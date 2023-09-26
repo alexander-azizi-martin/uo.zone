@@ -1,0 +1,1 @@
+from data_scraper.pipelines.pipelines import SaveReportPipeline
