@@ -2,8 +2,6 @@ import scrapy
 from scrapy.http import Response
 import urllib.parse
 import os
-from itertools import filterfalse
-from operator import methodcaller
 from data_scraper import helpers, items
 
 
@@ -19,13 +17,14 @@ class CourseFeedbackSpider(scrapy.Spider):
 
     def parse_report_list(self, response: Response):
         # Parse all the reports on the page
-        urls = response.css("table a::attr(href)").getall()
-        report_urls = filter(methodcaller("startswith", "rpvf-eng.aspx"), urls)
-        web_report_urls = filterfalse(methodcaller("endswith", "pdf=true"), report_urls)
-        for url in web_report_urls:
+        report_links = response.css("a[href^='rpvf-eng.aspx']:not([href$='pdf=true'])")
+        for link in report_links:
+            url, title = link.attrib['href'], link.css('a::text').get()
+
             yield scrapy.Request(
                 url=urllib.parse.urljoin(response.url, url),
                 callback=self.parse_report,
+                meta={"report_title": title},
                 cookies={"CookieName": os.getenv("SESSION_COOKIE")},
             )
 
@@ -58,6 +57,7 @@ class CourseFeedbackSpider(scrapy.Spider):
         )
 
         report = items.Report({
+            "title": response.meta["report_title"],
             "term": term,
             "faculty": faculty,
             "professor": professor,
@@ -77,6 +77,6 @@ class CourseFeedbackSpider(scrapy.Spider):
             survey["image_url"] = survey_image_url
             survey["num_invited"] = survey_num_invited
 
-            report["surveys"].append(dict(survey))
+            report["surveys"].append(survey)
 
         yield report

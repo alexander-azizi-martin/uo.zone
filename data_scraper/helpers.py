@@ -30,8 +30,8 @@ def extract_survey_results(survey_image: str) -> items.Survey:
     result_pattern = re.compile(r"Total \((\d+)\)")
 
     survey = items.Survey({
-            "total_responses": 0,
-            "options": [],
+        "total_responses": 0,
+        "options": [],
     })
 
     text = pytesseract.image_to_string(bw_image)
@@ -40,9 +40,11 @@ def extract_survey_results(survey_image: str) -> items.Survey:
         if match := option_pattern.search(line):
             label, description, responses = match.groups()
 
-            survey["options"].append(
-                {"label": label, "description": description, "responses": responses}
-            )
+            survey["options"].append({
+                "label": label, 
+                "description": description, 
+                "responses": responses
+            })
         elif match := result_pattern.search(line):
             survey["total_responses"] = match.group(1)
 
