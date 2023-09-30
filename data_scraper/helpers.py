@@ -9,6 +9,10 @@ def normalize_string(s):
     return normalized.encode("ascii", "ignore").decode("ascii", "ignore").strip()
 
 
+def normalize_whitespace(s):
+    return " ".join(s.split())
+
+
 def download_image(url: str) -> Image:
     response = requests.get(url)
 
