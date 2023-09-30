@@ -1,8 +1,8 @@
 import scrapy
-from scrapy.http import Response
-import urllib.parse
 import os
-from data_scraper import helpers, items
+from scrapy.http import Response
+from scrapy.loader import ItemLoader
+from data_scraper.items import Report, Survey
 
 
 class CourseFeedbackSpider(scrapy.Spider):
@@ -22,7 +22,7 @@ class CourseFeedbackSpider(scrapy.Spider):
             url, title = link.attrib['href'], link.css('a::text').get()
 
             yield scrapy.Request(
-                url=urllib.parse.urljoin(response.url, url),
+                url=response.urljoin(url),
                 callback=self.parse_report,
                 meta={"report_title": title},
                 cookies={"CookieName": os.getenv("SESSION_COOKIE")},
@@ -52,31 +52,25 @@ class CourseFeedbackSpider(scrapy.Spider):
             )
 
     def parse_report(self, response: Response):
-        term, faculty, professor, course = map(
-            helpers.normalize_string, response.css("ul:first-child li::text").getall()
-        )
+        report_loader = ItemLoader(Report(), response)
+        report_loader.add_value("title", response.meta["report_title"])
+        report_loader.add_value("link", response.url)
 
-        report = items.Report({
-            "title": response.meta["report_title"],
-            "term": term,
-            "faculty": faculty,
-            "professor": professor,
-            "course": course,
-            "link": response.url,
-            "surveys": [],
-        })
+        sub_report_loader = report_loader.nested_css("ul:first-child ")
+        sub_report_loader.add_css("term", "li:nth-child(1)::text")
+        sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
+        sub_report_loader.add_css("professor", "li:nth-child(3)::text")
+        sub_report_loader.add_css("course", "li:nth-child(4)::text")
 
-        surveys = response.css(".report-block")
-        for survey in surveys:
-            survey_title = helpers.normalize_string(survey.css("h4 span::text").get())
-            survey_image_url = urllib.parse.urljoin(response.url, survey.css("img::attr(src)").get())
-            survey_num_invited = survey.css("#Invited + td::text").get()
+        surveys = []
+        for survey_block in response.css(".report-block"):
+            survey_image_url = response.urljoin(survey_block.css("img::attr(src)").get())
+            
+            survey_loader = ItemLoader(Survey.extract_results(survey_image_url), survey_block)
+            survey_loader.add_css("title", "h4 span::text")
+            survey_loader.add_css("num_invited", "#Invited + td::text")
 
-            survey = helpers.extract_survey_results(survey_image_url)
-            survey["title"] = survey_title
-            survey["image_url"] = survey_image_url
-            survey["num_invited"] = survey_num_invited
+            surveys.append(survey_loader.load_item())
 
-            report["surveys"].append(survey)
-
-        yield report
+        report_loader.add_value("surveys", surveys)
+        yield report_loader.load_item()
