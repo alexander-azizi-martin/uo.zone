@@ -54,9 +54,9 @@ class CourseFeedbackSpider(scrapy.Spider):
             if url in self.saved_reports:
                 continue
             
-            callback = self.parse_report_v2
+            callback = self.parse_report_v1
             if self.term_year <= 2018 or self.term == "winter 2019":
-                callback = self.parse_report_v1
+                callback = self.parse_report_v2
 
             yield scrapy.Request(
                 url=url,
@@ -87,7 +87,7 @@ class CourseFeedbackSpider(scrapy.Spider):
                 cookies={"CookieName": os.getenv("BLUERA_COOKIE")},
             )
 
-    def parse_report_v2(self, response: Response):
+    def parse_report_v1(self, response: Response):
         report_loader = ItemLoader(Report(), response)
         report_loader.add_value("link", response.url)
 
@@ -96,7 +96,7 @@ class CourseFeedbackSpider(scrapy.Spider):
         sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
         sub_report_loader.add_css("professor", "li:nth-child(3)::text")
         sub_report_loader.add_css("course", "li:nth-child(4)::text")
-        sub_report_loader.add_css("codes", "li:nth-child(4)::text")
+        sub_report_loader.add_css("sections", "li:nth-child(4)::text")
 
         surveys = []
         for survey_block in response.css(".report-block"):
@@ -111,5 +111,40 @@ class CourseFeedbackSpider(scrapy.Spider):
         report_loader.add_value("surveys", surveys)
         yield report_loader.load_item()
 
-    def parse_report_v1(self, response: Response):
-        pass
+    def parse_report_v2(self, response: Response):
+        report_loader = ItemLoader(Report(), response)
+        report_loader.add_value("link", response.url)
+
+        sub_report_loader = report_loader.nested_css("ul:first-child ")
+        sub_report_loader.add_css("term", "li:nth-child(1)::text")
+        sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
+        sub_report_loader.add_css("professor", "li:nth-child(3)::text")
+        sub_report_loader.add_css("course", "li:nth-child(4)::text")
+        sub_report_loader.add_css("sections", "li:nth-child(4)::text")
+
+        surveys = []
+        for survey_block in response.css(".report-block"):            
+            survey_loader = ItemLoader(Survey(), survey_block)
+
+            options_table, statistics_table, *_ = survey_block.css('table')
+            total_responses = statistics_table.css("tbody tr:first-child td::text").get()
+
+            survey_loader.add_css("question", "h4 span::text")
+            survey_loader.add_value("total_responses", total_responses)
+
+            options = []
+            for option in options_table.css('tbody tr'):
+                label, description = option.css('th::text').get().split(': ')
+                responses = int(option.css('td::text').get())
+
+                options.append({
+                    "label": label, 
+                    "description": description, 
+                    "responses": responses,
+                })
+
+            survey_loader.add_value('options', options)
+            surveys.append(survey_loader.load_item())
+
+        report_loader.add_value("surveys", surveys)
+        yield report_loader.load_item()

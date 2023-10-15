@@ -4,12 +4,12 @@ import io
 from PIL import Image
 
 
-def normalize_string(s):
+def normalize_string(s: str):
     normalized = unicodedata.normalize("NFKD", s)
     return normalized.encode("ascii", "ignore").decode("ascii", "ignore").strip()
 
 
-def normalize_whitespace(s):
+def normalize_whitespace(s: str):
     return " ".join(s.split())
 
 

@@ -18,7 +18,7 @@ class Survey(scrapy.Item):
         output_processor=TakeFirst(),
     )
     total_responses = scrapy.Field(
-        input_processor=MapCompose(normalize_string), 
+        input_processor=MapCompose(normalize_string, int), 
         output_processor=TakeFirst(),
     )
     image_url = scrapy.Field()
@@ -48,7 +48,7 @@ class Survey(scrapy.Item):
                 survey["options"].append({
                     "label": label, 
                     "description": description, 
-                    "responses": int(responses)
+                    "responses": int(responses),
                 })
             elif match := result_pattern.search(line):
                 survey["total_responses"] = int(normalize_string(match.group(1)))
