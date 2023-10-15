@@ -48,9 +48,9 @@ class Survey(scrapy.Item):
                 survey["options"].append({
                     "label": label, 
                     "description": description, 
-                    "responses": responses
+                    "responses": int(responses)
                 })
             elif match := result_pattern.search(line):
-                survey["total_responses"] = normalize_string(match.group(1))
+                survey["total_responses"] = int(normalize_string(match.group(1)))
 
         return survey

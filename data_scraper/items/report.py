@@ -19,7 +19,7 @@ def normalize_professor_name(name):
 
 
 def extract_codes(name):
-    courses = name.split(",")
+    courses = name.lower().split(",")
     course_codes = [course.strip().split(" ").pop(0).strip() for course in courses]
     unique_course_codes = list(set(course_codes))
     return unique_course_codes

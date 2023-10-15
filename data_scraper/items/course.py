@@ -16,7 +16,10 @@ class Course(scrapy.Item):
         output_processor=TakeFirst(),
     )
     code = scrapy.Field(
-        input_processor=MapCompose(normalize_string),
+        input_processor=MapCompose(
+            normalize_string, 
+            lambda x: x.lower().replace(' ', ''),
+        ),
         output_processor=TakeFirst(),
     )
     units = scrapy.Field(
