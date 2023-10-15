@@ -9,10 +9,10 @@ class SaveReportPipeline:
         if not isinstance(report, Report):
             return report
 
-        file_path = pathlib.Path("temp", report["term"])
+        file_path = pathlib.Path("backend", "storage", "app", "feedback", report["term"])
         file_path.mkdir(parents=True, exist_ok=True)
 
-        with (file_path / f"{report['title']}.json").open('wb') as json_file:
+        with (file_path / f"{report['course']}.json").open('wb') as json_file:
             exporter = JsonLinesItemExporter(json_file)
             exporter.export_item(report)
 

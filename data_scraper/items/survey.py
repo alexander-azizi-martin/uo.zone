@@ -6,8 +6,11 @@ from data_scraper.helpers import normalize_string, download_image
 
 
 class Survey(scrapy.Item):
-    title = scrapy.Field(
-        input_processor=MapCompose(normalize_string), 
+    question = scrapy.Field(
+        input_processor=MapCompose(
+            normalize_string, 
+            lambda x: x.split(")", 1).pop().strip(),
+        ), 
         output_processor=TakeFirst(),
     )
     num_invited = scrapy.Field(

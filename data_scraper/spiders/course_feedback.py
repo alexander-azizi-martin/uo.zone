@@ -1,5 +1,8 @@
 import scrapy
 import os
+import json
+import pathlib
+from operator import methodcaller, attrgetter
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
 from data_scraper.items import Report, Survey
@@ -7,13 +10,40 @@ from data_scraper.items import Report, Survey
 
 class CourseFeedbackSpider(scrapy.Spider):
     name = "feedback"
+    
+    def __init__(self, *args, **kwargs):
+        super(CourseFeedbackSpider, self).__init__(*args, **kwargs)
+
+        self.term_season = os.getenv("TERM_SEASON")
+        self.term_year = int(os.getenv("TERM_YEAR"))
+        self.term = f"{self.term_season} {self.term_year}".lower()
+        self.saved_reports = set()
+
+        term_folder = pathlib.Path("data", "feedback", self.term)
+        if term_folder.exists():
+            report_files = filter(methodcaller('is_file'), term_folder.iterdir())
+            for report in report_files:
+                with report.open() as f:
+                    self.saved_reports.add(json.load(f)['link'])
 
     def start_requests(self):
         yield scrapy.Request(
-            url="https://uottawa.bluera.com/uottawa/rpvlf.aspx?rid=657e46a4-19a0-467b-97cc-d14b06ed85f0&regl=en-US",
-            callback=self.parse_report_list,
-            cookies={"CookieName": os.getenv("SESSION_COOKIE")},
+            url="https://uozone2.uottawa.ca/en/apps/s-reports",
+            callback=self.parse_term_link,
+            cookies={"SSESS6483c99e0d6fc7b7554c57814d17fc09": os.getenv("UOZONE_COOKIE")},
         )
+
+    def parse_term_link(self, response: Response):
+        term_links = response.css("table a")
+        for link in term_links:
+            url, term = link.attrib['href'], link.css('a::text').get()
+
+            if term.lower() == self.term:
+                yield scrapy.Request(
+                    url=url,
+                    callback=self.parse_report_list,
+                    cookies={"CookieName": os.getenv("BLUERA_COOKIE")},  
+                )
 
     def parse_report_list(self, response: Response):
         # Parse all the reports on the page
@@ -21,11 +51,17 @@ class CourseFeedbackSpider(scrapy.Spider):
         for link in report_links:
             url, title = link.attrib['href'], link.css('a::text').get()
 
+            if url in self.saved_reports:
+                continue
+            
+            callback = self.parse_report_v2
+            if self.term_year <= 2018 or self.term == "winter 2019":
+                callback = self.parse_report_v1
+
             yield scrapy.Request(
                 url=response.urljoin(url),
-                callback=self.parse_report,
-                meta={"report_title": title},
-                cookies={"CookieName": os.getenv("SESSION_COOKIE")},
+                callback=callback,
+                cookies={"CookieName": os.getenv("BLUERA_COOKIE")},
             )
 
         # Goes to the next page
@@ -48,12 +84,11 @@ class CourseFeedbackSpider(scrapy.Spider):
                 url=response.url,
                 formdata=new_page_request,
                 callback=self.parse_report_list,
-                cookies={"CookieName": os.getenv("SESSION_COOKIE")},
+                cookies={"CookieName": os.getenv("BLUERA_COOKIE")},
             )
 
-    def parse_report(self, response: Response):
+    def parse_report_v2(self, response: Response):
         report_loader = ItemLoader(Report(), response)
-        report_loader.add_value("title", response.meta["report_title"])
         report_loader.add_value("link", response.url)
 
         sub_report_loader = report_loader.nested_css("ul:first-child ")
@@ -61,16 +96,20 @@ class CourseFeedbackSpider(scrapy.Spider):
         sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
         sub_report_loader.add_css("professor", "li:nth-child(3)::text")
         sub_report_loader.add_css("course", "li:nth-child(4)::text")
+        sub_report_loader.add_css("codes", "li:nth-child(4)::text")
 
         surveys = []
         for survey_block in response.css(".report-block"):
             survey_image_url = response.urljoin(survey_block.css("img::attr(src)").get())
             
             survey_loader = ItemLoader(Survey.extract_results(survey_image_url), survey_block)
-            survey_loader.add_css("title", "h4 span::text")
+            survey_loader.add_css("question", "h4 span::text")
             survey_loader.add_css("num_invited", "#Invited + td::text")
 
             surveys.append(survey_loader.load_item())
 
         report_loader.add_value("surveys", surveys)
         yield report_loader.load_item()
+
+    def parse_report_v1(self, response: Response):
+        pass
