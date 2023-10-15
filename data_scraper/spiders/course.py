@@ -7,22 +7,22 @@ from scrapy.loader import ItemLoader
 
 class CourseSpider(scrapy.Spider):
     name = "course"
-    start_urls = ["https://catalogue.uottawa.ca/en/courses/ped/"]
-
-    # def parse(self, response: Response):
-    #     course_pattern = re.compile(r"\/en\/courses\/[a-z]{3}\/")
-
-    #     urls = response.css("a[href^='/en/courses']::attr(href)").getall()
-    #     for url in urls:
-    #         if course_pattern.search(url) is None:
-    #             continue
-
-    #         yield scrapy.Request(
-    #             url=response.urljoin(url),
-    #             callback=self.parse_course_list,
-    #         )
+    start_urls = ["https://catalogue.uottawa.ca/en/courses/"]
 
     def parse(self, response: Response):
+        course_pattern = re.compile(r"\/en\/courses\/[a-z]{3}\/")
+
+        urls = response.css("a[href^='/en/courses']::attr(href)").getall()
+        for url in urls:
+            if course_pattern.search(url) is None:
+                continue
+
+            yield scrapy.Request(
+                url=response.urljoin(url),
+                callback=self.parse_course_list,
+            )
+
+    def parse_course_list(self, response: Response):
         subject_pattern = re.compile(r"(.+) \(([A-Z]{3})\)")
         units_pattern = re.compile(r"([0-9]\.?[0-9]*) (unit|crédit)s?")
 
