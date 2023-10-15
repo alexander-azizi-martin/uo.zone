@@ -19,7 +19,7 @@ class CourseFeedbackSpider(scrapy.Spider):
         self.term = f"{self.term_season} {self.term_year}".lower()
         self.saved_reports = set()
 
-        term_folder = pathlib.Path("data", "feedback", self.term)
+        term_folder = pathlib.Path("backend", "storage", "app", "feedback", self.term)
         if term_folder.exists():
             report_files = filter(methodcaller('is_file'), term_folder.iterdir())
             for report in report_files:
@@ -49,7 +49,7 @@ class CourseFeedbackSpider(scrapy.Spider):
         # Parse all the reports on the page
         report_links = response.css("a[href^='rpvf-eng.aspx']:not([href$='pdf=true'])")
         for link in report_links:
-            url, title = link.attrib['href'], link.css('a::text').get()
+            url = response.urljoin(link.attrib['href'])
 
             if url in self.saved_reports:
                 continue
@@ -59,7 +59,7 @@ class CourseFeedbackSpider(scrapy.Spider):
                 callback = self.parse_report_v1
 
             yield scrapy.Request(
-                url=response.urljoin(url),
+                url=url,
                 callback=callback,
                 cookies={"CookieName": os.getenv("BLUERA_COOKIE")},
             )
