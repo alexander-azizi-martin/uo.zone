@@ -18,15 +18,16 @@ class CourseSeeder extends Seeder
     {
         $subjects = Storage::json("courses.json");
 
-        foreach ($subjects as $subject) {
-            if (!Arr::exists($subject, 'code') || !Arr::exists($subject, 'faculty'))
+        foreach ($subjects as $subjectData) {
+            if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty'))
                 continue;
 
-            $savedSubject = Subject::create(
-                Arr::only($subject, ['faculty', 'code', 'subject'])
+            $subject = Subject::create(
+                Arr::only($subjectData, ['faculty', 'code', 'subject'])
             );
 
-            foreach ($subject['courses'] as $course) {
+            $courses = [];
+            foreach ($subjectData['courses'] as $course) {
                 if (!Arr::exists($course, 'description'))
                     continue;
 
@@ -35,10 +36,10 @@ class CourseSeeder extends Seeder
                     ->remove(' ')
                     ->toString();
 
-                $savedSubject->courses()->create(
-                    Arr::only($course, ['code', 'title', 'description', 'units'])
-                );
+                $courses[] = Arr::only($course, ['code', 'title', 'description', 'units']);
             }
+
+            $subject->courses()->createMany($courses);
         }
     }
 }
