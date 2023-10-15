@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('professor_id')->constrained();
             $table->string('term');
             $table->string('code');
-            // $table->jsonb('grades');
+            $table->jsonb('grades')->nullable();
+            $table->integer('total_enrolled')->unsigned()->default(0);
             $table->timestamps();
         });
     }

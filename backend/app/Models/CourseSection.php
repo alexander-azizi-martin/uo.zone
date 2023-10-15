@@ -17,6 +17,13 @@ class CourseSection extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     */
+    protected $casts = [
+        'grades' => 'array'
+    ];
+
+    /**
      * Get the section's course.
      */
     public function course(): BelongsTo
