@@ -11,7 +11,6 @@ class CourseController extends Controller
     {
         $course = Course::where('code', $code)
             ->with(['sections' => ['professor'], 'subject'])->firstOrFail();
-        $course->incrementViewCount();
 
         return response()->json($course->toArray());
     }

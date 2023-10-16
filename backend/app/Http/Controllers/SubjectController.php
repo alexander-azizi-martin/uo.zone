@@ -10,7 +10,6 @@ class SubjectController extends Controller
     public function getSubject(string $code): JsonResponse
     {
         $subject = Subject::where('code', $code)->firstOrFail();
-        $subject->incrementViewCount();
 
         return response()->json($subject->toArray());
     }
