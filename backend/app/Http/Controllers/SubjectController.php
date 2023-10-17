@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class SubjectController extends Controller
 {
-    public function getSubject(string $code): JsonResponse
+    public function getSubject(string $code)
     {
-        $subject = Subject::where('code', $code)->firstOrFail();
-
-        return response()->json($subject->toArray());
+        $subject = Subject::with('courses')
+            ->where('code', Str::upper($code))
+            ->firstOrFail();
+        
+        return new SubjectResource($subject);
     }
 }

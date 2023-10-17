@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,8 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/courses/{code}', [CourseController::class, 'getCourse']);
 
-Route::get('/faculties/{code}', [FacultyController::class, 'getFaculty']);
+Route::get('/subjects/{code}', [SubjectController::class, 'getSubject']);
 
-Route::get('/professor/{id}', [ProfessorController::class, 'getProfessor']);
+Route::get('/professors/{id}', [ProfessorController::class, 'getProfessor']);
 
 Route::get('/search', [SearchController::class, 'search']);

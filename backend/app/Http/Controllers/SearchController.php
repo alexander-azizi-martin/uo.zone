@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CourseResource;
+use App\Http\Resources\ProfessorResource;
+use App\Http\Resources\SubjectResource;
 use App\Models\Course;
 use App\Models\Professor;
 use App\Models\Subject;
@@ -14,17 +17,24 @@ class SearchController extends Controller
     {
         $query = $request->query('q');
 
-        $courses = Course::search($query)
-            ->with('viewCount')->orderByDesc('viewCount.views')->limit(10)->get();
-        $faculties = Subject::search($query)
-            ->with('viewCount')->orderByDesc('viewCount.views')->limit(10)->get();
-        $professors = Professor::search($query)
-            ->with('viewCount')->orderByDesc('viewCount.views')->limit(10)->get();
+        $courses = Course::where('title', 'like', '%' . $query . '%')
+            ->select(['code', 'title'])
+            ->orderByDesc('total_enrolled')
+            ->limit(10)
+            ->get();
+        $subjects = Subject::where('code', 'like', '%' . $query . '%')
+            ->select(['code', 'subject'])
+            ->limit(10)
+            ->get();
+        $professors = Professor::where('name', 'like', '%' . $query . '%')
+            ->select(['id', 'name'])
+            ->limit(10)
+            ->get();
 
         return response()->json([
-            'courses' => $courses,
-            'faculties' => $faculties,
-            'professors' => $professors,
+            'courses' => CourseResource::collection($courses),
+            'subjects' => SubjectResource::collection($subjects),
+            'professors' => ProfessorResource::collection($professors),
         ]);
     }
 }
