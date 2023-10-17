@@ -17,16 +17,18 @@ class SearchController extends Controller
     {
         $query = $request->query('q');
 
-        $courses = Course::where('title', 'like', '%' . $query . '%')
+        $courses = Course::search($query)
             ->select(['code', 'title'])
             ->orderByDesc('total_enrolled')
             ->limit(10)
             ->get();
-        $subjects = Subject::where('code', 'like', '%' . $query . '%')
+
+        $subjects = Subject::search($query)
             ->select(['code', 'subject'])
             ->limit(10)
             ->get();
-        $professors = Professor::where('name', 'like', '%' . $query . '%')
+        
+        $professors = Professor::search($query)
             ->select(['id', 'name'])
             ->limit(10)
             ->get();
