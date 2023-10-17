@@ -10,7 +10,7 @@ class CourseController extends Controller
 {
     public function getCourse(string $code): CourseResource
     {
-        $course = Course::with(['sections' => ['professor']])
+        $course = Course::with(['sections' => ['professor'], 'surveys'])
             ->where('code', Str::lower($code))
             ->firstOrFail();
 

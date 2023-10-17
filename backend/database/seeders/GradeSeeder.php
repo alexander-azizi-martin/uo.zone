@@ -36,6 +36,20 @@ class GradeSeeder extends Seeder
             $section->grades = $grades->toArray();
             $section->total_enrolled = $grades->sum();
             $section->save();
+            
+            $course = $section->course;
+            if (empty($course->grades)) {
+                $course->grades = $grades;
+            } else {
+                $course->grades = $grades
+                    ->mergeRecursive($course->grades)
+                    ->map(function (array $values) {
+                        return array_sum($values);
+                    });
+            }
+
+            $course->total_enrolled += $section->total_enrolled;
+            $course->save();
         }
     }
 }

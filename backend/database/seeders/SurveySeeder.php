@@ -50,10 +50,13 @@ class SurveySeeder extends Seeder
                     $survey = $professor->surveys()->firstOrCreate(['question' => $question]);
                     SurveySeeder::updateSurvey($survey, $surveyData);
                 } else if ($questionType == 'course') {
-                    $courseSections->map(function (CourseSection $section) use ($surveyData, $question) {
-                        $survey = $section->surveys()->firstOrCreate(['question' => $question]);
-                        SurveySeeder::updateSurvey($survey, $surveyData);
-                    });
+                    $courseSurvey = $course->surveys()->firstOrCreate(['question' => $question]);
+                    SurveySeeder::updateSurvey($courseSurvey, $surveyData);
+
+                    foreach ($courseSections as $section) {
+                        $sectionSurvey = $section->surveys()->firstOrCreate(['question' => $question]);
+                        SurveySeeder::updateSurvey($sectionSurvey, $surveyData);
+                    }
                 }
             }
         }
