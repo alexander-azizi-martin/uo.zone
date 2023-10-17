@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
             $table->string('question');
-            $table->jsonb('options')->nullable();
+            $table->jsonb('options')->default('[]');
             $table->integer('total_responses')->unsigned()->default(0);
             $table->unsignedBigInteger('surveyable_id');
             $table->string('surveyable_type');

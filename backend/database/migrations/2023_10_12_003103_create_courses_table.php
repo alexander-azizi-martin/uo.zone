@@ -20,6 +20,8 @@ return new class extends Migration
             // $table->text('prerequisites');
             // $table->text('corequisites');
             $table->float('units')->nullable();
+            $table->jsonb('grades')->default('[]');
+            $table->integer('total_enrolled')->unsigned()->default(0);
             // $table->enum('language', ['en', 'fr']);
             $table->timestamps();
         });

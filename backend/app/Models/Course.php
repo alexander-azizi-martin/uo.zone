@@ -12,6 +12,13 @@ class Course extends Model
     use HasFactory;
 
     /**
+     * The attributes that should be cast.
+     */
+    protected $casts = [
+        'grades' => 'array'
+    ];
+
+    /**
      * Get all of the course's sections.
      */
     public function sections(): HasMany
