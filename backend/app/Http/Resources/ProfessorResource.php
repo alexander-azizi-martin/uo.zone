@@ -38,12 +38,18 @@ class ProfessorResource extends JsonResource
         ];
     }
 
+    /**
+     * Add the professor's courses with the sections they taught to the output.
+     */
     public function withCourses(): static
     {
         $this->withCourses = true;
         return $this;
     }
 
+    /**
+     * Add the sections the professor taught to the output.
+     */
     public function withSections(): static
     {
         $this->withSections = true;
