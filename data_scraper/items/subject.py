@@ -1,6 +1,7 @@
 import scrapy
 import re
-from itemloaders.processors import MapCompose, Compose, TakeFirst
+from itemloaders.processors import MapCompose, TakeFirst
+from operator import methodcaller
 from data_scraper.helpers import normalize_string
 
 
@@ -15,7 +16,10 @@ class Subject(scrapy.Item):
         output_processor=TakeFirst(),
     )
     code = scrapy.Field(
-        input_processor=MapCompose(normalize_string), 
+        input_processor=MapCompose(
+            normalize_string,
+            methodcaller('lower'),
+        ), 
         output_processor=TakeFirst(),
     )
     faculty = scrapy.Field(
