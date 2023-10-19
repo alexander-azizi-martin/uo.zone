@@ -15,7 +15,7 @@ export interface Course {
   code: string;
   title: string;
   description: string;
-  units: number;
+  units: number | null;
   grades: { [grade: string]: number };
   total_enrolled: number;
   surveys: Survey[];
@@ -47,6 +47,9 @@ export interface Subject {
   code: string;
   subject: string;
   faculty: string;
+}
+
+export interface SubjectWithCourses extends Subject{
   courses: Course[];
 }
 

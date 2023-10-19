@@ -80,7 +80,7 @@ export default function Home() {
           </Box>
         </Flex>
 
-        <Box pt={[5, 5, 2]} pb={[5, 0, 0]} width={'100%'}>
+        <Box pb={[5, 0, 0]} width={'100%'}>
           <Search
             onSearchOpen={setSearching.on}
             onSearchClose={setSearching.off}
@@ -92,4 +92,4 @@ export default function Home() {
   );
 }
 
-export { getDictionary as getStaticProps } from '~/lib/dictionary';
+export { getStaticProps } from '~/lib/dictionary';

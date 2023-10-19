@@ -5,6 +5,9 @@
   "Home": {
     "description": "Voir toutes les notes antérieures des cours suivis à l'Université d'Ottawa."
   },
+  "Course": {
+    "units": "{units} {units, plural, =1 {crédit} other {crédits}}"
+  },
   "Footer": {
     "github": "Regardez le github",
     "dataSource": {
