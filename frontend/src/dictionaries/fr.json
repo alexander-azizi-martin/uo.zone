@@ -1,0 +1,31 @@
+{
+  "common": {
+    "and": "et"
+  },
+  "Home": {
+    "description": "Voir toutes les notes antérieures des cours suivis à l'Université d'Ottawa."
+  },
+  "Footer": {
+    "github": "Regardez le github",
+    "dataSource": {
+      "text": "L'information de l'Été 2017 au Automne 2023 ont été fournies par",
+      "office": {
+        "text": "Le Bureau de l'accès à l'information et de la protection de la vie privée",
+        "link": "https://www.uottawa.ca/notre-universite/baipvp"
+      },
+      "uozone": {
+        "text": "uoZone",
+        "link": "https://uozone2.uottawa.ca/fr/apps/s-reports?language=fr"
+      }
+    }
+  },
+  "Search": {
+    "placeholder": "Recherche par Cour, Professeur ou Sujet",
+    "result": "Résultats pour <quotes>{query}</quotes>",
+    "loading": "Chargement...",
+    "courses": "Cours",
+    "professors": "Professeurs",
+    "subjects": "Sujets",
+    "empty": "Aucun résultat n'a été trouvé."
+  }
+}

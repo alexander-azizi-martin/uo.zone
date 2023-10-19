@@ -1,0 +1,31 @@
+{
+  "common": {
+    "and": "and"
+  },
+  "Home": {
+    "description": "View all the past grades for courses taken at the University of Ottawa."
+  },
+  "Footer": {
+    "github": "Checkout the github",
+    "dataSource": {
+      "text": "Data from Summer 2017 to Fall 2023 provided by",
+      "office": {
+        "text": "The Access to Information and Privacy Office",
+        "link": "https://www.uottawa.ca/about-us/aipo"
+      },
+      "uozone": {
+        "text": "uoZone",
+        "link": "https://uozone2.uottawa.ca/en/apps/s-reports"
+      }
+    }
+  },
+  "Search": {
+    "placeholder": "Search by Course, Professor, or Subject",
+    "result": "Search Results for <quotes>{query}</quotes>",
+    "loading": "Loading...",
+    "courses": "Courses",
+    "professors": "Professors",
+    "subjects": "Subjects",
+    "empty": "No results found."
+  }
+}
