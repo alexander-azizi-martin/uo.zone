@@ -44,14 +44,9 @@ export default function Search({
     []
   );
 
-  const setSearchingDebounced = useCallback(
-    debounce(setSearching, 1000 * searchDurations.enter),
-    []
-  );
-
   useEffect(() => {
     setResults(null);
-    setSearchingDebounced(!!query);
+    setSearching(!!query);
     updateResults.cancel();
     if (query) updateResults(query);
   }, [query]);
@@ -80,6 +75,7 @@ export default function Search({
             delay: searchDurations.exit / 8,
           },
         }}
+        startingHeight={1}
       >
         <VStack
           spacing={4}
