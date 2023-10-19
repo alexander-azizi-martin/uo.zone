@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CourseResource extends JsonResource
 {
-    protected bool $withProfessor = false;
+    protected bool $withProfessors = false;
     protected bool $withSections = false;
 
     /**
@@ -26,7 +26,7 @@ class CourseResource extends JsonResource
             'surveys' => $this->whenLoaded('surveys', function () {
                 return SurveyResource::collection($this->surveys);
             }),
-            'professors' => $this->when($this->withProfessor, function () {
+            'professors' => $this->when($this->withProfessors, function () {
                 $professors = new Collection($this->sections->loadMissing('professor')->pluck('professor'));
                 $groupedSections = $this->sections->groupby('professor.id');
 
@@ -45,9 +45,9 @@ class CourseResource extends JsonResource
     /**
      * Add the course's professors with the sections they taught to the output.
      */
-    public function withProfessor(): static
+    public function withProfessors(): static
     {
-        $this->withProfessor = true;
+        $this->withProfessors = true;
         return $this;
     }
 
