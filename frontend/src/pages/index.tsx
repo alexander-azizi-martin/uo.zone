@@ -56,10 +56,10 @@ export default function Home() {
             pt={[10, 10, 0]}
             pb={[5, 5, 0]}
             zIndex={-1}
-            opacity={[1, 1, 0.5]}
+            opacity={[0.9, 0.9, 0.5]}
             position={'relative'}
             left={[0, 0, 0, 0, '80px']}
-            top={[0, 0, '90px', '180px', '180px']}
+            top={[0, 0, '90px', '160px', '160px']}
           >
             <Collapse
               unmountOnExit={false}

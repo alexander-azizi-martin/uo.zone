@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Box, Button, Divider, Text, VStack } from '@chakra-ui/react';
-import Link from '~/components/Link';
+import ExternalLink from '~/components/ExternalLink';
 
 export default function Footer() {
   const t = useTranslations();
@@ -26,13 +26,13 @@ export default function Footer() {
           color={'gray.600'}
         >
           {t('Footer.dataSource.text')}{' '}
-          <Link href={t('Footer.dataSource.office.link')} isExternal>
+          <ExternalLink href={t('Footer.dataSource.office.link')}>
             {t('Footer.dataSource.office.text')}
-          </Link>{' '}
+          </ExternalLink>{' '}
           {t('common.and')}{' '}
-          <Link href={t('Footer.dataSource.uozone.link')} isExternal>
+          <ExternalLink href={t('Footer.dataSource.uozone.link')}>
             {t('Footer.dataSource.uozone.text')}
-          </Link>
+          </ExternalLink>
         </Text>
       </VStack>
     </Box>
