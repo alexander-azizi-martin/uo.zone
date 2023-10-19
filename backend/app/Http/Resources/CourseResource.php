@@ -23,6 +23,9 @@ class CourseResource extends JsonResource
             'units' => $this->whenHas('units'),
             'grades' => $this->whenHas('grades'),
             'total_enrolled' => $this->whenHas('total_enrolled'),
+            'subject' => $this->whenLoaded('subject', function () {
+                return new SubjectResource($this->subject);
+            }),
             'surveys' => $this->whenLoaded('surveys', function () {
                 return SurveyResource::collection($this->surveys);
             }),
