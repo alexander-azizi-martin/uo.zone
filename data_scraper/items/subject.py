@@ -6,8 +6,13 @@ from data_scraper.helpers import normalize_string
 
 
 def extract_faculty(s):
-    faculty_pattern = re.compile(r"The following (?:courses are|course is) offered by (?:the )?(.+)\.")
-    return faculty_pattern.match(s).group(1)
+    faculty_pattern_en = re.compile(r"The following (?:courses are|course is) offered by (?:the )?(.+)\.")
+    if (match := faculty_pattern_en.match(s)):
+        return match.group(1).strip('. ')
+    faculty_pattern_fr = re.compile(r"Les? cours (?:suivants sont offerts|suivant est offert) par (?:la )?(.+)")
+    if (match := faculty_pattern_fr.match(s)):
+        return match.group(1).strip('. ')
+    return ""
 
 
 class Subject(scrapy.Item):

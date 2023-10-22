@@ -1,5 +1,6 @@
 import scrapy
 from scrapy.http import Response
+import os 
 import re
 from data_scraper import items
 from scrapy.loader import ItemLoader
@@ -7,12 +8,36 @@ from scrapy.loader import ItemLoader
 
 class CourseSpider(scrapy.Spider):
     name = "course"
-    start_urls = ["https://catalogue.uottawa.ca/en/courses/"]
 
-    def parse(self, response: Response):
+    def start_requests(self):
+        if os.getenv("COURSES_LANG") == "EN":
+            yield scrapy.Request(
+                url="https://catalogue.uottawa.ca/en/courses/",
+                callback=self.parse_english,
+            )
+        elif os.getenv("COURSES_LANG") == "FR":
+            yield scrapy.Request(
+                url="https://catalogue.uottawa.ca/fr/cours/",
+                callback=self.parse_french,
+            )
+
+    def parse_english(self, response: Response):
         course_pattern = re.compile(r"\/en\/courses\/[a-z]{3}\/")
 
         urls = response.css("a[href^='/en/courses']::attr(href)").getall()
+        for url in urls:
+            if course_pattern.search(url) is None:
+                continue
+
+            yield scrapy.Request(
+                url=response.urljoin(url),
+                callback=self.parse_course_list,
+            )
+
+    def parse_french(self, response: Response):
+        course_pattern = re.compile(r"\/fr\/cours\/[a-z]{3}\/")
+
+        urls = response.css("a[href^='/fr/cours']::attr(href)").getall()
         for url in urls:
             if course_pattern.search(url) is None:
                 continue
@@ -53,6 +78,7 @@ class CourseSpider(scrapy.Spider):
 
             course_loader.add_value("title", title)
             course_loader.add_value("code", title, re=r"[A-Z]{3} \d{4,5}")
+            course_loader.add_value("language", title, re=r"[A-Z]{3} \d{4,5}")
             course_loader.add_css("description", ".courseblockdesc *::text")
             course_loader.add_css("mentioned_courses", ".courseblockdesc a::text")
             course_loader.add_css("components", ".courseblocktitle + .courseblockextra *::text")

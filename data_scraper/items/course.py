@@ -7,7 +7,11 @@ from data_scraper.helpers import normalize_string, normalize_whitespace
 
 def remove_prerequisites(s):
     prerequisites_pattern = re.compile(r"Prerequisites( or corequisites)?: ([^\.]*)\.")
-    return re.sub(prerequisites_pattern, '', s)
+    return re.sub(prerequisites_pattern, "", s)
+
+
+def extract_language(code):
+    return "en" if int(code[4]) < 5 else "fr"
 
 
 class Course(scrapy.Item):
@@ -17,8 +21,16 @@ class Course(scrapy.Item):
     )
     code = scrapy.Field(
         input_processor=MapCompose(
-            normalize_string, 
-            lambda x: x.lower().replace(' ', ''),
+            normalize_string,
+            lambda x: x.lower().replace(" ", ""),
+        ),
+        output_processor=TakeFirst(),
+    )
+    language = scrapy.Field(
+        input_processor=MapCompose(
+            normalize_string,
+            lambda x: x.lower().replace(" ", ""),
+            extract_language,
         ),
         output_processor=TakeFirst(),
     )
@@ -28,7 +40,7 @@ class Course(scrapy.Item):
     )
     description = scrapy.Field(
         input_processor=Compose(
-            Join(" "), 
+            Join(" "),
             str.strip,
             normalize_whitespace,
         ),
@@ -40,16 +52,16 @@ class Course(scrapy.Item):
     components = scrapy.Field(
         input_processor=MapCompose(normalize_string),
         output_processor=Compose(
-            Join(" "), 
-            methodcaller("split", ": ", 1), 
+            Join(" "),
+            methodcaller("split", ": ", 1),
             itemgetter(-1),
         ),
     )
     prereq_description = scrapy.Field(
         input_processor=MapCompose(normalize_string),
         output_processor=Compose(
-            Join(" "), 
-            methodcaller("split", ": ", 1), 
+            Join(" "),
+            methodcaller("split", ": ", 1),
             itemgetter(-1),
             remove_prerequisites,
         ),
