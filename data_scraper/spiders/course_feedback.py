@@ -14,6 +14,12 @@ class CourseFeedbackSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(CourseFeedbackSpider, self).__init__(*args, **kwargs)
 
+        self.cached_current_page = 1
+        if os.path.isfile(".cache"):
+            with open(".cache", "r") as f:
+                self.cached_current_page = int(f.readline().strip())
+
+        self.current_page = 1
         self.term_season = os.getenv("TERM_SEASON")
         self.term_year = int(os.getenv("TERM_YEAR"))
         self.term = f"{self.term_season} {self.term_year}".lower()
@@ -21,10 +27,14 @@ class CourseFeedbackSpider(scrapy.Spider):
 
         term_folder = pathlib.Path("backend", "storage", "app", "feedback", self.term)
         if term_folder.exists():
-            report_files = filter(methodcaller('is_file'), term_folder.iterdir())
+            report_files = filter(methodcaller("is_file"), term_folder.iterdir())
             for report in report_files:
                 with report.open() as f:
-                    self.saved_reports.add(json.load(f)['link'])
+                    self.saved_reports.add(json.load(f)["link"])
+
+    def cache_current_page(self):
+        with open(".cache", "w") as f:
+            f.write(f"{self.current_page}")
 
     def start_requests(self):
         yield scrapy.Request(
@@ -39,11 +49,43 @@ class CourseFeedbackSpider(scrapy.Spider):
             url, term = link.attrib['href'], link.css('a::text').get()
 
             if term.lower() == self.term:
+                callback = self.jump_to_cached_page 
+                if True:
+                    callback = self.parse_report_list
+
                 yield scrapy.Request(
                     url=url,
-                    callback=self.parse_report_list,
+                    callback=callback,
                     cookies={"CookieName": os.getenv("BLUERA_COOKIE")},  
                 )
+
+    def jump_to_cached_page(self, response: Response):
+        start_index = 0 if self.current_page <= 10 else 1
+        jump = min(10, self.cached_current_page - self.current_page)
+        self.current_page += jump
+
+        new_page_request = {
+            "__EVENTTARGET": f"ViewList$ctl04$listing$ctl01$ctl{jump + start_index}",
+            "__EVENTARGUMENT": "",
+            "__VIEWSTATE": response.css("input[name=__VIEWSTATE]::attr(value)").get(),
+            "__VIEWSTATEGENERATOR": response.css("input[name=__VIEWSTATEGENERATOR]::attr(value)").get(),
+            "__VIEWSTATEENCRYPTED": "",
+            "__EVENTVALIDATION": response.css("input[name=__EVENTVALIDATION]::attr(value)").get(),
+            "ViewList$dplField": "Title",
+            "ViewList$dplOperator": "contains",
+            "ViewList$tbxValue": "",
+        }
+
+        callback = self.jump_to_cached_page 
+        if self.current_page == self.cached_current_page:
+            callback = self.parse_report_list
+
+        yield scrapy.FormRequest(
+            url=response.url,
+            formdata=new_page_request,
+            callback=callback,
+            cookies={"CookieName": os.getenv("BLUERA_COOKIE")},
+        ) 
 
     def parse_report_list(self, response: Response):
         # Parse all the reports on the page
@@ -80,6 +122,9 @@ class CourseFeedbackSpider(scrapy.Spider):
 
         next_page_input = response.css("input[name='ViewList$ctl04$listing$ctl01$btnNext']")
         if 'aria-disabled' not in next_page_input.attrib:
+            self.current_page += 1
+            self.cache_current_page()
+
             yield scrapy.FormRequest(
                 url=response.url,
                 formdata=new_page_request,

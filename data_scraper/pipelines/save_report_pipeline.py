@@ -12,7 +12,7 @@ class SaveReportPipeline:
         file_path = pathlib.Path("backend", "storage", "app", "feedback", report["term"])
         file_path.mkdir(parents=True, exist_ok=True)
 
-        with (file_path / f"{report['course']}.json").open('wb') as json_file:
+        with (file_path / f"{report['course'].replace('/', ' ')}.json").open('wb') as json_file:
             exporter = JsonLinesItemExporter(json_file)
             exporter.export_item(report)
 

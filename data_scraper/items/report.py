@@ -25,6 +25,10 @@ def extract_codes(name):
 
     course_codes = []
     for course in courses:
+        split_course = course.strip().split(" ", 2)
+        if len(split_course) < 3:
+            continue
+
         code, section, _ = course.strip().split(" ", 2)
 
         course_codes.append({
