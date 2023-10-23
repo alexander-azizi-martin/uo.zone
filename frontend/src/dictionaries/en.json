@@ -1,15 +1,11 @@
 {
-  "common": {
-    "and": "and"
-  },
-  "Home": {
-    "description": "View all the past grades for courses taken at the University of Ottawa."
-  },
   "Course": {
+    "all-courses": "All Courses For {code}",
+    "all-professors": "All Professors",
+    "terms": "{count} terms from {start} to {stop}",
     "units": "{units} {units, plural, =1 {unit} other {units}}"
   },
   "Footer": {
-    "github": "Checkout the github",
     "dataSource": {
       "text": "Data from Summer 2017 to Fall 2023 provided by",
       "office": {
@@ -20,15 +16,60 @@
         "text": "uoZone",
         "link": "https://uozone2.uottawa.ca/en/apps/s-reports"
       }
-    }
+    },
+    "github": "Checkout the github",
+    "maintainer": "Maintained by"
+  },
+  "General": {
+    "and": "and"
+  },
+  "Grades": {
+    "mean": "{letter} Average ({value})",
+    "mode": "Most Common: {letter} ({percent}%)",
+    "students": "{totalStudents} {totalStudents, plural, =1 {student} other {students}}",
+    "occurrence": "{occurrences} {occurrences, plural, =1 {student} other {students}} got {letterClass, select, A {an} other {a}} {letter} ({percent}%)"
+  },
+  "Home": {
+    "description": "View all the past grades for courses taken at the University of Ottawa."
   },
   "Search": {
-    "placeholder": "Search by Course, Professor, or Subject",
-    "result": "Search Results for <quotes>{query}</quotes>",
-    "loading": "Loading...",
     "courses": "Courses",
+    "empty": "No results found.",
+    "loading": "Loading...",
+    "placeholder": "Search by Course, Professor, or Subject",
     "professors": "Professors",
-    "subjects": "Subjects",
-    "empty": "No results found."
+    "result": "Search Results for <quotes>{query}</quotes>",
+    "subjects": "Subjects"
+  },
+  "Survey": {
+    "overall": "Overall",
+    "availability": {
+      "info": "Availability",
+      "tooltip": "The professor is available to address questions outside of class. ({responses} responses)"
+    },
+    "communication": {
+      "info": "Communication",
+      "tooltip": "The professor conveys subject matter effectively. ({responses} responses)"
+    },
+    "feedback": {
+      "info": "Feedback",
+      "tooltip": "The professor's feedback contributes to my learning. ({responses} responses)"
+    },
+    "instructions": {
+      "info": "Instructions",
+      "tooltip": "The professor's instructions for assignments are clear. ({responses} responses)"
+    },
+    "teacher": {
+      "info": "Teacher",
+      "tooltip": "The professor as a teacher is good. ({responses} responses)"
+    },
+    "prepared": {
+      "info": "Prepared",
+      "tooltip": "The professor is well prepared for class. ({responses} responses)"
+    },
+    "respect": {
+      "info": "Respect",
+      "tooltip": "The professor shows respect towards students. ({responses} responses)"
+    }
   }
 }

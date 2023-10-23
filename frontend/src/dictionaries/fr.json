@@ -1,15 +1,11 @@
 {
-  "common": {
-    "and": "et"
-  },
-  "Home": {
-    "description": "Voir toutes les notes antérieures des cours suivis à l'Université d'Ottawa."
-  },
   "Course": {
+    "all-courses": "Tous Les Cours Pour {code}",
+    "all-professors": "Tous Les Professeurs",
+    "terms": "{count} semestres de l''{start} au l''{stop}",
     "units": "{units} {units, plural, =1 {crédit} other {crédits}}"
   },
   "Footer": {
-    "github": "Regardez le github",
     "dataSource": {
       "text": "L'information de l'Été 2017 au Automne 2023 ont été fournies par",
       "office": {
@@ -20,15 +16,60 @@
         "text": "uoZone",
         "link": "https://uozone2.uottawa.ca/fr/apps/s-reports?language=fr"
       }
-    }
+    },
+    "github": "Regardez le github",
+    "maintainer": "Maintenu par"
+  },
+  "General": {
+    "and": "et"
+  },
+  "Grades": {
+    "mean": "Moyenne {letter} ({value})",
+    "mode": "Le plus fréquent: {letter} ({percent}%)",
+    "students": "{totalStudents} {totalStudents, plural, =1 {étudiant} other {étudiants}}",
+    "occurrence": "{occurrences} {occurrences, plural, =1 {étudiant a reçu} other {étudiants ont reçu}} un {letter} ({percent}%)"
+  },
+  "Home": {
+    "description": "Voir toutes les notes antérieures des cours suivis à l'Université d'Ottawa."
   },
   "Search": {
-    "placeholder": "Recherche par Cour, Professeur ou Sujet",
-    "result": "Résultats pour <quotes>{query}</quotes>",
-    "loading": "Chargement...",
     "courses": "Cours",
+    "empty": "Aucun résultat n'a été trouvé.",
+    "loading": "Chargement...",
+    "placeholder": "Recherche par Cour, Professeur ou Sujet",
     "professors": "Professeurs",
-    "subjects": "Sujets",
-    "empty": "Aucun résultat n'a été trouvé."
+    "result": "Résultats pour <quotes>{query}</quotes>",
+    "subjects": "Sujets"
+  },
+  "Survey": {
+    "overall": "Total",
+    "availability": {
+      "info": "Disponibilité",
+      "tooltip": "Le professeur est disponible pour répondre aux questions en dehors des cours. ({responses} réponses)"
+    },
+    "communication": {
+      "info": "Communication",
+      "tooltip": "Le professeur transmet efficacement le sujet. ({responses} réponses)"
+    },
+    "feedback": {
+      "info": "Commentaire",
+      "tooltip": "Les commentaires du professeur contribuent à mon apprentissage. ({responses} réponses)"
+    },
+    "instructions": {
+      "info": "Instructions",
+      "tooltip": "Les instructions du professeur pour les devoirs sont claires. ({responses} réponses)"
+    },
+    "teacher": {
+      "info": "Enseignant",
+      "tooltip": "Le professeur en tant qu'enseignant est bon. ({responses} réponses)"
+    },
+    "prepared": {
+      "info": "Préparé",
+      "tooltip": "Le professeur est bien préparé pour le cours. ({responses} réponses)"
+    },
+    "respect": {
+      "info": "Respect",
+      "tooltip": "Le professeur fait preuve de respect envers les étudiants. ({responses} réponses)"
+    }
   }
 }
