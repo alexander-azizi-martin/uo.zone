@@ -4,10 +4,23 @@ export interface Survey {
   total_responses: number;
 }
 
+export interface Subject {
+  code: string;
+  subject: string;
+  faculty: string;
+  grades: Grades;
+  total_enrolled: number;
+}
+
+export interface Grades {
+  [grade: string]: number;
+}
+
 export interface CourseSection {
   term: string;
   code: string;
-  grades: { [grade: string]: number };
+  section: string;
+  grades: Grades;
   total_enrolled: number;
 }
 
@@ -16,15 +29,18 @@ export interface Course {
   title: string;
   description: string;
   units: number | null;
-  grades: { [grade: string]: number };
+  grades: Grades;
   total_enrolled: number;
   surveys: Survey[];
+  subject: Subject;
 }
 
 export interface Professor {
   id: number;
   name: string;
   surveys: Survey[];
+  grades: Grades;
+  total_enrolled: number;
 }
 
 export interface CourseWithSections extends Course {
@@ -43,13 +59,7 @@ export interface CourseWithProfessors extends Course {
   professors: ProfessorWithSections[];
 }
 
-export interface Subject {
-  code: string;
-  subject: string;
-  faculty: string;
-}
-
-export interface SubjectWithCourses extends Subject{
+export interface SubjectWithCourses extends Subject {
   courses: Course[];
 }
 
