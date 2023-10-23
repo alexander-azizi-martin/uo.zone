@@ -7,10 +7,7 @@ import type {
   SubjectWithCourses,
 } from './types';
 
-export const API_URL = urlJoin(
-  process.env.NEXT_PUBLIC_SERVER_URL as string,
-  'api'
-);
+export const API_URL = '/api';
 
 async function fetchData<T>(url: string, lang: string = 'en') {
   try {
