@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import debounce from 'lodash.debounce';
@@ -6,6 +8,7 @@ import {
   Collapse,
   Heading,
   VStack,
+  Box,
   InputGroupProps,
 } from '@chakra-ui/react';
 import { search, SearchResults as SearchResultsType } from '~/lib/api';
@@ -26,6 +29,8 @@ export default function Search({
   searchBarProps,
 }: SearchProps) {
   const t = useTranslations('Search');
+  const { locale } = useRouter();
+  const pathname = usePathname();
 
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
@@ -33,16 +38,22 @@ export default function Search({
 
   const updateResults = useCallback(
     debounce((query: string) => {
-      search(query)
+      search(query, locale)
         .then((data) => {
           setResults(data);
         })
         .catch(() => {
-          setResults(null);
+          setResults({ courses: [], professors: [], subjects: [] });
         });
     }, 300),
-    []
+    [locale]
   );
+
+  useEffect(() => {
+    setResults(null);
+    setSearching(false);
+    updateResults.cancel();
+  }, [pathname]);
 
   useEffect(() => {
     setResults(null);
@@ -57,14 +68,12 @@ export default function Search({
   }, [searching, onSearchClose, onSearchOpen]);
 
   return (
-    <>
+    <Box pt={8} w={'100%'}>
       <SearchBar
         {...searchBarProps}
         onChange={setQuery}
         placeholder={t('placeholder')}
       />
-
-      {children}
 
       <Collapse
         in={searching}
@@ -93,7 +102,14 @@ export default function Search({
             })}
           </Heading>
 
-          {!!results &&
+          {!results && query.trim() && (
+            <Heading size={'md'} pt={4}>
+              <Spinner size={'sm'} mr={2} />
+              {t('loading')}
+            </Heading>
+          )}
+
+          {results &&
             results.courses.length +
               results.professors.length +
               results.subjects.length ===
@@ -103,16 +119,13 @@ export default function Search({
               </Heading>
             )}
 
-          {!results && !!query.trim() && (
-            <Heading size={'md'} pt={4}>
-              <Spinner size={'sm'} mr={2} />
-              {t('loading')}
-            </Heading>
-          )}
-
-          {!!results && <SearchResults results={results} />}
+          {results && <SearchResults results={results} />}
         </VStack>
       </Collapse>
-    </>
+
+      <Collapse in={!searching} animateOpacity>
+        {children}
+      </Collapse>
+    </Box>
   );
 }
