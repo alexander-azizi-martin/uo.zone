@@ -2,7 +2,7 @@ import { Box, BoxProps } from '@chakra-ui/react';
 
 export interface BaseCardProps extends BoxProps {
   onClick?: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function BaseCard({

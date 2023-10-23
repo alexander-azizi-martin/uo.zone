@@ -15,7 +15,7 @@ export default function LinkCard({
 }: LinkCardProps) {
   const [clicked, setClicked] = useBoolean(false);
 
-  const extraProps = !!isExternal ? { target: '_blank' } : {};
+  const extraProps = isExternal ? { target: '_blank' } : {};
 
   const hoverStyles = {
     cursor: 'pointer',
@@ -33,7 +33,7 @@ export default function LinkCard({
         _hover={hoverStyles}
       >
         {children}
-        {clicked && !!!isExternal && (
+        {clicked && !isExternal && (
           <Spinner
             size={'sm'}
             ml={2}
