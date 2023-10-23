@@ -29,9 +29,7 @@ interface CoursesProps {
 function Courses({ courses }: CoursesProps) {
   const t = useTranslations('Search');
 
-  if (courses.length === 0) {
-    return null;
-  }
+  if (courses.length === 0) return null;
 
   return (
     <VStack spacing={2} width={'100%'} align={'start'}>
@@ -54,9 +52,7 @@ interface ProfessorsProps {
 function Professors({ professors }: ProfessorsProps) {
   const t = useTranslations('Search');
 
-  if (professors.length === 0) {
-    return null;
-  }
+  if (professors.length === 0) return null;
 
   return (
     <VStack spacing={2} width={'100%'} align={'start'}>
@@ -64,7 +60,7 @@ function Professors({ professors }: ProfessorsProps) {
         {t('professors')}
       </Heading>
       {professors.map((professor) => (
-        <LinkCard key={professor.id} href={`/professor/${professor.name}`}>
+        <LinkCard key={professor.id} href={`/professor/${professor.id}`}>
           {professor.name}
         </LinkCard>
       ))}
@@ -79,9 +75,7 @@ interface SubjectsProps {
 function Subjects({ subjects }: SubjectsProps) {
   const t = useTranslations('Search');
 
-  if (subjects.length === 0) {
-    return null;
-  }
+  if (subjects.length === 0) return null;
 
   return (
     <VStack spacing={2} width={'100%'} align={'start'}>
