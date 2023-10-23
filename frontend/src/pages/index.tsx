@@ -3,7 +3,7 @@ import { useBoolean, Box } from '@chakra-ui/react';
 import { searchDurations } from '~/lib/config';
 import { Flex, VStack, Collapse, Heading, Text, Image } from '@chakra-ui/react';
 import Layout from '~/components/Layout';
-import Search from '~/components/Search';
+import SearchNav from '~/components/Search';
 
 export default function Home() {
   const t = useTranslations('Home');
@@ -14,7 +14,7 @@ export default function Home() {
     <Layout>
       <VStack
         alignItems={['center', 'center', 'start']}
-        spacing={[0, 8, 8]}
+        spacing={0}
         width={'100%'}
       >
         <Flex
@@ -80,13 +80,11 @@ export default function Home() {
           </Box>
         </Flex>
 
-        <Box pb={[5, 0, 0]} width={'100%'}>
-          <Search
-            onSearchOpen={setSearching.on}
-            onSearchClose={setSearching.off}
-            searchBarProps={{ w: ['100%', '100%', '60%'] }}
-          />
-        </Box>
+        <SearchNav
+          onSearchOpen={setSearching.on}
+          onSearchClose={setSearching.off}
+          searchBarProps={{ w: ['100%', '100%', '60%'] }}
+        />
       </VStack>
     </Layout>
   );
