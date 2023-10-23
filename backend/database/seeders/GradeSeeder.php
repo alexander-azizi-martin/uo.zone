@@ -47,9 +47,35 @@ class GradeSeeder extends Seeder
                         return array_sum($values);
                     });
             }
-
             $course->total_enrolled += $section->total_enrolled;
             $course->save();
+        
+            $professor = $section->professor;
+            if (empty($professor->grades)) {
+                $professor->grades = $grades;
+            } else {
+                $professor->grades = $grades
+                    ->mergeRecursive($professor->grades)
+                    ->map(function (array $values) {
+                        return array_sum($values);
+                    });
+            }
+            $professor->total_enrolled += $section->total_enrolled;
+            $professor->save();
+
+            $subject = $section->course->subject;
+            if (empty($subject->grades)) {
+                $subject->grades = $grades;
+            } else {
+                $subject->grades = $grades
+                    ->mergeRecursive($subject->grades)
+                    ->map(function (array $values) {
+                        return array_sum($values);
+                    });
+            }
+            $subject->total_enrolled += $section->total_enrolled;
+            $subject->save();
         }
     }
+
 }

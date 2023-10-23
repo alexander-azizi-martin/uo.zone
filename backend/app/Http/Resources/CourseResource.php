@@ -37,7 +37,7 @@ class CourseResource extends JsonResource
                     $professors->find($professorId)->setRelation('sections', $sections);
                 }
 
-                return ProfessorResource::collection($professors)->collection->map->withSections();
+                return ProfessorResource::collection($professors->unique()->values())->collection->map->withSections();
             }),
             'sections' => $this->when($this->withSections, function () {
                 return CourseSectionResource::collection($this->sections);

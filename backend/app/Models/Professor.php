@@ -18,6 +18,13 @@ class Professor extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     */
+    protected $casts = [
+        'grades' => 'array',
+    ];
+
+    /**
      * Get all of the sections taught by the professor.
      */
     public function sections(): HasMany

@@ -19,18 +19,20 @@ class ProfessorResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'survey' => $this->whenLoaded('surveys', function () {
+            'grades' => $this->whenHas('grades'),
+            'total_enrolled' => $this->whenHas('total_enrolled'),
+            'surveys' => $this->whenLoaded('surveys', function () {
                 return SurveyResource::collection($this->surveys);
             }),
             'courses' => $this->when($this->withCourses, function () {
                 $courses = new Collection($this->sections->loadMissing('course')->pluck('course'));
-                $groupedSections = $this->sections->groupby('course.id');
+                $groupedSections = $this->sections->groupby('course.code');
 
-                foreach ($groupedSections as $courseId => $sections) {
-                    $courses->find($courseId)->setRelation('sections', $sections);
+                foreach ($groupedSections as $courseCode => $sections) {
+                    $courses->firstWhere('code', $courseCode)->setRelation('sections', $sections);
                 }
 
-                return CourseResource::collection($courses)->collection->map->withSections();;
+                return CourseResource::collection($courses->unique('code')->values())->collection->map->withSections();;
             }),
             'sections' => $this->when($this->withSections, function () {
                 return CourseSectionResource::collection($this->sections);

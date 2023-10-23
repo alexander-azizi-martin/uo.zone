@@ -6,8 +6,8 @@ use App\Traits\HasSurveys;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Course extends Model
 {
@@ -17,7 +17,7 @@ class Course extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'grades' => 'array'
+        'grades' => 'array',
     ];
 
     /**
@@ -31,16 +31,16 @@ class Course extends Model
     /**
      * Get the course's subject.
      */
-    public function subject(): HasOne
+    public function subject(): BelongsTo
     {
-        return $this->HasOne(Subject::class);
+        return $this->BelongsTo(Subject::class);
     }
 
     /**
      * Get the searchable columns for the model.
      */
     public static function searchableColumns(): array
-    {  
-        return ['title'];
+    {
+        return ['title', 'code'];
     }
 }
