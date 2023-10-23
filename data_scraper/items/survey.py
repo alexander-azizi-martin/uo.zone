@@ -21,7 +21,9 @@ class Survey(scrapy.Item):
         input_processor=MapCompose(normalize_string, int), 
         output_processor=TakeFirst(),
     )
-    image_url = scrapy.Field()
+    image_url = scrapy.Field(
+        output_processor=TakeFirst()
+    )
     options = scrapy.Field()
 
     @staticmethod
