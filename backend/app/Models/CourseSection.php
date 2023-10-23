@@ -20,7 +20,8 @@ class CourseSection extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'grades' => 'array'
+        'grades' => 'array',
+        'term' => Translations::class,
     ];
 
     /**

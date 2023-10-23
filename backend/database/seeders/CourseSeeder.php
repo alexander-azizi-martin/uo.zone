@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Course;
 use App\Models\Subject;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-
 
 class CourseSeeder extends Seeder
 {
@@ -31,15 +29,21 @@ class CourseSeeder extends Seeder
                 if (!Arr::exists($course, 'description'))
                     continue;
 
-                $course['code'] = str($course['code'])
-                    ->lower()
-                    ->remove(' ')
-                    ->toString();
-
-                $courses[] = Arr::only($course, ['code', 'title', 'description', 'units']);
+                $courses[] = Arr::only($course, ['code', 'title', 'description', 'units', 'language']);
             }
 
             $subject->courses()->createMany($courses);
+        }
+
+        $frenchSubjects = Storage::json("courses_fr.json");
+        foreach ($frenchSubjects as $subjectData) {
+            if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty'))
+                continue;
+
+            $subject = Subject::where('code', $subjectData['code'])->firstOrFail();
+            $subject->subject->addTranslation('fr', $subjectData['subject']);
+            $subject->faculty->addTranslation('fr', $subjectData['faculty']);
+            $subject->save();
         }
     }
 }

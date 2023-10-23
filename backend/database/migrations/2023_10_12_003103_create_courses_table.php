@@ -22,7 +22,7 @@ return new class extends Migration
             $table->float('units')->nullable();
             $table->jsonb('grades')->default('[]');
             $table->integer('total_enrolled')->unsigned()->default(0);
-            // $table->enum('language', ['en', 'fr']);
+            $table->enum('language', ['en', 'fr']);
             $table->timestamps();
         });
     }

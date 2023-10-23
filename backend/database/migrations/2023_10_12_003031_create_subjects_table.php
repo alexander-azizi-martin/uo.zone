@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('subject');
-            $table->string('faculty');
+            $table->jsonb('subject')->default('[]');
+            $table->jsonb('faculty')->default('[]');
+            $table->jsonb('grades')->default('[]');
+            $table->integer('total_enrolled')->unsigned()->default(0);
             $table->timestamps();
         });
     }

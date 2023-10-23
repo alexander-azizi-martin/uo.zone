@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Course;
-use App\Models\CourseSection;
 use App\Models\Professor;
 use App\Models\Survey;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,19 +26,30 @@ class SurveySeeder extends Seeder
 
             $professor = Professor::firstOrCreate(['name' => $feedbackData['professor']]);
 
+            $courses = collect();
             $courseSections = collect();
             foreach ($feedbackData['sections'] as ['code' => $code, 'section' => $section]) {
                 $course = Course::firstWhere('code', $code);
 
                 if (is_null($course))
                     continue;
-                
+
+                [$season, $year] = str($feedbackData['term'])->explode(' ');
+                $season = ['Winter' => 'Hiver', 'Summer' => 'Été', 'Fall' => 'Automne'][$season];
+
+                $courses->push($course);
                 $courseSections->push($course->sections()->create([
                     'professor_id' => $professor->id,
                     'code' => Str::squish(Str::upper("$code $section")),
-                    'term' => $feedbackData['term'],
+                    'section' => $section,
+                    'term' => [
+                        'en' => $feedbackData['term'],
+                        'fr' => "$season $year"
+                    ],
                 ]));
             }
+
+            $courses = $courses->unique('code');
 
             foreach ($feedbackData['surveys'] as $surveyData) {
                 $questionType = config('survey.questions')[$surveyData['question']];
@@ -50,8 +59,10 @@ class SurveySeeder extends Seeder
                     $survey = $professor->surveys()->firstOrCreate(['question' => $question]);
                     SurveySeeder::updateSurvey($survey, $surveyData);
                 } else if ($questionType == 'course') {
-                    $courseSurvey = $course->surveys()->firstOrCreate(['question' => $question]);
-                    SurveySeeder::updateSurvey($courseSurvey, $surveyData);
+                    foreach ($courses as $course) {
+                        $courseSurvey = $course->surveys()->firstOrCreate(['question' => $question]);
+                        SurveySeeder::updateSurvey($courseSurvey, $surveyData);
+                    }
 
                     foreach ($courseSections as $section) {
                         $sectionSurvey = $section->surveys()->firstOrCreate(['question' => $question]);
@@ -62,6 +73,9 @@ class SurveySeeder extends Seeder
         }
     }
 
+    /**
+     * Updates the given survey with more data.
+     */
     public static function updateSurvey(Survey $survey, array $surveyData): void
     {
         $options = $survey->options ?? [];

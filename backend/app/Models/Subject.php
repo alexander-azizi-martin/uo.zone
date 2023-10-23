@@ -17,6 +17,15 @@ class Subject extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     */
+    protected $casts = [
+        'grades' => 'json',
+        'subject' => Translations::class,
+        'faculty' => Translations::class,
+    ];
+
+    /**
      * Get all of the subject's courses.
      */
     public function courses(): HasMany
@@ -28,7 +37,7 @@ class Subject extends Model
      * Get the searchable columns for the model.
      */
     public static function searchableColumns(): array
-    {  
+    {
         return ['code', 'subject'];
     }
 }
