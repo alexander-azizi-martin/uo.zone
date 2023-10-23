@@ -3,7 +3,8 @@ import { Box, Button, Divider, Text, VStack } from '@chakra-ui/react';
 import ExternalLink from '~/components/ExternalLink';
 
 export default function Footer() {
-  const t = useTranslations();
+  const tFooter = useTranslations('Footer');
+  const tGeneral = useTranslations('General');
 
   return (
     <Box pt={10} pb={10}>
@@ -17,7 +18,7 @@ export default function Footer() {
           target={'_blank'}
           href={'https://github.com/alexander-azizi-martin/uo.zone'}
         >
-          {t('Footer.github')}
+          {tFooter('github')}
         </Button>
         <Text
           textAlign={'center'}
@@ -25,13 +26,24 @@ export default function Footer() {
           fontWeight={300}
           color={'gray.600'}
         >
-          {t('Footer.dataSource.text')}{' '}
-          <ExternalLink href={t('Footer.dataSource.office.link')}>
-            {t('Footer.dataSource.office.text')}
+          {tFooter('dataSource.text')}{' '}
+          <ExternalLink href={tFooter('dataSource.office.link')}>
+            {tFooter('dataSource.office.text')}
           </ExternalLink>{' '}
-          {t('common.and')}{' '}
-          <ExternalLink href={t('Footer.dataSource.uozone.link')}>
-            {t('Footer.dataSource.uozone.text')}
+          {tGeneral('and')}{' '}
+          <ExternalLink href={tFooter('dataSource.uozone.link')}>
+            {tFooter('dataSource.uozone.text')}
+          </ExternalLink>
+        </Text>
+        <Text
+          textAlign={'center'}
+          fontSize={'sm'}
+          fontWeight={300}
+          color={'gray.600'}
+        >
+          {tFooter('maintainer')}{' '}
+          <ExternalLink href={'mailto:alexander.azizi.martin@uo.zone'}>
+            Alexander Azizi-Martin
           </ExternalLink>
         </Text>
       </VStack>
