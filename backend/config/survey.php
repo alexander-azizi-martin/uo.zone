@@ -9,7 +9,7 @@ return [
         'The course is well organized.' => 'course',
         'Course expectations are clearly explained.' => 'course',
         'I think the professor conveys the subject matter effectively' => 'professor',
-        'Instructions for completing activities and assignments are clear.' => 'course',
+        'Instructions for completing activities and assignments are clear.' => 'professor',
         'The professors feedback contributes to my learning.' => 'professor',
         'The teaching and learning methods used in the course facilitated my learning.' => 'professor',
         'Assignments and/or exams closely reflect what is covered in class.' => 'course',
