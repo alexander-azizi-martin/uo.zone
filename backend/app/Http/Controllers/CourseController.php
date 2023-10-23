@@ -5,13 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\RateLimiter;
 
 class CourseController extends Controller
 {
-    public function allCourses(): JsonResponse
+    public function allCourses(Request $request): JsonResponse
     {
+        $limiterKey = 'all-courses:' . $request->ip;
+        abort_if(
+            RateLimiter::tooManyAttempts($limiterKey, 5),
+            429,
+            'To many requests to /api/courses'
+        );
+        RateLimiter::hit($limiterKey, 60);
+
         if (!Cache::has('courses')) {
             $courses = Course::cursor()->pluck('code')->all();
             Cache::put('courses', $courses);
