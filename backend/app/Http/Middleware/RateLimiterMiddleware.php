@@ -14,7 +14,7 @@ class RateLimiterMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        abort_if(RateLimiter::tooManyAttempts($request->ip, 5), 429, 'To many requests to api');
+        abort_if(RateLimiter::tooManyAttempts($request->ip, 5), 429, 'To many requests to api.');
         RateLimiter::hit($request->id, 1);
         return $next($request);
     }

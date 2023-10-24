@@ -18,7 +18,7 @@ class SubjectController extends Controller
         abort_if(
             RateLimiter::tooManyAttempts($limiterKey, 5),
             429,
-            'To many requests to /api/subjects'
+            'To many requests to api/subjects.'
         );
         RateLimiter::hit($limiterKey, 60);
 

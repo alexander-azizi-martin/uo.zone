@@ -18,7 +18,7 @@ class CourseController extends Controller
         abort_if(
             RateLimiter::tooManyAttempts($limiterKey, 5),
             429,
-            'To many requests to /api/courses'
+            'To many requests to api/courses.'
         );
         RateLimiter::hit($limiterKey, 60);
 

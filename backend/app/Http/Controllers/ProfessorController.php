@@ -17,7 +17,7 @@ class ProfessorController extends Controller
         abort_if(
             RateLimiter::tooManyAttempts($limiterKey, 5),
             429,
-            'To many requests to /api/professors'
+            'To many requests to api/professors.'
         );
         RateLimiter::hit($limiterKey, 60);
 
