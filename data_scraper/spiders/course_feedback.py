@@ -26,7 +26,9 @@ class CourseFeedbackSpider(scrapy.Spider):
 
         browser_cookies = browser_cookie3.firefox()
         for cookie in browser_cookies:
-            if "login.microsoftonline.com" in cookie.domain:
+            if cookie.name == "CookieName":
+                self.cookies[cookie.name] = cookie.value
+            elif cookie.name == "SSESS6483c99e0d6fc7b7554c57814d17fc09":
                 self.cookies[cookie.name] = cookie.value
 
         term_folder = pathlib.Path("backend", "storage", "app", "feedback", self.term)
@@ -35,6 +37,9 @@ class CourseFeedbackSpider(scrapy.Spider):
         for report in report_files:
             with report.open() as f:
                 self.saved_reports.add(json.load(f)["link"])
+
+        self.current_page = 1
+        self.start_page = (len(self.saved_reports) // 10) + 1
 
     def start_requests(self):
         yield scrapy.Request(
@@ -51,11 +56,11 @@ class CourseFeedbackSpider(scrapy.Spider):
             if term.lower() == self.term:
                 yield scrapy.Request(
                     url=url,
-                    callback=self.parse_report_list,
+                    callback=self.jump_to_start,
                     cookies=self.cookies,
                 )
-
-    def parse_report_list(self, response: Response):
+    
+    def jump_to_start(self, response: Response):
         if self.progress_bar is None:
             num_reports = response.css(
                 "#ViewList_ctl04_lblTopPageStatus::text"
@@ -63,6 +68,34 @@ class CourseFeedbackSpider(scrapy.Spider):
 
             self.progress_bar = tqdm(total=int(num_reports), desc="Reports parsed")
 
+        if self.current_page < self.start_page:
+            offset = 0 if self.current_page <= 10 else 1
+            jump = min(10, self.start_page - self.current_page)
+            self.current_page += jump
+            self.progress_bar.update(jump * 10)
+
+            new_page_request = {
+                "__EVENTTARGET": f"ViewList$ctl04$listing$ctl01$ctl{jump + offset}",
+                "__EVENTARGUMENT": "",
+                "__VIEWSTATE": response.css("input[name=__VIEWSTATE]::attr(value)").get(),
+                "__VIEWSTATEGENERATOR": response.css("input[name=__VIEWSTATEGENERATOR]::attr(value)").get(),
+                "__VIEWSTATEENCRYPTED": "",
+                "__EVENTVALIDATION": response.css("input[name=__EVENTVALIDATION]::attr(value)").get(),
+                "ViewList$dplField": "Title",
+                "ViewList$dplOperator": "contains",
+                "ViewList$tbxValue": "",
+            }
+
+            yield scrapy.FormRequest(
+                url=response.url,
+                formdata=new_page_request,
+                callback=self.jump_to_start,
+                cookies=self.cookies,
+            ) 
+        else:
+            yield from self.parse_report_list(response) 
+
+    def parse_report_list(self, response: Response):
         # Parse all the reports on the page
         report_links = response.css("a[href^='rpvf-eng.aspx']:not([href$='pdf=true'])")
         for link in report_links:
@@ -159,7 +192,7 @@ class CourseFeedbackSpider(scrapy.Spider):
 
                 options.append({
                     "label": label,
-                    "description": description.strip("?."),
+                    "description": description,
                     "responses": responses,
                 })
 

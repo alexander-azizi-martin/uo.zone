@@ -9,7 +9,7 @@ class Survey(scrapy.Item):
     question = scrapy.Field(
         input_processor=MapCompose(
             normalize_string, 
-            lambda x: x.split(")", 1).pop().strip(),
+            lambda x: x.split(")", 1).pop().strip("?. "),
             normalize_whitespace,
         ), 
         output_processor=TakeFirst(),
