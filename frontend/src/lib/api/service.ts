@@ -7,15 +7,19 @@ import type {
   SubjectWithCourses,
 } from './types';
 
-export const API_URL = '/api';
+export const API_URL =
+  typeof window === 'undefined'
+    ? urlJoin(process.env.SERVER_URL as string, 'api')
+    : '/api';
 
 async function fetchData<T>(url: string, lang: string = 'en') {
-  try {
-    const res = await fetch(url, { headers: { 'Accept-Language': lang } });
-    return (await res.json()) as T;
-  } catch (error) {
-    notFound();
+  const res = await fetch(url, { headers: { 'Accept-Language': lang } });
+
+  if (!res.ok) {
+    throw res;
   }
+
+  return (await res.json()) as T;
 }
 
 export async function search(query: string, lang: string = 'en') {

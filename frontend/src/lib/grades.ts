@@ -41,7 +41,7 @@ export class LetterGrade {
 
     if (!(0 <= this._value && this._value <= 10)) {
       throw new Error(
-        `LetterGrade value ${this._value} must be between 0 and 10 ${grade}`
+        `LetterGrade value ${this._value} must be between 0 and 10: ${grade}`
       );
     }
   }

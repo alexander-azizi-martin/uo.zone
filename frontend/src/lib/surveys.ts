@@ -1,6 +1,35 @@
 import { Survey } from '~/lib/api';
 
 export class Surveys {
+  // prettier-ignore
+  static RESPONSE_VALUES: any = {
+    'excellent': 5,
+    'strongly agree': 5,
+    'almost always': 5,
+    'very useful': 5,
+    'very light': 5,
+    'lighter than average': 4.5,
+    'good': 4,
+    'agree': 4,
+    'often': 4,
+    'useful': 4,
+    'average': 4,
+    'neither agree nor disagree': 3.5,
+    'acceptable': 3.5,
+    'sometimes': 3,
+    'poor': 2,
+    'disagree': 2,
+    'rarely': 2,
+    'useless': 2,
+    'not very useful': 2,
+    'heavier than average': 2,
+    'very poor': 1,
+    'strongly disagree': 1,
+    'almost never': 1,
+    'no feedback': 1,
+    'very heavy': 1,
+  };
+
   _surveys: { [question: string]: Survey };
   _numQuestions: number;
   _scoreCache: Map<string, number>;
@@ -33,40 +62,17 @@ export class Surveys {
       return this._scoreCache.get(question) as number;
 
     let value = 0;
+    let total = 0;
     for (let option in this._surveys[question].options) {
-      switch (option) {
-        case 'excellent':
-        case 'strongly agree':
-        case 'almost always':
-          value += 5 * this._surveys[question].options[option];
-          break;
-        case 'good':
-        case 'agree':
-        case 'often':
-          value += 4 * this._surveys[question].options[option];
-          break;
-        case 'acceptable':
-        case 'neither agree nor disagree':
-        case 'sometimes':
-          value += 3 * this._surveys[question].options[option];
-          break;
-        case 'poor':
-        case 'disagree':
-        case 'rarely':
-          value += 2 * this._surveys[question].options[option];
-          break;
-        case 'very poor':
-        case 'strongly disagree':
-        case 'almost never':
-          value += 1 * this._surveys[question].options[option];
-          break;
-        default:
-          value += 0;
-          break;
+      if (option in Surveys.RESPONSE_VALUES) {
+        let numResponses = this._surveys[question].options[option];
+
+        value += Surveys.RESPONSE_VALUES[option] * numResponses;
+        total += numResponses;
       }
     }
 
-    this._scoreCache.set(question, value / this.totalResponses(question));
+    this._scoreCache.set(question, value / total);
     return this._scoreCache.get(question) as number;
   }
 
@@ -84,7 +90,12 @@ export class Surveys {
    */
   totalResponses(question: string): number {
     if (!this.has(question)) return 0;
-    return this._surveys[question].total_responses;
+
+    return Object.entries(this._surveys[question].options).reduce(
+      (acc, [question, responses]) =>
+        acc + (question in Surveys.RESPONSE_VALUES ? acc + responses : acc),
+      0
+    );
   }
 
   /**

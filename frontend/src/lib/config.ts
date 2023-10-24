@@ -19,12 +19,17 @@ export const professorSurveys = {
   'I find that the professor as a teacher is': 'teacher',
   'I find the professor well prepared for class': 'prepared',
   'I think the professor conveys the subject matter effectively': 'communication',
-  'The professors feedback contributes to my learning.': 'feedback',
-  'The professor is available to address questions outside of class.': 'availability',
-  'The professor shows respect towards the students.': 'respect',
+  'The professors feedback contributes to my learning': 'feedback',
+  'The professor is available to address questions outside of class': 'availability',
+  'The professor shows respect towards the students': 'respect',
+  'Instructions for completing activities and assignments are clear': 'instructions',
 };
 
 export const courseSurveys = {
-  'The course is well organized.': 'organized',
-  'Course expectations are clearly explained.': 'expectations',
+  'The course is well organized': 'organized',
+  'Course expectations are clearly explained': 'expectations',
+  'I have learned a lot in this course': 'learning',
+  'I would recommend this course to another student': 'recommend',
+  'In comparison with my other courses, the workload for this  course is': 'workload',
+  'Assignments and/or exams closely reflect what was covered in the course': 'activities'
 };

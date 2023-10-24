@@ -123,9 +123,11 @@ export default function Search({
         </VStack>
       </Collapse>
 
-      <Collapse in={!searching} animateOpacity>
-        {children}
-      </Collapse>
+      {children && (
+        <Collapse in={!searching} animateOpacity>
+          <Box px={'10px'}>{children}</Box>
+        </Collapse>
+      )}
     </Box>
   );
 }

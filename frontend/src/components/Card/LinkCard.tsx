@@ -33,7 +33,7 @@ export default function LinkCard({
         _hover={hoverStyles}
       >
         {children}
-        {clicked && !isExternal && (
+        {/* {clicked && !isExternal && (
           <Spinner
             size={'sm'}
             ml={2}
@@ -41,7 +41,7 @@ export default function LinkCard({
             left={-1.5}
             top={4}
           />
-        )}
+        )} */}
       </BaseCard>
     </Link>
   );

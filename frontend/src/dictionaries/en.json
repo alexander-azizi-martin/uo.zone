@@ -5,6 +5,10 @@
     "terms": "{count} terms from {start} to {stop}",
     "units": "{units} {units, plural, =1 {unit} other {units}}"
   },
+  "Error": {
+    "404": "This page does not exist.",
+    "500": "Something went wrong during your request."
+  },
   "Footer": {
     "dataSource": {
       "text": "Data from Summer 2017 to Fall 2023 provided by",
