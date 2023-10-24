@@ -27,7 +27,7 @@
     "mean": "Moyenne {letter} ({value})",
     "mode": "Le plus fréquent: {letter} ({percent}%)",
     "students": "{totalStudents} {totalStudents, plural, =1 {étudiant} other {étudiants}}",
-    "occurrence": "{occurrences} {occurrences, plural, =1 {étudiant a reçu} other {étudiants ont reçu}} un {letter} ({percent}%)"
+    "occurrence": "{occurrences} {occurrences, plural, =1 {étudiant a} other {étudiants ont}} reçu un {letter} ({percent}%)"
   },
   "Home": {
     "description": "Voir toutes les notes antérieures des cours suivis à l'Université d'Ottawa."
@@ -43,6 +43,10 @@
   },
   "Survey": {
     "overall": "Total",
+    "activities": {
+      "info": "Activités",
+      "tooltip": "Les devoirs et/ou les examens reflètent fidèlement ce qui a été abordé dans le cours. ({responses} réponses)"
+    },
     "availability": {
       "info": "Disponibilité",
       "tooltip": "Le professeur est disponible pour répondre aux questions en dehors des cours. ({responses} réponses)"
@@ -50,6 +54,10 @@
     "communication": {
       "info": "Communication",
       "tooltip": "Le professeur transmet efficacement le sujet. ({responses} réponses)"
+    },
+    "expectations": {
+      "info": "Attentes",
+      "tooltip": "Les attentes en matière de cours sont clairement expliquées. ({responses} réponses)"
     },
     "feedback": {
       "info": "Commentaire",
@@ -59,17 +67,33 @@
       "info": "Instructions",
       "tooltip": "Les instructions du professeur pour les devoirs sont claires. ({responses} réponses)"
     },
+    "learning": {
+      "info": "Apprentissage",
+      "tooltip": "Les étudiants ont beaucoup appris dans ce cours. ({responses} responses)"
+    },
     "teacher": {
       "info": "Enseignant",
       "tooltip": "Le professeur en tant qu'enseignant est bon. ({responses} réponses)"
+    },
+    "organized": {
+      "info": "Organisé",
+      "tooltip": "Le cours est bien organisé. ({responses} réponses)"
     },
     "prepared": {
       "info": "Préparé",
       "tooltip": "Le professeur est bien préparé pour le cours. ({responses} réponses)"
     },
+    "recommend": {
+      "info": "Recommander",
+      "tooltip": "Je recommanderais ce cours à un autre étudiant. ({responses} réponses)"
+    },
     "respect": {
       "info": "Respect",
       "tooltip": "Le professeur fait preuve de respect envers les étudiants. ({responses} réponses)"
+    },
+    "workload": {
+      "info": "Charge de travail",
+      "tooltip": "La charge de travail pour le cours est raisonnable. ({responses} réponses)"
     }
   }
 }

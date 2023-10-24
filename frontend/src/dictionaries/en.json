@@ -43,6 +43,10 @@
   },
   "Survey": {
     "overall": "Overall",
+    "activities": {
+      "info": "Activities",
+      "tooltip": "Assignments and/or exams closely reflect what was covered in the course. ({responses} responses)"
+    },
     "availability": {
       "info": "Availability",
       "tooltip": "The professor is available to address questions outside of class. ({responses} responses)"
@@ -50,6 +54,10 @@
     "communication": {
       "info": "Communication",
       "tooltip": "The professor conveys subject matter effectively. ({responses} responses)"
+    },
+    "expectations": {
+      "info": "Expectations",
+      "tooltip": "Course expectations are clearly explained. ({responses} responses)"
     },
     "feedback": {
       "info": "Feedback",
@@ -59,17 +67,33 @@
       "info": "Instructions",
       "tooltip": "The professor's instructions for assignments are clear. ({responses} responses)"
     },
+    "learning": {
+      "info": "Learning",
+      "tooltip": "Students learned a lot in this course. ({responses} responses)"
+    },
     "teacher": {
       "info": "Teacher",
       "tooltip": "The professor as a teacher is good. ({responses} responses)"
+    },
+    "organized": {
+      "info": "Organized",
+      "tooltip": "The course is well organized. ({responses} responses)"
     },
     "prepared": {
       "info": "Prepared",
       "tooltip": "The professor is well prepared for class. ({responses} responses)"
     },
+    "recommend": {
+      "info": "Recommend",
+      "tooltip": "I would recommend this course to another student. ({responses} responses)"
+    },
     "respect": {
       "info": "Respect",
       "tooltip": "The professor shows respect towards students. ({responses} responses)"
+    },
+    "workload": {
+      "info": "Workload",
+      "tooltip": "The workload for the course is reasonable. ({responses} responses)"
     }
   }
 }
