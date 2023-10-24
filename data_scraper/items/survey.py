@@ -2,7 +2,7 @@ import scrapy
 import re
 import pytesseract
 from itemloaders.processors import MapCompose, TakeFirst
-from data_scraper.helpers import normalize_string, download_image
+from data_scraper.helpers import normalize_string, normalize_whitespace, download_image
 
 
 class Survey(scrapy.Item):
@@ -10,6 +10,7 @@ class Survey(scrapy.Item):
         input_processor=MapCompose(
             normalize_string, 
             lambda x: x.split(")", 1).pop().strip(),
+            normalize_whitespace,
         ), 
         output_processor=TakeFirst(),
     )

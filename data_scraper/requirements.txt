@@ -5,3 +5,4 @@ pytesseract==0.3.10
 python-dotenv==1.0.0
 Requests==2.31.0
 Scrapy==2.11.0
+tqdm==4.66.1
