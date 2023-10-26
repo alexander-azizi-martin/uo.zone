@@ -13,6 +13,11 @@ const nextConfig = {
         destination: serverUrl.href,
         basePath: false,
       },
+      {
+        source: '/stats/:match*',
+        destination: 'https://analytics.uo.zone/:match*',
+        basePath: false,
+      },
     ];
   },
 };

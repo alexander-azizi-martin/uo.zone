@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Box, Button, Divider, Text, VStack } from '@chakra-ui/react';
+import { trackEvent } from '~/lib/helpers';
 import ExternalLink from '~/components/ExternalLink';
 
 export default function Footer() {
@@ -7,7 +8,7 @@ export default function Footer() {
   const tGeneral = useTranslations('General');
 
   return (
-    <Box pt={10} pb={10}>
+    <Box pb={10}>
       <Divider borderColor={'rgba(91,0,19,0.42)'} mb={4} />
       <VStack spacing={4}>
         <Button
@@ -17,6 +18,7 @@ export default function Footer() {
           as={'a'}
           target={'_blank'}
           href={'https://github.com/alexander-azizi-martin/uo.zone'}
+          onClick={() => trackEvent('button.github.click')}
         >
           {tFooter('github')}
         </Button>
@@ -40,9 +42,10 @@ export default function Footer() {
           fontSize={'sm'}
           fontWeight={300}
           color={'gray.600'}
+          onClick={() => trackEvent('button.alexander_azizi-martin.email.click')}
         >
           {tFooter('maintainer')}{' '}
-          <ExternalLink href={'mailto:alexander.azizi.martin@uo.zone'}>
+          <ExternalLink href={'mailto:alexander.azizi-martin@uo.zone'}>
             Alexander Azizi-Martin
           </ExternalLink>
         </Text>
