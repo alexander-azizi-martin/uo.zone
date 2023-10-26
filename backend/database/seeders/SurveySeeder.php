@@ -6,10 +6,8 @@ use App\Models\Course;
 use App\Models\Professor;
 use App\Models\Survey;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
 
 class SurveySeeder extends Seeder
 {
@@ -18,6 +16,8 @@ class SurveySeeder extends Seeder
      */
     public function run(string $file): void
     {
+        if (!Str::endsWith($file, '.json')) return;
+
         $feedbackData = Storage::json($file);
 
         $professor = Professor::firstOrCreate(['name' => $feedbackData['professor']]);

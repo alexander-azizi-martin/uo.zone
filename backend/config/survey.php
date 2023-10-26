@@ -27,10 +27,12 @@ return [
         'In comparison with my other courses, the workload for this course is' => 'course',
         'Overall, I find this course' => 'course',
         'I would recommend this course to another student' => 'course',
+        'How did the teaching modality (in class, online, blended) affect your learning' => 'course',
     ],
 
     'equivalent_questions' => [
         'How did the place where the course was held affect your learning' => 'How did the teaching modality (in class, online, blended) impact your learning',
+        'How did the teaching modality (in class, online, blended) affect your learning' => 'How did the teaching modality (in class, online, blended) impact your learning',
         'The professor\'s expectations of students for this course are clear' => 'Instructions for completing activities and assignments are clear',
         'The professor\'s feedback on assignments and/or exams is' => 'The professors feedback contributes to my learning',
         'The professor was available to address questions outside class hours' => 'The professor is available to address questions outside of class',
