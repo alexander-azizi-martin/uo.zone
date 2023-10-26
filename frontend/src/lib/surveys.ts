@@ -14,8 +14,8 @@ export class Surveys {
     'often': 4,
     'useful': 4,
     'average': 4,
+    'acceptable': 3.75,
     'neither agree nor disagree': 3.5,
-    'acceptable': 3.5,
     'sometimes': 3,
     'poor': 2,
     'disagree': 2,
@@ -93,7 +93,7 @@ export class Surveys {
 
     return Object.entries(this._surveys[question].options).reduce(
       (acc, [question, responses]) =>
-        acc + (question in Surveys.RESPONSE_VALUES ? acc + responses : acc),
+        question in Surveys.RESPONSE_VALUES ? acc + responses : acc,
       0
     );
   }
