@@ -34,9 +34,9 @@ class SearchController extends Controller
             ->get();
 
         return response()->json([
-            'courses' => CourseResource::collection($courses),
-            'subjects' => SubjectResource::collection($subjects),
-            'professors' => ProfessorResource::collection($professors),
+            'courses' => CourseResource::collection($courses->sortBy('code')),
+            'subjects' => SubjectResource::collection($subjects->sortBy('name')),
+            'professors' => ProfessorResource::collection($professors->sortBy('code')),
         ]);
     }
 }
