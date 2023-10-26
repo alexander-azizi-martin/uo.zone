@@ -16,6 +16,7 @@
     "framer-motion": "^10.16.4",
     "lodash.debounce": "^4.0.8",
     "next": "latest",
+    "next-axiom": "0.18.0",
     "next-intl": "3.0.0-beta.19",
     "react": "latest",
     "react-dom": "latest",

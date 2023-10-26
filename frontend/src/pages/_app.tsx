@@ -12,3 +12,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </NextIntlClientProvider>
   );
 }
+
+export { reportWebVitals } from 'next-axiom';
