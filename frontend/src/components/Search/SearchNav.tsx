@@ -50,9 +50,7 @@ export default function Search({
   );
 
   useEffect(() => {
-    setResults(null);
-    setSearching(false);
-    updateResults.cancel();
+    setQuery('');
   }, [pathname]);
 
   useEffect(() => {
@@ -125,7 +123,9 @@ export default function Search({
 
       {children && (
         <Collapse in={!searching} animateOpacity>
-          <Box px={'10px'}>{children}</Box>
+          <Box px={'10px'} pb={10}>
+            {children}
+          </Box>
         </Collapse>
       )}
     </Box>

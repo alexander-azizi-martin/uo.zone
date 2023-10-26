@@ -41,9 +41,7 @@ export default function Home() {
                 uoZone
               </Heading>
               <Text
-                style={{
-                  color: 'black',
-                }}
+                style={{ color: 'black' }}
                 textAlign={['center', 'center', 'left']}
                 py={2}
                 fontWeight={300}
