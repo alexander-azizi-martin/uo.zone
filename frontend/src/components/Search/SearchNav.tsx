@@ -12,7 +12,6 @@ import {
   InputGroupProps,
 } from '@chakra-ui/react';
 import { search, SearchResults as SearchResultsType } from '~/lib/api';
-import { searchDurations } from '~/lib/config';
 import { SearchBar, SearchResults } from '~/components/Search';
 
 interface SearchProps {
@@ -74,17 +73,7 @@ export default function Search({
         placeholder={t('placeholder')}
       />
 
-      <Collapse
-        in={searching}
-        transition={{
-          exit: { duration: searchDurations.enter },
-          enter: {
-            duration: (3 * searchDurations.exit) / 4,
-            delay: searchDurations.exit / 8,
-          },
-        }}
-        startingHeight={1}
-      >
+      <Collapse in={searching} startingHeight={1}>
         <VStack
           spacing={4}
           width={'100%'}
@@ -123,8 +112,12 @@ export default function Search({
       </Collapse>
 
       {children && (
-        <Collapse in={!searching} animateOpacity>
-          <Box px={'10px'} pb={10}>
+        <Collapse in={!searching} startingHeight={1}>
+          <Box
+            px={'10px'}
+            pb={10}
+            style={{ transition: 'opacity 0.2s', opacity: searching ? 0 : 1 }}
+          >
             {children}
           </Box>
         </Collapse>
