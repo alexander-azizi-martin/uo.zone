@@ -9,18 +9,17 @@ import { Search2Icon } from '@chakra-ui/icons';
 
 interface SearchBarProps extends InputGroupProps {
   placeholder?: string;
+  value: string;
   onChange: (value: any) => void;
 }
 
 export default function SearchBar({
+  value,
   onChange,
   placeholder,
   ...props
 }: SearchBarProps) {
-  const [query, setQuery] = useState('');
-
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setQuery(event.target.value);
     onChange?.(event.target.value);
   };
 
@@ -31,7 +30,7 @@ export default function SearchBar({
       </InputLeftElement>
       <Input
         type={'text'}
-        value={query}
+        value={value}
         onChange={handleChange}
         placeholder={placeholder}
         background={'rgba(255,255,255,0.3)'}

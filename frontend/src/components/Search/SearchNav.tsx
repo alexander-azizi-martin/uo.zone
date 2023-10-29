@@ -69,6 +69,7 @@ export default function Search({
     <Box pt={8} w={'100%'}>
       <SearchBar
         {...searchBarProps}
+        value={query}
         onChange={setQuery}
         placeholder={t('placeholder')}
       />
