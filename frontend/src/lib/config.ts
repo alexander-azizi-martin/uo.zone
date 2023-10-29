@@ -31,5 +31,5 @@ export const courseSurveys = {
   'I have learned a lot in this course': 'learning',
   'I would recommend this course to another student': 'recommend',
   'In comparison with my other courses, the workload for this course is': 'workload',
-  'Assignments and/or exams closely reflect what was covered in the course': 'activities'
+  'Assignments and/or exams closely reflect what is covered in class': 'activities'
 };

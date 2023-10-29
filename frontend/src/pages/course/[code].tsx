@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import NextLink from 'next/link';
 import type { GetServerSidePropsContext } from 'next';
 import { useTranslations } from 'next-intl';
 import {
@@ -10,6 +11,7 @@ import {
   Divider,
   Wrap,
   WrapItem,
+  Link,
 } from '@chakra-ui/react';
 import { getCourse, CourseWithProfessors } from '~/lib/api';
 import { CourseGrades } from '~/lib/grades';
@@ -38,11 +40,23 @@ export default function Course({ course }: CourseProps) {
     return new Surveys(course.surveys);
   }, [course.surveys]);
 
+  const subject = course.title.slice(0, 3);
+
   return (
     <Layout>
       <SearchNav>
-        <Heading mt={4}>{course.title}</Heading>
-        <Stack direction={['column', 'row']} mt={1} spacing={2} wrap={'wrap'}>
+        <Heading mt={4}>
+          <Link
+            as={NextLink}
+            href={`/subject/${subject}`}
+            textDecor={'underline'}
+            textDecorationThickness={'2px'}
+          >
+            {subject}
+          </Link>
+          {course.title.slice(3)}
+        </Heading>
+        <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
           {course.units !== null && (
             <Tag size={'md'}>{tCourse('units', { units: course.units })}</Tag>
           )}
@@ -69,7 +83,7 @@ export default function Course({ course }: CourseProps) {
             {Object.entries(courseSurveys)
               .filter(([question]) => surveys.has(question))
               .map(([question, name]) => (
-                <WrapItem flexGrow={1} key={question}>
+                <WrapItem flexGrow={1} flexBasis={'20%'} key={question}>
                   <BigNumberCard
                     info={tSurvey(`${name}.info`)}
                     tooltip={tSurvey(`${name}.tooltip`, {
@@ -80,6 +94,18 @@ export default function Course({ course }: CourseProps) {
                   />
                 </WrapItem>
               ))}
+          </Wrap>
+
+          <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
+            {surveys.numQuestions() > 0 && (
+              <BigNumberCard
+                info={tSurvey('overall')}
+                value={surveys
+                  .averageScore(Object.keys(courseSurveys))
+                  .toFixed(2)}
+                total={5}
+              />
+            )}
           </Wrap>
 
           <Divider

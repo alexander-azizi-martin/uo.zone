@@ -62,7 +62,9 @@ export default function Professor({ professor }: ProfessorProps) {
             {surveys.numQuestions() > 0 && (
               <BigNumberCard
                 info={t('overall')}
-                value={surveys.overall().toFixed(2)}
+                value={surveys
+                  .averageScore(Object.keys(professorSurveys))
+                  .toFixed(2)}
                 total={5}
               />
             )}

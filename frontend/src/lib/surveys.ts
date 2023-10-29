@@ -8,7 +8,7 @@ export class Surveys {
     'almost always': 5,
     'very useful': 5,
     'very light': 5,
-    'lighter than average': 4.5,
+    'lighter than average': 4,
     'good': 4,
     'agree': 4,
     'often': 4,
@@ -32,12 +32,10 @@ export class Surveys {
 
   _surveys: { [question: string]: Survey };
   _numQuestions: number;
-  _scoreCache: Map<string, number>;
 
   constructor(surveys: Survey[]) {
     this._surveys = {};
     this._numQuestions = surveys.length;
-    this._scoreCache = new Map();
 
     if (!surveys) return;
 
@@ -54,54 +52,60 @@ export class Surveys {
   }
 
   /**
-   * Calculates the average response out of 5 for the given question.
+   * Gets the number of questions in the survey.
    */
-  score(question: string): number {
-    if (!this.has(question)) return 0;
-    if (this._scoreCache.has(question))
-      return this._scoreCache.get(question) as number;
-
-    let value = 0;
-    let total = 0;
-    for (let option in this._surveys[question].options) {
-      if (option in Surveys.RESPONSE_VALUES) {
-        let numResponses = this._surveys[question].options[option];
-
-        value += Surveys.RESPONSE_VALUES[option] * numResponses;
-        total += numResponses;
-      }
-    }
-
-    this._scoreCache.set(question, value / total);
-    return this._scoreCache.get(question) as number;
-  }
-
-  /**
-   * Calculated the average score of all questions.
-   */
-  overall(): number {
-    let result = 0;
-    for (let question in this._surveys) result += this.score(question);
-    return result / this._numQuestions;
+  numQuestions() {
+    return this._numQuestions;
   }
 
   /**
    * Gets the total number of responses for the given question.
    */
   totalResponses(question: string): number {
-    if (!this.has(question)) return 0;
-
-    return Object.entries(this._surveys[question].options).reduce(
-      (acc, [question, responses]) =>
-        question in Surveys.RESPONSE_VALUES ? acc + responses : acc,
-      0
-    );
+    let responses = 0;
+    for (let option in this._surveys[question]?.options) {
+      if (option in Surveys.RESPONSE_VALUES) {
+        responses += this._surveys[question].options[option];
+      }
+    }
+    return responses;
   }
 
   /**
-   * Gets the number of questions in the survey.
+   * Calculates the average response out of 5 for the given question.
    */
-  numQuestions() {
-    return this._numQuestions;
+  score(question: string): number {
+    let total = 0;
+    let totalResponses = 0;
+    for (let option in this._surveys[question]?.options) {
+      if (option in Surveys.RESPONSE_VALUES) {
+        let numResponses = this._surveys[question].options[option];
+
+        total += Surveys.RESPONSE_VALUES[option] * numResponses;
+        totalResponses += numResponses;
+      }
+    }
+
+    if (totalResponses === 0) return NaN;
+    return total / totalResponses;
+  }
+
+  /**
+   * Calculated the average score of the given questions.
+   */
+  averageScore(questions: string[]): number {
+    let total = 0;
+    let numQuestions = 0;
+    for (let question of questions) {
+      let score = this.score(question);
+
+      if (!Number.isNaN(score)) {
+        total += this.score(question);
+        numQuestions++;
+      }
+    }
+
+    if (numQuestions === 0) return NaN;
+    return total / numQuestions;
   }
 }

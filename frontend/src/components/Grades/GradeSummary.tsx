@@ -27,6 +27,7 @@ export default function GradeSummary({
       align={'center'}
       width={'100%'}
       flexWrap={'wrap'}
+      alignItems={'start'}
     >
       <VStack
         align={'start'}
