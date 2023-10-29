@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { GetServerSidePropsContext } from 'next';
+import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import { Heading, VStack, Divider } from '@chakra-ui/react';
 import { getSubject, Subject, SubjectWithCourses } from '~/lib/api';
@@ -59,26 +59,30 @@ export default function Subject({ subject }: SubjectProps) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    const subject = await getSubject(
-      context.params?.code as string,
-      context.locale
-    );
+export const getServerSideProps = withAxiomGetServerSideProps(
+  async (context) => {
+    try {
+      const subject = await getSubject(
+        context.params?.code as string,
+        context.locale
+      );
 
-    return {
-      props: {
-        subject,
-        messages: await getDictionary(context.locale),
-      },
-    };
-  } catch (error: any) {
-    if (error.status == 404) {
       return {
-        notFound: true,
+        props: {
+          subject,
+          messages: await getDictionary(context.locale),
+        },
       };
-    }
+    } catch (error: any) {
+      if (error.status == 404) {
+        return {
+          notFound: true,
+        };
+      }
 
-    throw new Error('Internal Server Error');
+      context.log.error('Internal Server Error', error);
+
+      throw new Error('Internal Server Error');
+    }
   }
-}
+);

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import NextLink from 'next/link';
-import type { GetServerSidePropsContext } from 'next';
+import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import {
   Heading,
@@ -134,28 +134,30 @@ export default function Course({ course }: CourseProps) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    const course = await getCourse(
-      context.params?.code as string,
-      context.locale
-    );
+export const getServerSideProps = withAxiomGetServerSideProps(
+  async (context) => {
+    try {
+      const course = await getCourse(
+        context.params?.code as string,
+        context.locale
+      );
 
-    return {
-      props: {
-        course,
-        messages: await getDictionary(context.locale),
-      },
-    };
-  } catch (error: any) {
-    if (error.status == 404) {
       return {
-        notFound: true,
+        props: {
+          course,
+          messages: await getDictionary(context.locale),
+        },
       };
+    } catch (error: any) {
+      if (error.status == 404) {
+        return {
+          notFound: true,
+        };
+      }
+
+      context.log.error('Internal Server Error', error);
+
+      throw new Error('Internal Server Error');
     }
-
-    console.log(error);
-
-    throw new Error('Internal Server Error');
   }
-}
+);

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { GetServerSidePropsContext } from 'next';
+import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import { Heading, VStack, Divider, Wrap, WrapItem } from '@chakra-ui/react';
 import { getProfessor, ProfessorWithCourses } from '~/lib/api';
@@ -96,26 +96,30 @@ export default function Professor({ professor }: ProfessorProps) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    const professor = await getProfessor(
-      context.params?.id as string,
-      context.locale
-    );
+export const getServerSideProps = withAxiomGetServerSideProps(
+  async (context) => {
+    try {
+      const professor = await getProfessor(
+        context.params?.id as string,
+        context.locale
+      );
 
-    return {
-      props: {
-        professor,
-        messages: await getDictionary(context.locale),
-      },
-    };
-  } catch (error: any) {
-    if (error.status == 404) {
       return {
-        notFound: true,
+        props: {
+          professor,
+          messages: await getDictionary(context.locale),
+        },
       };
-    }
+    } catch (error: any) {
+      if (error.status == 404) {
+        return {
+          notFound: true,
+        };
+      }
 
-    throw new Error('Internal Server Error');
+      context.log.error('Internal Server Error', error);
+
+      throw new Error('Internal Server Error');
+    }
   }
-}
+);
