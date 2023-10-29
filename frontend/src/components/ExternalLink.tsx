@@ -1,23 +1,19 @@
-import { Link as ChakraLink, Box } from '@chakra-ui/react';
+import { Link, LinkProps } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
-interface ExternalLinkProps {
-  href: string;
-  children: React.ReactNode;
-}
-
-export default function ExternalLink({ href, children }: ExternalLinkProps) {
+export default function ExternalLink({ href, children, ...props }: LinkProps) {
   return (
-    <ChakraLink
+    <Link
       href={href}
       fontWeight={500}
       color={'gray.700'}
       isExternal={true}
       display={'inline-flex'}
       alignItems={'center'}
+      {...props}
     >
       {children}
       <ExternalLinkIcon mx={'2px'} />
-    </ChakraLink>
+    </Link>
   );
 }

@@ -11,7 +11,7 @@
   },
   "Footer": {
     "dataSource": {
-      "text": "L'information de l'Été 2017 au Automne 2023 ont été fournies par",
+      "text": "L'information de l'Automne 2017 au l'Hiver 2023 ont été fournies par",
       "office": {
         "text": "Le Bureau de l'accès à l'information et de la protection de la vie privée",
         "link": "https://www.uottawa.ca/notre-universite/baipvp"
@@ -21,8 +21,7 @@
         "link": "https://uozone2.uottawa.ca/fr/apps/s-reports?language=fr"
       }
     },
-    "github": "Regardez le github",
-    "maintainer": "Maintenu par"
+    "maintainer": "maintenu par"
   },
   "General": {
     "and": "et"

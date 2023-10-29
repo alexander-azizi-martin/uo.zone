@@ -11,7 +11,7 @@
   },
   "Footer": {
     "dataSource": {
-      "text": "Data from Summer 2017 to Fall 2023 provided by",
+      "text": "Data from Fall 2017 to Winter 2023 provided by",
       "office": {
         "text": "The Access to Information and Privacy Office",
         "link": "https://www.uottawa.ca/about-us/aipo"
@@ -21,8 +21,7 @@
         "link": "https://uozone2.uottawa.ca/en/apps/s-reports"
       }
     },
-    "github": "Checkout the github",
-    "maintainer": "Maintained by"
+    "maintainer": "maintained by"
   },
   "General": {
     "and": "and"
