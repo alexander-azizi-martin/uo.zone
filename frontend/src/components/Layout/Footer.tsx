@@ -55,7 +55,7 @@ export default function Footer() {
           <ExternalLink
             href={'https://github.com/alexander-azizi-martin/uo.zone'}
             onClick={() => {
-              trackEvent('button.github.email.click');
+              trackEvent('button.github.click');
             }}
           >
             Github
