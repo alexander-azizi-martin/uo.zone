@@ -13,4 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export { reportWebVitals } from 'next-axiom';
+import { reportWebVitals as axiomReportWebVitals } from 'next-axiom';
+
+export function reportWebVitals(metric: any) {
+  console.log(metric);
+  axiomReportWebVitals(metric);
+}
