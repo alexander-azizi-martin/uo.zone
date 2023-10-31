@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use League\StatsD\Laravel5\Facade\StatsdFacade as Statsd;
+use Facades\League\StatsD\Client as Statsd;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReportAnalytics
