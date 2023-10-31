@@ -8,16 +8,16 @@
             "files": {
                 "collect_list": [
                     {
-                        "file_path": "./storage/logs/laravel.log",
+                        "file_path": "/home/ec2-user/uo.zone/backend/storage/logs/laravel.log",
                         "log_group_name": "laravel.log",
                         "log_stream_name": "{instance_id}",
-                        "retention_in_days": -1
+                        "retention_in_days": 5
                     },
                     {
-                        "file_path": "./storage/logs/requests.log",
-                        "log_group_name": "laravel.log",
+                        "file_path": "/home/ec2-user/uo.zone/backend/storage/logs/requests.log",
+                        "log_group_name": "laravel.requests",
                         "log_stream_name": "{instance_id}",
-                        "retention_in_days": -1
+                        "retention_in_days": 5
                     }
                 ]
             }
