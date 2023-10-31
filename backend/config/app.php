@@ -179,6 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        League\StatsD\Laravel5\Provider\StatsdServiceProvider::class,
     ])->toArray(),
 
     /*
