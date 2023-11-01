@@ -36,9 +36,7 @@ class StatsdServiceProvider extends ServiceProvider
                 ['host', 'port', 'namespace', 'timeout', 'throwConnectionExceptions']
             );
 
-            $statsd = new Statsd();
-            $statsd->configure($options);
-            return $statsd;
+            return (new Statsd())->configure($options);
         });
     }
 }

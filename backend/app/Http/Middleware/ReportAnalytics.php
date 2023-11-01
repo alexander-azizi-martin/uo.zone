@@ -24,9 +24,9 @@ class ReportAnalytics
     public function terminate(Request $request, Response $response)
     {
         $metrics = [
+            'requests',
             'request.code.' . $response->getStatusCode(),
             'request.method.' . $request->method(),
-            'request.path.' . $request->path(),
         ];
 
         $route = $request->route();
