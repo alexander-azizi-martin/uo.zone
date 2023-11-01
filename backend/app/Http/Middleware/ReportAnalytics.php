@@ -36,9 +36,15 @@ class ReportAnalytics
 
         Statsd::increment($metrics);
 
-        $responseTime = ((microtime(true) - $request->server('REQUEST_TIME_FLOAT')) * 1000);
+        $responseTime = round((microtime(true) - $request->server('REQUEST_TIME_FLOAT')) * 1000, 2);
         Statsd::timings(['request.response_time' => $responseTime]);
 
-        Log::channel('requests')->info("{$response->getStatusCode()} {$request->method()} {$request->path()}");
+        Log::channel('requests')->info("{ip} {method} {path} {status} {responseTime}ms", [
+            'ip' => $request->ip(),
+            'method' => $request->method(),
+            'path' => $request->path(),
+            'status' => $response->getStatusCode(),
+            'responseTime' => $responseTime,
+        ]);
     }
 }
