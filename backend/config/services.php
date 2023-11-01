@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'axiom' => [
+        'token' => env('AXIOM_TOKEN'),
+        'dataset' => env('AXIOM_DATASET', 'laravel')
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

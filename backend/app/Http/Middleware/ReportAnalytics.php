@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Facades\League\StatsD\Client as Statsd;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +25,7 @@ class ReportAnalytics
      */
     public function terminate(Request $request, Response $response)
     {
-        $metrics = [
+        $statsdMetrics = [
             'requests',
             'request.code.' . $response->getStatusCode(),
             'request.method.' . $request->method(),
@@ -31,20 +33,29 @@ class ReportAnalytics
 
         $route = $request->route();
         if (isset($route)) {
-            $metrics[] = 'request.route.' . $route->uri();
+            $statsdMetrics[] = 'request.route.' . $route->uri();
         }
 
-        Statsd::increment($metrics);
-
         $responseTime = round((microtime(true) - $request->server('REQUEST_TIME_FLOAT')) * 1000, 2);
-        Statsd::timings(['request.response_time' => $responseTime]);
 
-        Log::channel('requests')->info("{ip} {method} {path} {status} {responseTime}ms", [
+        Statsd::increment($statsdMetrics);
+        Statsd::timings(['request.responseTime' => $responseTime]);
+
+        $axiomData = Arr::whereNotNull([
             'ip' => $request->ip(),
             'method' => $request->method(),
             'path' => $request->path(),
             'status' => $response->getStatusCode(),
             'responseTime' => $responseTime,
+            'route' => $route->uri ?? null,
         ]);
+
+        Http::withToken(config('services.axiom.token'))
+            ->withUrlParameters(['dataset' => config('services.axiom.dataset')])
+            ->post('https://api.axiom.co/v1/datasets/{dataset}/ingest', [$axiomData]);
+
+        Log::channel('requests')->info(
+            "{$response->getStatusCode()} {$request->method()} {$request->path()}"
+        );
     }
 }
