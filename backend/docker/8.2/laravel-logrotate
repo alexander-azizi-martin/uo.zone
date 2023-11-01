@@ -1,0 +1,5 @@
+~/uo.zone/backend/storage/logs/*.log {
+    rotate 0
+    daily
+    missingok
+}
