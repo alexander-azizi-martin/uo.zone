@@ -55,7 +55,7 @@ class ReportAnalytics
             ->post('https://api.axiom.co/v1/datasets/{dataset}/ingest', [$axiomData]);
 
         Log::channel('requests')->info(
-            "{$response->getStatusCode()} {$request->method()} {$request->path()}"
+            "{$request->ip()} {$request->method()} {$request->path()} {$response->getStatusCode()}"
         );
     }
 }
