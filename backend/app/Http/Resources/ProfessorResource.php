@@ -10,7 +10,7 @@ class ProfessorResource extends JsonResource
 {
     protected bool $withCourses = false;
     protected bool $withSections = false;
-    
+
     /**
      * Transform the resource into an array.
      */
@@ -23,6 +23,9 @@ class ProfessorResource extends JsonResource
             'total_enrolled' => $this->whenHas('total_enrolled'),
             'surveys' => $this->whenLoaded('surveys', function () {
                 return SurveyResource::collection($this->surveys);
+            }),
+            'rmp_review' => $this->whenLoaded('rmpReview', function () {
+                return isset($this->rmpReview) ? new RateMyProfessorReviewResource($this->rmpReview) : null;
             }),
             'courses' => $this->when($this->withCourses, function () {
                 $courses = new Collection($this->sections->loadMissing('course')->pluck('course'));
