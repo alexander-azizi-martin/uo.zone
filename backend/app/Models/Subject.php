@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\Searchable;
+use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subject extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, HasSearch;
 
     /**
      * The attributes that aren't mass assignable.

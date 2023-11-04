@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-trait Searchable
+trait HasSearch
 {
     /**
      * Get the searchable data for the model.
