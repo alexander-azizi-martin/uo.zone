@@ -35,12 +35,21 @@ export interface Course {
   subject: Subject;
 }
 
+export interface RateMyProfessorReview {
+  link: string;
+  rating: number;
+  difficulty: number;
+  num_ratings: number;
+  department: string;
+}
+
 export interface Professor {
   id: number;
   name: string;
   surveys: Survey[];
   grades: Grades;
   total_enrolled: number;
+  rmp_review?: RateMyProfessorReview;
 }
 
 export interface CourseWithSections extends Course {

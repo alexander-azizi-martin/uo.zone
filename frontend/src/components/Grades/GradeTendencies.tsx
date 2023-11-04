@@ -15,7 +15,7 @@ export default function GradeTendencies({ grades }: GradeTendenciesProps) {
   }, [grades]);
 
   return (
-    <HStack pt={3}>
+    <HStack>
       {mean.value() >= 0 && grades.totalStudents() > 0 && (
         <Tag size={'sm'} textAlign={'center'} colorScheme={mean.color()} py={1}>
           {t('mean', {

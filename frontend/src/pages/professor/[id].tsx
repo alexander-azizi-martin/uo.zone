@@ -1,7 +1,16 @@
 import { useMemo } from 'react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
-import { Heading, VStack, Divider, Wrap, WrapItem } from '@chakra-ui/react';
+import {
+  Heading,
+  VStack,
+  HStack,
+  Divider,
+  Text,
+  Box,
+  Wrap,
+  WrapItem,
+} from '@chakra-ui/react';
 import { getProfessor, ProfessorWithCourses } from '~/lib/api';
 import { CourseGrades } from '~/lib/grades';
 import { Surveys } from '~/lib/surveys';
@@ -10,8 +19,9 @@ import { professorSurveys } from '~/lib/config';
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
+import ExternalLink from '~/components/ExternalLink';
 import { LinkCard, SummaryCard, BigNumberCard } from '~/components/Card';
-import { GradeSummary } from '~/components/Grades';
+import { GradeSummary, RmpRating } from '~/components/Grades';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
@@ -38,6 +48,28 @@ export default function Professor({ professor }: ProfessorProps) {
               grades={grades}
               title={professor.name}
               titleSize={'3xl'}
+              rmpReview={professor.rmp_review}
+              info={
+                <>
+                  <Text fontSize={'sm'} color={'gray.600'} mt={2}>
+                    This total also includes classes that they may not teach
+                    anymore.
+                  </Text>
+
+                  {professor.rmp_review && (
+                    <VStack spacing={2} alignItems={'start'} mt={3}>
+                      <RmpRating review={professor.rmp_review} />
+                      <ExternalLink
+                        href={professor.rmp_review.link}
+                        color={'gray.600'}
+                        fontSize={'sm'}
+                      >
+                        View on RateMyProfessor
+                      </ExternalLink>
+                    </VStack>
+                  )}
+                </>
+              }
             />
           </SummaryCard>
 

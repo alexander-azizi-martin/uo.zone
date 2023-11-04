@@ -1,13 +1,19 @@
-import { HStack, VStack, Text } from '@chakra-ui/react';
+import { HStack, VStack, Box, Text, Spacer } from '@chakra-ui/react';
 import { CourseGrades } from '~/lib/grades';
-import { GradeDistribution, GradeTendencies } from '.';
+import { RateMyProfessorReview } from '~/lib/api';
+import {
+  GradeDistribution,
+  GradeTendencies,
+  RmpRating,
+} from '~/components/Grades';
 
 interface GradeSummaryProps {
   title?: string;
   titleSize?: '3xl' | 'lg';
   subtitle?: string;
-  info?: string;
+  info?: React.ReactNode;
   grades: CourseGrades;
+  rmpReview?: RateMyProfessorReview;
   distributionWidth?: number;
   distributionHeight?: number;
 }
@@ -18,6 +24,7 @@ export default function GradeSummary({
   subtitle,
   info,
   grades,
+  rmpReview,
   distributionWidth = 390,
   distributionHeight = 55,
 }: GradeSummaryProps) {
@@ -32,7 +39,6 @@ export default function GradeSummary({
       <VStack
         align={'start'}
         flexGrow={1}
-        pb={2}
         width={'50%'}
         justifyContent={'center'}
         height={'100%'}
@@ -41,19 +47,18 @@ export default function GradeSummary({
         <Text fontSize={titleSize} fontWeight={'bold'}>
           {title}
         </Text>
+
         {subtitle && (
           <Text fontSize={'xs'} fontWeight={'200'}>
             {subtitle}
           </Text>
         )}
 
+        <Spacer mt={3} />
+
         <GradeTendencies grades={grades} />
 
-        {info && (
-          <Text fontSize={'sm'} color={'gray.600'} pt={2}>
-            {info}
-          </Text>
-        )}
+        {info && info}
       </VStack>
 
       <GradeDistribution
