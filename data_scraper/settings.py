@@ -8,6 +8,7 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 import dotenv
+from data_scraper import helpers
 
 dotenv.load_dotenv()
 
@@ -99,3 +100,18 @@ FEED_EXPORT_ENCODING = "utf-8"
 
 LOG_ENABLED = False
 # LOG_LEVEL = "INFO"
+
+DOWNLOAD_HANDLERS = {
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+}
+
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+
+PLAYWRIGHT_LAUNCH_OPTIONS = {
+    "headless": False,
+    "timeout": 20 * 1000,  # 20 seconds
+}
+
+ad_blocker = helpers.AdBlocker()
+PLAYWRIGHT_ABORT_REQUEST = lambda request: ad_blocker.is_blocked(request.url)
