@@ -3,7 +3,7 @@ from itemloaders.processors import MapCompose, Compose, TakeFirst
 from data_scraper.helpers import normalize_string, normalize_whitespace
 
 
-def normalize_term(term):
+def normalize_term(term: str) -> str:
     token1, token2 = term.lower().replace("term", "").strip(" :").split(" ")
 
     if token1.isdigit():
@@ -12,7 +12,7 @@ def normalize_term(term):
         return f"{token1.capitalize()} {token2}"
 
 
-def normalize_professor_name(name):
+def normalize_professor_name(name: str) -> str:
     if "," not in name:
         return name
 
@@ -20,7 +20,7 @@ def normalize_professor_name(name):
     return f"{first_name} {last_name}".strip()
 
 
-def extract_codes(name):
+def extract_codes(name: str) -> str:
     courses = name.lower().split(",")
 
     course_codes = []
@@ -43,7 +43,6 @@ class Report(scrapy.Item):
     term = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            normalize_whitespace,
             normalize_term,
         ),
         output_processor=TakeFirst(),
@@ -51,15 +50,14 @@ class Report(scrapy.Item):
     faculty = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            lambda x: x.split(":", 1).pop().strip(),
+            lambda s: s.split(":", 1).pop().strip(),
         ),
         output_processor=TakeFirst(),
     )
     professor = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            normalize_whitespace,
-            lambda x: x.split(":", 1).pop().strip(),
+            lambda s: s.split(":", 1).pop().strip(),
             normalize_professor_name,
         ),
         output_processor=TakeFirst(),
@@ -67,7 +65,7 @@ class Report(scrapy.Item):
     course = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            lambda x: x.split(":", 1).pop().strip(),
+            lambda s: s.split(":", 1).pop().strip(),
         ),
         output_processor=TakeFirst(),
     )
@@ -75,7 +73,7 @@ class Report(scrapy.Item):
         input_processor=Compose(
             TakeFirst(),
             normalize_string,
-            lambda x: x.split(":", 1).pop().strip(),
+            lambda s: s.split(":", 1).pop().strip(),
             extract_codes,
         ),
     )

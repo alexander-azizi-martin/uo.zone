@@ -1,16 +1,16 @@
 import scrapy
 import re
 from itemloaders.processors import MapCompose, TakeFirst
-from operator import methodcaller
 from data_scraper.helpers import normalize_string
+
+FACULTY_PATTERN_EN = re.compile(r"The following (?:courses are|course is) offered by (?:the )?(.+)\.")
+FACULTY_PATTERN_FR = re.compile(r"Les? cours (?:suivants sont offerts|suivant est offert) par (?:la )?(.+)")
 
 
 def extract_faculty(s):
-    faculty_pattern_en = re.compile(r"The following (?:courses are|course is) offered by (?:the )?(.+)\.")
-    if (match := faculty_pattern_en.match(s)):
+    if (match := FACULTY_PATTERN_EN.match(s)):
         return match.group(1).strip('. ')
-    faculty_pattern_fr = re.compile(r"Les? cours (?:suivants sont offerts|suivant est offert) par (?:la )?(.+)")
-    if (match := faculty_pattern_fr.match(s)):
+    if (match := FACULTY_PATTERN_FR.match(s)):
         return match.group(1).strip('. ')
     return ""
 
@@ -23,12 +23,15 @@ class Subject(scrapy.Item):
     code = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            methodcaller('lower'),
+            str.lower,
         ), 
         output_processor=TakeFirst(),
     )
     faculty = scrapy.Field(
-        input_processor=MapCompose(normalize_string, extract_faculty),
+        input_processor=MapCompose(
+            normalize_string, 
+            extract_faculty,
+        ),
         output_processor=TakeFirst(),
     )
     courses = scrapy.Field()

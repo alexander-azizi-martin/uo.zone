@@ -2,7 +2,7 @@ import scrapy
 import re
 from itemloaders.processors import Compose, MapCompose, Join, TakeFirst
 from operator import methodcaller, itemgetter
-from data_scraper.helpers import normalize_string, normalize_whitespace
+from data_scraper.helpers import normalize_string, normalize_whitespace, remove_whitespace
 
 
 def remove_prerequisites(s):
@@ -22,14 +22,16 @@ class Course(scrapy.Item):
     code = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            lambda x: x.lower().replace(" ", ""),
+            remove_whitespace,
+            str.lower,
         ),
         output_processor=TakeFirst(),
     )
     language = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
-            lambda x: x.lower().replace(" ", ""),
+            remove_whitespace,
+            str.lower,
             extract_language,
         ),
         output_processor=TakeFirst(),
@@ -41,7 +43,6 @@ class Course(scrapy.Item):
     description = scrapy.Field(
         input_processor=Compose(
             Join(" "),
-            str.strip,
             normalize_whitespace,
         ),
         output_processor=TakeFirst(),
@@ -53,16 +54,14 @@ class Course(scrapy.Item):
         input_processor=MapCompose(normalize_string),
         output_processor=Compose(
             Join(" "),
-            methodcaller("split", ": ", 1),
-            itemgetter(-1),
+            lambda s: s.split(":", 1).pop().strip(),
         ),
     )
     prereq_description = scrapy.Field(
         input_processor=MapCompose(normalize_string),
         output_processor=Compose(
             Join(" "),
-            methodcaller("split", ": ", 1),
-            itemgetter(-1),
+            lambda s: s.split(":", 1).pop().strip(),
             remove_prerequisites,
         ),
     )

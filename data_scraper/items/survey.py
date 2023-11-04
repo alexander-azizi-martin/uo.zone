@@ -2,15 +2,17 @@ import scrapy
 import re
 import pytesseract
 from itemloaders.processors import MapCompose, TakeFirst
-from data_scraper.helpers import normalize_string, normalize_whitespace, download_image
+from data_scraper.helpers import normalize_string, download_image
+
+OPTION_PATTERN = r"([A-Z]):\s+(.*?)\s+\((\d+)\)"
+RESULT_PATTERN = r"Total \((\d+)\)"
 
 
 class Survey(scrapy.Item):
     question = scrapy.Field(
         input_processor=MapCompose(
             normalize_string, 
-            lambda x: x.split(")", 1).pop().strip("?. "),
-            normalize_whitespace,
+            lambda s: s.split(")", 1).pop().strip("?. "),
         ), 
         output_processor=TakeFirst(),
     )
@@ -33,9 +35,6 @@ class Survey(scrapy.Item):
         # Improves text recognition
         bw_image = image.convert("L")
 
-        option_pattern = re.compile(r"([A-Z]):\s+(.*?)\s+\((\d+)\)")
-        result_pattern = re.compile(r"Total \((\d+)\)")
-
         survey = Survey({
             "total_responses": 0,
             "image_url": survey_image,
@@ -45,7 +44,7 @@ class Survey(scrapy.Item):
         text = pytesseract.image_to_string(bw_image)
         lines = filter(len, text.strip().split("\n"))
         for line in lines:
-            if match := option_pattern.search(line):
+            if match := OPTION_PATTERN.search(line):
                 label, description, responses = map(normalize_string, match.groups())
 
                 survey["options"].append({
@@ -53,7 +52,7 @@ class Survey(scrapy.Item):
                     "description": description, 
                     "responses": int(responses),
                 })
-            elif match := result_pattern.search(line):
+            elif match := RESULT_PATTERN.search(line):
                 survey["total_responses"] = int(normalize_string(match.group(1)))
 
         return survey
