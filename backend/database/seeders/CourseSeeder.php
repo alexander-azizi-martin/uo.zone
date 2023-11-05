@@ -14,7 +14,7 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        $subjects = Storage::json("courses.json");
+        $subjects = Storage::json("courses_en.json");
 
         foreach ($subjects as $subjectData) {
             if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty'))
