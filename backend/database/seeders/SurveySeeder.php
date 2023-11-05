@@ -16,7 +16,8 @@ class SurveySeeder extends Seeder
      */
     public function run(string $file): void
     {
-        if (!Str::endsWith($file, '.json')) return;
+        if (!Str::endsWith($file, '.json') || Str::endsWith($file, '.cache.json'))
+            return;
 
         $feedbackData = Storage::json($file);
 
