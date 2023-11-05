@@ -2,8 +2,6 @@ import scrapy
 import os
 import json
 import browser_cookie3
-import boto3
-import io
 from tqdm import tqdm
 from urllib.parse import urljoin
 from multiprocessing import Pool
@@ -12,6 +10,7 @@ from itertools import repeat
 from scrapy import signals
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
+from data_scraper.settings import filesystem
 from data_scraper.items import Report, Survey
 from data_scraper.helpers import normalize_string
 
@@ -36,19 +35,12 @@ class CourseFeedbackSpider(scrapy.Spider):
             elif cookie.name == "SSESS6483c99e0d6fc7b7554c57814d17fc09":
                 self.cookies[cookie.name] = cookie.value
 
-        self.s3 = boto3.client('s3')
-        file_name = os.path.join("feedback", self.term, ".cache.json")
-        with io.BytesIO() as buffer:
-            try:
-                self.s3.download_fileobj("uozone-data", file_name, buffer)
-                buffer.seek(0)
+        cache_file_name = os.path.join("feedback", self.term, ".cache.json")
+        cache_file_data = filesystem.get(cache_file_name, "[]")
 
-                self.saved_reports = set(json.load(buffer))
-            except:
-                self.saved_reports = set()
-
-        self.current_page = 1
+        self.saved_reports = set(json.loads(cache_file_data))
         self.start_page = (len(self.saved_reports) // 10) + 1
+        self.current_page = 1
 
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
@@ -60,11 +52,10 @@ class CourseFeedbackSpider(scrapy.Spider):
         self.progress_bar.close()
         self.thread_pool.close()
 
-        file_name = os.path.join("feedback", self.term, ".cache.json")
-        with io.BytesIO() as buffer:
-            buffer.write(json.dumps(list(self.saved_reports)).encode())
-            buffer.seek(0)
-            self.s3.upload_fileobj(buffer, "uozone-data", file_name)
+        cache_file_name = os.path.join("feedback", self.term, ".cache.json")
+        cache_file_data = json.dumps(list(self.saved_reports))
+
+        filesystem.put(cache_file_name, cache_file_data)
 
     def start_requests(self):
         yield scrapy.Request(

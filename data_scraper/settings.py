@@ -115,3 +115,6 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {
 
 ad_blocker = helpers.AdBlocker()
 PLAYWRIGHT_ABORT_REQUEST = lambda request: ad_blocker.is_blocked(request.url)
+
+filesystem = helpers.LocalFilesystem("backend/storage/app")
+# filesystem = helpers.S3Filesystem("uozone-data")
