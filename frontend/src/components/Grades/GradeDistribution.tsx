@@ -28,7 +28,7 @@ export default function GradeDistribution({
     return LetterGrade.LETTER_ORDER.map((letter) =>
       Math.round(height * Math.max(0, 1 - grades.percentage(letter) * 3))
     );
-  }, [grades]);
+  }, [grades, height]);
 
   const blockWidth = width / 10;
   const gradeOffset = (grade: number) => grade * blockWidth;
