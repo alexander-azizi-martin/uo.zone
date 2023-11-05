@@ -1,10 +1,15 @@
 import scrapy
 import os
 import json
-import pathlib
 import browser_cookie3
+import boto3
+import io
 from tqdm import tqdm
-from operator import methodcaller
+from urllib.parse import urljoin
+from multiprocessing import Pool
+from parsel import Selector
+from itertools import repeat
+from scrapy import signals
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
 from data_scraper.items import Report, Survey
@@ -17,12 +22,12 @@ class CourseFeedbackSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(CourseFeedbackSpider, self).__init__(*args, **kwargs)
 
+        self.thread_pool = Pool(12)
         self.progress_bar = None
         self.term_season = os.getenv("TERM_SEASON")
         self.term_year = int(os.getenv("TERM_YEAR"))
         self.term = f"{self.term_season} {self.term_year}".lower()
         self.cookies = {}
-        self.saved_reports = set()
 
         browser_cookies = browser_cookie3.firefox()
         for cookie in browser_cookies:
@@ -31,15 +36,35 @@ class CourseFeedbackSpider(scrapy.Spider):
             elif cookie.name == "SSESS6483c99e0d6fc7b7554c57814d17fc09":
                 self.cookies[cookie.name] = cookie.value
 
-        term_folder = pathlib.Path("backend", "storage", "app", "feedback", self.term)
-        term_folder.mkdir(parents=True, exist_ok=True)
-        report_files = filter(methodcaller("is_file"), term_folder.iterdir())
-        for report in report_files:
-            with report.open() as f:
-                self.saved_reports.add(json.load(f)["link"])
+        self.s3 = boto3.client('s3')
+        file_name = os.path.join("feedback", self.term, ".cache.json")
+        with io.BytesIO() as buffer:
+            try:
+                self.s3.download_fileobj("uozone-data", file_name, buffer)
+                buffer.seek(0)
+
+                self.saved_reports = set(json.load(buffer))
+            except:
+                self.saved_reports = set()
 
         self.current_page = 1
         self.start_page = (len(self.saved_reports) // 10) + 1
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(CourseFeedbackSpider, cls).from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider.spider_closed, signal=signals.spider_closed)
+        return spider
+
+    def spider_closed(self, spider):
+        self.progress_bar.close()
+        self.thread_pool.close()
+
+        file_name = os.path.join("feedback", self.term, ".cache.json")
+        with io.BytesIO() as buffer:
+            buffer.write(json.dumps(list(self.saved_reports)).encode())
+            buffer.seek(0)
+            self.s3.upload_fileobj(buffer, "uozone-data", file_name)
 
     def start_requests(self):
         yield scrapy.Request(
@@ -59,7 +84,7 @@ class CourseFeedbackSpider(scrapy.Spider):
                     callback=self.jump_to_start,
                     cookies=self.cookies,
                 )
-    
+
     def jump_to_start(self, response: Response):
         if self.progress_bar is None:
             num_reports = response.css(
@@ -91,9 +116,9 @@ class CourseFeedbackSpider(scrapy.Spider):
                 formdata=new_page_request,
                 callback=self.jump_to_start,
                 cookies=self.cookies,
-            ) 
+            )
         else:
-            yield from self.parse_report_list(response) 
+            yield from self.parse_report_list(response)
 
     def parse_report_list(self, response: Response):
         # Parse all the reports on the page
@@ -105,14 +130,12 @@ class CourseFeedbackSpider(scrapy.Spider):
             if url in self.saved_reports:
                 continue
 
-            callback = self.parse_report_v1
-            if self.term_year <= 2018 or self.term == "winter 2019":
-                callback = self.parse_report_v2
+            self.saved_reports.add(url)
 
             yield scrapy.Request(
                 url=url,
-                callback=callback,
-                cookies={"CookieName": os.getenv("BLUERA_COOKIE")},
+                callback=self.parse_report,
+                cookies=self.cookies,
             )
 
         # Goes to the next page
@@ -137,67 +160,59 @@ class CourseFeedbackSpider(scrapy.Spider):
                 callback=self.parse_report_list,
                 cookies=self.cookies,
             )
+
+    def parse_report(self, response: Response):
+        report_loader = ItemLoader(Report(), response)
+        report_loader.add_value("link", response.url)
+
+        sub_report_loader = report_loader.nested_css("ul:first-child ")
+        sub_report_loader.add_css("term", "li:nth-child(1)::text")
+        sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
+        sub_report_loader.add_css("professor", "li:nth-child(3)::text")
+        sub_report_loader.add_css("course", "li:nth-child(4)::text")
+        sub_report_loader.add_css("sections", "li:nth-child(4)::text")
+
+        surveys_blocks = response.css(".report-block").getall()
+        if self.term_year > 2018 and self.term != "winter 2019":
+            surveys = self.thread_pool.starmap(parse_survey_block_v1, zip(surveys_blocks, repeat(response.url)))
         else:
-            self.progress_bar.close()
-
-    def parse_report_v1(self, response: Response):
-        report_loader = ItemLoader(Report(), response)
-        report_loader.add_value("link", response.url)
-
-        sub_report_loader = report_loader.nested_css("ul:first-child ")
-        sub_report_loader.add_css("term", "li:nth-child(1)::text")
-        sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
-        sub_report_loader.add_css("professor", "li:nth-child(3)::text")
-        sub_report_loader.add_css("course", "li:nth-child(4)::text")
-        sub_report_loader.add_css("sections", "li:nth-child(4)::text")
-
-        surveys = []
-        for survey_block in response.css(".report-block"):
-            survey_image_url = response.urljoin(survey_block.css("img::attr(src)").get())
-
-            survey_loader = ItemLoader(Survey.extract_results(survey_image_url), survey_block)
-            survey_loader.add_css("question", "h4 span::text")
-            survey_loader.add_css("num_invited", "#Invited + td::text")
-
-            surveys.append(survey_loader.load_item())
+            surveys = self.thread_pool.map(parse_survey_block_v2, surveys_blocks)
 
         report_loader.add_value("surveys", surveys)
         yield report_loader.load_item()
 
-    def parse_report_v2(self, response: Response):
-        report_loader = ItemLoader(Report(), response)
-        report_loader.add_value("link", response.url)
 
-        sub_report_loader = report_loader.nested_css("ul:first-child ")
-        sub_report_loader.add_css("term", "li:nth-child(1)::text")
-        sub_report_loader.add_css("faculty", "li:nth-child(2)::text")
-        sub_report_loader.add_css("professor", "li:nth-child(3)::text")
-        sub_report_loader.add_css("course", "li:nth-child(4)::text")
-        sub_report_loader.add_css("sections", "li:nth-child(4)::text")
+def parse_survey_block_v1(text, url):
+    survey_block = Selector(text)
+    survey_image_url = urljoin(url, survey_block.css("img::attr(src)").get())
 
-        surveys = []
-        for survey_block in response.css(".report-block"):
-            survey_loader = ItemLoader(Survey(), survey_block)
+    survey_loader = ItemLoader(Survey.extract_results(survey_image_url), survey_block)
+    survey_loader.add_css("question", "h4 span::text")
+    survey_loader.add_css("num_invited", "#Invited + td::text")
 
-            options_table, statistics_table, *_ = survey_block.css("table")
-            total_responses = statistics_table.css("tbody tr:first-child td::text").get()
+    return survey_loader.load_item()
 
-            survey_loader.add_css("question", "h4 span::text")
-            survey_loader.add_value("total_responses", total_responses)
 
-            options = []
-            for option in options_table.css("tbody tr"):
-                label, description = map(normalize_string, option.css("th::text").get().split(": "))
-                responses = int(option.css("td::text").get())
+def parse_survey_block_v2(text):
+    survey_block = Selector(text)
+    survey_loader = ItemLoader(Survey(), survey_block)
 
-                options.append({
-                    "label": label,
-                    "description": description,
-                    "responses": responses,
-                })
+    options_table, statistics_table, *_ = survey_block.css("table")
+    total_responses = statistics_table.css("tbody tr:first-child td::text").get()
 
-            survey_loader.add_value("options", options)
-            surveys.append(survey_loader.load_item())
+    survey_loader.add_css("question", "h4 span::text")
+    survey_loader.add_value("total_responses", total_responses)
 
-        report_loader.add_value("surveys", surveys)
-        yield report_loader.load_item()
+    options = []
+    for option in options_table.css("tbody tr"):
+        label, description = map(normalize_string, option.css("th::text").get().split(": "))
+        responses = int(option.css("td::text").get())
+
+        options.append({
+            "label": label,
+            "description": description,
+            "responses": responses,
+        })
+
+    survey_loader.add_value("options", options)
+    return survey_loader.load_item()

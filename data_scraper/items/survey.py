@@ -4,8 +4,8 @@ import pytesseract
 from itemloaders.processors import MapCompose, TakeFirst
 from data_scraper.helpers import normalize_string, download_image
 
-OPTION_PATTERN = r"([A-Z]):\s+(.*?)\s+\((\d+)\)"
-RESULT_PATTERN = r"Total \((\d+)\)"
+OPTION_PATTERN = re.compile(r"([A-Z]):\s+(.*?)\s+\((\d+)\)")
+RESULT_PATTERN = re.compile(r"Total \((\d+)\)")
 
 
 class Survey(scrapy.Item):

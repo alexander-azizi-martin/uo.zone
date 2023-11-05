@@ -1,19 +1,27 @@
-from data_scraper.items import Report
+import boto3
+import io
+import os
 from scrapy.exporters import JsonLinesItemExporter
 from scrapy.exceptions import DropItem
-import pathlib
+from data_scraper.items import Report
 
 
 class SaveReportPipeline:
+    def __init__(self) -> None:
+        self.s3 = boto3.client('s3')
+
     def process_item(self, report, spider):
         if not isinstance(report, Report):
             return report
 
-        file_path = pathlib.Path("backend", "storage", "app", "feedback", report["term"])
-        file_path.mkdir(parents=True, exist_ok=True)
+        file_name = f"{report['course'].replace('/', ' ')}.json"
+        file_path = os.path.join("feedback", report['term'].lower(), file_name)
 
-        with (file_path / f"{report['course'].replace('/', ' ')}.json").open('wb') as json_file:
-            exporter = JsonLinesItemExporter(json_file)
+        with io.BytesIO() as buffer:
+            exporter = JsonLinesItemExporter(buffer)
             exporter.export_item(report)
+
+            buffer.seek(0)
+            self.s3.upload_fileobj(buffer, "uozone-data", file_path)
 
         raise DropItem()

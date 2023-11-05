@@ -4,7 +4,7 @@ from data_scraper.helpers import normalize_string, normalize_whitespace
 
 
 def normalize_term(term: str) -> str:
-    token1, token2 = term.lower().replace("term", "").strip(" :").split(" ")
+    token1, token2 = term.lower().replace("term", "").replace("spring/", "").strip(" :").split(" ")
 
     if token1.isdigit():
         return f"{token2.capitalize()} {token1}"
