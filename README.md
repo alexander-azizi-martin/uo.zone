@@ -3,7 +3,7 @@
 
 uo.zone is a web app that allows you to look up past grades for courses at the University of Ottawa. The frontend is build with NextJS and Chakra UI. The backend is written in Laravel using a PostgreSQL database and redis cache. The data scrappers for scrapping data from the university website and [ratemyprofessors.com](https://www.ratemyprofessors.com/) are written in python using the scrapy library.
 
-Web design taken from [Gopher Grades](https://github.com/samyok/gophergrades) with reimplemented frontend.
+Web design and idea taken from [Gopher Grades](https://github.com/samyok/gophergrades).
 
 # Running Locally
 
