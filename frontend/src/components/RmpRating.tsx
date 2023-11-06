@@ -18,7 +18,7 @@ interface RmpRatingProps {
 
 export default function RmpRating({ review }: RmpRatingProps) {
   return (
-    <HStack>
+    <HStack spacing={2}>
       <Tooltip label={'RateMyProfessor rating'} hasArrow>
         <Tag
           size={'sm'}

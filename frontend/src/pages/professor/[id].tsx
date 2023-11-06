@@ -1,7 +1,9 @@
 import {
   Divider,
   Heading,
+  Tag,
   Text,
+  Stack,
   VStack,
   Wrap,
   WrapItem,
@@ -43,6 +45,25 @@ export default function Professor({ professor }: ProfessorProps) {
     <Layout>
       <SearchNav>
         <Heading my={4}>{professor.name}</Heading>
+        {professor.rmp_review && (
+          <>
+            <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
+              <RmpRating review={professor.rmp_review} />
+              <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
+                {professor.rmp_review.department}
+              </Tag>
+            </Stack>
+            <Text my={4} fontSize={'sm'}>
+              <ExternalLink
+                href={professor.rmp_review.link}
+                color={'gray.600'}
+                fontSize={'sm'}
+              >
+                View on RateMyProfessor
+              </ExternalLink>
+            </Text>
+          </>
+        )}
         <VStack spacing={4} align={'start'} pb={4} minH={'50vh'}>
           <SummaryCard>
             <GradeSummary
@@ -50,25 +71,10 @@ export default function Professor({ professor }: ProfessorProps) {
               title={professor.name}
               titleSize={'3xl'}
               info={
-                <>
-                  <Text fontSize={'sm'} color={'gray.600'} mt={2}>
-                    This total also includes classes that they may not teach
-                    anymore.
-                  </Text>
-
-                  {professor.rmp_review && (
-                    <VStack spacing={2} alignItems={'start'} mt={3}>
-                      <RmpRating review={professor.rmp_review} />
-                      <ExternalLink
-                        href={professor.rmp_review.link}
-                        color={'gray.600'}
-                        fontSize={'sm'}
-                      >
-                        View on RateMyProfessor
-                      </ExternalLink>
-                    </VStack>
-                  )}
-                </>
+                <Text fontSize={'sm'} color={'gray.600'} mt={2}>
+                  This total also includes classes that they may not teach
+                  anymore.
+                </Text>
               }
             />
           </SummaryCard>
