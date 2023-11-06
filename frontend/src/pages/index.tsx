@@ -1,9 +1,10 @@
+import { Box, useBoolean } from '@chakra-ui/react';
+import { Collapse, Flex, Heading, Image, Text, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { useBoolean, Box } from '@chakra-ui/react';
-import { searchDurations } from '~/lib/config';
-import { Flex, VStack, Collapse, Heading, Text, Image } from '@chakra-ui/react';
+
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
+import { searchDurations } from '~/lib/config';
 
 export default function Home() {
   const t = useTranslations('Home');

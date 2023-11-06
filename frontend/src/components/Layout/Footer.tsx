@@ -1,8 +1,9 @@
+import { Box, Button, Divider, HStack, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
-import { Box, Button, Divider, Text, VStack, HStack } from '@chakra-ui/react';
-import { trackEvent } from '~/lib/helpers';
+
 import ExternalLink from '~/components/ExternalLink';
+import { trackEvent } from '~/lib/helpers';
 
 export default function Footer() {
   const tFooter = useTranslations('Footer');

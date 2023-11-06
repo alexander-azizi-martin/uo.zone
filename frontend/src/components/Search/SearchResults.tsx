@@ -1,12 +1,13 @@
+import { Heading, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
+
+import { LinkCard } from '~/components/Card';
 import type {
-  SearchResults as SearchResultsType,
   CourseResult,
   ProfessorResult,
+  SearchResults as SearchResultsType,
   SubjectResult,
 } from '~/lib/api';
-import { VStack, Heading } from '@chakra-ui/react';
-import { LinkCard } from '~/components/Card';
 
 interface SearchResultsProps {
   results: SearchResultsType;

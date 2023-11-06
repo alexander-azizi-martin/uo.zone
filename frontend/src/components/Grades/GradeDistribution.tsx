@@ -1,9 +1,10 @@
-import { useState, useRef, useMemo, MouseEventHandler } from 'react';
+import { Badge, Box, Circle, Flex, Text } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { Box, Flex, Circle, Text, Badge } from '@chakra-ui/react';
+import { MouseEventHandler, useMemo, useRef, useState } from 'react';
+
+import { useGradient } from '~/hooks';
 import { gradeGradient } from '~/lib/config';
 import { CourseGrades, LetterGrade } from '~/lib/grades';
-import { useGradient } from '~/hooks';
 
 interface GradeDistributionProps {
   grades: CourseGrades;

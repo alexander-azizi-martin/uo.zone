@@ -1,5 +1,6 @@
-import { useTranslations } from 'next-intl';
 import { Heading } from '@chakra-ui/react';
+import { useTranslations } from 'next-intl';
+
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
 

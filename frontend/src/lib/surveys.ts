@@ -1,4 +1,4 @@
-import { Survey } from '~/lib/api';
+import type { Survey } from '~/lib/api';
 
 export class Surveys {
   // prettier-ignore

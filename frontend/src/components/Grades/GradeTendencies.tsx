@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
 import { HStack, Tag } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
+
 import { CourseGrades } from '~/lib/grades';
 
 interface GradeTendenciesProps {

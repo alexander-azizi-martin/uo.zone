@@ -1,28 +1,30 @@
-import { useMemo } from 'react';
-import NextLink from 'next/link';
-import { withAxiomGetServerSideProps } from 'next-axiom';
-import { useTranslations } from 'next-intl';
 import {
+  Divider,
   Heading,
+  Link,
   Stack,
   Tag,
   Text,
   VStack,
-  Divider,
   Wrap,
   WrapItem,
-  Link,
 } from '@chakra-ui/react';
-import { getCourse, CourseWithProfessors } from '~/lib/api';
-import { CourseGrades } from '~/lib/grades';
-import { Surveys } from '~/lib/surveys';
-import { getDictionary } from '~/lib/dictionary';
-import { courseSurveys } from '~/lib/config';
+import NextLink from 'next/link';
+import { withAxiomGetServerSideProps } from 'next-axiom';
+import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
+
+import { BigNumberCard, LinkCard, SummaryCard } from '~/components/Card';
+import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
-import { LinkCard, SummaryCard, BigNumberCard } from '~/components/Card';
-import { GradeSummary } from '~/components/Grades';
+import type { CourseWithProfessors } from '~/lib/api';
+import { getCourse } from '~/lib/api';
+import { courseSurveys } from '~/lib/config';
+import { getDictionary } from '~/lib/dictionary';
+import { CourseGrades } from '~/lib/grades';
+import { Surveys } from '~/lib/surveys';
 
 interface CourseProps {
   course: CourseWithProfessors;

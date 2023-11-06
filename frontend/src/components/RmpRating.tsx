@@ -1,5 +1,6 @@
-import { HStack, Tag, Tooltip, chakra } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
+import { chakra, HStack, Tag, Tooltip } from '@chakra-ui/react';
+
 import type { RateMyProfessorReview } from '~/lib/api';
 
 function ratingToColor(rating: number): string {

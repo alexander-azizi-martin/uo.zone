@@ -1,14 +1,16 @@
-import { useMemo } from 'react';
+import { Divider, Heading, VStack } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
-import { Heading, VStack, Divider } from '@chakra-ui/react';
-import { getSubject, Subject, SubjectWithCourses } from '~/lib/api';
-import { CourseGrades } from '~/lib/grades';
-import { getDictionary } from '~/lib/dictionary';
-import Layout from '~/components/Layout';
-import SearchNav from '~/components/Search';
+import { useMemo } from 'react';
+
 import { LinkCard, SummaryCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
+import Layout from '~/components/Layout';
+import SearchNav from '~/components/Search';
+import type { SubjectWithCourses } from '~/lib/api';
+import { getSubject } from '~/lib/api';
+import { getDictionary } from '~/lib/dictionary';
+import { CourseGrades } from '~/lib/grades';
 
 interface SubjectProps {
   subject: SubjectWithCourses;

@@ -1,9 +1,9 @@
 import urlJoin from 'url-join';
-import { notFound } from 'next/navigation';
+
 import type {
-  SearchResults,
   CourseWithProfessors,
   ProfessorWithCourses,
+  SearchResults,
   SubjectWithCourses,
 } from './types';
 

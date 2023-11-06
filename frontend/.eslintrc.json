@@ -1,3 +1,10 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "plugins": ["simple-import-sort", "unused-imports"],
+  "rules": {
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
+    "unused-imports/no-unused-imports": "warn",
+		"unused-imports/no-unused-vars": "warn"
+  }
 }

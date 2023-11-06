@@ -1,5 +1,6 @@
 import { Spinner, useBoolean } from '@chakra-ui/react';
 import Link from 'next/link';
+
 import { BaseCard, BaseCardProps } from '~/components/Card';
 
 interface LinkCardProps extends BaseCardProps {

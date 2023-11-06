@@ -1,17 +1,18 @@
-import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import {
-  VStack,
-  Collapse,
   Box,
+  Collapse,
   IconButton,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
+
+import { BaseCard } from '~/components/Card';
+import { GradeSummary } from '~/components/Grades';
 import { CourseGrades } from '~/lib/grades';
 import { termValue } from '~/lib/helpers';
-import { GradeSummary } from '~/components/Grades';
-import { BaseCard } from '~/components/Card';
 
 interface SectionsSummaryProps {
   title: string;

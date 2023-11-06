@@ -1,5 +1,6 @@
-import { Badge, Heading, HStack, Tooltip, VStack } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { Badge, Heading, HStack, Tooltip, VStack } from '@chakra-ui/react';
+
 import { BaseCardProps, SummaryCard } from '~/components/Card';
 
 interface BigNumberCardProps extends BaseCardProps {

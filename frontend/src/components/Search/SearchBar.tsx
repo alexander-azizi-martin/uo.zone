@@ -1,11 +1,11 @@
-import { useState, ChangeEventHandler } from 'react';
+import { Search2Icon } from '@chakra-ui/icons';
 import {
   Input,
   InputGroup,
-  InputLeftElement,
   InputGroupProps,
+  InputLeftElement,
 } from '@chakra-ui/react';
-import { Search2Icon } from '@chakra-ui/icons';
+import { ChangeEventHandler } from 'react';
 
 interface SearchBarProps extends InputGroupProps {
   placeholder?: string;

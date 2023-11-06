@@ -1,11 +1,7 @@
-import { HStack, VStack, Box, Text, Spacer } from '@chakra-ui/react';
+import { HStack, Spacer, Text, VStack } from '@chakra-ui/react';
+
+import { GradeDistribution, GradeTendencies } from '~/components/Grades';
 import { CourseGrades } from '~/lib/grades';
-import { RateMyProfessorReview } from '~/lib/api';
-import {
-  GradeDistribution,
-  GradeTendencies,
-  RmpRating,
-} from '~/components/Grades';
 
 interface GradeSummaryProps {
   title?: string;
@@ -13,7 +9,6 @@ interface GradeSummaryProps {
   subtitle?: string;
   info?: React.ReactNode;
   grades: CourseGrades;
-  rmpReview?: RateMyProfessorReview;
   distributionWidth?: number;
   distributionHeight?: number;
 }
@@ -24,7 +19,6 @@ export default function GradeSummary({
   subtitle,
   info,
   grades,
-  rmpReview,
   distributionWidth = 390,
   distributionHeight = 55,
 }: GradeSummaryProps) {

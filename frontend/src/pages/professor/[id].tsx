@@ -1,28 +1,28 @@
-import { useMemo } from 'react';
-import { withAxiomGetServerSideProps } from 'next-axiom';
-import { useTranslations } from 'next-intl';
 import {
-  Heading,
-  VStack,
-  HStack,
   Divider,
+  Heading,
   Text,
-  Box,
+  VStack,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { getProfessor, ProfessorWithCourses } from '~/lib/api';
-import { CourseGrades } from '~/lib/grades';
-import { Surveys } from '~/lib/surveys';
-import { getDictionary } from '~/lib/dictionary';
-import { professorSurveys } from '~/lib/config';
+import { withAxiomGetServerSideProps } from 'next-axiom';
+import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
+
+import { BigNumberCard, LinkCard, SummaryCard } from '~/components/Card';
+import ExternalLink from '~/components/ExternalLink';
+import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
+import RmpRating from '~/components/RmpRating';
 import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
-import ExternalLink from '~/components/ExternalLink';
-import { LinkCard, SummaryCard, BigNumberCard } from '~/components/Card';
-import { GradeSummary } from '~/components/Grades';
-import RmpRating from '~/components/RmpRating';
+import type { ProfessorWithCourses } from '~/lib/api';
+import { getProfessor } from '~/lib/api';
+import { professorSurveys } from '~/lib/config';
+import { getDictionary } from '~/lib/dictionary';
+import { CourseGrades } from '~/lib/grades';
+import { Surveys } from '~/lib/surveys';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
@@ -49,7 +49,6 @@ export default function Professor({ professor }: ProfessorProps) {
               grades={grades}
               title={professor.name}
               titleSize={'3xl'}
-              rmpReview={professor.rmp_review}
               info={
                 <>
                   <Text fontSize={'sm'} color={'gray.600'} mt={2}>

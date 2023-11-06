@@ -1,18 +1,20 @@
-import { useRouter } from 'next/router';
-import { usePathname } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
-import { useTranslations } from 'next-intl';
-import debounce from 'lodash.debounce';
 import {
-  Spinner,
+  Box,
   Collapse,
   Heading,
-  VStack,
-  Box,
   InputGroupProps,
+  Spinner,
+  VStack,
 } from '@chakra-ui/react';
-import { search, SearchResults as SearchResultsType } from '~/lib/api';
+import debounce from 'lodash.debounce';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { useTranslations } from 'next-intl';
+import { useCallback, useEffect, useState } from 'react';
+
 import { SearchBar, SearchResults } from '~/components/Search';
+import type { SearchResults as SearchResultsType } from '~/lib/api';
+import { search } from '~/lib/api';
 
 interface SearchProps {
   onSearchOpen?: () => void;

@@ -1,6 +1,7 @@
+import { Box, Flex } from '@chakra-ui/react';
 import Head from 'next/head';
 import Script from 'next/script';
-import { Box, Flex } from '@chakra-ui/react';
+
 import { Footer } from '~/components/Layout';
 
 interface LayoutProps {
