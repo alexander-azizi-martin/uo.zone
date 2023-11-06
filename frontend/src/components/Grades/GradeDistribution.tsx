@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Box, Flex, Circle, Text, Badge } from '@chakra-ui/react';
 import { gradeGradient } from '~/lib/config';
 import { CourseGrades, LetterGrade } from '~/lib/grades';
-import { useGradient } from '~/lib/hooks';
+import { useGradient } from '~/hooks';
 
 interface GradeDistributionProps {
   grades: CourseGrades;

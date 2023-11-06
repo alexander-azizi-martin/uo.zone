@@ -21,7 +21,8 @@ import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
 import ExternalLink from '~/components/ExternalLink';
 import { LinkCard, SummaryCard, BigNumberCard } from '~/components/Card';
-import { GradeSummary, RmpRating } from '~/components/Grades';
+import { GradeSummary } from '~/components/Grades';
+import RmpRating from '~/components/RmpRating';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
