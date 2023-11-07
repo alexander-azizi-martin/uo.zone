@@ -12,7 +12,7 @@ class DbRestore extends Command
      * The name and signature of the console command.
      */
     protected $signature = 'db:restore 
-                            {--download : Whether the dump is downloaded from s3}
+                            {--s3 : Whether the dump is downloaded from s3}
                             {--file= : File to use as database dump}';
 
     /**
@@ -32,7 +32,7 @@ class DbRestore extends Command
         if (!is_null($this->option('file'))) {
             $db_dump_file = fopen($this->option('file'), 'rb');
             Storage::disk('local')->put($filename, $db_dump_file);
-        } else if ($this->option('download')) {
+        } else if ($this->option('s3')) {
             $db_dump_file = Storage::disk('s3')->readStream($filename);
             Storage::disk('local')->put($filename, $db_dump_file);
         }

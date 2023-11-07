@@ -12,7 +12,7 @@ class DbDump extends Command
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'db:dump {--upload : Whether the dump is uploaded to s3}';
+    protected $signature = 'db:dump {--s3 : Whether the dump is uploaded to s3}';
 
     /**
      * The console command description.
@@ -43,7 +43,7 @@ class DbDump extends Command
         $process->setTty(true);
         $process->run();
 
-        if ($this->argument('upload')) {
+        if ($this->argument('s3')) {
             $db_dump_file = new File($filepath);
             Storage::disk('s3')->put($filename, $db_dump_file);
         }
