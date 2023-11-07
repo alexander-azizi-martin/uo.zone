@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\HasSurveys;
+use App\Traits\HasSurvey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CourseSection extends Model
 {
-    use HasFactory, HasSurveys;
+    use HasFactory, HasSurvey;
 
     /**
      * The attributes that aren't mass assignable.

@@ -24,7 +24,7 @@ import { getProfessor } from '~/lib/api';
 import { professorSurveys } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
 import { CourseGrades } from '~/lib/grades';
-import { Surveys } from '~/lib/surveys';
+import Survey from '~/lib/survey';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
@@ -38,24 +38,24 @@ export default function Professor({ professor }: ProfessorProps) {
   }, [professor.grades]);
 
   const surveys = useMemo(() => {
-    return new Surveys(professor.surveys);
-  }, [professor.surveys]);
+    return new Survey(professor.survey);
+  }, [professor.survey]);
 
   return (
     <Layout>
       <SearchNav>
         <Heading my={4}>{professor.name}</Heading>
-        {professor.rmp_review && (
+        {professor.rmpReview && (
           <>
             <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
-              <RmpRating review={professor.rmp_review} />
+              <RmpRating review={professor.rmpReview} />
               <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
-                {professor.rmp_review.department}
+                {professor.rmpReview.department}
               </Tag>
             </Stack>
             <Text my={4} fontSize={'sm'}>
               <ExternalLink
-                href={professor.rmp_review.link}
+                href={professor.rmpReview.link}
                 color={'gray.600'}
                 fontSize={'sm'}
               >

@@ -22,12 +22,12 @@ class CourseResource extends JsonResource
             'description' => $this->whenHas('description'),
             'units' => $this->whenHas('units'),
             'grades' => $this->whenHas('grades'),
-            'total_enrolled' => $this->whenHas('total_enrolled'),
+            'totalEnrolled' => $this->whenHas('total_enrolled'),
             'subject' => $this->whenLoaded('subject', function () {
                 return new SubjectResource($this->subject);
             }),
-            'surveys' => $this->whenLoaded('surveys', function () {
-                return SurveyResource::collection($this->surveys);
+            'survey' => $this->whenLoaded('survey', function () {
+                return SurveyQuestionResource::collection($this->survey);
             }),
             'professors' => $this->when($this->withProfessors, function () {
                 $professors = new Collection($this->sections->loadMissing('professor')->pluck('professor'));

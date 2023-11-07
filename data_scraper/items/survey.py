@@ -1,58 +1,81 @@
 import scrapy
-import re
-import pytesseract
-from itemloaders.processors import MapCompose, TakeFirst
-from data_scraper.helpers import normalize_string, download_image
+from itemloaders.processors import MapCompose, Compose, TakeFirst
+from data_scraper.helpers import normalize_string, normalize_whitespace
 
-OPTION_PATTERN = re.compile(r"([A-Z]):\s+(.*?)\s+\((\d+)\)")
-RESULT_PATTERN = re.compile(r"Total \((\d+)\)")
+
+def normalize_term(term: str) -> str:
+    token1, token2 = term.lower().replace("term", "").replace("spring/", "").strip(" :").split(" ")
+
+    if token1.isdigit():
+        return f"{token2.capitalize()} {token1}"
+    else:
+        return f"{token1.capitalize()} {token2}"
+
+
+def normalize_professor_name(name: str) -> str:
+    if "," not in name:
+        return name
+
+    last_name, first_name = name.split(",")
+    return f"{first_name} {last_name}".strip()
+
+
+def extract_codes(name: str) -> str:
+    courses = name.lower().split(",")
+
+    course_codes = []
+    for course in courses:
+        split_course = course.strip().split(" ", 2)
+        if len(split_course) < 3:
+            continue
+
+        code, section, _ = course.strip().split(" ", 2)
+
+        course_codes.append({
+            "code": code.strip(),
+            "section": section.strip(),
+        })
+
+    return course_codes
 
 
 class Survey(scrapy.Item):
-    question = scrapy.Field(
+    term = scrapy.Field(
         input_processor=MapCompose(
-            normalize_string, 
-            lambda s: s.split(")", 1).pop().strip("?. "),
-        ), 
+            normalize_string,
+            normalize_term,
+        ),
         output_processor=TakeFirst(),
     )
-    num_invited = scrapy.Field(
-        input_processor=MapCompose(normalize_string), 
+    faculty = scrapy.Field(
+        input_processor=MapCompose(
+            normalize_string,
+            lambda s: s.split(":", 1).pop().strip(),
+        ),
         output_processor=TakeFirst(),
     )
-    total_responses = scrapy.Field(
-        input_processor=MapCompose(normalize_string, int), 
+    professor = scrapy.Field(
+        input_processor=MapCompose(
+            normalize_string,
+            lambda s: s.split(":", 1).pop().strip(),
+            normalize_professor_name,
+        ),
         output_processor=TakeFirst(),
     )
-    image_url = scrapy.Field(
-        output_processor=TakeFirst()
+    course = scrapy.Field(
+        input_processor=MapCompose(
+            normalize_string,
+            lambda s: s.split(":", 1).pop().strip(),
+        ),
+        output_processor=TakeFirst(),
     )
-    options = scrapy.Field()
-
-    @staticmethod
-    def extract_results(survey_image: str):
-        image = download_image(survey_image)
-        # Improves text recognition
-        bw_image = image.convert("L")
-
-        survey = Survey({
-            "total_responses": 0,
-            "image_url": survey_image,
-            "options": [],
-        })
-
-        text = pytesseract.image_to_string(bw_image)
-        lines = filter(len, text.strip().split("\n"))
-        for line in lines:
-            if match := OPTION_PATTERN.search(line):
-                label, description, responses = map(normalize_string, match.groups())
-
-                survey["options"].append({
-                    "label": label, 
-                    "description": description, 
-                    "responses": int(responses),
-                })
-            elif match := RESULT_PATTERN.search(line):
-                survey["total_responses"] = int(normalize_string(match.group(1)))
-
-        return survey
+    sections = scrapy.Field(
+        input_processor=Compose(
+            TakeFirst(),
+            normalize_string,
+            lambda s: s.split(":", 1).pop().strip(),
+            extract_codes,
+        ),
+    )
+    link = scrapy.Field(output_processor=TakeFirst())
+    questions = scrapy.Field()

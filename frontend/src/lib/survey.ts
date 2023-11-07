@@ -1,6 +1,6 @@
-import type { Survey } from '~/lib/api';
+import type { SurveyQuestion } from '~/lib/api';
 
-export class Surveys {
+export default class Survey {
   // prettier-ignore
   static RESPONSE_VALUES: any = {
     'excellent': 5,
@@ -30,10 +30,10 @@ export class Surveys {
     'very heavy': 1,
   };
 
-  _surveys: { [question: string]: Survey };
+  _surveys: { [question: string]: SurveyQuestion };
   _numQuestions: number;
 
-  constructor(surveys: Survey[]) {
+  constructor(surveys: SurveyQuestion[]) {
     this._surveys = {};
     this._numQuestions = surveys.length;
 
@@ -64,7 +64,7 @@ export class Surveys {
   totalResponses(question: string): number {
     let responses = 0;
     for (let option in this._surveys[question]?.options) {
-      if (option in Surveys.RESPONSE_VALUES) {
+      if (option in Survey.RESPONSE_VALUES) {
         responses += this._surveys[question].options[option];
       }
     }
@@ -78,10 +78,10 @@ export class Surveys {
     let total = 0;
     let totalResponses = 0;
     for (let option in this._surveys[question]?.options) {
-      if (option in Surveys.RESPONSE_VALUES) {
+      if (option in Survey.RESPONSE_VALUES) {
         let numResponses = this._surveys[question].options[option];
 
-        total += Surveys.RESPONSE_VALUES[option] * numResponses;
+        total += Survey.RESPONSE_VALUES[option] * numResponses;
         totalResponses += numResponses;
       }
     }

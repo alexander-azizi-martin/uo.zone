@@ -5,25 +5,26 @@ namespace App\Console\Commands;
 use Database\Seeders\SurveySeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
-class TermFeedback extends Command
+class SeedSurveys extends Command
 {
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'app:feedback';
+    protected $signature = 'db:seed-surveys';
 
     /**
      * The console command description.
      */
-    protected $description = 'Seeds course surveys for a particular term.';
+    protected $description = 'Seeds the database with course surveys from a particular term';
 
     /**
      * Execute the console command.
      */
     public function handle(SurveySeeder $surveySeeder)
     {
-        $termDirectories = collect(['feedback', ...Storage::directories('feedback')])
+        $termDirectories = collect(['all', ...Storage::directories('surveys')])
             ->sort()
             ->values()
             ->toArray();
@@ -33,7 +34,13 @@ class TermFeedback extends Command
             $termDirectories,
         );
 
-        $files = Storage::allFiles($directory);
+        if ($directory == 'all') $directory = 'surveys';
+
+        $files = collect(Storage::allFiles($directory))
+            ->filter(function (string $file) {
+                return Str::endsWith($file, '.json') && !Str::endsWith($file, '.cache.json');
+            });
+
         $this->withProgressBar($files, function (string $file) use ($surveySeeder) {
             $surveySeeder->run($file);
         });

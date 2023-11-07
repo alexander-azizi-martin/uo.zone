@@ -16,7 +16,7 @@ class RateMyProfessorReviewResource extends JsonResource
             'link' => $this->link,
             'rating' => $this->rating,
             'difficulty' => $this->difficulty,
-            'num_ratings' => $this->num_ratings,
+            'numRatings' => $this->num_ratings,
             'department' => $this->department,
         ];
     }

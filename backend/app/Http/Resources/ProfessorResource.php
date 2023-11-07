@@ -20,11 +20,11 @@ class ProfessorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'grades' => $this->whenHas('grades'),
-            'total_enrolled' => $this->whenHas('total_enrolled'),
-            'surveys' => $this->whenLoaded('surveys', function () {
-                return SurveyResource::collection($this->surveys);
+            'totalEnrolled' => $this->whenHas('total_enrolled'),
+            'survey' => $this->whenLoaded('survey', function () {
+                return SurveyQuestionResource::collection($this->survey);
             }),
-            'rmp_review' => $this->whenLoaded('rmpReview', function () {
+            'rmpReview' => $this->whenLoaded('rmpReview', function () {
                 return isset($this->rmpReview) ? new RateMyProfessorReviewResource($this->rmpReview) : null;
             }),
             'courses' => $this->when($this->withCourses, function () {

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasSearch;
-use App\Traits\HasSurveys;
+use App\Traits\HasSurvey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Professor extends Model
 {
-    use HasFactory, HasSurveys, HasSearch;
+    use HasFactory, HasSurvey, HasSearch;
 
     /**
      * The attributes that aren't mass assignable.

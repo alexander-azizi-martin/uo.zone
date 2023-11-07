@@ -24,7 +24,7 @@ import { getCourse } from '~/lib/api';
 import { courseSurveys } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
 import { CourseGrades } from '~/lib/grades';
-import { Surveys } from '~/lib/surveys';
+import Survey from '~/lib/survey';
 
 interface CourseProps {
   course: CourseWithProfessors;
@@ -39,8 +39,8 @@ export default function Course({ course }: CourseProps) {
   }, [course.grades]);
 
   const surveys = useMemo(() => {
-    return new Surveys(course.surveys);
-  }, [course.surveys]);
+    return new Survey(course.survey);
+  }, [course.survey]);
 
   const subject = course.title.slice(0, 3);
 

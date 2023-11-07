@@ -17,7 +17,7 @@ class CourseSectionResource extends JsonResource
             'code' => $this->code,
             'section' => $this->section,
             'grades' => $this->grades,
-            'total_enrolled' => $this->total_enrolled,
+            'totalEnrolled' => $this->total_enrolled,
         ];
     }
 }

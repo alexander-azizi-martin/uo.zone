@@ -36,7 +36,7 @@ class ProfessorController extends Controller
             throw (new ModelNotFoundException())->setModel(Professor::class);
         }
 
-        $professor = Professor::with(['sections' => ['course'], 'surveys', 'rmpReview'])
+        $professor = Professor::with(['sections' => ['course'], 'survey', 'rmpReview'])
             ->findOrFail($id);
 
         return (new ProfessorResource($professor))->withCourses();

@@ -1,7 +1,7 @@
-export interface Survey {
+export interface SurveyQuestion {
   question: string;
   options: { [option: string]: number };
-  total_responses: number;
+  totalResponses: number;
 }
 
 export interface Subject {
@@ -9,7 +9,7 @@ export interface Subject {
   subject: string;
   faculty: string;
   grades: Grades;
-  total_enrolled: number;
+  totalEnrolled: number;
 }
 
 export interface Grades {
@@ -21,7 +21,7 @@ export interface CourseSection {
   code: string;
   section: string;
   grades: Grades;
-  total_enrolled: number;
+  totalEnrolled: number;
 }
 
 export interface Course {
@@ -30,8 +30,8 @@ export interface Course {
   description: string;
   units: number | null;
   grades: Grades;
-  total_enrolled: number;
-  surveys: Survey[];
+  totalEnrolled: number;
+  survey: SurveyQuestion[];
   subject: Subject;
 }
 
@@ -39,17 +39,17 @@ export interface RateMyProfessorReview {
   link: string;
   rating: number;
   difficulty: number;
-  num_ratings: number;
+  numRatings: number;
   department: string;
 }
 
 export interface Professor {
   id: number;
   name: string;
-  surveys: Survey[];
+  survey: SurveyQuestion[];
   grades: Grades;
-  total_enrolled: number;
-  rmp_review?: RateMyProfessorReview;
+  totalEnrolled: number;
+  rmpReview?: RateMyProfessorReview;
 }
 
 export interface CourseWithSections extends Course {

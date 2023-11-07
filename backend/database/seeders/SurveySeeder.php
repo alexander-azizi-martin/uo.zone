@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Course;
 use App\Models\Professor;
-use App\Models\Survey;
+use App\Models\SurveyQuestion;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -16,23 +16,26 @@ class SurveySeeder extends Seeder
      */
     public function run(string $file): void
     {
-        if (!Str::endsWith($file, '.json') || Str::endsWith($file, '.cache.json'))
-            return;
+        $surveyData = Storage::json($file);
 
-        $feedbackData = Storage::json($file);
-
-        $professor = Professor::firstOrCreate(['name' => $feedbackData['professor']]);
+        $professor = Professor::firstOrCreate(['name' => $surveyData['professor']]);
 
         $courses = collect();
         $courseSections = collect();
-        foreach ($feedbackData['sections'] as ['code' => $code, 'section' => $section]) {
+        foreach ($surveyData['sections'] as ['code' => $code, 'section' => $section]) {
             $course = Course::firstWhere('code', $code);
 
             if (is_null($course))
                 continue;
 
-            [$season, $year] = str($feedbackData['term'])->explode(' ');
-            $season = ['Winter' => 'Hiver', 'Summer' => 'Été', 'Fall' => 'Automne'][$season];
+            [$season, $year] = str($surveyData['term'])->explode(' ');
+            $frenchSeason = [
+                'Winter' => 'Hiver',
+                'Summer' => 'Été',
+                'Fall' => 'Automne'
+            ][$season];
+
+            $frenchTerm = "$frenchSeason $year";
 
             $courses->push($course);
             $courseSections->push($course->sections()->create([
@@ -40,39 +43,39 @@ class SurveySeeder extends Seeder
                 'code' => Str::squish(Str::upper("$code $section")),
                 'section' => $section,
                 'term' => [
-                    'en' => $feedbackData['term'],
-                    'fr' => "$season $year"
+                    'en' => $surveyData['term'],
+                    'fr' => $frenchTerm,
                 ],
             ]));
         }
 
         $courses = $courses->unique('code');
 
-        foreach ($feedbackData['surveys'] as $surveyData) {
-            $questionType = config('survey.questions')[$surveyData['question']];
-            $question = config('survey.equivalent_questions')[$surveyData['question']] ?? $surveyData['question'];
+        foreach ($surveyData['questions'] as $questionData) {
+            $questionType = config('survey.questions')[$questionData['question']];
+            $questionVal = config('survey.equivalent_questions')[$questionData['question']] ?? $questionData['question'];
 
             if ($questionType == 'professor') {
-                $survey = $professor->surveys()->firstOrCreate(['question' => $question]);
-                SurveySeeder::updateSurvey($survey, $surveyData);
+                $question = $professor->survey()->firstOrCreate(['question' => $questionVal]);
+                SurveySeeder::updateQuestion($question, $questionData);
             } else if ($questionType == 'course') {
                 foreach ($courses as $course) {
-                    $courseSurvey = $course->surveys()->firstOrCreate(['question' => $question]);
-                    SurveySeeder::updateSurvey($courseSurvey, $surveyData);
+                    $question = $course->survey()->firstOrCreate(['question' => $questionVal]);
+                    SurveySeeder::updateQuestion($question, $questionData);
                 }
 
                 foreach ($courseSections as $section) {
-                    $sectionSurvey = $section->surveys()->firstOrCreate(['question' => $question]);
-                    SurveySeeder::updateSurvey($sectionSurvey, $surveyData);
+                    $question = $section->survey()->firstOrCreate(['question' => $questionVal]);
+                    SurveySeeder::updateQuestion($question, $questionData);
                 }
             }
         }
     }
 
     /**
-     * Updates the given survey with more data.
+     * Updates the given survey question with more data.
      */
-    public static function updateSurvey(Survey $survey, array $surveyData): void
+    public static function updateQuestion(SurveyQuestion $survey, array $surveyData): void
     {
         $options = $survey->options ?? [];
         foreach ($surveyData['options'] as $option) {

@@ -1,1 +1,1 @@
-from data_scraper.pipelines.save_report_pipeline import SaveReportPipeline
+from data_scraper.pipelines.save_survey_pipeline import SaveSurveyPipeline

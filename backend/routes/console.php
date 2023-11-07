@@ -28,9 +28,9 @@ Artisan::command('env:aws', function () {
 
     $envContents = collect(json_decode($result['SecretString']))
         ->map(function (string $key, string $value) {
-            return "$key=$value\n";
+            return "$key=$value";
         })
-        ->sum();
+        ->implode("\n");
 
     Storage::disk('root')->put('.env', $envContents);
 });

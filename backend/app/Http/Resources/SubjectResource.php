@@ -17,7 +17,7 @@ class SubjectResource extends JsonResource
             'code' => Str::upper($this->code),
             'subject' => $this->subject->getLocalTranslation(),
             'grades' => $this->whenHas('grades'),
-            'total_enrolled' => $this->whenHas('total_enrolled'),
+            'totalEnrolled' => $this->whenHas('total_enrolled'),
             'faculty' => $this->whenHas('faculty', function () {
                 return $this->faculty->getLocalTranslation();
             }),
