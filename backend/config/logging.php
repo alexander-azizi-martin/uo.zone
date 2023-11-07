@@ -129,9 +129,11 @@ return [
 
         'requests' => [
             'driver' => 'single',
+            'level' => 'debug',
             'path' => storage_path('logs/requests.log'),
             'replace_placeholders' => true,
         ],
+
     ],
 
 ];
