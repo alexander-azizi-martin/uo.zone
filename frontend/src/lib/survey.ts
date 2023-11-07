@@ -33,14 +33,14 @@ export default class Survey {
   _surveys: { [question: string]: SurveyQuestion };
   _numQuestions: number;
 
-  constructor(surveys: SurveyQuestion[]) {
+  constructor(survey: SurveyQuestion[]) {
     this._surveys = {};
-    this._numQuestions = surveys.length;
+    this._numQuestions = survey.length;
 
-    if (!surveys) return;
+    if (!survey) return;
 
-    for (let survey of surveys) {
-      this._surveys[survey.question] = survey;
+    for (let question of survey) {
+      this._surveys[question.question] = question;
     }
   }
 
