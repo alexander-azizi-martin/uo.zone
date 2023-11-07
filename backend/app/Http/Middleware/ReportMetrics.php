@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Facades\League\StatsD\Client as Statsd;
 use Symfony\Component\HttpFoundation\Response;
 
-class ReportAnalytics
+class ReportMetrics
 {
     /**
      * Handle an incoming request.
