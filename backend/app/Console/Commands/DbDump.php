@@ -43,7 +43,7 @@ class DbDump extends Command
         $process->setTty(true);
         $process->run();
 
-        if ($this->argument('s3')) {
+        if ($this->option('s3')) {
             $db_dump_file = new File($filepath);
             Storage::disk('s3')->put($filename, $db_dump_file);
         }
