@@ -29,7 +29,7 @@ cp .env.example .env
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan db:restore \
-    --file=https://uozone-data.s3.ca-central-1.amazonaws.com/db_dump
+    --file=https://uozone.s3.ca-central-1.amazonaws.com/db_dump
 
 # live at http://localhost
 ```
