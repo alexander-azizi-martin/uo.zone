@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,14 +29,27 @@ class CourseResource extends JsonResource
                 return SurveyQuestionResource::collection($this->survey);
             }),
             'professors' => $this->when($this->withProfessors, function () {
-                $professors = new Collection($this->sections->loadMissing('professor')->pluck('professor'));
-                $groupedSections = $this->sections->groupby('professor.id');
+                $groupedSections = $this->sections->loadMissing('professor')->groupby('professor.id');
 
-                foreach ($groupedSections as $professorId => $sections) {
-                    $professors->find($professorId)->setRelation('sections', $sections);
+                $professors = [];
+                foreach ($groupedSections as $sections) {
+                    $totalGrades = [];
+                    $totalEnrolled = 0;
+                    foreach ($sections as $section) {
+                        foreach ($section->grades as $grade => $value) {
+                            $totalGrades[$grade] = ($totalGrades[$grade] ?? 0) + $value;
+                            $totalEnrolled += $value;
+                        }
+                    }
+
+                    $professor = $sections->first()->professor;
+                    $professor->grades = $totalGrades;
+                    $professor->total_enrolled = $totalEnrolled;
+                    $professor->setRelation('sections', $sections);
+                    $professors[] = $professor;
                 }
 
-                return ProfessorResource::collection($professors->unique()->values())->collection->map->withSections();
+                return ProfessorResource::collection($professors)->collection->map->withSections();
             }),
             'sections' => $this->when($this->withSections, function () {
                 return CourseSectionResource::collection($this->sections);

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -28,14 +27,27 @@ class ProfessorResource extends JsonResource
                 return isset($this->rmpReview) ? new RateMyProfessorReviewResource($this->rmpReview) : null;
             }),
             'courses' => $this->when($this->withCourses, function () {
-                $courses = new Collection($this->sections->loadMissing('course')->pluck('course'));
-                $groupedSections = $this->sections->groupby('course.code');
+                $groupedSections = $this->sections->loadMissing('course')->groupby('course.code');
 
-                foreach ($groupedSections as $courseCode => $sections) {
-                    $courses->firstWhere('code', $courseCode)->setRelation('sections', $sections);
+                $courses = [];
+                foreach ($groupedSections as $sections) {
+                    $totalGrades = [];
+                    $totalEnrolled = 0;
+                    foreach ($sections as $section) {
+                        foreach ($section->grades as $grade => $value) {
+                            $totalGrades[$grade] = ($totalGrades[$grade] ?? 0) + $value;
+                            $totalEnrolled += $value;
+                        }
+                    }
+
+                    $course = $sections->first()->course;
+                    $course->grades = $totalGrades;
+                    $course->total_enrolled = $totalEnrolled;
+                    $course->setRelation('sections', $sections);
+                    $courses[] = $course;
                 }
 
-                return CourseResource::collection($courses->unique('code')->values())->collection->map->withSections();;
+                return CourseResource::collection($courses)->collection->map->withSections();;
             }),
             'sections' => $this->when($this->withSections, function () {
                 return CourseSectionResource::collection($this->sections);
