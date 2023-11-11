@@ -17,7 +17,7 @@ class SeedSurveys extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Seeds the database with course surveys from a particular term';
+    protected $description = 'Seed the database with course surveys from a particular term';
 
     /**
      * Execute the console command.

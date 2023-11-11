@@ -16,7 +16,7 @@ class EnvAws extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Gets environment variables from aws secret';
+    protected $description = 'Get environment variables from aws secret';
 
     /**
      * Execute the console command.

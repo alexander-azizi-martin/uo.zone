@@ -18,7 +18,7 @@ class DbRestore extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Restores the database from a dump';
+    protected $description = 'Restore the database from a dump';
 
     /**
      * Execute the console command.
@@ -30,11 +30,27 @@ class DbRestore extends Command
         $pgsqlConfig = config('database.connections.pgsql');
 
         if (!is_null($this->option('file'))) {
+            $this->info("Downloading the database dump from {$this->option('file')}.");
+
             $db_dump_file = fopen($this->option('file'), 'rb');
-            Storage::disk('local')->put($filename, $db_dump_file);
+            $success = Storage::disk('local')->put($filename, $db_dump_file);
         } else if ($this->option('s3')) {
+            $this->info('Downloading the database dump from s3.');
+
             $db_dump_file = Storage::disk('s3')->readStream($filename);
-            Storage::disk('local')->put($filename, $db_dump_file);
+            $success = Storage::disk('local')->put($filename, $db_dump_file);
+        }
+
+        if (isset($success)) {
+            if ($success)
+                $this->info('Successfully downloaded the database dump.');
+            else
+                $this->error('Something went wrong while downloading the database dump.');
+        }
+
+        if (!file_exists($filepath)) {
+            $this->error('No database dump found.');
+            return;
         }
 
         $process = new Process([
@@ -53,6 +69,6 @@ class DbRestore extends Command
 
         $process->setEnv(['PGPASSWORD' => $pgsqlConfig['password']]);
         $process->setTty(true);
-        $process->run();
+        $process->mustRun();
     }
 }

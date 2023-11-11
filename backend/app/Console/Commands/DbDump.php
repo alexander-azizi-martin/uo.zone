@@ -17,7 +17,7 @@ class DbDump extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Creates a database dump';
+    protected $description = 'Create a database dump';
 
     /**
      * Execute the console command.
@@ -41,11 +41,18 @@ class DbDump extends Command
 
         $process->setEnv(['PGPASSWORD' => $pgsqlConfig['password']]);
         $process->setTty(true);
-        $process->run();
+        $process->mustRun();
 
         if ($this->option('s3')) {
-            $db_dump_file = new File($filepath);
-            Storage::disk('s3')->put($filename, $db_dump_file);
+            $this->info('Uploading the database dump to s3.');
+
+            $db_dump_file = fopen($filepath, 'rb');
+            $success = Storage::disk('s3')->put($filename, $db_dump_file);
+
+            if ($success)
+                $this->info('Successfully uploaded the database dump.');
+            else
+                $this->error('Something went wrong while uploading the database dump.');
         }
     }
 }
