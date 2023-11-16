@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/provider';
 import type { AppProps } from 'next/app';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -14,4 +14,4 @@ export default function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export { reportWebVitals } from 'next-axiom';
+export { reportWebVitals } from 'next-axiom/dist/webVitals';
