@@ -73,6 +73,6 @@ class DbRestore extends Command
         $process->setTty(true);
         $process->mustRun();
 
-        $this->exec(DbConfig::class);
+        // $this->exec(DbConfig::class);
     }
 }

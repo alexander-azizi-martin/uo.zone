@@ -24,7 +24,7 @@ class DbDump extends Command
      */
     public function handle(PgConfigFileSeeder $configFileSeeder)
     {
-        $configFileSeeder->run();
+        // $configFileSeeder->run();
 
         $filename = 'db_dump';
         $filepath = storage_path("app/$filename");
