@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ProfessorResource extends JsonResource
 {
     protected bool $withCourses = false;
+
     protected bool $withSections = false;
 
     /**
@@ -47,11 +48,11 @@ class ProfessorResource extends JsonResource
                     $courses[] = $course;
                 }
 
-                return CourseResource::collection($courses)->collection->map->withSections();;
+                return CourseResource::collection($courses)->collection->map->withSections();
             }),
             'sections' => $this->when($this->withSections, function () {
                 return CourseSectionResource::collection($this->sections);
-            })
+            }),
         ];
     }
 
@@ -61,6 +62,7 @@ class ProfessorResource extends JsonResource
     public function withCourses(): static
     {
         $this->withCourses = true;
+
         return $this;
     }
 
@@ -70,6 +72,7 @@ class ProfessorResource extends JsonResource
     public function withSections(): static
     {
         $this->withSections = true;
+
         return $this;
     }
 }

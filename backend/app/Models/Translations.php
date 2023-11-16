@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 
 class Translations implements Castable
@@ -60,9 +59,9 @@ class Translations implements Castable
             {
                 if ($value instanceof Translations) {
                     return json_encode($value->translations);
-                } else if (is_string($value)) {
+                } elseif (is_string($value)) {
                     return json_encode([config('app.fallback_locale') => $value]);
-                } else if (is_array($value)) {
+                } elseif (is_array($value)) {
                     return json_encode($value);
                 }
 

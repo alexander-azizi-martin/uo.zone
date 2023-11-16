@@ -36,7 +36,7 @@ class GradeSeeder extends Seeder
             $section->grades = $grades->toArray();
             $section->total_enrolled = $grades->sum();
             $section->save();
-            
+
             $course = $section->course;
             if (empty($course->grades)) {
                 $course->grades = $grades;
@@ -49,7 +49,7 @@ class GradeSeeder extends Seeder
             }
             $course->total_enrolled += $section->total_enrolled;
             $course->save();
-        
+
             $professor = $section->professor;
             if (empty($professor->grades)) {
                 $professor->grades = $grades;
@@ -77,5 +77,4 @@ class GradeSeeder extends Seeder
             $subject->save();
         }
     }
-
 }

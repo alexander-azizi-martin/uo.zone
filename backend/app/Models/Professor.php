@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Professor extends Model
 {
-    use HasFactory, HasSurvey, HasSearch;
+    use HasFactory, HasSearch, HasSurvey;
 
     /**
      * The attributes that aren't mass assignable.

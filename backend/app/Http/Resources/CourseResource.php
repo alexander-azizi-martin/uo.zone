@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CourseResource extends JsonResource
 {
     protected bool $withProfessors = false;
+
     protected bool $withSections = false;
 
     /**
@@ -63,6 +64,7 @@ class CourseResource extends JsonResource
     public function withProfessors(): static
     {
         $this->withProfessors = true;
+
         return $this;
     }
 
@@ -72,6 +74,7 @@ class CourseResource extends JsonResource
     public function withSections(): static
     {
         $this->withSections = true;
+
         return $this;
     }
 }

@@ -7,14 +7,14 @@ use App\Models\Course;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
     public function allCourses(Request $request): JsonResponse
     {
-        $limiterKey = 'all-courses:' . $request->ip;
+        $limiterKey = 'all-courses:'.$request->ip;
         abort_if(
             RateLimiter::tooManyAttempts($limiterKey, 5),
             429,
@@ -22,7 +22,7 @@ class CourseController extends Controller
         );
         RateLimiter::hit($limiterKey, 60);
 
-        if (!Cache::has('courses')) {
+        if (! Cache::has('courses')) {
             $courses = Course::cursor()->pluck('code')->all();
             Cache::put('courses', $courses);
         }

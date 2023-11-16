@@ -14,7 +14,7 @@ class ProfessorController extends Controller
 {
     public function allProfessors(Request $request): JsonResponse
     {
-        $limiterKey = 'all-professors:' . $request->ip;
+        $limiterKey = 'all-professors:'.$request->ip;
         abort_if(
             RateLimiter::tooManyAttempts($limiterKey, 5),
             429,
@@ -22,7 +22,7 @@ class ProfessorController extends Controller
         );
         RateLimiter::hit($limiterKey, 60);
 
-        if (!Cache::has('professors')) {
+        if (! Cache::has('professors')) {
             $professors = Professor::cursor()->pluck('id')->all() ?? [];
             Cache::put('professors', $professors);
         }
@@ -32,7 +32,7 @@ class ProfessorController extends Controller
 
     public function getProfessor(string $id): ProfessorResource
     {
-        if (!is_numeric($id)) {
+        if (! is_numeric($id)) {
             throw (new ModelNotFoundException())->setModel(Professor::class);
         }
 

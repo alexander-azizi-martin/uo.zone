@@ -14,4 +14,4 @@ trait HasSurvey
     {
         return $this->MorphMany(SurveyQuestion::class, 'surveyable');
     }
-};
+}

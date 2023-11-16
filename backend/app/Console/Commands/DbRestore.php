@@ -29,12 +29,12 @@ class DbRestore extends Command
         $filepath = storage_path("app/$filename");
         $pgsqlConfig = config('database.connections.pgsql');
 
-        if (!is_null($this->option('file'))) {
+        if (! is_null($this->option('file'))) {
             $this->info("Downloading the database dump from {$this->option('file')}.");
 
             $db_dump_file = fopen($this->option('file'), 'rb');
             $success = Storage::disk('local')->put($filename, $db_dump_file);
-        } else if ($this->option('s3')) {
+        } elseif ($this->option('s3')) {
             $this->info('Downloading the database dump from s3.');
 
             $db_dump_file = Storage::disk('s3')->readStream($filename);
@@ -42,14 +42,16 @@ class DbRestore extends Command
         }
 
         if (isset($success)) {
-            if ($success)
+            if ($success) {
                 $this->info('Successfully downloaded the database dump.');
-            else
+            } else {
                 $this->error('Something went wrong while downloading the database dump.');
+            }
         }
 
-        if (!file_exists($filepath)) {
+        if (! file_exists($filepath)) {
             $this->error('No database dump found.');
+
             return;
         }
 

@@ -18,6 +18,6 @@ class SurveyQuestion extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'options' => 'array'
+        'options' => 'array',
     ];
 }

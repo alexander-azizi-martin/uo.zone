@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\support\Facades\DB;
 use Illuminate\Database\Seeder;
+use Illuminate\support\Facades\DB;
 
 class TsWordSeeder extends Seeder
 {

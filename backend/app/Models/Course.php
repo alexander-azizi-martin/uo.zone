@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
-    use HasFactory, HasSurvey, HasSearch;
+    use HasFactory, HasSearch, HasSurvey;
 
     /**
      * The attributes that should be cast.

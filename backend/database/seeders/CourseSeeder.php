@@ -14,11 +14,12 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        $subjects = Storage::json("courses_en.json");
+        $subjects = Storage::json('courses_en.json');
 
         foreach ($subjects as $subjectData) {
-            if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty'))
+            if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
                 continue;
+            }
 
             $subject = Subject::create(
                 Arr::only($subjectData, ['faculty', 'code', 'subject'])
@@ -26,8 +27,9 @@ class CourseSeeder extends Seeder
 
             $courses = [];
             foreach ($subjectData['courses'] as $course) {
-                if (!Arr::exists($course, 'description'))
+                if (! Arr::exists($course, 'description')) {
                     continue;
+                }
 
                 $courses[] = Arr::only($course, ['code', 'title', 'description', 'units', 'language']);
             }
@@ -35,10 +37,11 @@ class CourseSeeder extends Seeder
             $subject->courses()->createMany($courses);
         }
 
-        $frenchSubjects = Storage::json("courses_fr.json");
+        $frenchSubjects = Storage::json('courses_fr.json');
         foreach ($frenchSubjects as $subjectData) {
-            if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty'))
+            if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
                 continue;
+            }
 
             $subject = Subject::where('code', $subjectData['code'])->firstOrFail();
             $subject->subject->addTranslation('fr', $subjectData['subject']);

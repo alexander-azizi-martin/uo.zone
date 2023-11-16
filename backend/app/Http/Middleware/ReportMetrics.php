@@ -3,12 +3,12 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Facades\League\StatsD\Client as Statsd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Facades\League\StatsD\Client as Statsd;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReportMetrics
@@ -28,13 +28,13 @@ class ReportMetrics
     {
         $statsdMetrics = [
             'requests',
-            'request.code.' . $response->getStatusCode(),
-            'request.method.' . $request->method(),
+            'request.code.'.$response->getStatusCode(),
+            'request.method.'.$request->method(),
         ];
 
         $route = $request->route();
         if (isset($route)) {
-            $statsdMetrics[] = 'request.route.' . $route->uri();
+            $statsdMetrics[] = 'request.route.'.$route->uri();
         }
 
         $responseTime = round((microtime(true) - $request->server('REQUEST_TIME_FLOAT')) * 1000, 2);

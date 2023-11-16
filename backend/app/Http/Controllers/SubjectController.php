@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
-use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class SubjectController extends Controller
 {
     public function allSubjects(Request $request): JsonResponse
     {
-        $limiterKey = 'all-subjects:' . $request->ip;
+        $limiterKey = 'all-subjects:'.$request->ip;
         abort_if(
             RateLimiter::tooManyAttempts($limiterKey, 5),
             429,
@@ -22,7 +22,7 @@ class SubjectController extends Controller
         );
         RateLimiter::hit($limiterKey, 60);
 
-        if (!Cache::has('subjects')) {
+        if (! Cache::has('subjects')) {
             $subjects = Subject::cursor()->pluck('code')->all();
             Cache::put('subjects', $subjects);
         }

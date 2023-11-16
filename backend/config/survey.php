@@ -37,5 +37,5 @@ return [
         'The professor\'s feedback on assignments and/or exams is' => 'The professors feedback contributes to my learning',
         'The professor was available to address questions outside class hours' => 'The professor is available to address questions outside of class',
         'Assignments and/or exams closely reflect what was covered in the course' => 'Assignments and/or exams closely reflect what is covered in class',
-    ]
+    ],
 ];

@@ -51,10 +51,11 @@ class DbDump extends Command
             $db_dump_file = fopen($filepath, 'rb');
             $success = Storage::disk('s3')->put($filename, $db_dump_file);
 
-            if ($success)
+            if ($success) {
                 $this->info('Successfully uploaded the database dump.');
-            else
+            } else {
                 $this->error('Something went wrong while uploading the database dump.');
+            }
         }
     }
 }

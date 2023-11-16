@@ -20,11 +20,11 @@ class PgConfigFileSeeder extends Seeder
             $filePath = "/usr/share/postgresql/15/tsearch_data/$fileName";
             $fileData = Storage::get($file);
 
-            DB::insert("
+            DB::insert('
                 INSERT INTO pg_config_files VALUES (:path, :data) ON CONFLICT (path) DO 
                     UPDATE SET data = :data;
-            ", [
-                'path' => $filePath, 
+            ', [
+                'path' => $filePath,
                 'data' => $fileData,
             ]);
         }

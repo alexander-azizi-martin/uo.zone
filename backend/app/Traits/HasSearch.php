@@ -43,4 +43,4 @@ trait HasSearch
 
         return static::hydrate($results);
     }
-};
+}

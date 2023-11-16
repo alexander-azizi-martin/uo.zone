@@ -34,11 +34,13 @@ class SeedSurveys extends Command
             $termDirectories,
         );
 
-        if ($directory == 'all') $directory = 'surveys';
+        if ($directory == 'all') {
+            $directory = 'surveys';
+        }
 
         $files = collect(Storage::allFiles($directory))
             ->filter(function (string $file) {
-                return Str::endsWith($file, '.json') && !Str::endsWith($file, '.cache.json');
+                return Str::endsWith($file, '.json') && ! Str::endsWith($file, '.cache.json');
             });
 
         $this->withProgressBar($files, function (string $file) use ($surveySeeder) {

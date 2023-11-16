@@ -16,7 +16,7 @@ return [
 
     'axiom' => [
         'token' => env('AXIOM_TOKEN'),
-        'dataset' => env('AXIOM_DATASET', 'laravel')
+        'dataset' => env('AXIOM_DATASET', 'laravel'),
     ],
 
     'mailgun' => [

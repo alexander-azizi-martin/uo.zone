@@ -6,8 +6,8 @@ use App\Models\Course;
 use App\Models\Professor;
 use App\Models\SurveyQuestion;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SurveySeeder extends Seeder
 {
@@ -25,14 +25,15 @@ class SurveySeeder extends Seeder
         foreach ($surveyData['sections'] as ['code' => $code, 'section' => $section]) {
             $course = Course::firstWhere('code', $code);
 
-            if (is_null($course))
+            if (is_null($course)) {
                 continue;
+            }
 
             [$season, $year] = str($surveyData['term'])->explode(' ');
             $frenchSeason = [
                 'Winter' => 'Hiver',
                 'Summer' => 'Été',
-                'Fall' => 'Automne'
+                'Fall' => 'Automne',
             ][$season];
 
             $frenchTerm = "$frenchSeason $year";
@@ -58,7 +59,7 @@ class SurveySeeder extends Seeder
             if ($questionType == 'professor') {
                 $question = $professor->survey()->firstOrCreate(['question' => $questionVal]);
                 SurveySeeder::updateQuestion($question, $questionData);
-            } else if ($questionType == 'course') {
+            } elseif ($questionType == 'course') {
                 foreach ($courses as $course) {
                     $question = $course->survey()->firstOrCreate(['question' => $questionVal]);
                     SurveySeeder::updateQuestion($question, $questionData);

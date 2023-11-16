@@ -27,13 +27,13 @@ class EnvAws extends Command
         $result = $client->getSecretValue([
             'SecretId' => 'prod/uozone/env',
         ]);
-    
+
         $envContents = collect(json_decode($result['SecretString']))
             ->map(function (string $value, string $key) {
                 return "$key=$value";
             })
             ->implode("\n");
-    
+
         Storage::disk('root')->put('.env', $envContents);
     }
 }
