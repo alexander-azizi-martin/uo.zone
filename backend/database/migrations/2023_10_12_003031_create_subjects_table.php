@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,6 +21,19 @@ return new class extends Migration
             $table->integer('total_enrolled')->unsigned()->default(0);
             $table->timestamps();
         });
+
+        DB::unprepared("
+            ALTER TABLE subjects ADD COLUMN searchable_text tsvector
+                GENERATED ALWAYS AS (
+                    to_tsvector('simple', coalesce(code, '')) || 
+                    ' ' ||
+                    to_tsvector('english_ispell', coalesce(subject ->> 'en', '')) ||
+                    ' ' ||
+                    to_tsvector('french_ispell', coalesce(subject ->> 'fr', ''))
+                ) STORED;
+
+            CREATE INDEX subjects_searchable_text_idx ON subjects USING GIN (searchable_text);
+        ");
     }
 
     /**

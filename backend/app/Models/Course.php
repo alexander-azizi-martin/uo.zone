@@ -35,12 +35,4 @@ class Course extends Model
     {
         return $this->BelongsTo(Subject::class);
     }
-
-    /**
-     * Get the searchable columns for the model.
-     */
-    public static function searchableColumns(): array
-    {
-        return ['title', 'code'];
-    }
 }

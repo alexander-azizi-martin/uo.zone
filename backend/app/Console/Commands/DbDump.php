@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Database\Seeders\PgConfigFileSeeder;
 use Illuminate\Console\Command;
-use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
@@ -22,8 +22,10 @@ class DbDump extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(PgConfigFileSeeder $configFileSeeder)
     {
+        $configFileSeeder->run();
+
         $filename = 'db_dump';
         $filepath = storage_path("app/$filename");
         $pgsqlConfig = config('database.connections.pgsql');

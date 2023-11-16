@@ -32,12 +32,4 @@ class Subject extends Model
     {
         return $this->HasMany(Course::class);
     }
-
-    /**
-     * Get the searchable columns for the model.
-     */
-    public static function searchableColumns(): array
-    {
-        return ['code', 'subject'];
-    }
 }

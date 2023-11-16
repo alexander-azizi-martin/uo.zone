@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Facades\League\StatsD\Client as Statsd;
@@ -50,9 +51,11 @@ class ReportMetrics
             'route' => $route->uri ?? null,
         ]);
 
-        Http::withToken(config('services.axiom.token'))
-            ->withUrlParameters(['dataset' => config('services.axiom.dataset')])
-            ->post('https://api.axiom.co/v1/datasets/{dataset}/ingest', [$axiomData]);
+        if (App::isProduction()) {
+            Http::withToken(config('services.axiom.token'))
+                ->withUrlParameters(['dataset' => config('services.axiom.dataset')])
+                ->post('https://api.axiom.co/v1/datasets/{dataset}/ingest', [$axiomData]);
+        }
 
         Log::channel('requests')->info(
             "{$request->ip()} {$request->method()} {$request->path()} {$response->getStatusCode()}"

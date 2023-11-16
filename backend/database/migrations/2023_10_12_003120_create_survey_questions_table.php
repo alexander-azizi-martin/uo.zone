@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('question')->index();
             $table->jsonb('options')->default('[]');
             $table->integer('total_responses')->unsigned()->default(0);
-            $table->unsignedBigInteger('surveyable_id');
-            $table->string('surveyable_type');
+            $table->morphs('surveyable');
             $table->timestamps();
         });
     }

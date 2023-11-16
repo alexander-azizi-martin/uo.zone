@@ -40,12 +40,4 @@ class Professor extends Model
     {
         return $this->hasOne(RateMyProfessorReview::class);
     }
-
-    /**
-     * Get the searchable columns for the model.
-     */
-    public static function searchableColumns(): array
-    {  
-        return ['name'];
-    }
 }

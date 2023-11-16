@@ -17,26 +17,14 @@ class SearchController extends Controller
     {
         $query = $request->query('q');
 
-        $courses = Course::search($query)
-            ->select(['code', 'title'])
-            ->orderByDesc('total_enrolled')
-            ->limit(10)
-            ->get();
-
-        $subjects = Subject::search($query)
-            ->select(['code', 'subject'])
-            ->limit(10)
-            ->get();
-        
-        $professors = Professor::search($query)
-            ->select(['id', 'name'])
-            ->limit(10)
-            ->get();
+        $courses = Course::search($query, ['code', 'title']);
+        $subjects = Subject::search($query, ['code', 'subject']);
+        $professors = Professor::search($query, ['id', 'name']);
 
         return response()->json([
-            'courses' => CourseResource::collection($courses->sortBy('code')),
-            'subjects' => SubjectResource::collection($subjects->sortBy('name')),
-            'professors' => ProfessorResource::collection($professors->sortBy('code')),
+            'courses' => CourseResource::collection($courses),
+            'subjects' => SubjectResource::collection($subjects),
+            'professors' => ProfessorResource::collection($professors),
         ]);
     }
 }

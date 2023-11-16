@@ -2,35 +2,45 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Schema;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 trait HasSearch
 {
     /**
-     * Get the searchable data for the model.
-     */
-    public static function searchableColumns(): array
-    {
-        return Schema::getColumnListing(app(static::class)->getTable());
-    }
-
-    /**
      * Search for matching models.
      */
-    public static function search(string $query): Builder
+    public static function search(string $query, array $columns = ['*'])
     {
-        $searchable = static::searchableColumns();
+        $table = app(static::class)->getTable();
+        $select = Arr::join($columns, ',');
 
-        $queryBuilder = static::query();
-        foreach ($searchable as $i => $column) {
-            if ($i == 0) 
-                $queryBuilder->where($column, 'ILIKE', '%' . $query . '%');
-            else 
-                $queryBuilder->orWhere($column, 'ILIKE', '%' . $query . '%');
+        $tokens = str($query)->trim()->limit(255, '')->explode(' ')->filter();
+        if ($tokens->isEmpty()) {
+            return static::query()->whereRaw('1 = 0');
         }
 
-        return $queryBuilder;
+        $lastToken = $tokens->pop();
+        $otherTokens = $tokens->implode(' ');
+
+        $results = DB::select("
+            WITH queries (query) as (
+                SELECT ts_rewrite(
+                (
+                    COALESCE(plainto_tsquery('english_ispell', (select TS_NORMALIZE_SPELLING(:query, 'en'))), '') && 
+                    to_tsquery('english_ispell', (select TS_NORMALIZE_SPELLING(:lastWord, 'en')))
+                ) || 
+                (
+                    COALESCE(plainto_tsquery('french_ispell', (select TS_NORMALIZE_SPELLING(:query, 'fr'))), '') && 
+                    to_tsquery('french_ispell', (select TS_NORMALIZE_SPELLING(:lastWord, 'fr')))
+                ), 'SELECT t, s FROM ts_synonyms')
+            )
+            SELECT $select FROM $table, queries
+            WHERE searchable_text @@ query
+            ORDER BY log(total_enrolled + 1)
+            LIMIT 10;
+        ", ['query' => $otherTokens, 'lastWord' => $lastToken]);
+
+        return static::hydrate($results);
     }
 };

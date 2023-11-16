@@ -70,5 +70,7 @@ class DbRestore extends Command
         $process->setEnv(['PGPASSWORD' => $pgsqlConfig['password']]);
         $process->setTty(true);
         $process->mustRun();
+
+        $this->exec(DbConfig::class);
     }
 }
