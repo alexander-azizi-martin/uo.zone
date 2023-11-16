@@ -10,7 +10,7 @@ import SearchNav from '~/components/Search';
 import type { SubjectWithCourses } from '~/lib/api';
 import { getSubject } from '~/lib/api';
 import { getDictionary } from '~/lib/dictionary';
-import { CourseGrades } from '~/lib/grades';
+import CourseGrades from '~/lib/grades';
 
 interface SubjectProps {
   subject: SubjectWithCourses;
@@ -31,7 +31,7 @@ export default function Subject({ subject }: SubjectProps) {
           <SummaryCard>
             <GradeSummary
               grades={grades}
-              title={t('all-courses', { code: subject.code })}
+              title={t('all-courses-for', { code: subject.code })}
               titleSize={'3xl'}
             />
           </SummaryCard>

@@ -69,7 +69,7 @@ export class LetterGrade {
   }
 }
 
-export class CourseGrades {
+export default class CourseGrades {
   _totalStudents: number;
   _grades: GradesType;
   _term?: string;

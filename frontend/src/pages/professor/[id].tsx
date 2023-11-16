@@ -1,9 +1,9 @@
 import {
   Divider,
   Heading,
+  Stack,
   Tag,
   Text,
-  Stack,
   VStack,
   Wrap,
   WrapItem,
@@ -21,9 +21,9 @@ import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
 import type { ProfessorWithCourses } from '~/lib/api';
 import { getProfessor } from '~/lib/api';
-import { professorSurveys } from '~/lib/config';
+import { professorQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
-import { CourseGrades } from '~/lib/grades';
+import CourseGrades from '~/lib/grades';
 import Survey from '~/lib/survey';
 
 interface ProfessorProps {
@@ -31,13 +31,14 @@ interface ProfessorProps {
 }
 
 export default function Professor({ professor }: ProfessorProps) {
-  const t = useTranslations('Survey');
+  const tCourse = useTranslations('Course');
+  const tSurvey = useTranslations('Survey');
 
   const grades = useMemo(() => {
     return new CourseGrades(professor.grades);
   }, [professor.grades]);
 
-  const surveys = useMemo(() => {
+  const survey = useMemo(() => {
     return new Survey(professor.survey);
   }, [professor.survey]);
 
@@ -45,7 +46,7 @@ export default function Professor({ professor }: ProfessorProps) {
     <Layout>
       <SearchNav>
         <Heading my={4}>{professor.name}</Heading>
-        {professor.rmpReview && (
+        {professor.rmpReview && professor.rmpReview.numRatings > 0 && (
           <>
             <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
               <RmpRating review={professor.rmpReview} />
@@ -59,7 +60,7 @@ export default function Professor({ professor }: ProfessorProps) {
                 color={'gray.600'}
                 fontSize={'sm'}
               >
-                View on RateMyProfessor
+                {tCourse('rmp')}
               </ExternalLink>
             </Text>
           </>
@@ -68,28 +69,27 @@ export default function Professor({ professor }: ProfessorProps) {
           <SummaryCard>
             <GradeSummary
               grades={grades}
-              title={professor.name}
+              title={tCourse('all-courses')}
               titleSize={'3xl'}
               info={
                 <Text fontSize={'sm'} color={'gray.600'} mt={2}>
-                  This total also includes classes that they may not teach
-                  anymore.
+                  {tCourse('total-info')}
                 </Text>
               }
             />
           </SummaryCard>
 
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {Object.entries(professorSurveys)
-              .filter(([question]) => surveys.has(question))
+            {Object.entries(professorQuestions)
+              .filter(([question]) => survey.has(question))
               .map(([question, name]) => (
                 <WrapItem flexGrow={1} flexBasis={'18%'} key={question}>
                   <BigNumberCard
-                    info={t(`${name}.info`)}
-                    tooltip={t(`${name}.tooltip`, {
-                      responses: surveys.totalResponses(question),
+                    info={tSurvey(`${name}.info`)}
+                    tooltip={tSurvey(`${name}.tooltip`, {
+                      responses: survey.totalResponses(question),
                     })}
-                    value={surveys.score(question).toFixed(2)}
+                    value={survey.score(question).toFixed(2)}
                     total={5}
                   />
                 </WrapItem>
@@ -97,11 +97,11 @@ export default function Professor({ professor }: ProfessorProps) {
           </Wrap>
 
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {surveys.numQuestions() > 0 && (
+            {survey.numQuestions() > 0 && (
               <BigNumberCard
-                info={t('overall')}
-                value={surveys
-                  .averageScore(Object.keys(professorSurveys))
+                info={tSurvey('overall')}
+                value={survey
+                  .averageScore(Object.keys(professorQuestions))
                   .toFixed(2)}
                 total={5}
               />
@@ -119,13 +119,7 @@ export default function Professor({ professor }: ProfessorProps) {
 
           {professor.courses.map((course) => (
             <LinkCard href={`/course/${course.code}`} key={course.code}>
-              <SectionsSummary
-                title={course.title}
-                sectionGrades={course.sections.map(
-                  ({ grades, term, section }) =>
-                    new CourseGrades(grades, term, section)
-                )}
-              />
+              <SectionsSummary title={course.title} summarize={course} />
             </LinkCard>
           ))}
         </VStack>

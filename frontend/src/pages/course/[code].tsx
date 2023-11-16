@@ -21,9 +21,9 @@ import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
 import type { CourseWithProfessors } from '~/lib/api';
 import { getCourse } from '~/lib/api';
-import { courseSurveys } from '~/lib/config';
+import { courseQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
-import { CourseGrades } from '~/lib/grades';
+import CourseGrades from '~/lib/grades';
 import Survey from '~/lib/survey';
 
 interface CourseProps {
@@ -38,7 +38,7 @@ export default function Course({ course }: CourseProps) {
     return new CourseGrades(course.grades);
   }, [course.grades]);
 
-  const surveys = useMemo(() => {
+  const survey = useMemo(() => {
     return new Survey(course.survey);
   }, [course.survey]);
 
@@ -82,16 +82,16 @@ export default function Course({ course }: CourseProps) {
           </SummaryCard>
 
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {Object.entries(courseSurveys)
-              .filter(([question]) => surveys.has(question))
+            {Object.entries(courseQuestions)
+              .filter(([question]) => survey.has(question))
               .map(([question, name]) => (
                 <WrapItem flexGrow={1} flexBasis={'20%'} key={question}>
                   <BigNumberCard
                     info={tSurvey(`${name}.info`)}
                     tooltip={tSurvey(`${name}.tooltip`, {
-                      responses: surveys.totalResponses(question),
+                      responses: survey.totalResponses(question),
                     })}
-                    value={surveys.score(question).toFixed(2)}
+                    value={survey.score(question).toFixed(2)}
                     total={5}
                   />
                 </WrapItem>
@@ -99,11 +99,11 @@ export default function Course({ course }: CourseProps) {
           </Wrap>
 
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {surveys.numQuestions() > 0 && (
+            {survey.numQuestions() > 0 && (
               <BigNumberCard
                 info={tSurvey('overall')}
-                value={surveys
-                  .averageScore(Object.keys(courseSurveys))
+                value={survey
+                  .averageScore(Object.keys(courseQuestions))
                   .toFixed(2)}
                 total={5}
               />
@@ -121,13 +121,7 @@ export default function Course({ course }: CourseProps) {
 
           {course.professors.map((professor) => (
             <LinkCard href={`/professor/${professor.id}`} key={professor.id}>
-              <SectionsSummary
-                title={professor.name}
-                sectionGrades={professor.sections.map(
-                  ({ grades, term, section }) =>
-                    new CourseGrades(grades, term, section)
-                )}
-              />
+              <SectionsSummary title={professor.name} summarize={professor} />
             </LinkCard>
           ))}
         </VStack>

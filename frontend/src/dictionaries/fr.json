@@ -1,8 +1,12 @@
 {
   "Course": {
-    "all-courses": "Tous Les Cours Pour {code}",
+    "all-courses": "Tous Les Cours",
+    "all-courses-for": "Tous Les Cours Pour {code}",
     "all-professors": "Tous Les Professeurs",
+    "term": "{count} semestres pendant l''{term}",
     "terms": "{count} semestres de l''{start} au l''{stop}",
+    "total-info": "Ce total comprend également les classes qu'ils n'enseignent peut-être plus.",
+    "rmp": "Vue sur RateMyProfessor",
     "units": "{units} {units, plural, =1 {crédit} other {crédits}}"
   },
   "Error": {

@@ -4,7 +4,7 @@ import { MouseEventHandler, useMemo, useRef, useState } from 'react';
 
 import { useGradient } from '~/hooks';
 import { gradeGradient } from '~/lib/config';
-import { CourseGrades, LetterGrade } from '~/lib/grades';
+import CourseGrades, { LetterGrade } from '~/lib/grades';
 
 interface GradeDistributionProps {
   grades: CourseGrades;

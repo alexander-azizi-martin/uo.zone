@@ -1,7 +1,7 @@
 import { HStack, Spacer, Text, VStack } from '@chakra-ui/react';
 
 import { GradeDistribution, GradeTendencies } from '~/components/Grades';
-import { CourseGrades } from '~/lib/grades';
+import CourseGrades from '~/lib/grades';
 
 interface GradeSummaryProps {
   title?: string;

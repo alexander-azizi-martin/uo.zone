@@ -15,7 +15,7 @@ export const gradeGradient = [
   { color: '#38a169', offset: 100 },
 ];
 
-export const professorSurveys = {
+export const professorQuestions = {
   'I find that the professor as a teacher is': 'teacher',
   'I find the professor well prepared for class': 'prepared',
   'I think the professor conveys the subject matter effectively': 'communication',
@@ -25,7 +25,7 @@ export const professorSurveys = {
   'Instructions for completing activities and assignments are clear': 'instructions',
 };
 
-export const courseSurveys = {
+export const courseQuestions = {
   'The course is well organized': 'organized',
   'Course expectations are clearly explained': 'expectations',
   'I have learned a lot in this course': 'learning',

@@ -11,55 +11,56 @@ import { useMemo } from 'react';
 
 import { BaseCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
-import { CourseGrades } from '~/lib/grades';
-import { termValue } from '~/lib/helpers';
+import { CourseSection, Grades } from '~/lib/api';
+import CourseGrades from '~/lib/grades';
+import { compareTerms } from '~/lib/helpers';
 
 interface SectionsSummaryProps {
   title: string;
-  sectionGrades: CourseGrades[];
+  summarize: {
+    grades: Grades;
+    sections: CourseSection[];
+  };
 }
 
 export default function SectionsSummary({
   title,
-  sectionGrades,
+  summarize,
 }: SectionsSummaryProps) {
   const t = useTranslations('Course');
 
   const { isOpen, onToggle } = useDisclosure();
 
-  const { totalGrades, term } = useMemo(() => {
-    let minTerm = '';
-    let minTermVal = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
-    let maxTerm = '';
-    let maxTermVal = [0, 0];
+  const { totalGrades, sectionGrades, term } = useMemo(() => {
+    summarize.sections.sort(({ term: term1 }, { term: term2 }) =>
+      compareTerms(term2, term1)
+    );
 
-    const totalGrades = new CourseGrades({});
-    for (let grades of sectionGrades) {
-      const termVal = termValue(grades.term() as string);
+    const totalGrades = new CourseGrades(summarize.grades);
+    const sectionGrades = summarize.sections.map(
+      ({ grades, term, section }) => new CourseGrades(grades, term, section)
+    );
 
-      if (maxTermVal < termVal) {
-        maxTerm = grades.term() as string;
-        maxTermVal = termVal;
-      }
-      if (termVal < minTermVal) {
-        minTerm = grades.term() as string;
-        minTermVal = termVal;
-      }
+    let oldestTerm = summarize.sections[summarize.sections.length - 1].term;
+    let newestTerm = summarize.sections[0].term;
 
-      totalGrades.add(grades);
-    }
+    let term: string;
+    if (sectionGrades.length === 1)
+      term = `${oldestTerm} - ${summarize.sections[0].section}`;
+    else if (oldestTerm == newestTerm)
+      term = t('term', {
+        count: sectionGrades.length,
+        term: oldestTerm,
+      });
+    else
+      term = t('terms', {
+        count: sectionGrades.length,
+        start: oldestTerm,
+        stop: newestTerm,
+      });
 
-    const term =
-      sectionGrades.length > 1
-        ? t('terms', {
-            count: sectionGrades.length,
-            start: minTerm,
-            stop: maxTerm,
-          })
-        : minTerm;
-
-    return { totalGrades, term };
-  }, [sectionGrades]);
+    return { totalGrades, sectionGrades, term };
+  }, [summarize]);
 
   return (
     <Box>
