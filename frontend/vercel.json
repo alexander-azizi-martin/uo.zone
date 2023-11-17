@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/subject/csi",
+      "schedule": "* * * * *"
+    }
+  ]
+}
