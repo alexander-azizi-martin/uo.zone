@@ -28,11 +28,11 @@ trait HasSearch
                 SELECT ts_rewrite(
                 (
                     COALESCE(plainto_tsquery('english_ispell', (select TS_NORMALIZE_SPELLING(:query, 'en'))), '') && 
-                    to_tsquery('english_ispell', (select TS_NORMALIZE_SPELLING(:lastWord, 'en')))
+                    (to_tsquery('english_ispell', (select TS_NORMALIZE_SPELLING(:lastWord, 'en'))) || to_tsquery('english_ispell', :lastWord || ':*'))
                 ) || 
                 (
                     COALESCE(plainto_tsquery('french_ispell', (select TS_NORMALIZE_SPELLING(:query, 'fr'))), '') && 
-                    to_tsquery('french_ispell', (select TS_NORMALIZE_SPELLING(:lastWord, 'fr')))
+                    (to_tsquery('french_ispell', (select TS_NORMALIZE_SPELLING(:lastWord, 'fr'))) || to_tsquery('french_ispell', :lastWord || ':*'))
                 ), 'SELECT t, s FROM ts_synonyms')
             )
             SELECT $select FROM $table, queries
@@ -43,4 +43,4 @@ trait HasSearch
 
         return static::hydrate($results);
     }
-}
+};
