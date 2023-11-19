@@ -31,4 +31,4 @@ Route::get('/subjects/{code}', [SubjectController::class, 'getSubject']);
 Route::get('/professors', [ProfessorController::class, 'allProfessors']);
 Route::get('/professors/{id}', [ProfessorController::class, 'getProfessor']);
 
-Route::get('/search', [SearchController::class, 'search']);
+Route::post('/search', [SearchController::class, 'search']);

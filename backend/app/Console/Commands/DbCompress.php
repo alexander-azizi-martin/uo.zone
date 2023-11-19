@@ -26,7 +26,7 @@ class DbCompress extends Command
     {
         $databaseFilename = 'database.sqlite';
         $databaseFilepath = database_path($databaseFilename);
-        $archiveFilename = pathinfo($databaseFilename)['filename'] . '.tar.xz';
+        $archiveFilename = pathinfo($databaseFilename)['filename'].'.tar.xz';
         $archiveFilepath = database_path($archiveFilename);
 
         $this->info('Compressing the database.');

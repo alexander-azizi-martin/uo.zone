@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->float('units')->nullable();
             $table->jsonb('grades')->default('[]');
             $table->integer('total_enrolled')->unsigned()->default(0);
-            $table->enum('language', ['en', 'fr']);
+            $table->jsonb('languages')->default('[]');
             $table->timestamps();
         });
     }

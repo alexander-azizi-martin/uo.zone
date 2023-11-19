@@ -10,16 +10,29 @@ use App\Models\Professor;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class SearchController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
-        $query = $request->query('q');
+        $query = $request->input('q', '');
 
-        $courses = Course::search($query)->get();
-        $subjects = Subject::search($query)->get();
-        $professors = Professor::search($query)->get();
+        $courses = Course::search($query)
+            ->orderBy('languages.'.App::getLocale(), 'desc')
+            ->orderBy('total_enrolled', 'desc')
+            ->take(10)
+            ->get();
+
+        $subjects = Subject::search($query)
+            ->orderBy('total_enrolled', 'desc')
+            ->take(10)
+            ->get();
+
+        $professors = Professor::search($query)
+            ->orderBy('total_enrolled', 'desc')
+            ->take(10)
+            ->get();
 
         return response()->json([
             'courses' => CourseResource::collection($courses),

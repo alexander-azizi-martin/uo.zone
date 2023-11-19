@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\HasSearch;
 use App\Traits\HasSurvey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +11,7 @@ use Laravel\Scout\Searchable;
 
 class Professor extends Model
 {
-    use HasFactory, Searchable, HasSurvey;
+    use HasFactory, HasSurvey, Searchable;
 
     /**
      * The attributes that aren't mass assignable.
@@ -47,6 +46,9 @@ class Professor extends Model
      */
     public function toSearchableArray(): array
     {
-        return [$this->name];
+        return [
+            'name' => $this->name,
+            'total_enrolled' => $this->total_enrolled,
+        ];
     }
 }

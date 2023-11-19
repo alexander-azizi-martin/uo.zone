@@ -55,7 +55,7 @@ class DbExtract extends Command
 
             return;
         }
-    
+
         $this->info('Extracting the database.');
 
         $numPathComponents = str($archiveFilepath)->explode('/')->count() - 2;

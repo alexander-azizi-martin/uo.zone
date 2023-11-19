@@ -31,7 +31,13 @@ class CourseSeeder extends Seeder
                     continue;
                 }
 
-                $courses[] = Arr::only($course, ['code', 'title', 'description', 'units', 'language']);
+                $courses[] = [
+                    ...Arr::only($course, ['code', 'title', 'description', 'units']),
+                    'languages' => [
+                        'en' => (int) ($course['language'] == 'en'),
+                        'fr' => (int) ($course['language'] == 'fr'),
+                    ],
+                ];
             }
 
             $subject->courses()->createMany($courses);

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,10 +37,11 @@ class Subject extends Model
      * Get the indexable data array for the model.
      */
     public function toSearchableArray(): array
-    { 
+    {
         return [
-            $this->subject,
-            $this->code,
+            'subject' => $this->subject,
+            'code' => $this->code,
+            'total_enrolled' => $this->total_enrolled,
         ];
     }
 }

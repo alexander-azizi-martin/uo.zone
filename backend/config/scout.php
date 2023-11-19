@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\Course;
+use App\Models\Professor;
+use App\Models\Subject;
+use Illuminate\Support\Arr;
 
 return [
 
@@ -136,16 +139,32 @@ return [
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
             Course::class => [
-                'synonyms'=> [
+                'synonyms' => [
                     'intro' => ['introduction', 'introd'],
                     'intod' => ['introduction'],
-                    'calc' => ['calculus'],
+                    'calc' => ['calculus', 'calcul'],
                     '1' => ['i'],
                     '2' => ['ii'],
                     '3' => ['iii'],
                     '4' => ['iv'],
-                    '5' => ['5']
+                    '5' => ['5'],
+                    'cpp' => ['c++'],
                 ],
+                'sortableAttributes' => [
+                    ...Arr::map(config('app.valid_locales'), function (string $locale) {
+                        return "languages.$locale";
+                    }),
+                    'total_enrolled',
+                ],
+                'searchableAttributes' => ['code', 'title'],
+            ],
+            Professor::class => [
+                'sortableAttributes' => ['total_enrolled'],
+                'searchableAttributes' => ['name'],
+            ],
+            Subject::class => [
+                'sortableAttributes' => ['total_enrolled'],
+                'searchableAttributes' => ['code', 'subject'],
             ],
         ],
     ],
