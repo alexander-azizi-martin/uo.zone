@@ -50,17 +50,20 @@ export default function Search({
     [locale]
   );
 
+  // Removes query when page changes
   useEffect(() => {
     setQuery('');
   }, [pathname]);
 
+  // Sends search request when query or language changes
   useEffect(() => {
     setResults(null);
     setSearching(!!query);
     updateResults.cancel();
     if (query) updateResults(query);
-  }, [query]);
+  }, [query, locale]);
 
+  // Updates search listeners
   useEffect(() => {
     if (searching) onSearchOpen?.();
     else onSearchClose?.();

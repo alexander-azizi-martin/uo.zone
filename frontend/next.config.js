@@ -3,7 +3,7 @@ const { withAxiom } = require('next-axiom');
 const serverUrl = new URL('/api/:path*', process.env.SERVER_URL);
 
 /** @type {import('next').NextConfig} */
-const nextConfig = withAxiom({
+const nextConfig = {
   i18n: {
     locales: ['en', 'fr'],
     defaultLocale: 'en',
@@ -22,6 +22,6 @@ const nextConfig = withAxiom({
       },
     ];
   },
-});
+};
 
-module.exports = nextConfig;
+module.exports = withAxiom(nextConfig);
