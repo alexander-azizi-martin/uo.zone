@@ -1,9 +1,19 @@
 [![uo.zone](frontend/public/images/homepage.png)](https://uo.zone)
 # uoZone
 
-uo.zone is a web app that allows you to look up past grades for courses at the University of Ottawa. The frontend is build with NextJS and Chakra UI. The backend is written in Laravel using a PostgreSQL database and redis cache. The data scrappers for scrapping data from the university website and [ratemyprofessors.com](https://www.ratemyprofessors.com/) are written in python using the scrapy library.
+[uo.zone](https://uo.zone) is a web app that allows you to look up past grades for courses at the University of Ottawa. 
 
-Web design and idea taken from [Gopher Grades](https://github.com/samyok/gophergrades).
+## Tech Stack
+
+The frontend is written in typescript using nextjs and chakra ui. 
+
+The backend is written in php using laravel, sqlite, and meilisearch. 
+
+Python and scrapy were used to scrape information from the University of Ottawa's website and [ratemyprofessors](ratemyprofessors.com).
+
+# Acknowledgments
+
+The idea for uoZone was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design for uoZone was taken from the [Gopher Grades Github](https://github.com/samyok/gophergrades) with many of the React components being reimplemented.
 
 # Running Locally
 
@@ -28,8 +38,8 @@ cp .env.example .env
 
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail up -d
-./vendor/bin/sail artisan db:restore \
-    --file=https://uozone.s3.ca-central-1.amazonaws.com/db_dump
+./vendor/bin/sail artisan db:extract \
+    --file=https://uozone.s3.ca-central-1.amazonaws.com/database.tar.xz
 
 # live at http://localhost
 ```
