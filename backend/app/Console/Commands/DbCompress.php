@@ -38,7 +38,6 @@ class DbCompress extends Command
             $databaseFilepath,
         ]);
         $process->mustRun();
-        $this->
 
         if ($this->option('s3')) {
             $this->info('Uploading the compressed database to s3.');
