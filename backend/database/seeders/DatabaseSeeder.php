@@ -13,8 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CourseSeeder::class,
-            TsWordSeeder::class,
-            // PgConfigFileSeeder::class,
         ]);
     }
 }

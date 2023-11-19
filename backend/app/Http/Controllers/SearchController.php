@@ -17,9 +17,9 @@ class SearchController extends Controller
     {
         $query = $request->query('q');
 
-        $courses = Course::search($query, ['code', 'title']);
-        $subjects = Subject::search($query, ['code', 'subject']);
-        $professors = Professor::search($query, ['id', 'name']);
+        $courses = Course::search($query)->get();
+        $subjects = Subject::search($query)->get();
+        $professors = Professor::search($query)->get();
 
         return response()->json([
             'courses' => CourseResource::collection($courses),

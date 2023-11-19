@@ -19,15 +19,6 @@ return new class extends Migration
             $table->integer('total_enrolled')->unsigned()->default(0);
             $table->timestamps();
         });
-
-        DB::unprepared("
-            ALTER TABLE professors ADD COLUMN searchable_text tsvector
-                GENERATED ALWAYS AS (
-                    to_tsvector('english_ispell', coalesce(name, ''))
-                ) STORED;
-
-            CREATE INDEX professors_searchable_text_idx ON professors USING GIN (searchable_text);
-        ");
     }
 
     /**

@@ -8,13 +8,16 @@
         "php": "^8.1",
         "aws/aws-sdk-php": "*",
         "guzzlehttp/guzzle": "^7.8",
+        "http-interop/http-factory-guzzle": "^1.2",
         "laravel/framework": "^10.10",
         "laravel/octane": "^2.0",
         "laravel/sanctum": "^3.2",
+        "laravel/scout": "^10.5",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
         "league/flysystem-path-prefixing": "^3.0",
-        "league/statsd": "^2.0"
+        "league/statsd": "^2.0",
+        "meilisearch/meilisearch-php": "^1.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

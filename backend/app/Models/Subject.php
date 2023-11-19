@@ -6,10 +6,11 @@ use App\Traits\HasSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class Subject extends Model
 {
-    use HasFactory, HasSearch;
+    use HasFactory, Searchable;
 
     /**
      * The attributes that aren't mass assignable.
@@ -31,5 +32,16 @@ class Subject extends Model
     public function courses(): HasMany
     {
         return $this->HasMany(Course::class);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     */
+    public function toSearchableArray(): array
+    { 
+        return [
+            $this->subject,
+            $this->code,
+        ];
     }
 }

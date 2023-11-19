@@ -26,17 +26,6 @@ return new class extends Migration
             $table->enum('language', ['en', 'fr']);
             $table->timestamps();
         });
-
-        DB::unprepared("
-            ALTER TABLE courses ADD COLUMN searchable_text tsvector
-                GENERATED ALWAYS AS (
-                    to_tsvector('english_ispell', coalesce(code, '')) || 
-                    ' ' ||
-                    to_tsvector('english_ispell', coalesce(title, ''))
-                ) STORED;
-
-            CREATE INDEX courses_searchable_text_idx ON courses USING GIN (searchable_text);
-        ");
     }
 
     /**

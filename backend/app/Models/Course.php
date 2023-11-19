@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class Course extends Model
 {
-    use HasFactory, HasSearch, HasSurvey;
+    use HasFactory, Searchable, HasSurvey;
 
     /**
      * The attributes that should be cast.
@@ -34,5 +35,16 @@ class Course extends Model
     public function subject(): BelongsTo
     {
         return $this->BelongsTo(Subject::class);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     */
+    public function toSearchableArray(): array
+    { 
+        return [
+            $this->title,
+            $this->code,
+        ];
     }
 }
