@@ -27,7 +27,7 @@ export default function SectionsSummary({
   title,
   summarize,
 }: SectionsSummaryProps) {
-  const t = useTranslations('Course');
+  const tCourse = useTranslations('Course');
 
   const { isOpen, onToggle } = useDisclosure();
 
@@ -48,12 +48,12 @@ export default function SectionsSummary({
     if (sectionGrades.length === 1)
       term = `${oldestTerm} - ${summarize.sections[0].section}`;
     else if (oldestTerm == newestTerm)
-      term = t('term', {
+      term = tCourse('term', {
         count: sectionGrades.length,
         term: oldestTerm,
       });
     else
-      term = t('terms', {
+      term = tCourse('terms', {
         count: sectionGrades.length,
         start: oldestTerm,
         stop: newestTerm,

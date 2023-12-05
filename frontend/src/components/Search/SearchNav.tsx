@@ -29,7 +29,7 @@ export default function Search({
   children,
   searchBarProps,
 }: SearchProps) {
-  const t = useTranslations('Search');
+  const tSearch = useTranslations('Search');
   const { locale } = useRouter();
   const pathname = usePathname();
 
@@ -75,7 +75,7 @@ export default function Search({
         {...searchBarProps}
         value={query}
         onChange={setQuery}
-        placeholder={t('placeholder')}
+        placeholder={tSearch('placeholder')}
       />
 
       <Collapse in={searching} startingHeight={1}>
@@ -89,7 +89,7 @@ export default function Search({
           minH={'75vh'}
         >
           <Heading pt={4}>
-            {t.rich('result', {
+            {tSearch.rich('result', {
               query: query.trim(),
               quotes: (text) => <>&ldquo;{text}&rdquo;</>,
             })}
@@ -98,7 +98,7 @@ export default function Search({
           {!results && query.trim() && (
             <Heading size={'md'} pt={4}>
               <Spinner size={'sm'} mr={2} />
-              {t('loading')}
+              {tSearch('loading')}
             </Heading>
           )}
 
@@ -108,7 +108,7 @@ export default function Search({
               results.subjects.length ===
               0 && (
               <Heading size={'md'} pt={4}>
-                {t('empty')}
+                {tSearch('empty')}
               </Heading>
             )}
 

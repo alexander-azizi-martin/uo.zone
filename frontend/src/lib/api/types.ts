@@ -28,6 +28,8 @@ export interface Course {
   code: string;
   title: string;
   description: string;
+  components: string[];
+  requirements?: string;
   units: number | null;
   grades: Grades;
   totalEnrolled: number;

@@ -65,25 +65,12 @@ export default function Professor({ professor }: ProfessorProps) {
             </Text>
           </>
         )}
-        <VStack spacing={4} align={'start'} pb={4} minH={'50vh'}>
-          <SummaryCard>
-            <GradeSummary
-              grades={grades}
-              title={tCourse('all-courses')}
-              titleSize={'3xl'}
-              info={
-                <Text fontSize={'sm'} color={'gray.600'} mt={2}>
-                  {tCourse('total-info')}
-                </Text>
-              }
-            />
-          </SummaryCard>
-
+        <VStack spacing={4} align={'start'} pb={4}>
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
             {Object.entries(professorQuestions)
               .filter(([question]) => survey.has(question))
               .map(([question, name]) => (
-                <WrapItem flexGrow={1} flexBasis={'18%'} key={question}>
+                <WrapItem flexGrow={1} flexBasis={'30%'} key={question}>
                   <BigNumberCard
                     info={tSurvey(`${name}.info`)}
                     tooltip={tSurvey(`${name}.tooltip`, {
@@ -116,6 +103,19 @@ export default function Professor({ professor }: ProfessorProps) {
               opacity: 0.15,
             }}
           />
+
+          <SummaryCard>
+            <GradeSummary
+              grades={grades}
+              title={tCourse('all-courses')}
+              titleSize={'3xl'}
+              info={
+                <Text fontSize={'sm'} color={'gray.600'} mt={2}>
+                  {tCourse('total-info')}
+                </Text>
+              }
+            />
+          </SummaryCard>
 
           {professor.courses.map((course) => (
             <LinkCard href={`/course/${course.code}`} key={course.code}>

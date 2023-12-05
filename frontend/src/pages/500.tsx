@@ -5,12 +5,12 @@ import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
 
 export default function InternalError() {
-  const t = useTranslations('Error');
+  const tError = useTranslations('Error');
 
   return (
     <Layout>
       <SearchNav>
-        <Heading mt={4}>{t('500')}</Heading>
+        <Heading mt={4}>{tError('500')}</Heading>
       </SearchNav>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import { Divider, Heading, VStack } from '@chakra-ui/react';
+import { Heading, VStack } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
@@ -17,7 +17,7 @@ interface SubjectProps {
 }
 
 export default function Subject({ subject }: SubjectProps) {
-  const t = useTranslations('Course');
+  const tCourse = useTranslations('Course');
 
   const grades = useMemo(() => {
     return new CourseGrades(subject.grades);
@@ -31,19 +31,10 @@ export default function Subject({ subject }: SubjectProps) {
           <SummaryCard>
             <GradeSummary
               grades={grades}
-              title={t('all-courses-for', { code: subject.code })}
+              title={tCourse('all-courses-for', { code: subject.code })}
               titleSize={'3xl'}
             />
           </SummaryCard>
-
-          <Divider
-            orientation={'horizontal'}
-            style={{
-              borderColor: '#49080F',
-              borderBottomWidth: 1,
-              opacity: 0.15,
-            }}
-          />
 
           {subject.courses.map((course) => (
             <LinkCard href={`/course/${course.code}`} key={course.code}>

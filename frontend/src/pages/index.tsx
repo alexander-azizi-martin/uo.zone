@@ -7,7 +7,7 @@ import SearchNav from '~/components/Search';
 import { searchDurations } from '~/lib/config';
 
 export default function Home() {
-  const t = useTranslations('Home');
+  const tHome = useTranslations('Home');
 
   const [searching, setSearching] = useBoolean();
 
@@ -17,11 +17,13 @@ export default function Home() {
         alignItems={['center', 'center', 'start']}
         spacing={0}
         width={'100%'}
+        pb={'100px'}
       >
         <Flex
           alignItems={['center', 'center', 'end']}
-          justifyContent={['center', 'start', 'start']}
+          justifyContent={['center', 'space-between', 'space-between']}
           flexDirection={['column-reverse', 'column-reverse', 'row']}
+          width={'100%'}
         >
           <Collapse
             unmountOnExit={false}
@@ -32,33 +34,30 @@ export default function Home() {
               exit: { duration: searchDurations.exit },
               enter: { duration: searchDurations.enter },
             }}
+            style={{ minWidth: '410px' }}
           >
-            <Box>
-              <Heading
-                fontSize={['50px', '55px', '90px']}
-                paddingTop={[0, 10, 'calc(50vh - 185px)']}
-                textAlign={['center', 'center', 'left']}
-              >
-                uoZone
-              </Heading>
-              <Text
-                style={{ color: 'black' }}
-                textAlign={['center', 'center', 'left']}
-                py={2}
-                fontWeight={300}
-              >
-                {t('description')}
-              </Text>
-            </Box>
+            <Heading
+              fontSize={['50px', '55px', '90px']}
+              paddingTop={[0, 10, 'calc(50vh - 185px)']}
+              textAlign={['center', 'center', 'left']}
+              minW={'max-content'}
+            >
+              UO Grades
+            </Heading>
+            <Text
+              style={{ color: 'black' }}
+              textAlign={['center', 'center', 'left']}
+              fontWeight={300}
+              py={2}
+            >
+              {tHome('description')}
+            </Text>
           </Collapse>
           <Box
-            pt={[10, 10, 0]}
-            pb={[5, 5, 0]}
-            zIndex={-1}
-            opacity={[0.9, 0.9, 0.5]}
+            opacity={[1, 1, 0.5]}
             position={'relative'}
-            left={[0, 0, 0, 0, '80px']}
             top={[0, 0, '90px', '160px', '160px']}
+            pl={8}
           >
             <Collapse
               unmountOnExit={false}
@@ -71,7 +70,9 @@ export default function Home() {
               }}
             >
               <Image
-                src={'images/geegee.png'}
+                pt={[10, 10, 0]}
+                pb={[5, 5, 0]}
+                src={'geegee.svg'}
                 alt={'Geegee'}
                 width={['400px', '400px', '500px']}
               />

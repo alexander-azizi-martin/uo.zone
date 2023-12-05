@@ -28,14 +28,14 @@ interface CoursesProps {
 }
 
 function Courses({ courses }: CoursesProps) {
-  const t = useTranslations('Search');
+  const tSearch = useTranslations('Search');
 
   if (courses.length === 0) return null;
 
   return (
     <VStack spacing={2} width={'100%'} align={'start'}>
       <Heading size={'md'} pt={4}>
-        {t('courses')}
+        {tSearch('courses')}
       </Heading>
       {courses.map((course) => (
         <LinkCard key={course.code} href={`/course/${course.code}`}>
@@ -51,14 +51,14 @@ interface ProfessorsProps {
 }
 
 function Professors({ professors }: ProfessorsProps) {
-  const t = useTranslations('Search');
+  const tSearch = useTranslations('Search');
 
   if (professors.length === 0) return null;
 
   return (
     <VStack spacing={2} width={'100%'} align={'start'}>
       <Heading size={'md'} pt={4}>
-        {t('professors')}
+        {tSearch('professors')}
       </Heading>
       {professors.map((professor) => (
         <LinkCard key={professor.id} href={`/professor/${professor.id}`}>
@@ -74,14 +74,14 @@ interface SubjectsProps {
 }
 
 function Subjects({ subjects }: SubjectsProps) {
-  const t = useTranslations('Search');
+  const tSearch = useTranslations('Search');
 
   if (subjects.length === 0) return null;
 
   return (
     <VStack spacing={2} width={'100%'} align={'start'}>
       <Heading size={'md'} pt={4}>
-        {t('subjects')}
+        {tSearch('subjects')}
       </Heading>
       {subjects.map((subject) => (
         <LinkCard key={subject.code} href={`/subject/${subject.code}`}>

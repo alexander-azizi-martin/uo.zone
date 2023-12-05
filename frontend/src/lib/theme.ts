@@ -21,7 +21,7 @@ export default extendTheme({
     Heading: {
       baseStyle: {
         fontWeight: '700',
-        color: 'rgb(91, 0, 19)',
+        color: '#651d32',
         letterSpacing: '-0.05em',
       },
     },

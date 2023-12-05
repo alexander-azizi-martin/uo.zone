@@ -19,7 +19,7 @@ export default function GradeDistribution({
   height = 55,
   background = 'white',
 }: GradeDistributionProps) {
-  const t = useTranslations('Grades');
+  const tGrades = useTranslations('Grades');
 
   const [selectedGrade, setSelectedGrade] = useState<LetterGrade>();
   const gradient = useGradient(gradeGradient);
@@ -57,7 +57,7 @@ export default function GradeDistribution({
   return (
     <Flex direction={'column'}>
       <Badge margin={'auto'} mb={2}>
-        {t('students', { totalStudents: grades.totalStudents() })}
+        {tGrades('students', { totalStudents: grades.totalStudents() })}
       </Badge>
 
       <Flex
@@ -121,7 +121,7 @@ export default function GradeDistribution({
                 right: 0,
               }}
             >
-              {t('occurrence', {
+              {tGrades('occurrence', {
                 letter: selectedGrade.letter(),
                 letterClass: selectedGrade.letter()[0],
                 occurrences: grades.count(selectedGrade.letter()),

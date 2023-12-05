@@ -1,8 +1,8 @@
 import {
   Divider,
   Heading,
+  HStack,
   Link,
-  Stack,
   Tag,
   Text,
   VStack,
@@ -58,7 +58,7 @@ export default function Course({ course }: CourseProps) {
           </Link>
           {course.title.slice(3)}
         </Heading>
-        <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
+        <HStack mt={1} spacing={2} wrap={'wrap'}>
           {course.units !== null && (
             <Tag size={'md'}>{tCourse('units', { units: course.units })}</Tag>
           )}
@@ -68,62 +68,106 @@ export default function Course({ course }: CourseProps) {
           <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
             {course.subject.faculty}
           </Tag>
-        </Stack>
-        <Text my={4} fontSize={'sm'}>
-          {course.description}
-        </Text>
-        <VStack spacing={4} align={'start'} pb={4} minH={'50vh'}>
-          <SummaryCard>
-            <GradeSummary
-              grades={grades}
-              title={tCourse('all-professors')}
-              titleSize={'3xl'}
-            />
-          </SummaryCard>
+        </HStack>
+        <VStack my={6} spacing={4} align={'start'}>
+          <Text fontSize={'md'}>{course.description}</Text>
 
-          <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {Object.entries(courseQuestions)
-              .filter(([question]) => survey.has(question))
-              .map(([question, name]) => (
-                <WrapItem flexGrow={1} flexBasis={'20%'} key={question}>
+          {course.components.length > 0 && (
+            <HStack>
+              <Text fontWeight={'bold'} fontSize={'sm'}>
+                Components:
+              </Text>
+
+              {course.components.map((component) => (
+                <Tag size={'sm'} key={component}>
+                  {component}
+                </Tag>
+              ))}
+            </HStack>
+          )}
+          {course.requirements && (
+            <HStack>
+              <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
+                <Link
+                  as={NextLink}
+                  href={`/course/${course.code}/graph`}
+                  textDecor={'underline'}
+                  textDecorationThickness={'1px'}
+                  _hover={{ textDecorationThickness: '2px' }}
+                >
+                  Requirements:
+                </Link>
+              </Text>
+              <Text fontSize={'sm'}>{course.requirements}</Text>
+            </HStack>
+          )}
+        </VStack>
+        <VStack spacing={4} align={'start'} pb={4}>
+          {course.survey.length > 0 && (
+            <>
+              <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
+                {Object.entries(courseQuestions)
+                  .filter(([question]) => survey.has(question))
+                  .map(([question, name]) => (
+                    <WrapItem flexGrow={1} flexBasis={'30%'} key={question}>
+                      <BigNumberCard
+                        info={tSurvey(`${name}.info`)}
+                        tooltip={tSurvey(`${name}.tooltip`, {
+                          responses: survey.totalResponses(question),
+                        })}
+                        value={survey.score(question).toFixed(2)}
+                        total={5}
+                      />
+                    </WrapItem>
+                  ))}
+              </Wrap>
+              <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
+                {survey.numQuestions() > 0 && (
                   <BigNumberCard
-                    info={tSurvey(`${name}.info`)}
-                    tooltip={tSurvey(`${name}.tooltip`, {
-                      responses: survey.totalResponses(question),
-                    })}
-                    value={survey.score(question).toFixed(2)}
+                    info={tSurvey('overall')}
+                    value={survey
+                      .averageScore(Object.keys(courseQuestions))
+                      .toFixed(2)}
                     total={5}
                   />
-                </WrapItem>
-              ))}
-          </Wrap>
+                )}
+              </Wrap>
+            </>
+          )}
 
-          <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {survey.numQuestions() > 0 && (
-              <BigNumberCard
-                info={tSurvey('overall')}
-                value={survey
-                  .averageScore(Object.keys(courseQuestions))
-                  .toFixed(2)}
-                total={5}
+          {course.totalEnrolled > 0 && (
+            <>
+              <Divider
+                orientation={'horizontal'}
+                style={{
+                  borderColor: '#49080F',
+                  borderBottomWidth: 1,
+                  opacity: 0.15,
+                }}
+                my={2}
               />
-            )}
-          </Wrap>
 
-          <Divider
-            orientation={'horizontal'}
-            style={{
-              borderColor: '#49080F',
-              borderBottomWidth: 1,
-              opacity: 0.15,
-            }}
-          />
+              <SummaryCard>
+                <GradeSummary
+                  grades={grades}
+                  title={tCourse('all-professors')}
+                  titleSize={'3xl'}
+                />
+              </SummaryCard>
 
-          {course.professors.map((professor) => (
-            <LinkCard href={`/professor/${professor.id}`} key={professor.id}>
-              <SectionsSummary title={professor.name} summarize={professor} />
-            </LinkCard>
-          ))}
+              {course.professors.map((professor) => (
+                <LinkCard
+                  href={`/professor/${professor.id}`}
+                  key={professor.id}
+                >
+                  <SectionsSummary
+                    title={professor.name}
+                    summarize={professor}
+                  />
+                </LinkCard>
+              ))}
+            </>
+          )}
         </VStack>
       </SearchNav>
     </Layout>
