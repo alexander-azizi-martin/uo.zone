@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('subject_id')->constrained();
             $table->string('code')->unique();
-            $table->string('title');
-            $table->text('description');
-            // $table->text('prerequisites');
-            // $table->text('corequisites');
-            $table->float('units')->nullable();
+            $table->jsonb('title');
+            $table->jsonb('description');
+            $table->jsonb('components')->nullable();
+            $table->jsonb('requirements')->nullable();
+            $table->jsonb('languages')->default('[]');
             $table->jsonb('grades')->default('[]');
             $table->integer('total_enrolled')->unsigned()->default(0);
-            $table->jsonb('languages')->default('[]');
+            $table->float('units')->nullable();
             $table->timestamps();
         });
     }

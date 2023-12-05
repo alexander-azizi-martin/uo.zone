@@ -22,8 +22,12 @@ class Course extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'grades' => 'array',
+        'title' => Translations::class,
+        'description' => Translations::class,
+        'components' => Translations::class,
+        'requirements' => Translations::class,
         'languages' => 'array',
+        'grades' => 'array',
     ];
 
     /**

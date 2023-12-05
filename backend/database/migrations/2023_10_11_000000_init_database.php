@@ -10,10 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared("
+        DB::unprepared('
             PRAGMA journal_mode=WAL;
             PRAGMA synchronous=NORMAL;
-        ");
+        ');
     }
 
     /**

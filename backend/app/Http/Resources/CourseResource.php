@@ -18,8 +18,16 @@ class CourseResource extends JsonResource
     {
         return [
             'code' => $this->code,
-            'title' => $this->title,
-            'description' => $this->whenHas('description'),
+            'title' => $this->title->getLocalTranslation(),
+            'description' => $this->whenHas('description', function () {
+                return $this->description->getLocalTranslation();
+            }),
+            'components' => $this->whenHas('components', function () {
+                return $this->components->getLocalTranslation();
+            }),
+            'requirements' => $this->whenHas('requirements', function () {
+                return $this->requirements->getLocalTranslation();
+            }),
             'units' => $this->whenHas('units'),
             'grades' => $this->whenHas('grades'),
             'totalEnrolled' => $this->whenHas('total_enrolled'),
