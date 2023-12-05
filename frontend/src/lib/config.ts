@@ -16,7 +16,7 @@ export const gradeGradient = [
 ];
 
 export const professorQuestions = {
-  'I find that the professor as a teacher is': 'teacher',
+  // 'I find that the professor as a teacher is': 'teacher',
   'I find the professor well prepared for class': 'prepared',
   'I think the professor conveys the subject matter effectively': 'communication',
   'The professors feedback contributes to my learning': 'feedback',
@@ -31,5 +31,13 @@ export const courseQuestions = {
   'I have learned a lot in this course': 'learning',
   'I would recommend this course to another student': 'recommend',
   'In comparison with my other courses, the workload for this course is': 'workload',
-  'Assignments and/or exams closely reflect what is covered in class': 'activities'
+  'Assignments and/or exams closely reflect what is covered in class': 'activities',
+};
+
+export const openGraph = {
+  title: 'UO Grades',
+  description: 'View all the past grades for courses taken at the University of Ottawa.',
+  url: 'https://uo.zone',
+  theme: '#651d32',
+  image: './images/homepage.png'
 };
