@@ -1,5 +1,5 @@
 [![uo.zone](frontend/public/images/homepage.png)](https://uo.zone)
-# uoZone
+# UO Grades
 
 [uo.zone](https://uo.zone) is a web app that allows you to look up past grades for courses at the University of Ottawa. 
 
@@ -13,7 +13,7 @@ Python and scrapy were used to scrape information from the University of Ottawa'
 
 # Acknowledgments
 
-The idea for uoZone was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design for uoZone was taken from the [Gopher Grades Github](https://github.com/samyok/gophergrades) with many of the React components being reimplemented.
+The idea for UO Grades was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design for UO Grades was taken from the [Gopher Grades Github](https://github.com/samyok/gophergrades) with many of the React components being reimplemented.
 
 # Running Locally
 
@@ -37,9 +37,9 @@ docker run --rm \
 cp .env.example .env
 
 ./vendor/bin/sail artisan key:generate
-./vendor/bin/sail up -d
 ./vendor/bin/sail artisan db:extract \
     --file=https://uozone.s3.ca-central-1.amazonaws.com/database.tar.xz
+./vendor/bin/sail up -d
 
 # live at http://localhost
 ```
