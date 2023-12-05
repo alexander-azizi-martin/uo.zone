@@ -16,23 +16,23 @@ class SearchController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
-        $query = $request->input('q', '');
+        $query = str($request->input('q', ''))->limit(255, '');
 
         $courses = Course::search($query)
             ->orderBy('languages.'.App::getLocale(), 'desc')
             ->orderBy('total_enrolled', 'desc')
             ->take(10)
-            ->get();
+            ->hydrate();
 
         $subjects = Subject::search($query)
             ->orderBy('total_enrolled', 'desc')
             ->take(10)
-            ->get();
+            ->hydrate();
 
         $professors = Professor::search($query)
             ->orderBy('total_enrolled', 'desc')
             ->take(10)
-            ->get();
+            ->hydrate();
 
         return response()->json([
             'courses' => CourseResource::collection($courses),

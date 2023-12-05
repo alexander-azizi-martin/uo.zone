@@ -16,25 +16,49 @@ class Translations implements Castable
     /**
      * Adds a translation for the given language.
      */
-    public function addTranslation(string $language, string $value): void
+    public function addTranslation(string $language, mixed $value): void
     {
         $this->translations[$language] = $value;
     }
 
     /**
-     * Returns the translation in the given language.
+     * Returns the languages that have translations.
      */
-    public function getTranslation(string $language): string
+    public function getLanguages(): array
     {
-        return $this->translations[$language] ?? $this->translations[config('app.fallback_locale')];
+        return array_keys($this->translations);
     }
 
     /**
-     * Returns the translation in the locale language.
+     * Returns whether the given language has a translation.
      */
-    public function getLocalTranslation(): string
+    public function hasTranslation(string $language): bool
     {
-        return $this->getTranslation(App::getLocale());
+        return array_key_exists($language, $this->translations);
+    }
+
+    /**
+     * Returns the translation for the given language.
+     */
+    public function getTranslation(string $language): mixed
+    {
+        return $this->translations[$language] ?? null;
+    }
+
+    /**
+     * Returns the translation for the locale language. If there isnt a
+     * translation for the locale language it defaults to the first available
+     * translation.
+     */
+    public function getLocalTranslation(): mixed
+    {
+        if ($this->hasTranslation(App::getLocale())) {
+            return $this->translations[App::getLocale()];
+        } elseif (count($this->translations) == 0) {
+            return null;
+        }
+
+        return head($this->translations);
     }
 
     /**
@@ -49,7 +73,7 @@ class Translations implements Castable
              */
             public function get(Model $model, string $key, mixed $value, array $attributes): Translations
             {
-                return new Translations(json_decode($value, true));
+                return new Translations(json_decode($value ?? '[]', true));
             }
 
             /**

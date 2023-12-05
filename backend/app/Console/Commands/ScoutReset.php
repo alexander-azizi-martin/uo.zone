@@ -34,7 +34,7 @@ class ScoutReset extends Command
 
         foreach (static::MODELS as $model) {
             $this->call('scout:flush', ['model' => $model]);
-            $this->call('scout:import', ['model' => $model]);            
+            $this->call('scout:import', ['model' => $model]);
         }
     }
 }
