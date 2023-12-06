@@ -135,7 +135,7 @@ export default function Course({ course }: CourseProps) {
             </>
           )}
 
-          {course.totalEnrolled > 0 && (
+          {course.professors.length > 0 && (
             <>
               <Divider
                 orientation={'horizontal'}

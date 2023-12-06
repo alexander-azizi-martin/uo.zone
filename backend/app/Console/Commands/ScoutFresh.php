@@ -18,7 +18,7 @@ class ScoutReset extends Command
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'scout:reset';
+    protected $signature = 'scout:fresh';
 
     /**
      * The console command description.

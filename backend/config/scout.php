@@ -139,6 +139,7 @@ return [
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
             Course::class => [
+                'displayedAttributes' => ['code', 'title'],
                 'synonyms' => [
                     'intro' => ['introduction', 'introd'],
                     'intod' => ['introduction'],
@@ -159,10 +160,12 @@ return [
                 'searchableAttributes' => ['code', 'title'],
             ],
             Professor::class => [
+                'displayedAttributes' => ['id', 'name'],
                 'sortableAttributes' => ['total_enrolled'],
                 'searchableAttributes' => ['name'],
             ],
             Subject::class => [
+                'displayedAttributes' => ['code', 'subject'],
                 'sortableAttributes' => ['total_enrolled'],
                 'searchableAttributes' => ['code', 'subject'],
             ],
