@@ -39,5 +39,5 @@ export const openGraph = {
   description: 'View all the past grades for courses taken at the University of Ottawa.',
   url: 'https://uo.zone',
   theme: '#651d32',
-  image: './images/homepage.png'
+  image: 'https://uo.zone/images/homepage.png'
 };
