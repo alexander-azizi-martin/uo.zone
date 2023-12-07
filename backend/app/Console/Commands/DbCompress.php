@@ -43,7 +43,7 @@ class DbCompress extends Command
             $this->info('Uploading the compressed database to s3.');
 
             $archive_file = fopen($archiveFilepath, 'rb');
-            $success = Storage::disk('s3')->put($archiveFilename, $archive_file);
+            $success = Storage::disk('s3')->put($archiveFilename, $archive_file, 'public');
 
             if ($success) {
                 $this->info('Successfully uploaded the compressed database.');

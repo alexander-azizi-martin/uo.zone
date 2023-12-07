@@ -6,6 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
 
 import dotenv
 
@@ -115,8 +116,8 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {
     "timeout": 20 * 1000,  # 20 seconds
 }
 
-filesystem = helpers.LocalFilesystem("backend/storage/app")
-# filesystem = helpers.S3Filesystem("uozone-data")
+filesystem = helpers.LocalFilesystem(os.getenv("OUTPUT_DIR"))
+# filesystem = helpers.S3Filesystem("uozone")
 
 ad_blocker = helpers.AdBlocker()
 

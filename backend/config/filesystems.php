@@ -48,6 +48,12 @@ return [
             'throw' => false,
         ],
 
+        'scrapped' => [
+            'driver' => 'local',
+            'root' => storage_path('scrapped_data'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

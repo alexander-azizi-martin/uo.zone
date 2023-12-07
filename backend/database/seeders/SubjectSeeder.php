@@ -39,7 +39,7 @@ class SubjectSeeder extends Seeder
      */
     public function run(): void
     {
-        $subjects = Storage::json('subjects_en.json');
+        $subjects = Storage::disk('scrapped')->json('subjects_en.json');
 
         foreach ($subjects as $subjectData) {
             if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
@@ -74,7 +74,7 @@ class SubjectSeeder extends Seeder
             }
         }
 
-        $frenchSubjects = Storage::json('subjects_fr.json');
+        $frenchSubjects = Storage::disk('scrapped')->json('subjects_fr.json');
         foreach ($frenchSubjects as $subjectData) {
             if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
                 continue;
