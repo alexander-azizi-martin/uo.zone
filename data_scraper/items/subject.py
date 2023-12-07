@@ -1,6 +1,8 @@
-import scrapy
 import re
+
+import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
+
 from data_scraper.helpers import normalize_string
 
 FACULTY_PATTERN_EN = re.compile(r"The following (?:courses are|course is) offered by (?:the )?(.+)\.")
@@ -16,6 +18,9 @@ def extract_faculty(s):
 
 
 class Subject(scrapy.Item):
+    language = scrapy.Field(
+        output_processor=TakeFirst(),
+    )
     subject = scrapy.Field(
         input_processor=MapCompose(normalize_string), 
         output_processor=TakeFirst(),

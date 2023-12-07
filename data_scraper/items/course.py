@@ -1,22 +1,23 @@
 import scrapy
-import re
-from itemloaders.processors import Compose, MapCompose, Join, TakeFirst
-from operator import methodcaller, itemgetter
-from data_scraper.helpers import normalize_string, normalize_whitespace, remove_whitespace
+from itemloaders.processors import Compose, Join, MapCompose, TakeFirst
+
+from data_scraper.helpers import (normalize_string, normalize_whitespace,
+                                  remove_whitespace)
 
 
-def remove_prerequisites(s):
-    prerequisites_pattern = re.compile(r"Prerequisites( or corequisites)?: ([^\.]*)\.")
-    return re.sub(prerequisites_pattern, "", s)
-
-
-def extract_language(code):
-    return "en" if int(code[4]) < 5 else "fr"
+def extract_languages(code: str) -> dict[str, int]:
+    return {
+        "en": int(code[4] in ["0", "1", "2", "3", "4", "9"]),
+        "fr": int(code[4] in ["0", "5", "6", "7", "8", "9"]),
+    }
 
 
 class Course(scrapy.Item):
     title = scrapy.Field(
-        input_processor=MapCompose(normalize_string),
+        input_processor=Compose(
+            Join(" "),
+            normalize_whitespace,
+        ),
         output_processor=TakeFirst(),
     )
     code = scrapy.Field(
@@ -27,12 +28,12 @@ class Course(scrapy.Item):
         ),
         output_processor=TakeFirst(),
     )
-    language = scrapy.Field(
+    languages = scrapy.Field(
         input_processor=MapCompose(
             normalize_string,
             remove_whitespace,
             str.lower,
-            extract_language,
+            extract_languages,
         ),
         output_processor=TakeFirst(),
     )
@@ -47,24 +48,17 @@ class Course(scrapy.Item):
         ),
         output_processor=TakeFirst(),
     )
-    mentioned_courses = scrapy.Field(
-        input_processor=MapCompose(normalize_string),
-    )
     components = scrapy.Field(
-        input_processor=MapCompose(normalize_string),
-        output_processor=Compose(
+        input_processor=Compose(
             Join(" "),
-            lambda s: s.split(":", 1).pop().strip(),
+            normalize_whitespace,
         ),
+        output_processor=TakeFirst(),
     )
-    prereq_description = scrapy.Field(
-        input_processor=MapCompose(normalize_string),
-        output_processor=Compose(
+    requirements = scrapy.Field(
+        input_processor=Compose(
             Join(" "),
-            lambda s: s.split(":", 1).pop().strip(),
-            remove_prerequisites,
+            normalize_whitespace,
         ),
-    )
-    prereq_courses = scrapy.Field(
-        input_processor=MapCompose(normalize_string),
+        output_processor=TakeFirst(),
     )

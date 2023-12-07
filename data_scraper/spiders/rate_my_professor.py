@@ -1,9 +1,10 @@
 import scrapy
+import tqdm
+from parsel import Selector
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
 from scrapy_playwright.page import PageMethod
-from parsel import Selector
-from tqdm import tqdm
+
 from data_scraper import items
 
 
@@ -28,7 +29,7 @@ class RateMyProfessorSpider(scrapy.Spider):
         results = Selector(await page.content()).css("[data-testid='pagination-header-main-results']::text")
         [num_results] = results.re(r"\d+")
 
-        progress_bar = tqdm(total=int(num_results), desc="Professors")
+        progress_bar = tqdm.tqdm(total=int(num_results), desc="Professors")
         progress_bar.update(8)
 
         await page.get_by_alt_text("Banner Close Icon").click()

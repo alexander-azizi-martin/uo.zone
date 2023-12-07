@@ -1,18 +1,19 @@
-import scrapy
-import os
 import json
-import browser_cookie3
-from tqdm import tqdm
-from urllib.parse import urljoin
-from multiprocessing import Pool
-from parsel import Selector
+import os
 from itertools import repeat
-from scrapy import signals
+from multiprocessing import Pool
+from urllib.parse import urljoin
+
+import browser_cookie3
+import parsel
+import scrapy
+import tqdm
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
-from data_scraper.settings import filesystem
-from data_scraper.items import Survey, Question
+
 from data_scraper.helpers import normalize_string
+from data_scraper.items import Question, Survey
+from data_scraper.settings import filesystem
 
 
 class CourseSurveySpider(scrapy.Spider):
@@ -45,7 +46,7 @@ class CourseSurveySpider(scrapy.Spider):
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
         spider = super(CourseSurveySpider, cls).from_crawler(crawler, *args, **kwargs)
-        crawler.signals.connect(spider.spider_closed, signal=signals.spider_closed)
+        crawler.signals.connect(spider.spider_closed, signal=scrapy.signals.spider_closed)
         return spider
 
     def spider_closed(self, spider):
@@ -82,7 +83,7 @@ class CourseSurveySpider(scrapy.Spider):
                 "#ViewList_ctl04_lblTopPageStatus::text"
             ).re_first(r"Results: \d+ - \d+ of (\d+) Item\(s\)")
 
-            self.progress_bar = tqdm(total=int(num_surveys), desc="Surveys parsed")
+            self.progress_bar = tqdm.tqdm(total=int(num_surveys), desc="Surveys parsed")
 
         if self.current_page < self.start_page:
             offset = 0 if self.current_page <= 10 else 1
@@ -173,8 +174,8 @@ class CourseSurveySpider(scrapy.Spider):
         yield survey_loader.load_item()
 
 
-def parse_question_block_v1(text, url):
-    question_block = Selector(text)
+def parse_question_block_v1(text: str, url: str) -> Question:
+    question_block = parsel.Selector(text)
     result_image_url = urljoin(url, question_block.css("img::attr(src)").get())
 
     question_loader = ItemLoader(Question.extract_results(result_image_url), question_block)
@@ -184,8 +185,8 @@ def parse_question_block_v1(text, url):
     return question_loader.load_item()
 
 
-def parse_question_block_v2(text):
-    question_block = Selector(text)
+def parse_question_block_v2(text: str) -> Question:
+    question_block = parsel.Selector(text)
     question_loader = ItemLoader(Question(), question_block)
 
     options_table, statistics_table, *_ = question_block.css("table")

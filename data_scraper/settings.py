@@ -8,6 +8,7 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 import dotenv
+
 from data_scraper import helpers
 
 dotenv.load_dotenv()
@@ -70,6 +71,7 @@ COOKIES_ENABLED = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     "data_scraper.pipelines.SaveSurveyPipeline": 300,
+    "data_scraper.pipelines.SaveSubjectPipeline": 500,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -98,7 +100,7 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-LOG_ENABLED = False
+LOG_ENABLED = True
 # LOG_LEVEL = "INFO"
 
 DOWNLOAD_HANDLERS = {
@@ -113,8 +115,11 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {
     "timeout": 20 * 1000,  # 20 seconds
 }
 
-ad_blocker = helpers.AdBlocker()
-PLAYWRIGHT_ABORT_REQUEST = lambda request: ad_blocker.is_blocked(request.url)
-
 filesystem = helpers.LocalFilesystem("backend/storage/app")
 # filesystem = helpers.S3Filesystem("uozone-data")
+
+ad_blocker = helpers.AdBlocker()
+
+
+def PLAYWRIGHT_ABORT_REQUEST(request):
+    return ad_blocker.is_blocked(request.url)

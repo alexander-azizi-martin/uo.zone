@@ -1,25 +1,25 @@
+import os
+import re
+
 import scrapy
 from scrapy.http import Response
-import os 
-import re
-from data_scraper import items
 from scrapy.loader import ItemLoader
+
+from data_scraper import items
 
 
 class CourseSpider(scrapy.Spider):
     name = "course"
 
     def start_requests(self):
-        if os.getenv("COURSES_LANG") == "EN":
-            yield scrapy.Request(
-                url="https://catalogue.uottawa.ca/en/courses/",
-                callback=self.parse_english,
-            )
-        elif os.getenv("COURSES_LANG") == "FR":
-            yield scrapy.Request(
-                url="https://catalogue.uottawa.ca/fr/cours/",
-                callback=self.parse_french,
-            )
+        yield scrapy.Request(
+            url="https://catalogue.uottawa.ca/en/courses/",
+            callback=self.parse_english,
+        )
+        yield scrapy.Request(
+            url="https://catalogue.uottawa.ca/fr/cours/",
+            callback=self.parse_french,
+        )
 
     def parse_english(self, response: Response):
         course_pattern = re.compile(r"\/en\/courses\/[a-z]{3}\/")
@@ -32,6 +32,7 @@ class CourseSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=response.urljoin(url),
                 callback=self.parse_course_list,
+                meta={"language": "en"},
             )
 
     def parse_french(self, response: Response):
@@ -45,6 +46,7 @@ class CourseSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=response.urljoin(url),
                 callback=self.parse_course_list,
+                meta={"language": "fr"},
             )
 
     def parse_course_list(self, response: Response):
@@ -52,6 +54,7 @@ class CourseSpider(scrapy.Spider):
         units_pattern = re.compile(r"([0-9]\.?[0-9]*) (unit|crédit)s?")
 
         subject_loader = ItemLoader(items.Subject(), response)
+        subject_loader.add_value("language", response.meta["language"])
         subject_loader.add_css("faculty", "#textcontainer > p::text")
 
         page_title = response.css("#page-title-area h1::text").get()
@@ -67,24 +70,23 @@ class CourseSpider(scrapy.Spider):
         for course_block in response.css(".courseblock"):
             course_loader = ItemLoader(items.Course(), course_block)
 
-            course_header = " ".join(course_block.css(".courseblocktitle strong::text").get().split())
+            course_header = " ".join(
+                course_block.css(".courseblocktitle strong::text").get().split()
+            )
 
             units_match = units_pattern.search(course_header)
             if units_match is not None:
                 course_loader.add_value("units", units_match.group(1))
 
-            title = re.sub(units_pattern, '', course_header)
-            title = re.sub(r"\(( \/ )?\)",'', title)
+            title = re.sub(units_pattern, "", course_header)
+            title = re.sub(r"\(( \/ )?\)", "", title)
 
             course_loader.add_value("title", title)
             course_loader.add_value("code", title, re=r"[A-Z]{3} \d{4,5}")
-            course_loader.add_value("language", title, re=r"[A-Z]{3} \d{4,5}")
+            course_loader.add_value("languages", title, re=r"[A-Z]{3} \d{4,5}")
             course_loader.add_css("description", ".courseblockdesc *::text")
-            course_loader.add_css("mentioned_courses", ".courseblockdesc a::text")
-            course_loader.add_css("components", ".courseblocktitle + .courseblockextra *::text")
-            course_loader.add_css("components", ".courseblockdesc + .courseblockextra *::text")
-            course_loader.add_css("prereq_description", ".courseblockextra + .courseblockextra *::text")
-            course_loader.add_css("prereq_courses", ".courseblockextra + .courseblockextra a::text")
+            course_loader.add_css("components", ".courseblocktitle + .courseblockextra *::text, .courseblockdesc + .courseblockextra *::text")
+            course_loader.add_css( "requirements", ".courseblockextra + .courseblockextra *::text")
 
             courses.append(course_loader.load_item())
 

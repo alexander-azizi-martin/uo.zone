@@ -1,8 +1,10 @@
-import scrapy
 import re
+
 import pytesseract
+import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
-from data_scraper.helpers import normalize_string, download_image
+
+from data_scraper.helpers import download_image, normalize_string
 
 OPTION_PATTERN = re.compile(r"([A-Z]):\s+(.*?)\s+\((\d+)\)")
 RESULT_PATTERN = re.compile(r"Total \((\d+)\)")

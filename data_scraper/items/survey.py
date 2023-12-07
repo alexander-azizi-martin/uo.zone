@@ -1,6 +1,7 @@
 import scrapy
-from itemloaders.processors import MapCompose, Compose, TakeFirst
-from data_scraper.helpers import normalize_string, normalize_whitespace
+from itemloaders.processors import Compose, MapCompose, TakeFirst
+
+from data_scraper.helpers import normalize_string
 
 
 def normalize_term(term: str) -> str:

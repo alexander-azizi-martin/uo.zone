@@ -1,1 +1,1 @@
-from data_scraper.pipelines.save_survey_pipeline import SaveSurveyPipeline
+from . import SaveSubjectPipeline, SaveSurveyPipeline

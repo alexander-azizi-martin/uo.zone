@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import pathlib
-import dotenv
+
 import browser_cookie3
+import dotenv
 
 env_file = pathlib.Path(__file__).parent.joinpath('../.env').resolve()
 env_values = dotenv.dotenv_values(env_file)

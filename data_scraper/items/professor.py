@@ -1,5 +1,6 @@
 import scrapy
-from itemloaders.processors import TakeFirst, MapCompose
+from itemloaders.processors import MapCompose, TakeFirst
+
 from data_scraper.helpers import normalize_string
 
 

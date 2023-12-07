@@ -1,9 +1,10 @@
-import unicodedata
-import requests
 import io
 import os
-import boto3
 import pathlib
+import unicodedata
+
+import boto3
+import requests
 import tldextract
 from PIL import Image
 
@@ -38,7 +39,9 @@ def download_image(url: str) -> Image:
 class AdBlocker:
     def __init__(self) -> None:
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        block_list = os.path.join(current_directory, "ublock-origin-blocklist.txt")
+        block_list = os.path.join(
+            current_directory,
+            "ublock-origin-blocklist.txt")
         with open(block_list) as f:
             self.blocked_domains = set(domain.strip() for domain in f)
 
@@ -65,23 +68,36 @@ class S3Filesystem:
                 buffer.seek(0)
 
                 return buffer.getvalue().decode()
-            except:
+            except BaseException:
                 return default
+
+    def listdir(self, directory: str = "") -> list[str]:
+        results = self.s3.list_objects(
+            Bucket=self.bucket, Prefix=directory.strip("/"))
+        return [result["key"] for result in results["Contents"]]
 
 
 class LocalFilesystem:
     def __init__(self, path) -> None:
-        self.pathlib = pathlib.Path(path)
+        self.path = pathlib.Path(path)
 
     def put(self, filename: str, data: str) -> str:
-        with (self.pathlib / filename).open("r") as f:
+        with (self.path / filename).open("w") as f:
             f.write(data)
 
     def get(self, filename: str, default: str = "") -> str:
-        filepath = self.pathlib / filename
+        filepath = self.path / filename
 
         if not filepath.is_file():
             return default
 
         with filepath.open() as f:
             return f.read()
+
+    def listdir(self, directory: str = "") -> list[str]:
+        results = (self.path / directory.strip()).rglob("*")
+        return [
+            result.as_posix().removeprefix(self.path.as_posix()).strip("/")
+            for result in results
+            if result.is_file()
+        ]

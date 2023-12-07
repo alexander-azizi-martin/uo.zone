@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
 
-import pathlib
 import json
+import re
+from collections import defaultdict
 
-feedback_dir = pathlib.Path("backend", "storage", "app", "feedback")
-for sub_dir in feedback_dir.iterdir():
-    if sub_dir.is_dir():
-        links = set()
+from data_scraper.settings import filesystem
 
-        for sub_file in sub_dir.iterdir():
-            if sub_file.is_file() and sub_file.name != '.cache.json':
-                with sub_file.open() as f:
-                    links.add(json.load(f)["link"])
+SEASON_PATTERN = r"(winter|summer|fall) \d{4}"
 
-        with (sub_dir / ".cache.json").open("w") as f:
-            json.dump(list(links), f)
+saved_surveys = defaultdict(list)
+
+for survey_file in filesystem.listdir("surveys"):
+    season_match = re.search(SEASON_PATTERN, survey_file)
+
+    if season_match is None or survey_file.endswith(".cache.json"):
+        continue
+
+    season = season_match.group(0)
+    data = json.loads(filesystem.get(survey_file))
+    saved_surveys[season].append(data["link"])
+
+for season in saved_surveys:
+    data = json.dumps(saved_surveys[season])
+    filesystem.put(f"surveys/{season}/.cache.json", data)
