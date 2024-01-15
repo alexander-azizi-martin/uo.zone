@@ -1,1 +1,5 @@
-from . import Course, Professor, Question, Subject, Survey
+from .course import Course
+from .professor import Professor
+from .question import Question
+from .subject import Subject
+from .survey import Survey

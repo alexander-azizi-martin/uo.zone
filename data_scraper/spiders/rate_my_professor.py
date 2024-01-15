@@ -5,7 +5,7 @@ from scrapy.http import Response
 from scrapy.loader import ItemLoader
 from scrapy_playwright.page import PageMethod
 
-from data_scraper import items
+from data_scraper.items import Professor
 
 
 class RateMyProfessorSpider(scrapy.Spider):
@@ -13,7 +13,7 @@ class RateMyProfessorSpider(scrapy.Spider):
 
     def start_requests(self):
         yield scrapy.Request(
-            url="https://www.ratemyprofessors.com/search/professors/1452",
+            url="https://www.ratemyprofessors.com/professor/9310",
             meta={
                 "playwright": True,
                 "playwright_include_page": True,
@@ -44,7 +44,7 @@ class RateMyProfessorSpider(scrapy.Spider):
 
         page_selector = Selector(await page.content())
         for professor_card in page_selector.css("[href^='/professor']"):
-            professor_loader = ItemLoader(items.Professor(), professor_card)
+            professor_loader = ItemLoader(Professor(), professor_card)
 
             professor_loader.add_value("link", response.urljoin(professor_card.attrib["href"]))
             professor_loader.add_css("name", "[class*='CardName']::text")
