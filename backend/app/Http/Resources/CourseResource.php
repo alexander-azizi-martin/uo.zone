@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Grades;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,19 +19,14 @@ class CourseResource extends JsonResource
     {
         return [
             'code' => $this->code,
-            'title' => $this->title->getLocalTranslation(),
-            'description' => $this->whenHas('description', function () {
-                return $this->description->getLocalTranslation();
-            }),
-            'components' => $this->whenHas('components', function () {
-                return $this->components->getLocalTranslation();
-            }),
-            'requirements' => $this->whenHas('requirements', function () {
-                return $this->requirements->getLocalTranslation();
-            }),
+            'title' => $this->title,
+            'description' => $this->whenHas('description'),
+            'components' => $this->whenHas('components'),
+            'requirements' => $this->whenHas('requirements'),
             'units' => $this->whenHas('units'),
-            'grades' => $this->whenHas('grades'),
-            'totalEnrolled' => $this->whenHas('total_enrolled'),
+            'gradeInfo' => $this->whenLoaded('grades', function () {
+                return isset($this->grades) ? new GradesResource($this->grades) : null;
+            }),
             'subject' => $this->whenLoaded('subject', function () {
                 return new SubjectResource($this->subject);
             }),
@@ -38,25 +34,21 @@ class CourseResource extends JsonResource
                 return SurveyQuestionResource::collection($this->survey);
             }),
             'professors' => $this->when($this->withProfessors, function () {
-                $groupedSections = $this->sections->loadMissing('professor')->groupby('professor.id');
+                $professors = $this->sections
+                    ->sortByDesc('term_id')
+                    ->loadMissing('professor')
+                    ->groupby('professor.id')
+                    ->map(function ($sections) {
+                        $grades = new Grades;
+                        $sections->pluck('grades')->each([$grades, 'mergeGrades']);
 
-                $professors = [];
-                foreach ($groupedSections as $sections) {
-                    $totalGrades = [];
-                    $totalEnrolled = 0;
-                    foreach ($sections as $section) {
-                        foreach ($section->grades as $grade => $value) {
-                            $totalGrades[$grade] = ($totalGrades[$grade] ?? 0) + $value;
-                            $totalEnrolled += $value;
-                        }
-                    }
+                        $professor = $sections->first()->professor;
+                        $professor->setRelation('sections', $sections);
+                        $professor->setRelation('grades', $grades);
 
-                    $professor = $sections->first()->professor;
-                    $professor->grades = $totalGrades;
-                    $professor->total_enrolled = $totalEnrolled;
-                    $professor->setRelation('sections', $sections);
-                    $professors[] = $professor;
-                }
+                        return $professor;
+                    })
+                    ->values();
 
                 return ProfessorResource::collection($professors)->collection->map->withSections();
             }),

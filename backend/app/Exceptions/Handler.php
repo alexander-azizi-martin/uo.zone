@@ -28,6 +28,7 @@ class Handler extends ExceptionHandler
             if ($request->is('api/*')) {
                 return response()->json([
                     'error' => $e->getMessage(),
+                    'code' => $e->getStatusCode(),
                 ], $e->getStatusCode());
             }
         });

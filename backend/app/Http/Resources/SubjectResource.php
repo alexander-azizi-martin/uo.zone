@@ -15,11 +15,10 @@ class SubjectResource extends JsonResource
     {
         return [
             'code' => Str::upper($this->code),
-            'subject' => $this->subject->getLocalTranslation(),
-            'grades' => $this->whenHas('grades'),
-            'totalEnrolled' => $this->whenHas('total_enrolled'),
-            'faculty' => $this->whenHas('faculty', function () {
-                return $this->faculty->getLocalTranslation();
+            'subject' => $this->subject,
+            'faculty' => $this->whenHas('faculty'),
+            'gradeInfo' => $this->whenLoaded('grades', function () {
+                return isset($this->grades) ? new GradesResource($this->grades) : null;
             }),
             'courses' => $this->whenLoaded('courses', function () {
                 return CourseResource::collection($this->courses->sortBy('code'));

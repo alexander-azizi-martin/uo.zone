@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->jsonb('subject')->default('[]');
             $table->jsonb('faculty')->default('[]');
-            $table->jsonb('grades')->default('[]');
-            $table->integer('total_enrolled')->unsigned()->default(0);
             $table->timestamps();
         });
     }

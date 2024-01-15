@@ -47,8 +47,8 @@ class SubjectSeeder extends Seeder
             }
 
             $subject = Subject::create(Arr::only($subjectData, ['code']));
-            $subject->subject->addTranslation('en', $subjectData['subject']);
-            $subject->faculty->addTranslation('en', $subjectData['faculty']);
+            $subject->subject->setTranslation('en', $subjectData['subject']);
+            $subject->faculty->setTranslation('en', $subjectData['faculty']);
             $subject->save();
 
             foreach ($subjectData['courses'] as $courseData) {
@@ -70,8 +70,18 @@ class SubjectSeeder extends Seeder
                     )
                 );
 
-                self::translateComponents($course);
+                static::translateComponents($course);
             }
+        }
+
+        foreach (Course::lazy() as $course) {
+            $course->description->mapTranslations(
+                fn (string $text) => static::addCourseLinks($text, $course->code)
+            );
+            $course->requirements->mapTranslations(
+                fn (string $text) => static::addCourseLinks($text, $course->code)
+            );
+            $course->save();
         }
 
         $frenchSubjects = Storage::disk('scrapped')->json('subjects_fr.json');
@@ -81,18 +91,35 @@ class SubjectSeeder extends Seeder
             }
 
             $subject = Subject::where('code', $subjectData['code'])->firstOrFail();
-            $subject->subject->addTranslation('fr', $subjectData['subject']);
-            $subject->faculty->addTranslation('fr', $subjectData['faculty']);
+            $subject->subject->setTranslation('fr', $subjectData['subject']);
+            $subject->faculty->setTranslation('fr', $subjectData['faculty']);
             $subject->save();
         }
     }
 
     /**
+     * Replaces course codes with markdown links to the course's page.
+     */
+    public static function addCourseLinks(string $text, string $courseCode): string
+    {
+        return str($text)
+            ->replaceMatches('/[a-zA-Z]{3} ?\d{4,5}/', function (array $matches) use ($courseCode) {
+                $code = str($matches[0])->lower()->remove(' ');
+
+                if ($code != $courseCode && ! is_null(Course::firstWhere('code', $code))) {
+                    return "[$matches[0]](/course/$code)";
+                } else {
+                    return $matches[0];
+                }
+            });
+    }
+
+    /**
      * Adds translations for the components of the given course.
      */
-    public static function translateComponents(Course $course)
+    public static function translateComponents(Course $course): void
     {
-        if (! $course->components->hasTranslation('en')) {
+        if (! $course->components->hasLanguage('en')) {
             $translatedComponents = [];
 
             foreach ($course->components->getTranslation('fr') as $component) {
@@ -101,10 +128,10 @@ class SubjectSeeder extends Seeder
                 );
             }
 
-            $course->components->addTranslation('en', $translatedComponents);
+            $course->components->setTranslation('en', $translatedComponents);
         }
 
-        if (! $course->components->hasTranslation('fr')) {
+        if (! $course->components->hasLanguage('fr')) {
             $translatedComponents = [];
 
             foreach ($course->components->getTranslation('en') as $component) {
@@ -113,7 +140,7 @@ class SubjectSeeder extends Seeder
                 );
             }
 
-            $course->components->addTranslation('fr', $translatedComponents);
+            $course->components->setTranslation('fr', $translatedComponents);
         }
 
         $course->save();

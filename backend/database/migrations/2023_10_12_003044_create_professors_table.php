@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('professors', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
-            $table->jsonb('grades')->default('[]');
-            $table->integer('total_enrolled')->unsigned()->default(0);
             $table->timestamps();
         });
     }

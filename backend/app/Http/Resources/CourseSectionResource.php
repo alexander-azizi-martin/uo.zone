@@ -13,11 +13,10 @@ class CourseSectionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'term' => $this->term->getLocalTranslation(),
+            'term' => $this->term,
             'code' => $this->code,
             'section' => $this->section,
-            'grades' => $this->grades,
-            'totalEnrolled' => $this->total_enrolled,
+            'gradeInfo' => new GradesResource($this->grades),
         ];
     }
 }

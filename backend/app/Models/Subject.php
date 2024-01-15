@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasGrades;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,7 @@ use Laravel\Scout\Searchable;
 
 class Subject extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, HasGrades, Searchable;
 
     /**
      * The attributes that aren't mass assignable.
@@ -20,7 +21,6 @@ class Subject extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'grades' => 'json',
         'subject' => Translations::class,
         'faculty' => Translations::class,
     ];

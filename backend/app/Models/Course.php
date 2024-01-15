@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasGrades;
 use App\Traits\HasSurvey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Laravel\Scout\Searchable;
 
 class Course extends Model
 {
-    use HasFactory, HasSurvey, Searchable;
+    use HasFactory, HasGrades, HasSurvey, Searchable;
 
     /**
      * The attributes that aren't mass assignable.
@@ -27,7 +28,6 @@ class Course extends Model
         'components' => Translations::class,
         'requirements' => Translations::class,
         'languages' => 'array',
-        'grades' => 'array',
     ];
 
     /**
@@ -52,7 +52,7 @@ class Course extends Model
     public function toSearchableArray(): array
     {
         return [
-            'title' => $this->title,
+            'title' => $this->title->translations,
             'code' => $this->code,
             'total_enrolled' => $this->total_enrolled,
             'languages' => $this->languages,

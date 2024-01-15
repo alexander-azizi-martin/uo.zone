@@ -6,19 +6,22 @@ use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use JsonSerializable;
 
-class Translations implements Castable
+class Translations implements Castable, JsonSerializable
 {
     public function __construct(public array $translations)
     {
     }
 
-    /**
-     * Adds a translation for the given language.
-     */
-    public function addTranslation(string $language, mixed $value): void
+    public function __toString(): string
     {
-        $this->translations[$language] = $value;
+        return json_encode($this->getLocalTranslation());
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->getLocalTranslation();
     }
 
     /**
@@ -32,9 +35,17 @@ class Translations implements Castable
     /**
      * Returns whether the given language has a translation.
      */
-    public function hasTranslation(string $language): bool
+    public function hasLanguage(string $language): bool
     {
         return array_key_exists($language, $this->translations);
+    }
+
+    /**
+     * Adds a translation for the given language.
+     */
+    public function setTranslation(string $language, mixed $value): void
+    {
+        $this->translations[$language] = $value;
     }
 
     /**
@@ -46,13 +57,20 @@ class Translations implements Castable
     }
 
     /**
-     * Returns the translation for the locale language. If there isnt a
-     * translation for the locale language it defaults to the first available
-     * translation.
+     * Maps each translation using the givin callback.
+     */
+    public function mapTranslations(callable $callback): void
+    {
+        $this->translations = array_map($callback, $this->translations);
+    }
+
+    /**
+     * Returns the translation for the locale language. If there isn't a translation for
+     * the locale language it defaults to the first available translation.
      */
     public function getLocalTranslation(): mixed
     {
-        if ($this->hasTranslation(App::getLocale())) {
+        if ($this->hasLanguage(App::getLocale())) {
             return $this->translations[App::getLocale()];
         } elseif (count($this->translations) == 0) {
             return null;

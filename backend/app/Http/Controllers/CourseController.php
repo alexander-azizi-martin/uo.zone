@@ -22,7 +22,7 @@ class CourseController extends Controller
 
     public function getCourse(string $code): CourseResource
     {
-        $course = Course::with(['sections' => ['professor' => ['rmpReview']], 'survey', 'subject'])
+        $course = Course::with(['sections' => ['professor' => ['rmpReview', 'grades'], 'grades'], 'survey', 'subject', 'grades'])
             ->where('code', Str::lower($code))
             ->firstOrFail();
 

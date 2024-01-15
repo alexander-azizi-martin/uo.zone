@@ -3,78 +3,48 @@
 namespace Database\Seeders;
 
 use App\Models\CourseSection;
+use App\Models\Grades;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class GradeSeeder extends Seeder
 {
-    public const GRADES = [
-        'A+',
-        'A',
-        'A-',
-        'B+',
-        'B',
-        'C+',
-        'C',
-        'D+',
-        'D',
-        'E',
-        'F',
-    ];
-
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        foreach (CourseSection::lazy() as $section) {
-            $grades = collect();
+        $gradesCSV = Storage::disk('scrapped')->readStream('processed_grade_data.csv');
 
-            foreach (GradeSeeder::GRADES as $grade) {
-                $grades->put($grade, fake()->randomNumber(2));
+        $header = fgetcsv($gradesCSV);
+        while ($row = fgetcsv($gradesCSV)) {
+            $gradeData = array_combine($header, $row);
+
+            $courseSection = CourseSection::firstWhere([
+                'code' => "{$gradeData['course']} {$gradeData['section']}",
+                'term_id' => $gradeData['term_id'],
+            ]);
+
+            if (empty($courseSection) || isset($courseSection->grades)) {
+                continue;
             }
 
-            $section->grades = $grades->toArray();
-            $section->total_enrolled = $grades->sum();
-            $section->save();
+            $grades = $courseSection->grades()->create(
+                Arr::only($gradeData, [...array_keys(Grades::GRADE_VALUES), 'total'])
+            );
 
-            $course = $section->course;
-            if (empty($course->grades)) {
-                $course->grades = $grades;
-            } else {
-                $course->grades = $grades
-                    ->mergeRecursive($course->grades)
-                    ->map(function (array $values) {
-                        return array_sum($values);
-                    });
-            }
-            $course->total_enrolled += $section->total_enrolled;
-            $course->save();
+            $courseSection->course
+                ->grades()
+                ->firstOrNew()
+                ->mergeGrades($grades)
+                ->save();
 
-            $professor = $section->professor;
-            if (empty($professor->grades)) {
-                $professor->grades = $grades;
-            } else {
-                $professor->grades = $grades
-                    ->mergeRecursive($professor->grades)
-                    ->map(function (array $values) {
-                        return array_sum($values);
-                    });
-            }
-            $professor->total_enrolled += $section->total_enrolled;
-            $professor->save();
-
-            $subject = $section->course->subject;
-            if (empty($subject->grades)) {
-                $subject->grades = $grades;
-            } else {
-                $subject->grades = $grades
-                    ->mergeRecursive($subject->grades)
-                    ->map(function (array $values) {
-                        return array_sum($values);
-                    });
-            }
-            $subject->total_enrolled += $section->total_enrolled;
-            $subject->save();
+            $courseSection->professor
+                ->grades()
+                ->firstOrNew()
+                ->mergeGrades($grades)
+                ->save();
         }
     }
 }

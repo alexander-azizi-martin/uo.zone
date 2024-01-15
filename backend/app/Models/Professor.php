@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasGrades;
 use App\Traits\HasSurvey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,19 +12,12 @@ use Laravel\Scout\Searchable;
 
 class Professor extends Model
 {
-    use HasFactory, HasSurvey, Searchable;
+    use HasFactory, HasGrades, HasSurvey, Searchable;
 
     /**
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
-
-    /**
-     * The attributes that should be cast.
-     */
-    protected $casts = [
-        'grades' => 'array',
-    ];
 
     /**
      * Get all of the sections taught by the professor.

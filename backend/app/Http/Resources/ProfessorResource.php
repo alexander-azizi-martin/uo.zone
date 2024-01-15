@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Grades;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,8 +20,9 @@ class ProfessorResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'grades' => $this->whenHas('grades'),
-            'totalEnrolled' => $this->whenHas('total_enrolled'),
+            'gradeInfo' => $this->whenLoaded('grades', function () {
+                return isset($this->grades) ? new GradesResource($this->grades) : null;
+            }),
             'survey' => $this->whenLoaded('survey', function () {
                 return SurveyQuestionResource::collection($this->survey);
             }),
@@ -28,25 +30,21 @@ class ProfessorResource extends JsonResource
                 return isset($this->rmpReview) ? new RateMyProfessorReviewResource($this->rmpReview) : null;
             }),
             'courses' => $this->when($this->withCourses, function () {
-                $groupedSections = $this->sections->loadMissing('course')->groupby('course.code');
+                $courses = $this->sections
+                    ->sortByDesc('term_id')
+                    ->loadMissing('course')
+                    ->groupby('course.id')
+                    ->map(function ($sections) {
+                        $grades = new Grades;
+                        $sections->pluck('grades')->each([$grades, 'mergeGrades']);
 
-                $courses = [];
-                foreach ($groupedSections as $sections) {
-                    $totalGrades = [];
-                    $totalEnrolled = 0;
-                    foreach ($sections as $section) {
-                        foreach ($section->grades as $grade => $value) {
-                            $totalGrades[$grade] = ($totalGrades[$grade] ?? 0) + $value;
-                            $totalEnrolled += $value;
-                        }
-                    }
+                        $course = $sections->first()->course;
+                        $course->setRelation('sections', $sections);
+                        $course->setRelation('grades', $grades);
 
-                    $course = $sections->first()->course;
-                    $course->grades = $totalGrades;
-                    $course->total_enrolled = $totalEnrolled;
-                    $course->setRelation('sections', $sections);
-                    $courses[] = $course;
-                }
+                        return $course;
+                    })
+                    ->values();
 
                 return CourseResource::collection($courses)->collection->map->withSections();
             }),

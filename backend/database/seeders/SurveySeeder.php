@@ -30,23 +30,18 @@ class SurveySeeder extends Seeder
             }
 
             [$season, $year] = str($surveyData['term'])->explode(' ');
-            $frenchSeason = [
-                'Winter' => 'Hiver',
-                'Summer' => 'Été',
-                'Fall' => 'Automne',
+            $seasonId = [
+                'Winter' => 0,
+                'Summer' => 1,
+                'Fall' => 2,
             ][$season];
-
-            $frenchTerm = "$frenchSeason $year";
 
             $courses->push($course);
             $courseSections->push($course->sections()->create([
                 'professor_id' => $professor->id,
                 'code' => Str::squish(Str::upper("$code $section")),
                 'section' => $section,
-                'term' => [
-                    'en' => $surveyData['term'],
-                    'fr' => $frenchTerm,
-                ],
+                'term_id' => (intval($year) * 10) + $seasonId,
             ]));
         }
 

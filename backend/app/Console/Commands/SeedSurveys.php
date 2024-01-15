@@ -24,7 +24,7 @@ class SeedSurveys extends Command
      */
     public function handle(SurveySeeder $surveySeeder)
     {
-        $termDirectories = collect(['all', ...Storage::directories('surveys')])
+        $termDirectories = collect(['all', ...Storage::disk('scrapped')->directories('surveys')])
             ->sort()
             ->values()
             ->toArray();
@@ -38,7 +38,7 @@ class SeedSurveys extends Command
             $directory = 'surveys';
         }
 
-        $files = collect(Storage::allFiles($directory))
+        $files = collect(Storage::disk('scrapped')->allFiles($directory))
             ->filter(function (string $file) {
                 return Str::endsWith($file, '.json') && ! Str::endsWith($file, '.cache.json');
             });

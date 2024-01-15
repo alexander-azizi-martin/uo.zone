@@ -20,8 +20,6 @@ return new class extends Migration
             $table->jsonb('components')->nullable();
             $table->jsonb('requirements')->nullable();
             $table->jsonb('languages')->default('[]');
-            $table->jsonb('grades')->default('[]');
-            $table->integer('total_enrolled')->unsigned()->default(0);
             $table->float('units')->nullable();
             $table->timestamps();
         });
