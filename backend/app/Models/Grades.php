@@ -97,6 +97,7 @@ class Grades extends Model
         }
 
         $this->total += $grades->total;
+
         return $this;
     }
 }

@@ -40,6 +40,12 @@ class GradeSeeder extends Seeder
                 ->mergeGrades($grades)
                 ->save();
 
+            $courseSection->course->subject
+                ->grades()
+                ->firstOrNew()
+                ->mergeGrades($courseSection->grades)
+                ->save();
+
             $courseSection->professor
                 ->grades()
                 ->firstOrNew()

@@ -22,7 +22,7 @@ class SubjectController extends Controller
 
     public function getSubject(string $code)
     {
-        $subject = Subject::with('courses')
+        $subject = Subject::with(['courses' => ['grades'], 'grades'])
             ->where('code', Str::lower($code))
             ->firstOrFail();
 
