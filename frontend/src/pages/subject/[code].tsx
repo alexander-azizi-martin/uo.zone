@@ -1,16 +1,13 @@
 import { Heading, VStack } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
 
 import { LinkCard, SummaryCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
-import type { SubjectWithCourses } from '~/lib/api';
-import { getSubject } from '~/lib/api';
+import { getSubject, type SubjectWithCourses } from '~/lib/api';
 import { getDictionary } from '~/lib/dictionary';
-import CourseGrades from '~/lib/grades';
 
 interface SubjectProps {
   subject: SubjectWithCourses;
@@ -19,10 +16,6 @@ interface SubjectProps {
 export default function Subject({ subject }: SubjectProps) {
   const tCourse = useTranslations('Course');
 
-  const grades = useMemo(() => {
-    return new CourseGrades(subject.grades);
-  }, [subject.grades]);
-
   return (
     <Layout>
       <SearchNav>
@@ -30,7 +23,7 @@ export default function Subject({ subject }: SubjectProps) {
         <VStack spacing={4} align={'start'} pb={4} minH={'50vh'}>
           <SummaryCard>
             <GradeSummary
-              grades={grades}
+              gradeInfo={subject.gradeInfo}
               title={tCourse('all-courses-for', { code: subject.code })}
               titleSize={'3xl'}
             />
@@ -40,7 +33,7 @@ export default function Subject({ subject }: SubjectProps) {
             <LinkCard href={`/course/${course.code}`} key={course.code}>
               <GradeSummary
                 title={course.title}
-                grades={new CourseGrades(course.grades)}
+                gradeInfo={course.gradeInfo}
                 distributionWidth={300}
                 distributionHeight={40}
               />

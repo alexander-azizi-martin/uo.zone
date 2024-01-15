@@ -11,14 +11,12 @@ import { useMemo } from 'react';
 
 import { BaseCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
-import { CourseSection, Grades } from '~/lib/api';
-import CourseGrades from '~/lib/grades';
-import { compareTerms } from '~/lib/helpers';
+import { CourseSection, GradeInfo } from '~/lib/api';
 
 interface SectionsSummaryProps {
   title: string;
   summarize: {
-    grades: Grades;
+    gradeInfo: GradeInfo;
     sections: CourseSection[];
   };
 }
@@ -31,60 +29,47 @@ export default function SectionsSummary({
 
   const { isOpen, onToggle } = useDisclosure();
 
-  const { totalGrades, sectionGrades, term } = useMemo(() => {
-    summarize.sections.sort(({ term: term1 }, { term: term2 }) =>
-      compareTerms(term2, term1)
-    );
-
-    const totalGrades = new CourseGrades(summarize.grades);
-    const sectionGrades = summarize.sections.map(
-      ({ grades, term, section }) => new CourseGrades(grades, term, section)
-    );
-
+  const term = useMemo(() => {
     let oldestTerm = summarize.sections[summarize.sections.length - 1].term;
     let newestTerm = summarize.sections[0].term;
 
     let term: string;
-    if (sectionGrades.length === 1)
+    if (summarize.sections.length === 1)
       term = `${oldestTerm} - ${summarize.sections[0].section}`;
     else if (oldestTerm == newestTerm)
       term = tCourse('term', {
-        count: sectionGrades.length,
+        count: summarize.sections.length,
         term: oldestTerm,
       });
     else
       term = tCourse('terms', {
-        count: sectionGrades.length,
+        count: summarize.sections.length,
         start: oldestTerm,
         stop: newestTerm,
       });
 
-    return { totalGrades, sectionGrades, term };
-  }, [summarize]);
+    return term;
+  }, [summarize, tCourse]);
 
   return (
     <Box>
       <GradeSummary
         title={title}
         subtitle={term}
-        grades={totalGrades}
+        gradeInfo={summarize.gradeInfo}
         distributionWidth={300}
         distributionHeight={40}
       />
 
-      {sectionGrades.length > 1 && (
+      {summarize.sections.length > 1 && (
         <>
           <Collapse in={isOpen} animateOpacity>
             <VStack spacing={3} p={2} pt={3}>
-              {sectionGrades.map((grades) => (
-                <BaseCard
-                  key={`${grades.term()} - ${grades.section()}` as string}
-                >
+              {summarize.sections.map((section) => (
+                <BaseCard key={`${section.term} - ${section.section}`}>
                   <GradeSummary
-                    subtitle={
-                      `${grades.term()} - ${grades.section()}` as string
-                    }
-                    grades={grades}
+                    subtitle={`${section.term} - ${section.section}`}
+                    gradeInfo={section.gradeInfo}
                     distributionWidth={300}
                     distributionHeight={40}
                   />

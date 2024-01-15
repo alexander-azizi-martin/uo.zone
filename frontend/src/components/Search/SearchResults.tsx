@@ -2,11 +2,11 @@ import { Heading, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
 import { LinkCard } from '~/components/Card';
-import type {
-  CourseResult,
-  ProfessorResult,
-  SearchResults as SearchResultsType,
-  SubjectResult,
+import {
+  type CourseResult,
+  type ProfessorResult,
+  type SearchResults as SearchResultsType,
+  type SubjectResult,
 } from '~/lib/api';
 
 interface SearchResultsProps {

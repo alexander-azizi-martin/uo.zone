@@ -13,8 +13,8 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 
 import { SearchBar, SearchResults } from '~/components/Search';
-import type { SearchResults as SearchResultsType } from '~/lib/api';
-import { search } from '~/lib/api';
+import { search, type SearchResults as SearchResultsType } from '~/lib/api';
+import { searchDurations } from '~/lib/config';
 
 interface SearchProps {
   onSearchOpen?: () => void;
@@ -57,11 +57,12 @@ export default function Search({
 
   // Sends search request when query or language changes
   useEffect(() => {
+    if (window) window.scrollTo({ top: 0 });
     setResults(null);
     setSearching(!!query);
     updateResults.cancel();
     if (query) updateResults(query);
-  }, [query, locale]);
+  }, [query, locale, updateResults]);
 
   // Updates search listeners
   useEffect(() => {
@@ -117,7 +118,16 @@ export default function Search({
       </Collapse>
 
       {children && (
-        <Collapse in={!searching} startingHeight={1}>
+        <Collapse
+          unmountOnExit={false}
+          in={!searching}
+          startingHeight={0.01}
+          animateOpacity
+          transition={{
+            exit: { duration: searchDurations.exit },
+            enter: { duration: searchDurations.enter },
+          }}
+        >
           <Box
             px={'10px'}
             pb={10}

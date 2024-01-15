@@ -1,23 +1,22 @@
 import { HStack, Tag } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
 
-import CourseGrades from '~/lib/grades';
+import { type GradeInfo } from '~/lib/api';
+import LetterGrade from '~/lib/letterGrade';
 
 interface GradeTendenciesProps {
-  grades: CourseGrades;
+  gradeInfo: GradeInfo;
 }
 
-export default function GradeTendencies({ grades }: GradeTendenciesProps) {
+export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
   const tGrades = useTranslations('Grades');
 
-  const { mean, mode } = useMemo(() => {
-    return { mean: grades.mean(), mode: grades.mode() };
-  }, [grades]);
+  const mean = new LetterGrade(gradeInfo.mean);
+  const mode = new LetterGrade(gradeInfo.mode);
 
   return (
     <HStack>
-      {mean.value() >= 0 && grades.totalStudents() > 0 && (
+      {mean.value() >= 0 && gradeInfo.total > 0 && (
         <Tag size={'sm'} textAlign={'center'} colorScheme={mean.color()} py={1}>
           {tGrades('mean', {
             letter: mean.letter(),
@@ -25,11 +24,13 @@ export default function GradeTendencies({ grades }: GradeTendenciesProps) {
           })}
         </Tag>
       )}
-      {mode.value() >= 0 && grades.totalStudents() > 0 && (
+      {mode.value() >= 0 && gradeInfo.total > 0 && (
         <Tag size={'sm'} textAlign={'center'} colorScheme={mode.color()} py={1}>
           {tGrades('mode', {
             letter: mode.letter(),
-            percent: Math.round(grades.percentage(mode.letter()) * 100),
+            percent: Math.round(
+              (gradeInfo.grades[mode.letter()] / gradeInfo.total) * 100
+            ),
           })}
         </Tag>
       )}

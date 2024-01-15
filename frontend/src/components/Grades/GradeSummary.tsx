@@ -1,14 +1,14 @@
 import { HStack, Spacer, Text, VStack } from '@chakra-ui/react';
 
 import { GradeDistribution, GradeTendencies } from '~/components/Grades';
-import CourseGrades from '~/lib/grades';
+import { GradeInfo } from '~/lib/api';
 
 interface GradeSummaryProps {
   title?: string;
   titleSize?: '3xl' | 'lg';
   subtitle?: string;
   info?: React.ReactNode;
-  grades: CourseGrades;
+  gradeInfo: GradeInfo;
   distributionWidth?: number;
   distributionHeight?: number;
 }
@@ -18,7 +18,7 @@ export default function GradeSummary({
   titleSize = 'lg',
   subtitle,
   info,
-  grades,
+  gradeInfo,
   distributionWidth = 390,
   distributionHeight = 55,
 }: GradeSummaryProps) {
@@ -50,13 +50,13 @@ export default function GradeSummary({
 
         <Spacer mt={3} />
 
-        <GradeTendencies grades={grades} />
+        <GradeTendencies gradeInfo={gradeInfo} />
 
         {info && info}
       </VStack>
 
       <GradeDistribution
-        grades={grades}
+        gradeInfo={gradeInfo}
         width={distributionWidth}
         height={distributionHeight}
       />

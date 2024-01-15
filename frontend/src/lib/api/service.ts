@@ -1,10 +1,10 @@
 import urlJoin from 'url-join';
 
-import type {
-  CourseWithProfessors,
-  ProfessorWithCourses,
-  SearchResults,
-  SubjectWithCourses,
+import {
+  type CourseWithProfessors,
+  type ProfessorWithCourses,
+  type SearchResults,
+  type SubjectWithCourses,
 } from './types';
 
 export const API_URL =

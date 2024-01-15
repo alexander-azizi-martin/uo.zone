@@ -1,7 +1,7 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { chakra, HStack, Tag, Tooltip } from '@chakra-ui/react';
 
-import type { RateMyProfessorReview } from '~/lib/api';
+import { type RateMyProfessorReview } from '~/lib/api';
 
 function ratingToColor(rating: number): string {
   if (rating === undefined) return 'blackAlpha';

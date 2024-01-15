@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "elkjs": "^0.8.2",
     "framer-motion": "^10.16.4",
     "lodash.debounce": "^4.0.8",
     "next": "latest",
@@ -20,6 +21,9 @@
     "next-intl": "3.0.0-beta.19",
     "react": "latest",
     "react-dom": "latest",
+    "react-markdown": "^9.0.1",
+    "reactflow": "^11.10.1",
+    "text-metrics": "^4.0.1",
     "url-join": "^5.0.0"
   },
   "devDependencies": {
@@ -27,6 +31,7 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/text-metrics": "^3.0.3",
     "autoprefixer": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",

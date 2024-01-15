@@ -1,4 +1,4 @@
-import type { SurveyQuestion } from '~/lib/api';
+import { type SurveyQuestion } from '~/lib/api';
 
 export default class Survey {
   // prettier-ignore
@@ -30,17 +30,15 @@ export default class Survey {
     'very heavy': 1,
   };
 
-  _surveys: { [question: string]: SurveyQuestion };
+  _question: { [question: string]: SurveyQuestion };
   _numQuestions: number;
 
   constructor(survey: SurveyQuestion[]) {
-    this._surveys = {};
+    this._question = {};
     this._numQuestions = survey.length;
 
-    if (!survey) return;
-
     for (let question of survey) {
-      this._surveys[question.question] = question;
+      this._question[question.question] = question;
     }
   }
 
@@ -48,7 +46,7 @@ export default class Survey {
    * Checks whether one of the surveys has the given question.
    */
   has(question: string): boolean {
-    return question in this._surveys;
+    return question in this._question;
   }
 
   /**
@@ -63,9 +61,9 @@ export default class Survey {
    */
   totalResponses(question: string): number {
     let responses = 0;
-    for (let option in this._surveys[question]?.options) {
+    for (let option in this._question[question]?.options) {
       if (option in Survey.RESPONSE_VALUES) {
-        responses += this._surveys[question].options[option];
+        responses += this._question[question].options[option];
       }
     }
     return responses;
@@ -75,37 +73,37 @@ export default class Survey {
    * Calculates the average response out of 5 for the given question.
    */
   score(question: string): number {
-    let total = 0;
+    let totalValue = 0;
     let totalResponses = 0;
-    for (let option in this._surveys[question]?.options) {
+    for (let option in this._question[question]?.options) {
       if (option in Survey.RESPONSE_VALUES) {
-        let numResponses = this._surveys[question].options[option];
+        let numResponses = this._question[question].options[option];
 
-        total += Survey.RESPONSE_VALUES[option] * numResponses;
+        totalValue += Survey.RESPONSE_VALUES[option] * numResponses;
         totalResponses += numResponses;
       }
     }
 
     if (totalResponses === 0) return NaN;
-    return total / totalResponses;
+    return totalValue / totalResponses;
   }
 
   /**
    * Calculated the average score of the given questions.
    */
   averageScore(questions: string[]): number {
-    let total = 0;
+    let totalScore = 0;
     let numQuestions = 0;
     for (let question of questions) {
       let score = this.score(question);
 
       if (!Number.isNaN(score)) {
-        total += this.score(question);
+        totalScore += this.score(question);
         numQuestions++;
       }
     }
 
     if (numQuestions === 0) return NaN;
-    return total / numQuestions;
+    return totalScore / numQuestions;
   }
 }

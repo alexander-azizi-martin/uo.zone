@@ -19,11 +19,9 @@ import Layout from '~/components/Layout';
 import RmpRating from '~/components/RmpRating';
 import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
-import type { ProfessorWithCourses } from '~/lib/api';
-import { getProfessor } from '~/lib/api';
+import { getProfessor, type ProfessorWithCourses } from '~/lib/api';
 import { professorQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
-import CourseGrades from '~/lib/grades';
 import Survey from '~/lib/survey';
 
 interface ProfessorProps {
@@ -34,13 +32,10 @@ export default function Professor({ professor }: ProfessorProps) {
   const tCourse = useTranslations('Course');
   const tSurvey = useTranslations('Survey');
 
-  const grades = useMemo(() => {
-    return new CourseGrades(professor.grades);
-  }, [professor.grades]);
-
-  const survey = useMemo(() => {
-    return new Survey(professor.survey);
-  }, [professor.survey]);
+  const survey = useMemo(
+    () => new Survey(professor.survey),
+    [professor.survey]
+  );
 
   return (
     <Layout>
@@ -69,8 +64,12 @@ export default function Professor({ professor }: ProfessorProps) {
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
             {Object.entries(professorQuestions)
               .filter(([question]) => survey.has(question))
-              .map(([question, name]) => (
-                <WrapItem flexGrow={1} flexBasis={'30%'} key={question}>
+              .map(([question, name], _, questions) => (
+                <WrapItem
+                  flexGrow={1}
+                  flexBasis={questions.length < 6 ? '45%' : '30%'}
+                  key={question}
+                >
                   <BigNumberCard
                     info={tSurvey(`${name}.info`)}
                     tooltip={tSurvey(`${name}.tooltip`, {
@@ -106,7 +105,7 @@ export default function Professor({ professor }: ProfessorProps) {
 
           <SummaryCard>
             <GradeSummary
-              grades={grades}
+              gradeInfo={professor.gradeInfo}
               title={tCourse('all-courses')}
               titleSize={'3xl'}
               info={

@@ -1,26 +1,51 @@
+import { type Letter } from "~/lib/letterGrade";
+
 export interface SurveyQuestion {
   question: string;
   options: { [option: string]: number };
   totalResponses: number;
 }
 
+// prettier-ignore
+export interface GradeInfo {
+  mean: number;
+  median: Letter;
+  mode: Letter;
+  total: number;
+  grades: {
+    'A+': number;
+    'A': number;
+    'A-': number;
+    'B+': number;
+    'B': number;
+    'C+': number;
+    'C': number;
+    'D+': number;
+    'D': number;
+    'E': number;
+    'F': number;
+    'EIN': number;
+    'NS': number;
+    'NC': number;
+    'ABS': number;
+    'P': number;
+    'S': number;
+  };
+}
+
 export interface Subject {
   code: string;
   subject: string;
   faculty: string;
-  grades: Grades;
+  gradeInfo: GradeInfo;
   totalEnrolled: number;
-}
-
-export interface Grades {
-  [grade: string]: number;
 }
 
 export interface CourseSection {
   term: string;
   code: string;
   section: string;
-  grades: Grades;
+  gradeInfo: GradeInfo;
   totalEnrolled: number;
 }
 
@@ -31,7 +56,7 @@ export interface Course {
   components: string[];
   requirements?: string;
   units: number | null;
-  grades: Grades;
+  gradeInfo: GradeInfo;
   totalEnrolled: number;
   survey: SurveyQuestion[];
   subject: Subject;
@@ -49,7 +74,7 @@ export interface Professor {
   id: number;
   name: string;
   survey: SurveyQuestion[];
-  grades: Grades;
+  gradeInfo: GradeInfo;
   totalEnrolled: number;
   rmpReview?: RateMyProfessorReview;
 }

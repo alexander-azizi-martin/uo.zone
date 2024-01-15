@@ -3,18 +3,19 @@ import { useTranslations } from 'next-intl';
 import { MouseEventHandler, useMemo, useRef, useState } from 'react';
 
 import { useGradient } from '~/hooks';
+import { type GradeInfo } from '~/lib/api';
 import { gradeGradient } from '~/lib/config';
-import CourseGrades, { LetterGrade } from '~/lib/grades';
+import LetterGrade from '~/lib/letterGrade';
 
 interface GradeDistributionProps {
-  grades: CourseGrades;
+  gradeInfo: GradeInfo;
   width?: number;
   height?: number;
   background?: string;
 }
 
 export default function GradeDistribution({
-  grades,
+  gradeInfo,
   width = 390,
   height = 55,
   background = 'white',
@@ -26,10 +27,13 @@ export default function GradeDistribution({
   const rootRef = useRef<HTMLDivElement>();
 
   const heights = useMemo(() => {
-    return LetterGrade.LETTER_ORDER.map((letter) =>
-      Math.round(height * Math.max(0, 1 - grades.percentage(letter) * 3))
-    );
-  }, [grades, height]);
+    return LetterGrade.LETTER_ORDER.map((letter) => {
+      const percent = gradeInfo.grades[letter] / gradeInfo.total;
+      const complement = Math.max(0, 1 - percent * 4);
+
+      return Math.round(height * complement);
+    });
+  }, [gradeInfo, height]);
 
   const blockWidth = width / 10;
   const gradeOffset = (grade: number) => grade * blockWidth;
@@ -57,7 +61,7 @@ export default function GradeDistribution({
   return (
     <Flex direction={'column'}>
       <Badge margin={'auto'} mb={2}>
-        {tGrades('students', { totalStudents: grades.totalStudents() })}
+        {tGrades('students', { totalStudents: gradeInfo.total })}
       </Badge>
 
       <Flex
@@ -124,9 +128,9 @@ export default function GradeDistribution({
               {tGrades('occurrence', {
                 letter: selectedGrade.letter(),
                 letterClass: selectedGrade.letter()[0],
-                occurrences: grades.count(selectedGrade.letter()),
+                occurrences: gradeInfo.grades[selectedGrade.letter()],
                 percent: Math.round(
-                  grades.percentage(selectedGrade.letter()) * 100
+                  gradeInfo.grades[selectedGrade.letter()] / gradeInfo.total * 100
                 ),
               })}
             </Text>

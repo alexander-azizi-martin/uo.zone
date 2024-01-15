@@ -1,4 +1,5 @@
 import {
+  chakra,
   Divider,
   Heading,
   HStack,
@@ -13,17 +14,16 @@ import NextLink from 'next/link';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
+import Markdown from 'react-markdown';
 
 import { BigNumberCard, LinkCard, SummaryCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
-import type { CourseWithProfessors } from '~/lib/api';
-import { getCourse } from '~/lib/api';
+import { type CourseWithProfessors, getCourse } from '~/lib/api';
 import { courseQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
-import CourseGrades from '~/lib/grades';
 import Survey from '~/lib/survey';
 
 interface CourseProps {
@@ -34,13 +34,7 @@ export default function Course({ course }: CourseProps) {
   const tCourse = useTranslations('Course');
   const tSurvey = useTranslations('Survey');
 
-  const grades = useMemo(() => {
-    return new CourseGrades(course.grades);
-  }, [course.grades]);
-
-  const survey = useMemo(() => {
-    return new Survey(course.survey);
-  }, [course.survey]);
+  const survey = useMemo(() => new Survey(course.survey), [course.survey]);
 
   const subject = course.title.slice(0, 3);
 
@@ -70,7 +64,11 @@ export default function Course({ course }: CourseProps) {
           </Tag>
         </HStack>
         <VStack my={6} spacing={4} align={'start'}>
-          <Text fontSize={'md'}>{course.description}</Text>
+          <Text fontSize={'md'} as="div">
+            <Markdown components={{ a: CourseLink }}>
+              {course.description}
+            </Markdown>
+          </Text>
 
           {course.components.length > 0 && (
             <HStack>
@@ -88,17 +86,13 @@ export default function Course({ course }: CourseProps) {
           {course.requirements && (
             <HStack>
               <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
-                <Link
-                  as={NextLink}
-                  href={`/course/${course.code}/graph`}
-                  textDecor={'underline'}
-                  textDecorationThickness={'1px'}
-                  _hover={{ textDecorationThickness: '2px' }}
-                >
-                  Requirements:
-                </Link>
+                Requirements:
               </Text>
-              <Text fontSize={'sm'}>{course.requirements}</Text>
+              <Text fontSize={'sm'} as={'div'}>
+                <Markdown components={{ a: CourseLink }}>
+                  {course.requirements}
+                </Markdown>
+              </Text>
             </HStack>
           )}
         </VStack>
@@ -108,8 +102,12 @@ export default function Course({ course }: CourseProps) {
               <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
                 {Object.entries(courseQuestions)
                   .filter(([question]) => survey.has(question))
-                  .map(([question, name]) => (
-                    <WrapItem flexGrow={1} flexBasis={'30%'} key={question}>
+                  .map(([question, name], _, questions) => (
+                    <WrapItem
+                      flexGrow={1}
+                      flexBasis={questions.length < 6 ? '45%' : '30%'}
+                      key={question}
+                    >
                       <BigNumberCard
                         info={tSurvey(`${name}.info`)}
                         tooltip={tSurvey(`${name}.tooltip`, {
@@ -149,7 +147,7 @@ export default function Course({ course }: CourseProps) {
 
               <SummaryCard>
                 <GradeSummary
-                  grades={grades}
+                  gradeInfo={course.gradeInfo}
                   title={tCourse('all-professors')}
                   titleSize={'3xl'}
                 />
@@ -171,6 +169,19 @@ export default function Course({ course }: CourseProps) {
         </VStack>
       </SearchNav>
     </Layout>
+  );
+}
+
+function CourseLink(props: any) {
+  return (
+    <chakra.span
+      color={'#8f001a'}
+      textDecoration={'underline'}
+      textDecorationThickness={'1px'}
+      _hover={{ textDecorationThickness: '2px' }}
+    >
+      <NextLink {...props} />
+    </chakra.span>
   );
 }
 
