@@ -8,7 +8,7 @@ interface GradeSummaryProps {
   titleSize?: '3xl' | 'lg';
   subtitle?: string;
   info?: React.ReactNode;
-  gradeInfo: GradeInfo;
+  gradeInfo?: GradeInfo;
   distributionWidth?: number;
   distributionHeight?: number;
 }
@@ -50,16 +50,18 @@ export default function GradeSummary({
 
         <Spacer mt={3} />
 
-        <GradeTendencies gradeInfo={gradeInfo} />
+        {gradeInfo && <GradeTendencies gradeInfo={gradeInfo} />}
 
         {info && info}
       </VStack>
 
-      <GradeDistribution
-        gradeInfo={gradeInfo}
-        width={distributionWidth}
-        height={distributionHeight}
-      />
+      {gradeInfo && (
+        <GradeDistribution
+          gradeInfo={gradeInfo}
+          width={distributionWidth}
+          height={distributionHeight}
+        />
+      )}
     </HStack>
   );
 }
