@@ -7,7 +7,7 @@ use App\Models\Professor;
 use App\Models\Subject;
 use Illuminate\Console\Command;
 
-class ScoutReset extends Command
+class ScoutFresh extends Command
 {
     private const MODELS = [
         Course::class,
