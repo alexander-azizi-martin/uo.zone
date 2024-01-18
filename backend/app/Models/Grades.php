@@ -87,8 +87,12 @@ class Grades extends Model
     /**
      * Merge distribution of another Grades model.
      */
-    public function mergeGrades(Grades $grades): static
+    public function mergeGrades(?Grades $grades): static
     {
+        if (is_null($grades)) {
+            return $this;
+        }
+
         foreach (Grades::GRADE_VALUES as $grade => $_) {
             $this->setAttribute(
                 $grade,
