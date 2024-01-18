@@ -35,7 +35,7 @@ class ProfessorResource extends JsonResource
                     ->loadMissing('course')
                     ->groupby('course.id')
                     ->map(function ($sections) {
-                        $grades = new Grades;
+                        $grades = Grades::new();
                         $sections->pluck('grades')->each([$grades, 'mergeGrades']);
 
                         $course = $sections->first()->course;

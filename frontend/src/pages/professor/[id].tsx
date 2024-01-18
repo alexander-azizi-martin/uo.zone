@@ -67,7 +67,7 @@ export default function Professor({ professor }: ProfessorProps) {
               .map(([question, name], _, questions) => (
                 <WrapItem
                   flexGrow={1}
-                  flexBasis={questions.length < 6 ? '45%' : '30%'}
+                  flexBasis={questions.length < 5 ? '45%' : '30%'}
                   key={question}
                 >
                   <BigNumberCard

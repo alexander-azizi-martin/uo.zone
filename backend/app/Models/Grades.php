@@ -31,6 +31,21 @@ class Grades extends Model
     ];
 
     /**
+     * Creates a new instance of grades with all values initialized to 0.
+     */
+    public static function new(): Grades
+    {
+        $grades = new Grades;
+
+        foreach (Grades::GRADE_VALUES as $grade => $_) {
+            $grades->setAttribute($grade, 0);
+        }
+
+        $grades->total = 0;
+        return $grades;
+    }
+
+    /**
      * Get the parent Grades model.
      */
     public function gradable(): MorphTo

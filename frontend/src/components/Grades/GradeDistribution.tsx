@@ -28,6 +28,8 @@ export default function GradeDistribution({
 
   const heights = useMemo(() => {
     return LetterGrade.NUMERICAL_GRADES.map((letter) => {
+      if (gradeInfo.total == 0) return height;
+
       const percent = gradeInfo.grades[letter] / gradeInfo.total;
       const complement = Math.max(0, 1 - percent * 4);
 
@@ -125,10 +127,14 @@ export default function GradeDistribution({
                 letter: selectedGrade.letter(),
                 letterClass: selectedGrade.letter()[0],
                 occurrences: gradeInfo.grades[selectedGrade.letter()],
-                percent: Math.round(
-                  (gradeInfo.grades[selectedGrade.letter()] / gradeInfo.total) *
-                    100
-                ),
+                percent:
+                  gradeInfo.total > 0
+                    ? Math.round(
+                        (gradeInfo.grades[selectedGrade.letter()] /
+                          gradeInfo.total) *
+                          100
+                      )
+                    : 0,
               })}
             </Text>
           </>
