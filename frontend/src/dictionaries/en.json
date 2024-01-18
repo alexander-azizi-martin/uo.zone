@@ -11,7 +11,8 @@
   },
   "Error": {
     "404": "This page does not exist.",
-    "500": "Something went wrong during your request."
+    "500": "Something went wrong during your request.",
+    "client": "An error occurred."
   },
   "Footer": {
     "dataSource": {

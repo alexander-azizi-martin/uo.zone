@@ -11,7 +11,8 @@
   },
   "Error": {
     "404": "Cette page n'existe pas.",
-    "500": "Une erreur s'est produite lors de votre demande."
+    "500": "Une erreur s'est produite lors de votre demande.",
+    "client": "Une erreur s'est produite."
   },
   "Footer": {
     "dataSource": {
