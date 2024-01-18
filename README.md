@@ -13,7 +13,7 @@ Python and scrapy were used to scrape information from the University of Ottawa'
 
 # Acknowledgments
 
-The idea for UO Grades was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design for UO Grades was taken from the [Gopher Grades Github](https://github.com/samyok/gophergrades) with many of the React components being reimplemented.
+The idea for UO Grades was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design and frontend for UO Grades was based off of the [Gopher Grades Github](https://github.com/samyok/gophergrades) with many of the React components being reimplemented.
 
 # Running Locally
 
