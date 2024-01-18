@@ -1,4 +1,7 @@
 export type Letter =
+  | 'NS'
+  | 'P'
+  | 'S'
   | 'F'
   | 'E'
   | 'D'
@@ -12,7 +15,9 @@ export type Letter =
   | 'A+';
 
 export default class LetterGrade {
-  static LETTER_ORDER: Letter[] = [
+  static NON_NUMERICAL_GRADES: Letter[] = ['P', 'S', 'NS'];
+
+  static NUMERICAL_GRADES: Letter[] = [
     'F',
     'E',
     'D',
@@ -27,6 +32,24 @@ export default class LetterGrade {
   ];
 
   // prettier-ignore
+  static GRADE_VALUES = {
+    'NS': NaN,
+    'P': NaN,
+    'S': NaN,
+    'F': 0,
+    'E': 1,
+    'D': 2,
+    'D+': 3,
+    'C': 4,
+    'C+': 5,
+    'B': 6,
+    'B+': 7,
+    'A-': 8,
+    'A': 9,
+    'A+': 10,
+  };
+
+  // prettier-ignore
   static GRADE_COLOR = {
     'A+': 'green',
     'A': 'green',
@@ -39,25 +62,27 @@ export default class LetterGrade {
     'D': 'red',
     'E': 'red',
     'F': 'red',
+    'P': 'purple',
+    'S': 'linkedin',
+    'NS': 'red',
   };
 
-  static isGrade(grade: string) {
-    return grade in LetterGrade.LETTER_ORDER;
-  }
-
   _value: number;
+  _letter: Letter;
 
   constructor(grade: Letter | number) {
     if (typeof grade === 'string') {
-      this._value = LetterGrade.LETTER_ORDER.indexOf(grade);
+      this._value = LetterGrade.GRADE_VALUES[grade];
+      this._letter = grade;
     } else {
-      this._value = grade;
-    }
+      if (!(0 <= grade && grade <= 10)) {
+        throw new Error(`LetterGrade value ${grade} must be between 0 and 10`);
+      }
 
-    if (!(0 <= this._value && this._value <= 10)) {
-      throw new Error(
-        `LetterGrade value ${this._value} must be between 0 and 10: ${grade}`
-      );
+      this._value = grade;
+      this._letter = Object.keys(LetterGrade.GRADE_VALUES).find(
+        (key) => LetterGrade.GRADE_VALUES[key as Letter] === Math.round(grade)
+      ) as Letter;
     }
   }
 
@@ -72,14 +97,13 @@ export default class LetterGrade {
    * Gets the letter corresponding to the grade's value.
    */
   letter(): Letter {
-    const roundedGrade = Math.round(this._value);
-    return LetterGrade.LETTER_ORDER[roundedGrade];
+    return this._letter;
   }
 
   /**
    * Gets a color representing the grade's value.
    */
   color(): string {
-    return LetterGrade.GRADE_COLOR[this.letter()];
+    return LetterGrade.GRADE_COLOR[this._letter];
   }
 }

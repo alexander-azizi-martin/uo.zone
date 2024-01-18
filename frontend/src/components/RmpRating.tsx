@@ -50,6 +50,17 @@ export default function RmpRating({ review }: RmpRatingProps) {
           </chakra.span>
         </Tag>
       </Tooltip>
+
+      <Tooltip label={'Number of RateMyProfessor ratings'} hasArrow>
+        <Tag
+          size={'sm'}
+          variant={'outline'}
+          textAlign={'center'}
+          colorScheme={'blue'}
+        >
+          {review.numRatings} ratings
+        </Tag>
+      </Tooltip>
     </HStack>
   );
 }

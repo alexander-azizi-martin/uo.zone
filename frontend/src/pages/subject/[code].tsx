@@ -1,4 +1,4 @@
-import { Heading, VStack } from '@chakra-ui/react';
+import { Heading,VStack } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 
@@ -15,6 +15,7 @@ interface SubjectProps {
 
 export default function Subject({ subject }: SubjectProps) {
   const tCourse = useTranslations('Course');
+  const tGrades = useTranslations('Grades');
 
   return (
     <Layout>
@@ -33,6 +34,11 @@ export default function Subject({ subject }: SubjectProps) {
             <LinkCard href={`/course/${course.code}`} key={course.code}>
               <GradeSummary
                 title={course.title}
+                subtitle={
+                  !course?.gradeInfo?.total
+                    ? tGrades('no-data')
+                    : undefined
+                }
                 gradeInfo={course.gradeInfo}
                 distributionWidth={300}
                 distributionHeight={40}

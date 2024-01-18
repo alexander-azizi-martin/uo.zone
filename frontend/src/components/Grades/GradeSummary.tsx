@@ -1,6 +1,11 @@
-import { HStack, Spacer, Text, VStack } from '@chakra-ui/react';
+import { Badge, Flex,HStack, Spacer, Text, VStack } from '@chakra-ui/react';
+import { useTranslations } from 'next-intl';
 
-import { GradeDistribution, GradeTendencies } from '~/components/Grades';
+import {
+  GradeDistribution,
+  GradeHistogram,
+  GradeTendencies,
+} from '~/components/Grades';
 import { GradeInfo } from '~/lib/api';
 
 interface GradeSummaryProps {
@@ -22,6 +27,8 @@ export default function GradeSummary({
   distributionWidth = 390,
   distributionHeight = 55,
 }: GradeSummaryProps) {
+  const tGrades = useTranslations('Grades');
+
   return (
     <HStack
       justify={'center'}
@@ -56,11 +63,20 @@ export default function GradeSummary({
       </VStack>
 
       {gradeInfo && (
-        <GradeDistribution
-          gradeInfo={gradeInfo}
-          width={distributionWidth}
-          height={distributionHeight}
-        />
+        <VStack gap={2}>
+          <Badge margin={'auto'}>
+            {tGrades('students', { totalStudents: gradeInfo.total })}
+          </Badge>
+
+          <Flex alignItems={'flex-end'} gap={'10px'}>
+            <GradeHistogram gradeInfo={gradeInfo} height={distributionHeight} />
+            <GradeDistribution
+              gradeInfo={gradeInfo}
+              width={distributionWidth}
+              height={distributionHeight}
+            />
+          </Flex>
+        </VStack>
       )}
     </HStack>
   );

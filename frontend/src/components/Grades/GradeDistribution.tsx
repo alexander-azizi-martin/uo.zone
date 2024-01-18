@@ -1,4 +1,4 @@
-import { Badge, Box, Circle, Flex, Text } from '@chakra-ui/react';
+import { Box, Circle, Flex, Text } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import { MouseEventHandler, useMemo, useRef, useState } from 'react';
 
@@ -11,14 +11,14 @@ interface GradeDistributionProps {
   gradeInfo: GradeInfo;
   width?: number;
   height?: number;
-  background?: string;
+  backgroundColor?: string;
 }
 
 export default function GradeDistribution({
   gradeInfo,
   width = 390,
   height = 55,
-  background = 'white',
+  backgroundColor = 'white',
 }: GradeDistributionProps) {
   const tGrades = useTranslations('Grades');
 
@@ -27,7 +27,7 @@ export default function GradeDistribution({
   const rootRef = useRef<HTMLDivElement>();
 
   const heights = useMemo(() => {
-    return LetterGrade.LETTER_ORDER.map((letter) => {
+    return LetterGrade.NUMERICAL_GRADES.map((letter) => {
       const percent = gradeInfo.grades[letter] / gradeInfo.total;
       const complement = Math.max(0, 1 - percent * 4);
 
@@ -60,10 +60,6 @@ export default function GradeDistribution({
 
   return (
     <Flex direction={'column'}>
-      <Badge margin={'auto'} mb={2}>
-        {tGrades('students', { totalStudents: gradeInfo.total })}
-      </Badge>
-
       <Flex
         ref={rootRef as any}
         w={`${width}px`}
@@ -89,7 +85,7 @@ export default function GradeDistribution({
               <Box
                 w="100%"
                 opacity={'0.92'}
-                borderTop={`${rectHeight}px solid ${background}`}
+                borderTop={`${rectHeight}px solid ${backgroundColor}`}
               ></Box>
               <Box
                 w="100%"
@@ -99,7 +95,7 @@ export default function GradeDistribution({
                     ? 'borderLeft'
                     : 'borderRight']: `${blockWidth}px solid transparent`,
                 }}
-                borderTop={`${trigHeight}px solid ${background}`}
+                borderTop={`${trigHeight}px solid ${backgroundColor}`}
               ></Box>
             </Box>
           );
@@ -130,7 +126,8 @@ export default function GradeDistribution({
                 letterClass: selectedGrade.letter()[0],
                 occurrences: gradeInfo.grades[selectedGrade.letter()],
                 percent: Math.round(
-                  gradeInfo.grades[selectedGrade.letter()] / gradeInfo.total * 100
+                  (gradeInfo.grades[selectedGrade.letter()] / gradeInfo.total) *
+                    100
                 ),
               })}
             </Text>
@@ -139,7 +136,7 @@ export default function GradeDistribution({
       </Flex>
 
       <Box position={'relative'} h={'14px'}>
-        {LetterGrade.LETTER_ORDER.map((letter, i) => {
+        {LetterGrade.NUMERICAL_GRADES.map((letter, i) => {
           if (i % 2 == 1) return null;
 
           return (
