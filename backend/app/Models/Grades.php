@@ -41,8 +41,12 @@ class Grades extends Model
     /**
      * Gets the mean of the grade distribution.
      */
-    public function getMeanAttribute(): float
+    public function getMeanAttribute(): ?float
     {
+        if ($this->total == 0) {
+            return null;
+        }
+
         $mean = 0;
         foreach (Grades::GRADE_VALUES as $grade => $value) {
             $mean += $value * $this->getAttribute($grade) / $this->total;
@@ -54,8 +58,12 @@ class Grades extends Model
     /**
      * Gets the median of the grade distribution.
      */
-    public function getMedianAttribute(): string
+    public function getMedianAttribute(): ?string
     {
+        if ($this->total == 0) {
+            return null;
+        }
+
         $accumulator = 0;
         foreach (Grades::GRADE_VALUES as $grade => $_) {
             $accumulator += $this->getAttribute($grade);
@@ -70,7 +78,7 @@ class Grades extends Model
     /**
      * Gets the mode of the grade distribution.
      */
-    public function getModeAttribute(): string
+    public function getModeAttribute(): ?string
     {
         $mode = '';
         $size = 0;
@@ -81,7 +89,7 @@ class Grades extends Model
             }
         }
 
-        return $mode;
+        return $mode !== '' ? $mode : null;
     }
 
     /**
