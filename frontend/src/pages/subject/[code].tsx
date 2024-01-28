@@ -40,8 +40,7 @@ export default function Subject({ subject }: SubjectProps) {
                     : undefined
                 }
                 gradeInfo={course.gradeInfo}
-                distributionWidth={300}
-                distributionHeight={40}
+                distributionSize={'sm'}
               />
             </LinkCard>
           ))}

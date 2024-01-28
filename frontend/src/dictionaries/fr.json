@@ -33,6 +33,7 @@
   },
   "Grades": {
     "mean": "Moyenne {letter} ({value})",
+    "median": "{letter} Médiane",
     "mode": "Le plus fréquent: {letter} ({percent}%)",
     "no-data": "Aucune donnée sur les notes n'est disponible pour ce cours.",
     "students": "{totalStudents} {totalStudents, plural, =1 {étudiant} other {étudiants}}",

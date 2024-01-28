@@ -12,6 +12,7 @@ export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
   const tGrades = useTranslations('Grades');
 
   const mean = new LetterGrade(gradeInfo.mean);
+  const median = new LetterGrade(gradeInfo.median);
   const mode = new LetterGrade(gradeInfo.mode);
 
   return (
@@ -25,6 +26,16 @@ export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
         </Tag>
       )}
       {gradeInfo.median && gradeInfo.total > 0 && (
+        <Tag
+          size={'sm'}
+          textAlign={'center'}
+          colorScheme={median.color()}
+          py={1}
+        >
+          {tGrades('median', { letter: median.letter() })}
+        </Tag>
+      )}
+      {gradeInfo.mode && gradeInfo.total > 0 && (
         <Tag size={'sm'} textAlign={'center'} colorScheme={mode.color()} py={1}>
           {tGrades('mode', {
             letter: mode.letter(),

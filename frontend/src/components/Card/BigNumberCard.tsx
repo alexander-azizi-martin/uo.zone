@@ -1,5 +1,13 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons';
-import { Badge, Heading, HStack, Tooltip, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Heading,
+  HStack,
+  Tooltip,
+  useOutsideClick,
+  VStack,
+} from '@chakra-ui/react';
+import { useRef,useState } from 'react';
 
 import { BaseCardProps, SummaryCard } from '~/components/Card';
 
@@ -18,6 +26,13 @@ export default function BigNumberCard({
   style,
   ...props
 }: BigNumberCardProps) {
+  const [isOpen, setIsOpen] = useState<boolean>();
+  const ref = useRef();
+  useOutsideClick({
+    ref: ref as any,
+    handler: () => setIsOpen(undefined),
+  });
+
   return (
     <SummaryCard
       {...props}
@@ -27,7 +42,12 @@ export default function BigNumberCard({
         ...style,
       }}
     >
-      <VStack align={'center'} spacing={0}>
+      <VStack
+        align={'center'}
+        spacing={0}
+        ref={ref as any}
+        onClick={() => setIsOpen(!isOpen)}
+      >
         <HStack align={'start'}>
           <Heading color={'black'} size={'2xl'} m={0}>
             {value}
@@ -36,7 +56,7 @@ export default function BigNumberCard({
             /{total}
           </Heading>
         </HStack>
-        <Tooltip label={tooltip} hasArrow textAlign={'center'}>
+        <Tooltip label={tooltip} hasArrow textAlign={'center'} isOpen={isOpen}>
           <Badge
             color={'gray.500'}
             background={'transparent'}

@@ -1,5 +1,5 @@
-import { Box, Flex, Text, useBoolean, useToken } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { Box, Flex, Text, useBoolean, useOutsideClick, useToken } from '@chakra-ui/react';
+import { useMemo, useRef } from 'react';
 
 import { GradeInfo } from '~/lib/api';
 import LetterGrade, { Letter } from '~/lib/letterGrade';
@@ -70,14 +70,21 @@ function Bar({
   const grade = new LetterGrade(letter);
   const [color] = useToken('colors', [`${grade.color()}.400`]);
   const [hovering, setHovering] = useBoolean(false);
+  const ref = useRef();
+  useOutsideClick({
+    ref: ref as any,
+    handler: setHovering.off,
+  });
 
   return (
     <Flex
+      ref={ref as any}
       w={`${barWidth}px`}
       flexDir={'column'}
       position={'relative'}
       onMouseEnter={setHovering.on}
       onMouseLeave={setHovering.off}
+      onClick={setHovering.on}
     >
       <Box h={`${height}px`} w={'100%'} bgColor={color}>
         <Box

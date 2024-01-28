@@ -1,4 +1,12 @@
-import { Badge, Flex,HStack, Spacer, Text, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Flex,
+  HStack,
+  Spacer,
+  Text,
+  useMediaQuery,
+  VStack,
+} from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
 import {
@@ -14,8 +22,7 @@ interface GradeSummaryProps {
   subtitle?: string;
   info?: React.ReactNode;
   gradeInfo?: GradeInfo;
-  distributionWidth?: number;
-  distributionHeight?: number;
+  distributionSize?: 'sm' | 'md';
 }
 
 export default function GradeSummary({
@@ -24,10 +31,24 @@ export default function GradeSummary({
   subtitle,
   info,
   gradeInfo,
-  distributionWidth = 390,
-  distributionHeight = 55,
+  distributionSize = 'md',
 }: GradeSummaryProps) {
   const tGrades = useTranslations('Grades');
+  const [isLargerThan600] = useMediaQuery('(min-width: 650px)', {
+    ssr: true,
+    fallback: false,
+  });
+
+  let distributionWidth;
+  let distributionHeight;
+
+  if (distributionSize == 'sm') {
+    distributionWidth = isLargerThan600 ? 300 : 250;
+    distributionHeight = 40;
+  } else if (distributionSize == 'md') {
+    distributionWidth = isLargerThan600 ? 390 : 300;
+    distributionHeight = 55;
+  }
 
   return (
     <HStack
@@ -68,7 +89,11 @@ export default function GradeSummary({
             {tGrades('students', { totalStudents: gradeInfo.total })}
           </Badge>
 
-          <Flex alignItems={'flex-end'} gap={'10px'}>
+          <Flex
+            alignItems={['center', 'flex-end', 'flex-end']}
+            gap={'10px'}
+            flexDir={['column-reverse', 'row', 'row']}
+          >
             <GradeHistogram gradeInfo={gradeInfo} height={distributionHeight} />
             <GradeDistribution
               gradeInfo={gradeInfo}

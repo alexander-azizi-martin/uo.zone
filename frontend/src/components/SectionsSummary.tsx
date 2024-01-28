@@ -57,8 +57,7 @@ export default function SectionsSummary({
         title={title}
         subtitle={term}
         gradeInfo={summarize.gradeInfo}
-        distributionWidth={300}
-        distributionHeight={40}
+        distributionSize={'sm'}
       />
 
       {summarize.sections.length > 1 && (
@@ -70,8 +69,7 @@ export default function SectionsSummary({
                   <GradeSummary
                     subtitle={`${section.term} - ${section.section}`}
                     gradeInfo={section.gradeInfo}
-                    distributionWidth={300}
-                    distributionHeight={40}
+                    distributionSize={'sm'}
                   />
                 </BaseCard>
               ))}

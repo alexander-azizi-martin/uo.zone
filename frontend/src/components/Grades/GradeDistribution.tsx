@@ -1,6 +1,6 @@
-import { Box, Circle, Flex, Text } from '@chakra-ui/react';
+import { Box, Circle, Flex, Text, useOutsideClick } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { MouseEventHandler, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { useGradient } from '~/hooks';
 import { type GradeInfo } from '~/lib/api';
@@ -25,6 +25,10 @@ export default function GradeDistribution({
   const [selectedGrade, setSelectedGrade] = useState<LetterGrade>();
   const gradient = useGradient(gradeGradient);
   const rootRef = useRef<HTMLDivElement>();
+  useOutsideClick({
+    ref: rootRef as any,
+    handler: () => setSelectedGrade(undefined),
+  });
 
   const heights = useMemo(() => {
     return LetterGrade.NUMERICAL_GRADES.map((letter) => {
@@ -40,11 +44,13 @@ export default function GradeDistribution({
   const blockWidth = width / 10;
   const gradeOffset = (grade: number) => grade * blockWidth;
 
-  const handleMouseMove: MouseEventHandler = (event) => {
+  const handleMouseMove = (event: any) => {
     if (!rootRef.current) return;
 
+    event.stopPropagation();
+
     const rootRect = rootRef.current.getBoundingClientRect();
-    const x = event.clientX - rootRect.left;
+    const x = (event.clientX || event.touches[0].clientX) - rootRect.left;
 
     let minDistance = width;
     let closestGrade = -1;
@@ -70,7 +76,9 @@ export default function GradeDistribution({
         background={gradient}
         overflow={'hidden'}
         position={'relative'}
+        style={{ touchAction: 'none' }}
         onMouseMove={handleMouseMove}
+        onTouchMove={handleMouseMove}
         onMouseLeave={() => setSelectedGrade(undefined)}
       >
         {heights.map((_, i) => {

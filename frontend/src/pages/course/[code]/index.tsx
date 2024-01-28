@@ -1,5 +1,4 @@
 import {
-  chakra,
   Divider,
   Heading,
   HStack,
@@ -17,6 +16,7 @@ import { useMemo } from 'react';
 import Markdown from 'react-markdown';
 
 import { BigNumberCard, LinkCard, SummaryCard } from '~/components/Card';
+import CourseLink from '~/components/CourseLink';
 import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
@@ -169,19 +169,6 @@ export default function Course({ course }: CourseProps) {
         </VStack>
       </SearchNav>
     </Layout>
-  );
-}
-
-function CourseLink(props: any) {
-  return (
-    <chakra.span
-      color={'#8f001a'}
-      textDecoration={'underline'}
-      textDecorationThickness={'1px'}
-      _hover={{ textDecorationThickness: '2px' }}
-    >
-      <NextLink {...props} />
-    </chakra.span>
   );
 }
 
