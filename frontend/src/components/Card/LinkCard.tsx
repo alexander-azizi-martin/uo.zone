@@ -16,22 +16,22 @@ export default function LinkCard({
 }: LinkCardProps) {
   const [clicked, setClicked] = useBoolean(false);
 
-  const extraProps = isExternal ? { target: '_blank' } : {};
-
-  const hoverStyles = {
-    cursor: 'pointer',
-    boxShadow: '0px 0px 4px rgba(111, 19, 29, 0.175)',
-    background: 'rgba(255,255,255,0.25)',
-    transition: 'opacity 0.1s',
-  };
-
   return (
-    <Link href={href} style={{ width: '100%' }} {...extraProps}>
+    <Link
+      href={href}
+      style={{ width: '100%' }}
+      target={isExternal ? '_blank' : undefined}
+    >
       <BaseCard
         {...props}
         onClick={setClicked.on}
         as={'button'}
-        _hover={hoverStyles}
+        _hover={{
+          cursor: 'pointer',
+          boxShadow: '0px 0px 4px rgba(111, 19, 29, 0.175)',
+          background: 'rgba(255,255,255,0.25)',
+          transition: 'opacity 0.1s',
+        }}
       >
         {children}
         {clicked && !isExternal && (
