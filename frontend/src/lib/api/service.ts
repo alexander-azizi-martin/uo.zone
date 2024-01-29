@@ -1,5 +1,7 @@
 import urlJoin from 'url-join';
 
+import { getRandomServerUrl } from '~/lib/helpers';
+
 import {
   type CourseWithProfessors,
   type ProfessorWithCourses,
@@ -8,9 +10,7 @@ import {
 } from './types';
 
 export const API_URL =
-  typeof window === 'undefined'
-    ? urlJoin(process.env.SERVER_URL as string, 'api')
-    : '/api';
+  typeof window === 'undefined' ? urlJoin(getRandomServerUrl(), 'api') : '/api';
 
 async function fetchData<T>(url: string, options: RequestInit = {}) {
   const res = await fetch(url, options);
