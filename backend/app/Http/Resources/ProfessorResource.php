@@ -40,7 +40,7 @@ class ProfessorResource extends JsonResource
 
                         $course = $sections->first()->course;
                         $course->setRelation('sections', $sections);
-                        $course->setRelation('grades', $grades);
+                        $course->setRelation('grades', $grades->total > 0 ? $grades : null);
 
                         return $course;
                     })

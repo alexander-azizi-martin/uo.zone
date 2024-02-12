@@ -42,6 +42,7 @@ class Grades extends Model
         }
 
         $grades->total = 0;
+
         return $grades;
     }
 

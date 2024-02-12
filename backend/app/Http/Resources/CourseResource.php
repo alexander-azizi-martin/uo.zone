@@ -24,6 +24,9 @@ class CourseResource extends JsonResource
             'components' => $this->whenHas('components'),
             'requirements' => $this->whenHas('requirements'),
             'units' => $this->whenHas('units'),
+            'languages' => $this->whenHas('languages', function () {
+                return collect($this->languages)->filter()->keys();
+            }),
             'gradeInfo' => $this->whenLoaded('grades', function () {
                 return isset($this->grades) ? new GradesResource($this->grades) : null;
             }),
@@ -44,7 +47,7 @@ class CourseResource extends JsonResource
 
                         $professor = $sections->first()->professor;
                         $professor->setRelation('sections', $sections);
-                        $professor->setRelation('grades', $grades);
+                        $professor->setRelation('grades', $grades->total > 0 ? $grades : null);
 
                         return $professor;
                     })
