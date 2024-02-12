@@ -35,7 +35,7 @@ season_to_num = {
 
 def calculate_mean(course):
     return sum(
-        (grade_values[grade] * course[grade]) / course["TOTAL"]
+        (grade_values[grade] * course[grade]) / course["total"]
         for grade in grade_values
     )
 
@@ -43,7 +43,7 @@ def calculate_mean(course):
 def calculate_median(course):
     grades = list(grade_values.keys())
     grade_occurrences = list(itertools.accumulate(course[grades]))
-    median_i = bisect.bisect_left(grade_occurrences, course["TOTAL"] / 2)
+    median_i = bisect.bisect_left(grade_occurrences, course["total"] / 2)
     return grades[median_i]
 
 
@@ -61,21 +61,21 @@ def transform_term(term):
     return (year * 10) + season
 
 
-grade_data = pd.read_csv("scrapped_data/grade_data.csv")
-grade_data = (
-    grade_data.groupby(["TERM", "COURSE", "CLASS_SECTION"])
-    .agg({grade: "sum" for grade in grade_values} | {"TOTAL": "sum"})
-    .reset_index()
-)
-
-grade_data["Mean"] = grade_data.apply(calculate_mean, axis=1)
-grade_data["Median"] = grade_data.apply(calculate_median, axis=1)
-grade_data["Mode"] = grade_data.apply(calculate_mode, axis=1)
-grade_data["TERM_ID"] = grade_data["TERM"].apply(transform_term)
-
+grade_data = pd.read_csv("scrapped_data/grade_data.csv", low_memory=False)
 grade_data.columns = [
     column if column in grade_values else column.lower()
     for column in grade_data.columns
 ]
+
+grade_data = (
+    grade_data.groupby(["term", "course", "section"])
+    .agg({grade: "sum" for grade in grade_values} | {"total": "sum"})
+    .reset_index()
+)
+
+grade_data["mean"] = grade_data.apply(calculate_mean, axis=1)
+grade_data["median"] = grade_data.apply(calculate_median, axis=1)
+grade_data["mode"] = grade_data.apply(calculate_mode, axis=1)
+grade_data["term_id"] = grade_data["term"].apply(transform_term)
 
 grade_data.to_csv("scrapped_data/processed_grade_data.csv", index=False)
