@@ -16,3 +16,27 @@ export function getRandomServerUrl(): string {
 
   return serverUrls[Math.floor(Math.random() * serverUrls.length)];
 }
+
+export function arrayLt(array1: Array<any>, array2: Array<any>) {
+  const length = Math.min(array1.length, array2.length);
+
+  for (let i = 0; i < length; i++) {
+    if (array1[i] < array2[i]) {
+      return true;
+    }
+  }
+
+  return array1.length < array2.length;
+}
+
+export function arrayGt(array1: Array<any>, array2: Array<any>) {
+  const length = Math.min(array1.length, array2.length);
+
+  for (let i = 0; i < length; i++) {
+    if (array1[i] > array2[i]) {
+      return true;
+    }
+  }
+
+  return array1.length > array2.length;
+}

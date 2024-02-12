@@ -8,6 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
+import { ReactNode } from 'react';
 
 import {
   GradeDistribution,
@@ -17,10 +18,10 @@ import {
 import { GradeInfo } from '~/lib/api';
 
 interface GradeSummaryProps {
-  title?: string;
+  title?: ReactNode;
   titleSize?: '3xl' | 'lg';
-  subtitle?: string;
-  info?: React.ReactNode;
+  subtitle?: ReactNode;
+  info?: ReactNode;
   gradeInfo?: GradeInfo;
   distributionSize?: 'sm' | 'md';
 }
@@ -35,7 +36,7 @@ export default function GradeSummary({
 }: GradeSummaryProps) {
   const tGrades = useTranslations('Grades');
   const [isLargerThan600] = useMediaQuery('(min-width: 650px)', {
-    ssr: true,
+    ssr: typeof window === 'undefined',
     fallback: false,
   });
 
@@ -66,12 +67,12 @@ export default function GradeSummary({
         height={'100%'}
         spacing={0}
       >
-        <Text fontSize={titleSize} fontWeight={'bold'}>
+        <Text fontSize={titleSize} fontWeight={'bold'} as={'div'}>
           {title}
         </Text>
 
         {subtitle && (
-          <Text fontSize={'xs'} fontWeight={'200'}>
+          <Text fontSize={'xs'} fontWeight={'200'} as={'div'}>
             {subtitle}
           </Text>
         )}

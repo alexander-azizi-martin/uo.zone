@@ -14,6 +14,17 @@
     "500": "Une erreur s'est produite lors de votre demande.",
     "client": "Une erreur s'est produite."
   },
+  "Filter": {
+    "1st-year": "1ère Année",
+    "2nd-year": "2ème Année",
+    "3rd-year": "3ème Année",
+    "4th-year": "4ème Année",
+    "filter": "Filtre",
+    "filter-language": "Langue du Filtre",
+    "filter-year": "Année de Filtrage",
+    "graduate": "Supérieures",
+    "sort-by": "Trier par"
+  },
   "Footer": {
     "dataSource": {
       "text": "L'information de l'Automne 2017 au l'Hiver 2023 ont été fournies par",
@@ -29,7 +40,13 @@
     "maintainer": "maintenu par"
   },
   "General": {
-    "and": "et"
+    "and": "et",
+    "average": "Moyenne",
+    "code": "Code",
+    "english": "Anglais",
+    "french": "Français",
+    "median": "Médian",
+    "mode": "Mode"
   },
   "Grades": {
     "mean": "Moyenne {letter} ({value})",

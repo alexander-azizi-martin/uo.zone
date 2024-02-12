@@ -57,11 +57,12 @@ export default function Search({
 
   // Sends search request when query or language changes
   useEffect(() => {
-    if (window) window.scrollTo({ top: 0 });
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
+    const trimmedQuery = query.trim();
     setResults(null);
-    setSearching(!!query);
+    setSearching(!!trimmedQuery);
     updateResults.cancel();
-    if (query) updateResults(query);
+    if (trimmedQuery) updateResults(trimmedQuery);
   }, [query, locale, updateResults]);
 
   // Updates search listeners

@@ -54,6 +54,7 @@ export interface Course {
   title: string;
   description: string;
   components: string[];
+  languages: string[];
   requirements?: string;
   units: number | null;
   gradeInfo: GradeInfo;

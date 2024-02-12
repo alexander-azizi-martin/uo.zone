@@ -9,12 +9,13 @@ import {
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
-import { BaseCard } from '~/components/Card';
+import { BaseCard, LinkCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
 import { CourseSection, GradeInfo } from '~/lib/api';
 
 interface SectionsSummaryProps {
   title: string;
+  href: string;
   summarize: {
     gradeInfo: GradeInfo;
     sections: CourseSection[];
@@ -23,9 +24,11 @@ interface SectionsSummaryProps {
 
 export default function SectionsSummary({
   title,
+  href,
   summarize,
 }: SectionsSummaryProps) {
   const tCourse = useTranslations('Course');
+  const tGrades = useTranslations('Grades');
 
   const { isOpen, onToggle } = useDisclosure();
 
@@ -52,16 +55,25 @@ export default function SectionsSummary({
   }, [summarize, tCourse]);
 
   return (
-    <Box>
-      <GradeSummary
-        title={title}
-        subtitle={term}
-        gradeInfo={summarize.gradeInfo}
-        distributionSize={'sm'}
-      />
+    <Box position={'relative'} w={'100%'}>
+      <LinkCard href={href}>
+        <GradeSummary
+          title={title}
+          subtitle={
+            <>
+              {term}
+              {!summarize.gradeInfo && (
+                <>
+                  <br /> {tGrades('no-data')}
+                </>
+              )}
+            </>
+          }
+          gradeInfo={summarize.gradeInfo}
+          distributionSize={'sm'}
+        />
 
-      {summarize.sections.length > 1 && (
-        <>
+        {summarize.sections.length > 1 && (
           <Collapse in={isOpen} animateOpacity>
             <VStack spacing={3} p={2} pt={3}>
               {summarize.sections.map((section) => (
@@ -75,26 +87,29 @@ export default function SectionsSummary({
               ))}
             </VStack>
           </Collapse>
+        )}
+      </LinkCard>
 
-          <IconButton
-            pos={'absolute'}
-            size={'xs'}
-            top={'36.5px'}
-            left={'1px'}
-            aria-label={'toggle dropdown'}
-            variant={'ghost'}
-            colorScheme={'blackAlpha'}
-            rounded={'full'}
-            onClick={(event) => {
-              onToggle();
-              event.preventDefault();
-              event.stopPropagation();
-            }}
-            as={'div'}
-          >
-            {isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </>
+      {summarize.sections.length > 1 && (
+        <IconButton
+          pos={'absolute'}
+          size={'xs'}
+          top={'36.5px'}
+          left={'1px'}
+          aria-label={'toggle dropdown'}
+          variant={'ghost'}
+          colorScheme={'blackAlpha'}
+          cursor={'pointer'}
+          rounded={'full'}
+          onClick={(event) => {
+            onToggle();
+            event.preventDefault();
+            event.stopPropagation();
+          }}
+          as={'div'}
+        >
+          {isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+        </IconButton>
       )}
     </Box>
   );

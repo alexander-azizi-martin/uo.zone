@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@primer/octicons-react": "^19.8.0",
     "d3-timer": "^3.0.1",
     "elkjs": "^0.8.2",
     "framer-motion": "^10.16.4",

@@ -15,7 +15,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import Markdown from 'react-markdown';
 
-import { BigNumberCard, LinkCard, SummaryCard } from '~/components/Card';
+import { BigNumberCard, SummaryCard } from '~/components/Card';
 import CourseLink from '~/components/CourseLink';
 import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
@@ -41,7 +41,7 @@ export default function Course({ course }: CourseProps) {
   return (
     <Layout>
       <SearchNav>
-        <Heading mt={4}>
+        <Heading mt={4} position={'relative'}>
           <Link
             as={NextLink}
             href={`/subject/${subject}`}
@@ -145,24 +145,23 @@ export default function Course({ course }: CourseProps) {
                 my={2}
               />
 
-              <SummaryCard>
-                <GradeSummary
-                  gradeInfo={course.gradeInfo}
-                  title={tCourse('all-professors')}
-                  titleSize={'3xl'}
-                />
-              </SummaryCard>
+              {course.gradeInfo && (
+                <SummaryCard>
+                  <GradeSummary
+                    gradeInfo={course.gradeInfo}
+                    title={tCourse('all-professors')}
+                    titleSize={'3xl'}
+                  />
+                </SummaryCard>
+              )}
 
               {course.professors.map((professor) => (
-                <LinkCard
-                  href={`/professor/${professor.id}`}
+                <SectionsSummary
                   key={professor.id}
-                >
-                  <SectionsSummary
-                    title={professor.name}
-                    summarize={professor}
-                  />
-                </LinkCard>
+                  title={professor.name}
+                  href={`/professor/${professor.id}`}
+                  summarize={professor}
+                />
               ))}
             </>
           )}

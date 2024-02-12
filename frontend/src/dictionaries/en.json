@@ -14,6 +14,17 @@
     "500": "Something went wrong during your request.",
     "client": "An error occurred."
   },
+  "Filter": {
+    "1st-year": "1st Year",
+    "2nd-year": "2nd Year",
+    "3rd-year": "3rd Year",
+    "4th-year": "4th Year",
+    "filter": "Filter",
+    "filter-language": "Filter Language",
+    "filter-year": "Filter Year",
+    "graduate": "Graduate",
+    "sort-by": "Sort By"
+  },
   "Footer": {
     "dataSource": {
       "text": "Data from Fall 2017 to Winter 2023 provided by",
@@ -29,7 +40,13 @@
     "maintainer": "maintained by"
   },
   "General": {
-    "and": "and"
+    "and": "and",
+    "average": "Average",
+    "code": "Code",
+    "english": "English",
+    "french": "French",
+    "median": "Median",
+    "mode": "Mode"
   },
   "Grades": {
     "mean": "{letter} Average ({value})",

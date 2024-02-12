@@ -12,7 +12,7 @@ import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
-import { BigNumberCard, LinkCard, SummaryCard } from '~/components/Card';
+import { BigNumberCard, SummaryCard } from '~/components/Card';
 import ExternalLink from '~/components/ExternalLink';
 import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
@@ -103,23 +103,28 @@ export default function Professor({ professor }: ProfessorProps) {
             }}
           />
 
-          <SummaryCard>
-            <GradeSummary
-              gradeInfo={professor.gradeInfo}
-              title={tCourse('all-courses')}
-              titleSize={'3xl'}
-              info={
-                <Text fontSize={'sm'} color={'gray.600'} mt={2}>
-                  {tCourse('total-info')}
-                </Text>
-              }
-            />
-          </SummaryCard>
+          {professor.gradeInfo && (
+            <SummaryCard>
+              <GradeSummary
+                gradeInfo={professor.gradeInfo}
+                title={tCourse('all-courses')}
+                titleSize={'3xl'}
+                info={
+                  <Text fontSize={'sm'} color={'gray.600'} mt={2}>
+                    {tCourse('total-info')}
+                  </Text>
+                }
+              />
+            </SummaryCard>
+          )}
 
           {professor.courses.map((course) => (
-            <LinkCard href={`/course/${course.code}`} key={course.code}>
-              <SectionsSummary title={course.title} summarize={course} />
-            </LinkCard>
+            <SectionsSummary
+              key={course.code}
+              title={course.title}
+              href={`/course/${course.code}`}
+              summarize={course}
+            />
           ))}
         </VStack>
       </SearchNav>
