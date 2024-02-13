@@ -109,7 +109,7 @@ export default function SectionsSummary({
           colorScheme={'blackAlpha'}
           cursor={'pointer'}
           rounded={'full'}
-          onClick={(event) => {
+          onClick={() => {
             onToggle();
           }}
           as={'div'}

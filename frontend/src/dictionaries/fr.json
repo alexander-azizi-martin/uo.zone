@@ -9,7 +9,7 @@
     "rmp": "Vue sur RateMyProfessor",
     "units": "{units} {units, plural, =1 {crédit} other {crédits}}",
     "unknown-professor": "{count, plural, =1 {Professeur} other {Professeurs}} Inconnus",
-    "unknown-professor-info": "Les professeurs de {count, plural, =1 {cette section} other {ces sections}} de cours n'est pas connu."
+    "unknown-professor-info": "{count, plural, =1 {Le professeur de cette section} other {Les professeurs de ces sections}} de cours n'est pas connu."
   },
   "Error": {
     "404": "Cette page n'existe pas.",

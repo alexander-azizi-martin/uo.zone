@@ -13,7 +13,7 @@ export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
 
   const mean = new LetterGrade(gradeInfo.mean);
   const mode = new LetterGrade(gradeInfo.mode);
-  console.log(mean);
+
   return (
     <HStack>
       {gradeInfo.mean !== null && gradeInfo.total > 0 && (
