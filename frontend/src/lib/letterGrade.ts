@@ -76,18 +76,20 @@ export default class LetterGrade {
   _value: number;
   _letter: Letter;
 
-  constructor(grade: Letter | number) {
+  constructor(grade?: Letter | number) {
     if (typeof grade === 'string') {
       this._value = LetterGrade.GRADE_VALUES[grade];
       this._letter = grade;
     } else {
+      grade = grade ?? 0;
+
       if (!(0 <= grade && grade <= 10)) {
         throw new Error(`LetterGrade value ${grade} must be between 0 and 10`);
       }
 
       this._value = grade;
       this._letter = Object.keys(LetterGrade.GRADE_VALUES).find(
-        (key) => LetterGrade.GRADE_VALUES[key as Letter] === Math.round(grade)
+        (key) => LetterGrade.GRADE_VALUES[key as Letter] === Math.round(this._value)
       ) as Letter;
     }
   }

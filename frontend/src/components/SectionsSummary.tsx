@@ -17,7 +17,7 @@ interface SectionsSummaryProps {
   title: ReactNode;
   href?: string;
   summarize: {
-    gradeInfo: GradeInfo;
+    gradeInfo?: GradeInfo;
     sections: CourseSection[];
   };
 }

@@ -38,9 +38,9 @@ export default function useFilteredCourses(
           case 'code':
             return Number(a.code > b.code);
           case 'average':
-            if (!a.gradeInfo && !b.gradeInfo) return Number(a.code > b.code);
-            if (!a.gradeInfo) return 1;
-            if (!b.gradeInfo) return -1;
+            if (!a?.gradeInfo?.mean && !b?.gradeInfo?.mean) return Number(a.code > b.code);
+            if (!a?.gradeInfo?.mean) return 1;
+            if (!b?.gradeInfo?.mean) return -1;
 
             const aAverage = a.gradeInfo.mean;
             const bAverage = b.gradeInfo.mean;

@@ -8,7 +8,7 @@ export interface SurveyQuestion {
 
 // prettier-ignore
 export interface GradeInfo {
-  mean: number;
+  mean?: number;
   median: Letter;
   mode: Letter;
   total: number;
@@ -37,7 +37,7 @@ export interface Subject {
   code: string;
   subject: string;
   faculty: string;
-  gradeInfo: GradeInfo;
+  gradeInfo?: GradeInfo;
   totalEnrolled: number;
 }
 
@@ -45,7 +45,7 @@ export interface CourseSection {
   term: string;
   code: string;
   section: string;
-  gradeInfo: GradeInfo;
+  gradeInfo?: GradeInfo;
   totalEnrolled: number;
 }
 
@@ -57,7 +57,7 @@ export interface Course {
   languages: string[];
   requirements?: string;
   units: number | null;
-  gradeInfo: GradeInfo;
+  gradeInfo?: GradeInfo;
   totalEnrolled: number;
   survey: SurveyQuestion[];
   subject: Subject;
