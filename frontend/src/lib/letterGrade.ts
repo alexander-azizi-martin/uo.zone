@@ -1,4 +1,6 @@
 export type Letter =
+  | 'EIN'
+  | 'ABS'
   | 'NS'
   | 'P'
   | 'S'
@@ -33,6 +35,8 @@ export default class LetterGrade {
 
   // prettier-ignore
   static GRADE_VALUES = {
+    'ABS': NaN, 
+    'EIN': NaN,
     'NS': NaN,
     'P': NaN,
     'S': NaN,
@@ -65,6 +69,8 @@ export default class LetterGrade {
     'P': 'purple',
     'S': 'linkedin',
     'NS': 'red',
+    'ABS': 'gray', 
+    'EIN': 'gray',
   };
 
   _value: number;

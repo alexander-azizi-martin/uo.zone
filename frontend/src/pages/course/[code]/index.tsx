@@ -1,3 +1,4 @@
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
   Divider,
   Heading,
@@ -21,6 +22,7 @@ import { GradeSummary } from '~/components/Grades';
 import Layout from '~/components/Layout';
 import SearchNav from '~/components/Search';
 import SectionsSummary from '~/components/SectionsSummary';
+import Tooltip from '~/components/Tooltip';
 import { type CourseWithProfessors, getCourse } from '~/lib/api';
 import { courseQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
@@ -158,8 +160,35 @@ export default function Course({ course }: CourseProps) {
               {course.professors.map((professor) => (
                 <SectionsSummary
                   key={professor.id}
-                  title={professor.name}
-                  href={`/professor/${professor.id}`}
+                  title={
+                    professor.id !== 0 ? (
+                      professor.name
+                    ) : (
+                      <HStack alignItems={'center'}>
+                        <span>
+                          {tCourse('unknown-professor', {
+                            count: professor.sections.length,
+                          })}
+                        </span>
+
+                        <Tooltip
+                          label={tCourse('unknown-professor-info', {
+                            count: professor.sections.length,
+                          })}
+                          fontSize={'sm'}
+                          textAlign={'center'}
+                          hasArrow
+                        >
+                          <InfoOutlineIcon fontSize={'sm'} />
+                        </Tooltip>
+                      </HStack>
+                    )
+                  }
+                  href={
+                    professor.id !== 0
+                      ? `/professor/${professor.id}`
+                      : undefined
+                  }
                   summarize={professor}
                 />
               ))}

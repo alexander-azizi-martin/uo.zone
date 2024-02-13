@@ -36,7 +36,7 @@ export default function GradeSummary({
 }: GradeSummaryProps) {
   const tGrades = useTranslations('Grades');
   const [isLargerThan600] = useMediaQuery('(min-width: 650px)', {
-    ssr: typeof window === 'undefined',
+    ssr: true,
     fallback: false,
   });
 
@@ -85,7 +85,13 @@ export default function GradeSummary({
       </VStack>
 
       {gradeInfo && (
-        <VStack gap={2}>
+        <VStack
+          gap={2}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+          }}
+        >
           <Badge margin={'auto'}>
             {tGrades('students', { totalStudents: gradeInfo.total })}
           </Badge>

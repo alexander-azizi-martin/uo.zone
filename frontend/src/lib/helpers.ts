@@ -23,6 +23,8 @@ export function arrayLt(array1: Array<any>, array2: Array<any>) {
   for (let i = 0; i < length; i++) {
     if (array1[i] < array2[i]) {
       return true;
+    } else if (array1[i] > array2[i]) {
+      return false;
     }
   }
 
@@ -35,6 +37,8 @@ export function arrayGt(array1: Array<any>, array2: Array<any>) {
   for (let i = 0; i < length; i++) {
     if (array1[i] > array2[i]) {
       return true;
+    } else if (array1[i] < array2[i]) {
+      return false;
     }
   }
 

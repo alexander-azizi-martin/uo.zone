@@ -7,15 +7,15 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import { BaseCard, LinkCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
 import { CourseSection, GradeInfo } from '~/lib/api';
 
 interface SectionsSummaryProps {
-  title: string;
-  href: string;
+  title: ReactNode;
+  href?: string;
   summarize: {
     gradeInfo: GradeInfo;
     sections: CourseSection[];
@@ -54,41 +54,49 @@ export default function SectionsSummary({
     return term;
   }, [summarize, tCourse]);
 
+  const summaryMarkup = (
+    <>
+      <GradeSummary
+        title={title}
+        subtitle={
+          <>
+            {term}
+            {!summarize.gradeInfo && (
+              <>
+                <br /> {tGrades('no-data')}
+              </>
+            )}
+          </>
+        }
+        gradeInfo={summarize.gradeInfo}
+        distributionSize={'sm'}
+      />
+
+      {summarize.sections.length > 1 && (
+        <Collapse in={isOpen} animateOpacity>
+          <VStack spacing={3} p={2} pt={3}>
+            {summarize.sections.map((section) => (
+              <BaseCard key={`${section.term} - ${section.section}`}>
+                <GradeSummary
+                  subtitle={`${section.term} - ${section.section}`}
+                  gradeInfo={section.gradeInfo}
+                  distributionSize={'sm'}
+                />
+              </BaseCard>
+            ))}
+          </VStack>
+        </Collapse>
+      )}
+    </>
+  );
+
   return (
     <Box position={'relative'} w={'100%'}>
-      <LinkCard href={href}>
-        <GradeSummary
-          title={title}
-          subtitle={
-            <>
-              {term}
-              {!summarize.gradeInfo && (
-                <>
-                  <br /> {tGrades('no-data')}
-                </>
-              )}
-            </>
-          }
-          gradeInfo={summarize.gradeInfo}
-          distributionSize={'sm'}
-        />
-
-        {summarize.sections.length > 1 && (
-          <Collapse in={isOpen} animateOpacity>
-            <VStack spacing={3} p={2} pt={3}>
-              {summarize.sections.map((section) => (
-                <BaseCard key={`${section.term} - ${section.section}`}>
-                  <GradeSummary
-                    subtitle={`${section.term} - ${section.section}`}
-                    gradeInfo={section.gradeInfo}
-                    distributionSize={'sm'}
-                  />
-                </BaseCard>
-              ))}
-            </VStack>
-          </Collapse>
-        )}
-      </LinkCard>
+      {href ? (
+        <LinkCard href={href}>{summaryMarkup}</LinkCard>
+      ) : (
+        <BaseCard>{summaryMarkup}</BaseCard>
+      )}
 
       {summarize.sections.length > 1 && (
         <IconButton
@@ -103,8 +111,6 @@ export default function SectionsSummary({
           rounded={'full'}
           onClick={(event) => {
             onToggle();
-            event.preventDefault();
-            event.stopPropagation();
           }}
           as={'div'}
         >

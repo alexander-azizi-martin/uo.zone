@@ -87,20 +87,20 @@ export default function useFilteredCourses(
             const bModePercent =
               b.gradeInfo.grades[bMode.letter()] / b.gradeInfo.total;
 
-            if (
-              arrayLt(
-                [aMode.value() || 0, aModePercent],
-                [bMode.value() || 0, bModePercent]
-              )
-            ) {
-              return 1;
-            } else if (
+              if (
               arrayGt(
                 [aMode.value() || 0, aModePercent],
                 [bMode.value() || 0, bModePercent]
               )
             ) {
               return -1;
+            } else if (
+              arrayLt(
+                [aMode.value() || 0, aModePercent],
+                [bMode.value() || 0, bModePercent]
+              )
+            ) {
+              return 1;
             }
 
             return 0;

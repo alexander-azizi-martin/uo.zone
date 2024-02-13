@@ -45,4 +45,15 @@ class Professor extends Model
             'total_enrolled' => $this->total_enrolled,
         ];
     }
+
+    public static function unknown(): Professor
+    {
+        $unknownProfessor = Professor::find(0);
+
+        if (empty($unknownProfessor)) {
+            $unknownProfessor = Professor::create(['id' => 0, 'name' => 'Unknown Professors']);
+        }
+
+        return $unknownProfessor;
+    }
 }

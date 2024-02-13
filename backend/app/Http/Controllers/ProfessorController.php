@@ -22,7 +22,7 @@ class ProfessorController extends Controller
 
     public function getProfessor(string $id): ProfessorResource
     {
-        if (! is_numeric($id)) {
+        if (! is_numeric($id) || intval($id) == 0) {
             throw (new ModelNotFoundException())->setModel(Professor::class);
         }
 

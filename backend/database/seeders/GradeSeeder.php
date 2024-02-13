@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Course;
 use App\Models\CourseSection;
 use App\Models\Grades;
+use App\Models\Professor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class GradeSeeder extends Seeder
 {
@@ -26,6 +29,19 @@ class GradeSeeder extends Seeder
                 'term_id' => $gradeData['term_id'],
             ]);
 
+            if (empty($courseSection)) {
+                $course = Course::where('code', Str::lower($gradeData['course']))->first();
+
+                if (isset($course)) {
+                    $courseSection = Professor::unknown()->sections()->create([
+                        'course_id' => $course->id,
+                        'term_id' => $gradeData['term_id'],
+                        'code' => "{$gradeData['course']} {$gradeData['section']}",
+                        'section' => Str::lower($gradeData['section']),
+                    ]);
+                }
+            }
+
             if (empty($courseSection) || isset($courseSection->grades)) {
                 continue;
             }
@@ -43,7 +59,7 @@ class GradeSeeder extends Seeder
             $courseSection->course->subject
                 ->grades()
                 ->firstOrNew()
-                ->mergeGrades($courseSection->grades)
+                ->mergeGrades($grades)
                 ->save();
 
             $courseSection->professor
