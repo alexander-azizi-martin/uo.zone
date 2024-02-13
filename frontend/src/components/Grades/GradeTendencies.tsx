@@ -13,10 +13,10 @@ export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
 
   const mean = new LetterGrade(gradeInfo.mean);
   const mode = new LetterGrade(gradeInfo.mode);
-
+  console.log(mean);
   return (
     <HStack>
-      {gradeInfo.mean && gradeInfo.total > 0 && (
+      {gradeInfo.mean !== null && gradeInfo.total > 0 && (
         <Tag size={'sm'} textAlign={'center'} colorScheme={mean.color()} py={1}>
           {tGrades('mean', {
             letter: mean.letter(),
@@ -24,7 +24,7 @@ export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
           })}
         </Tag>
       )}
-      {gradeInfo.mode && gradeInfo.total > 0 && (
+      {gradeInfo.mode !== null && gradeInfo.total > 0 && (
         <Tag size={'sm'} textAlign={'center'} colorScheme={mode.color()} py={1}>
           {tGrades('mode', {
             letter: mode.letter(),

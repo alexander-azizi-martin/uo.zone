@@ -23,11 +23,11 @@ class Grades extends Model
         'E' => 1,
         'F' => 0,
         'EIN' => 0,
-        'NS' => 0,
-        'NC' => 0,
+        'NS' => null,
+        'NC' => null,
         'ABS' => 0,
-        'P' => 0,
-        'S' => 0,
+        'P' => null,
+        'S' => null,
     ];
 
     /**
@@ -64,11 +64,17 @@ class Grades extends Model
         }
 
         $mean = 0;
+        $total = 0;
         foreach (Grades::GRADE_VALUES as $grade => $value) {
-            $mean += $value * $this->getAttribute($grade) / $this->total;
+            if (is_null($value)) {
+                continue;
+            }
+
+            $mean += $value * $this->getAttribute($grade);
+            $total += $this->getAttribute($grade);
         }
 
-        return $mean;
+        return $total > 0 ? $mean / $total : null;
     }
 
     /**
