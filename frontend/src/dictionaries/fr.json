@@ -3,6 +3,7 @@
     "all-courses": "Tous Les Cours",
     "all-courses-for": "Tous Les Cours Pour {code}",
     "all-professors": "Tous Les Professeurs",
+    "no-filter-match": "Aucun cours ne correspond aux filtres.",
     "term": "{count} section pendant l''{term}",
     "terms": "{count} section de l''{start} au l''{stop}",
     "total-info": "Ce total comprend également les classes qu'ils n'enseignent peut-être plus.",
@@ -46,6 +47,7 @@
     "average": "Moyenne",
     "code": "Code",
     "english": "Anglais",
+    "filter": "Filtre",
     "french": "Français",
     "median": "Médian",
     "mode": "Mode"

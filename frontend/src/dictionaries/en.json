@@ -3,6 +3,7 @@
     "all-courses": "All Courses",
     "all-courses-for": "All Courses For {code}",
     "all-professors": "All Professors",
+    "no-filter-match": "No course matches the filters.",
     "term": "{count} sections during {term}",
     "terms": "{count} sections from {start} to {stop}",
     "total-info": "This total also includes classes that they may not teach anymore.",
@@ -46,6 +47,7 @@
     "average": "Average",
     "code": "Code",
     "english": "English",
+    "filter": "Filter",
     "french": "French",
     "median": "Median",
     "mode": "Mode"

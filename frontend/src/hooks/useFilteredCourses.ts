@@ -15,8 +15,10 @@ export default function useFilteredCourses(
   filterOptions: CourseFilterOptions
 ) {
   const filteredCourses = useMemo(() => {
-    return courses
-      .filter((course) => {
+    return Array.from({ length: courses.length }, (_, i) => i)
+      .filter((i) => {
+        const course = courses[i];
+
         const includesLanguage =
           filterOptions.languages.length === 0 ||
           filterOptions.languages.some((language) => {
@@ -33,19 +35,29 @@ export default function useFilteredCourses(
 
         return includesLanguage && includesYear;
       })
-      .sort((a, b) => {
+      .sort((i, j) => {
+        const a = courses[i];
+        const b = courses[j];
+
         switch (filterOptions.sortBy) {
           case 'code':
             return Number(a.code > b.code);
           case 'average':
-            if (!a?.gradeInfo?.mean && !b?.gradeInfo?.mean) return Number(a.code > b.code);
+            if (!a?.gradeInfo?.mean && !b?.gradeInfo?.mean)
+              return Number(a.code > b.code);
             if (!a?.gradeInfo?.mean) return 1;
             if (!b?.gradeInfo?.mean) return -1;
 
             const aAverage = a.gradeInfo.mean;
             const bAverage = b.gradeInfo.mean;
 
-            return Number(aAverage < bAverage);
+            if (aAverage < bAverage) {
+              return 1;
+            } else if (aAverage > bAverage) {
+              return -1;
+            }
+
+            return 0;
           case 'median':
             if (!a.gradeInfo && !b.gradeInfo) return Number(a.code > b.code);
             if (!a.gradeInfo) return 1;
@@ -87,7 +99,7 @@ export default function useFilteredCourses(
             const bModePercent =
               b.gradeInfo.grades[bMode.letter()] / b.gradeInfo.total;
 
-              if (
+            if (
               arrayGt(
                 [aMode.value() || 0, aModePercent],
                 [bMode.value() || 0, bModePercent]

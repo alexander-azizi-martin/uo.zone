@@ -11,6 +11,7 @@ import {
   MenuOptionGroup,
   VStack,
 } from '@chakra-ui/react';
+import { useMemo } from 'react';
 import { SlidersIcon } from '@primer/octicons-react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
@@ -52,6 +53,23 @@ export default function Subject({ subject }: SubjectProps) {
       });
     };
 
+  const courseList = useMemo(
+    () =>
+      subject.courses.map((course) => (
+        <LinkCard href={`/course/${course.code}`} key={course.code}>
+          <GradeSummary
+            title={course.title}
+            subtitle={
+              !course?.gradeInfo?.total ? tGrades('no-data') : undefined
+            }
+            gradeInfo={course.gradeInfo}
+            distributionSize={'sm'}
+          />
+        </LinkCard>
+      )),
+    [subject.courses]
+  );
+
   const filteredCourses = useFilteredCourses(subject.courses, filterOptions);
 
   return (
@@ -68,7 +86,7 @@ export default function Subject({ subject }: SubjectProps) {
               size={'sm'}
               variant={'outline'}
             >
-              Filter
+              {tGeneral('filter')}
             </MenuButton>
             <MenuList>
               <MenuOptionGroup
@@ -78,7 +96,9 @@ export default function Subject({ subject }: SubjectProps) {
                 type="radio"
               >
                 <MenuItemOption value="code">{tGeneral('code')}</MenuItemOption>
-                <MenuItemOption value="average">{tGeneral('average')}</MenuItemOption>
+                <MenuItemOption value="average">
+                  {tGeneral('average')}
+                </MenuItemOption>
                 {/* <MenuItemOption value="median">Median</MenuItemOption> */}
                 <MenuItemOption value="mode">{tGeneral('mode')}</MenuItemOption>
               </MenuOptionGroup>
@@ -102,7 +122,9 @@ export default function Subject({ subject }: SubjectProps) {
                 title={tFilter('filter-language')}
                 type="checkbox"
               >
-                <MenuItemOption value="en">{tGeneral('english')}</MenuItemOption>
+                <MenuItemOption value="en">
+                  {tGeneral('english')}
+                </MenuItemOption>
                 <MenuItemOption value="fr">{tGeneral('french')}</MenuItemOption>
               </MenuOptionGroup>
             </MenuList>
@@ -117,18 +139,13 @@ export default function Subject({ subject }: SubjectProps) {
             />
           </SummaryCard>
 
-          {filteredCourses.map((course) => (
-            <LinkCard href={`/course/${course.code}`} key={course.code}>
-              <GradeSummary
-                title={course.title}
-                subtitle={
-                  !course?.gradeInfo?.total ? tGrades('no-data') : undefined
-                }
-                gradeInfo={course.gradeInfo}
-                distributionSize={'sm'}
-              />
-            </LinkCard>
-          ))}
+          {filteredCourses.length === 0 && (
+            <Heading my={2} as={'h3'} size={'md'}>
+              {tCourse('no-filter-match')}
+            </Heading>
+          )}
+
+          {filteredCourses.map((i) => courseList[i])}
         </VStack>
       </SearchNav>
     </Layout>
