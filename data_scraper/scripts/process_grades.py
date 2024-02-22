@@ -3,7 +3,7 @@ import itertools
 
 import pandas as pd
 
-grade_values = {
+GRADE_VALUES = {
     "A+": 10,
     "A": 9,
     "A-": 8,
@@ -35,20 +35,20 @@ season_to_num = {
 
 def calculate_mean(course):
     return sum(
-        (grade_values[grade] * course[grade]) / course["total"]
-        for grade in grade_values
+        (GRADE_VALUES[grade] * course[grade]) / course["total"]
+        for grade in GRADE_VALUES
     )
 
 
 def calculate_median(course):
-    grades = list(grade_values.keys())
+    grades = list(GRADE_VALUES.keys())
     grade_occurrences = list(itertools.accumulate(course[grades]))
     median_i = bisect.bisect_left(grade_occurrences, course["total"] / 2)
     return grades[median_i]
 
 
 def calculate_mode(course):
-    grades = list(grade_values.keys())
+    grades = list(GRADE_VALUES.keys())
     return max(grades, key=lambda grade: course[grade])
 
 
@@ -63,16 +63,17 @@ def transform_term(term):
 
 grade_data = pd.read_csv("scrapped_data/grade_data.csv", low_memory=False)
 grade_data.columns = [
-    column if column in grade_values else column.lower()
+    column if column in GRADE_VALUES else column.lower()
     for column in grade_data.columns
 ]
 
 grade_data = (
     grade_data.groupby(["term", "course", "section"])
-    .agg({grade: "sum" for grade in grade_values} | {"total": "sum"})
+    .agg({grade: "sum" for grade in GRADE_VALUES} | {"total": "sum"})
     .reset_index()
 )
 
+grade_data["total"] = grade_data.apply(lambda row: sum(row[grade] for grade in GRADE_VALUES), axis=1)
 grade_data["mean"] = grade_data.apply(calculate_mean, axis=1)
 grade_data["median"] = grade_data.apply(calculate_median, axis=1)
 grade_data["mode"] = grade_data.apply(calculate_mode, axis=1)

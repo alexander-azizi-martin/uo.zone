@@ -51,8 +51,10 @@ class CourseSurveySpider(scrapy.Spider):
         return spider
 
     def spider_closed(self, spider):
-        self.progress_bar.close()
-        self.thread_pool.close()
+        if self.progress_bar:
+            self.progress_bar.close()
+        if self.thread_pool:
+            self.thread_pool.close()
 
         cache_file_name = os.path.join("surveys", self.term, ".cache.json")
         cache_file_data = json.dumps(list(self.saved_surveys))
@@ -71,7 +73,7 @@ class CourseSurveySpider(scrapy.Spider):
         for link in term_links:
             url, term = link.attrib["href"], link.css("a::text").get()
 
-            if term.lower() == self.term:
+            if term.lower().replace("spring/", "") == self.term:
                 yield scrapy.Request(
                     url=url,
                     callback=self.jump_to_start,
@@ -167,11 +169,11 @@ class CourseSurveySpider(scrapy.Spider):
 
         question_blocks = response.css(".report-block").getall()
         if self.term_year > 2018 and self.term != "winter 2019":
-            surveys = self.thread_pool.starmap(parse_question_block_v1, zip(question_blocks, repeat(response.url)))
+            questions = self.thread_pool.starmap(parse_question_block_v1, zip(question_blocks, repeat(response.url)))
         else:
-            surveys = self.thread_pool.map(parse_question_block_v2, question_blocks)
+            questions = self.thread_pool.map(parse_question_block_v2, question_blocks)
 
-        survey_loader.add_value("surveys", surveys)
+        survey_loader.add_value("questions", questions)
         yield survey_loader.load_item()
 
 

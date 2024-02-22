@@ -82,7 +82,10 @@ class LocalFilesystem:
         self.path = pathlib.Path(path)
 
     def put(self, filename: str, data: str) -> str:
-        with (self.path / filename).open("w") as f:
+        file_path = self.path / filename
+        file_path.parents[0].mkdir(parents=True, exist_ok=True)
+    
+        with file_path.open("w") as f:
             f.write(data)
 
     def get(self, filename: str, default: str = "") -> str:

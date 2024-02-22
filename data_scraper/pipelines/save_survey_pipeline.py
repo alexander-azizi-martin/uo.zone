@@ -16,10 +16,10 @@ class SaveSurveyPipeline:
         file_name = f"{survey['course'].replace('/', ' ')}.json"
         file_path = os.path.join("surveys", survey["term"].lower(), file_name)
 
-        with io.StringIO() as buffer:
+        with io.BytesIO() as buffer:
             exporter = JsonLinesItemExporter(buffer)
             exporter.export_item(survey)
 
-            filesystem.put(file_path, buffer.getvalue())
+            filesystem.put(file_path, buffer.getvalue().decode())
 
         raise DropItem()
