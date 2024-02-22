@@ -36,10 +36,11 @@ docker run --rm \
 
 cp .env.example .env
 
+./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan db:extract \
     --file=https://uozone.s3.ca-central-1.amazonaws.com/database.tar.xz
-./vendor/bin/sail up -d
+./vendor/bin/sail artisan scout:fresh
 
 # live at http://localhost
 ```
