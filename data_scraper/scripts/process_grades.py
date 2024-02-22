@@ -61,7 +61,7 @@ def transform_term(term):
     return (year * 10) + season
 
 
-grade_data = pd.read_csv("scrapped_data/grade_data.csv", low_memory=False)
+grade_data = pd.read_csv("scraped_data/grade_data.csv", low_memory=False)
 grade_data.columns = [
     column if column in GRADE_VALUES else column.lower()
     for column in grade_data.columns
@@ -73,10 +73,12 @@ grade_data = (
     .reset_index()
 )
 
-grade_data["total"] = grade_data.apply(lambda row: sum(row[grade] for grade in GRADE_VALUES), axis=1)
+grade_data["total"] = grade_data.apply(
+    lambda row: sum(row[grade] for grade in GRADE_VALUES), axis=1
+)
 grade_data["mean"] = grade_data.apply(calculate_mean, axis=1)
 grade_data["median"] = grade_data.apply(calculate_median, axis=1)
 grade_data["mode"] = grade_data.apply(calculate_mode, axis=1)
 grade_data["term_id"] = grade_data["term"].apply(transform_term)
 
-grade_data.to_csv("scrapped_data/processed_grade_data.csv", index=False)
+grade_data.to_csv("scraped_data/processed_grade_data.csv", index=False)
