@@ -16,7 +16,7 @@ class SurveySeeder extends Seeder
      */
     public function run(string $file): void
     {
-        $surveyData = Storage::disk('scraped')->json($file);
+        $surveyData = Storage::disk('static')->json($file);
 
         $professor = Professor::firstOrCreate(['name' => $surveyData['professor']]);
 

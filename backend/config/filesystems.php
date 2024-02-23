@@ -48,9 +48,9 @@ return [
             'throw' => false,
         ],
 
-        'scraped' => [
+        'static' => [
             'driver' => 'local',
-            'root' => storage_path('scraped_data'),
+            'root' => storage_path('static'),
             'throw' => false,
         ],
 

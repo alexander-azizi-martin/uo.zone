@@ -39,10 +39,10 @@ class SubjectSeeder extends Seeder
      */
     public function run(): void
     {
-        $subjects = Storage::disk('scraped')->json('subjects_en.json');
+        $subjects = Storage::disk('static')->json('subjects_en.json');
 
         foreach ($subjects as $subjectData) {
-            if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty')) {
+            if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
                 continue;
             }
 
@@ -84,9 +84,9 @@ class SubjectSeeder extends Seeder
             $course->save();
         }
 
-        $frenchSubjects = Storage::disk('scraped')->json('subjects_fr.json');
+        $frenchSubjects = Storage::disk('static')->json('subjects_fr.json');
         foreach ($frenchSubjects as $subjectData) {
-            if (!Arr::exists($subjectData, 'code') || !Arr::exists($subjectData, 'faculty')) {
+            if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
                 continue;
             }
 
@@ -106,7 +106,7 @@ class SubjectSeeder extends Seeder
             ->replaceMatches('/[a-zA-Z]{3} ?\d{4,5}/', function (array $matches) use ($courseCode) {
                 $code = str($matches[0])->lower()->remove(' ');
 
-                if ($code != $courseCode && !is_null(Course::firstWhere('code', $code))) {
+                if ($code != $courseCode && ! is_null(Course::firstWhere('code', $code))) {
                     return "[$matches[0]](/course/$code)";
                 } else {
                     return $matches[0];
@@ -119,7 +119,7 @@ class SubjectSeeder extends Seeder
      */
     public static function translateComponents(Course $course): void
     {
-        if (!$course->components->hasLanguage('en')) {
+        if (! $course->components->hasLanguage('en')) {
             $translatedComponents = [];
 
             foreach ($course->components->getTranslation('fr') as $component) {
@@ -131,7 +131,7 @@ class SubjectSeeder extends Seeder
             $course->components->setTranslation('en', $translatedComponents);
         }
 
-        if (!$course->components->hasLanguage('fr')) {
+        if (! $course->components->hasLanguage('fr')) {
             $translatedComponents = [];
 
             foreach ($course->components->getTranslation('en') as $component) {

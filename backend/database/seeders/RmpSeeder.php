@@ -14,12 +14,12 @@ class RmpSeeder extends Seeder
      */
     public function run(): void
     {
-        $reviews = Storage::disk('scraped')->json('professors.json');
+        $reviews = Storage::disk('static')->json('professors.json');
 
         foreach ($reviews as $review) {
             $professor = Professor::where('name', $review['name'])->first();
 
-            if (!isset($professor)) {
+            if (! isset($professor)) {
                 continue;
             }
 

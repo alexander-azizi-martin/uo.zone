@@ -18,7 +18,7 @@ class GradeSeeder extends Seeder
      */
     public function run(): void
     {
-        $gradesCSV = Storage::disk('scraped')->readStream('processed_grade_data.csv');
+        $gradesCSV = Storage::disk('static')->readStream('processed_grade_data.csv');
 
         $header = fgetcsv($gradesCSV);
         while ($row = fgetcsv($gradesCSV)) {
