@@ -1,4 +1,4 @@
-# Scrapy settings for data_scraper project
+# Scrapy settings for scraper project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -10,18 +10,18 @@ import os
 
 import dotenv
 
-from data_scraper import helpers
+from scraper import helpers
 
 dotenv.load_dotenv()
 
-BOT_NAME = "data_scraper"
+BOT_NAME = "scraper"
 
-SPIDER_MODULES = ["data_scraper.spiders"]
-NEWSPIDER_MODULE = "data_scraper.spiders"
+SPIDER_MODULES = ["scraper.spiders"]
+NEWSPIDER_MODULE = "scraper.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = "data_scraper (+http://www.yourdomain.com)"
+# USER_AGENT = "scraper (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -53,13 +53,13 @@ COOKIES_ENABLED = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    "data_scraper.middlewares.DataScraperSpiderMiddleware": 543,
+#    "scraper.middlewares.DataScraperSpiderMiddleware": 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    "data_scraper.middlewares.DataScraperDownloaderMiddleware": 543,
+#    "scraper.middlewares.DataScraperDownloaderMiddleware": 543,
 # }
 
 # Enable or disable extensions
@@ -71,8 +71,8 @@ COOKIES_ENABLED = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "data_scraper.pipelines.SaveSurveyPipeline": 300,
-    "data_scraper.pipelines.SaveSubjectPipeline": 500,
+    "scraper.pipelines.SaveSurveyPipeline": 300,
+    "scraper.pipelines.SaveSubjectPipeline": 500,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

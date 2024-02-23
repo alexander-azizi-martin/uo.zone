@@ -4,8 +4,8 @@ import re
 from scrapy.exceptions import DropItem
 from scrapy.exporters import JsonItemExporter
 
-from data_scraper.items import Subject
-from data_scraper.settings import filesystem
+from scraper.items import Subject
+from scraper.settings import filesystem
 
 
 def split_title_languages(s: str) -> dict[str, str]:
@@ -91,9 +91,7 @@ class SaveSubjectPipeline:
 
             if course["languages"]["en"] and course["languages"]["fr"]:
                 course["title"] = (
-                    split_title_languages(course["title"]) 
-                    if course["title"] 
-                    else {}
+                    split_title_languages(course["title"]) if course["title"] else {}
                 )
                 course["description"] = (
                     split_description_languages(course["description"])
@@ -122,7 +120,11 @@ class SaveSubjectPipeline:
                     if course["languages"][language]
                 }
                 course["components"] = {
-                    language: course["components"].split(": ", 1).pop().strip().split(", ")
+                    language: course["components"]
+                    .split(": ", 1)
+                    .pop()
+                    .strip()
+                    .split(", ")
                     for language in course["languages"]
                     if course["languages"][language]
                 }
@@ -131,7 +133,7 @@ class SaveSubjectPipeline:
                     for language in course["languages"]
                     if course["languages"][language]
                 }
-        
+
             for key in ["title", "description", "components", "requirements"]:
                 if all(not course[key][language] for language in course[key]):
                     course[key] = None

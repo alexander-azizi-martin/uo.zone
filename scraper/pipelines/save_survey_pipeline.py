@@ -4,8 +4,8 @@ import os
 from scrapy.exceptions import DropItem
 from scrapy.exporters import JsonLinesItemExporter
 
-from data_scraper.items import Survey
-from data_scraper.settings import filesystem
+from scraper.items import Survey
+from scraper.settings import filesystem
 
 
 class SaveSurveyPipeline:

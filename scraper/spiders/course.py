@@ -4,8 +4,8 @@ import scrapy
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
 
-from data_scraper.helpers import normalize_whitespace
-from data_scraper.items import Course, Subject
+from scraper.helpers import normalize_whitespace
+from scraper.items import Course, Subject
 
 EN_COURSE_PATTERN = re.compile(r"\/en\/courses\/[a-z]{3}\/")
 FR_COURSE_PATTERN = re.compile(r"\/fr\/cours\/[a-z]{3}\/")

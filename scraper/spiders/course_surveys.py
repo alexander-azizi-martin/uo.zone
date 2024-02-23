@@ -11,9 +11,9 @@ import tqdm
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
 
-from data_scraper.helpers import normalize_string
-from data_scraper.items import Question, Survey
-from data_scraper.settings import filesystem
+from scraper.helpers import normalize_string
+from scraper.items import Question, Survey
+from scraper.settings import filesystem
 
 
 class CourseSurveySpider(scrapy.Spider):
@@ -47,7 +47,9 @@ class CourseSurveySpider(scrapy.Spider):
     def from_crawler(cls, crawler, *args, **kwargs):
         # Makes sure spider_closed is called during cleanup
         spider = super(CourseSurveySpider, cls).from_crawler(crawler, *args, **kwargs)
-        crawler.signals.connect(spider.spider_closed, signal=scrapy.signals.spider_closed)
+        crawler.signals.connect(
+            spider.spider_closed, signal=scrapy.signals.spider_closed
+        )
         return spider
 
     def spider_closed(self, spider):
@@ -97,10 +99,16 @@ class CourseSurveySpider(scrapy.Spider):
             new_page_request = {
                 "__EVENTTARGET": f"ViewList$ctl04$listing$ctl01$ctl{jump + offset}",
                 "__EVENTARGUMENT": "",
-                "__VIEWSTATE": response.css("input[name=__VIEWSTATE]::attr(value)").get(),
-                "__VIEWSTATEGENERATOR": response.css("input[name=__VIEWSTATEGENERATOR]::attr(value)").get(),
+                "__VIEWSTATE": response.css(
+                    "input[name=__VIEWSTATE]::attr(value)"
+                ).get(),
+                "__VIEWSTATEGENERATOR": response.css(
+                    "input[name=__VIEWSTATEGENERATOR]::attr(value)"
+                ).get(),
                 "__VIEWSTATEENCRYPTED": "",
-                "__EVENTVALIDATION": response.css("input[name=__EVENTVALIDATION]::attr(value)").get(),
+                "__EVENTVALIDATION": response.css(
+                    "input[name=__EVENTVALIDATION]::attr(value)"
+                ).get(),
                 "ViewList$dplField": "Title",
                 "ViewList$dplOperator": "contains",
                 "ViewList$tbxValue": "",
@@ -138,16 +146,22 @@ class CourseSurveySpider(scrapy.Spider):
             "__EVENTTARGET": "",
             "__EVENTARGUMENT": "",
             "__VIEWSTATE": response.css("input[name=__VIEWSTATE]::attr(value)").get(),
-            "__VIEWSTATEGENERATOR": response.css("input[name=__VIEWSTATEGENERATOR]::attr(value)").get(),
+            "__VIEWSTATEGENERATOR": response.css(
+                "input[name=__VIEWSTATEGENERATOR]::attr(value)"
+            ).get(),
             "__VIEWSTATEENCRYPTED": "",
-            "__EVENTVALIDATION": response.css("input[name=__EVENTVALIDATION]::attr(value)").get(),
+            "__EVENTVALIDATION": response.css(
+                "input[name=__EVENTVALIDATION]::attr(value)"
+            ).get(),
             "ViewList$dplField": "Title",
             "ViewList$dplOperator": "contains",
             "ViewList$tbxValue": "",
             "ViewList$ctl04$listing$ctl01$btnNext": "",
         }
 
-        next_page_input = response.css("input[name='ViewList$ctl04$listing$ctl01$btnNext']")
+        next_page_input = response.css(
+            "input[name='ViewList$ctl04$listing$ctl01$btnNext']"
+        )
         if "aria-disabled" not in next_page_input.attrib:
             yield scrapy.FormRequest(
                 url=response.url,
@@ -169,7 +183,9 @@ class CourseSurveySpider(scrapy.Spider):
 
         question_blocks = response.css(".report-block").getall()
         if self.term_year > 2018 and self.term != "winter 2019":
-            questions = self.thread_pool.starmap(parse_question_block_v1, zip(question_blocks, repeat(response.url)))
+            questions = self.thread_pool.starmap(
+                parse_question_block_v1, zip(question_blocks, repeat(response.url))
+            )
         else:
             questions = self.thread_pool.map(parse_question_block_v2, question_blocks)
 
@@ -181,7 +197,9 @@ def parse_question_block_v1(text: str, url: str) -> Question:
     question_block = parsel.Selector(text)
     result_image_url = urljoin(url, question_block.css("img::attr(src)").get())
 
-    question_loader = ItemLoader(Question.extract_results(result_image_url), question_block)
+    question_loader = ItemLoader(
+        Question.extract_results(result_image_url), question_block
+    )
     question_loader.add_css("question", "h4 span::text")
     question_loader.add_css("num_invited", "#Invited + td::text")
 
@@ -200,14 +218,18 @@ def parse_question_block_v2(text: str) -> Question:
 
     options = []
     for option in options_table.css("tbody tr"):
-        label, description = map(normalize_string, option.css("th::text").get().split(": "))
+        label, description = map(
+            normalize_string, option.css("th::text").get().split(": ")
+        )
         responses = int(option.css("td::text").get())
 
-        options.append({
-            "label": label,
-            "description": description,
-            "responses": responses,
-        })
+        options.append(
+            {
+                "label": label,
+                "description": description,
+                "responses": responses,
+            }
+        )
 
     question_loader.add_value("options", options)
     return question_loader.load_item()

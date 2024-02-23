@@ -1,11 +1,13 @@
 import scrapy
 from itemloaders.processors import Compose, MapCompose, TakeFirst
 
-from data_scraper.helpers import normalize_string
+from scraper.helpers import normalize_string
 
 
 def normalize_term(term: str) -> str:
-    token1, token2 = term.lower().replace("term", "").replace("spring/", "").strip(" :").split(" ")
+    token1, token2 = (
+        term.lower().replace("term", "").replace("spring/", "").strip(" :").split(" ")
+    )
 
     if token1.isdigit():
         return f"{token2.capitalize()} {token1}"
@@ -32,10 +34,12 @@ def extract_codes(name: str) -> str:
 
         code, section, _ = course.strip().split(" ", 2)
 
-        course_codes.append({
-            "code": code.strip(),
-            "section": section.strip(),
-        })
+        course_codes.append(
+            {
+                "code": code.strip(),
+                "section": section.strip(),
+            }
+        )
 
     return course_codes
 

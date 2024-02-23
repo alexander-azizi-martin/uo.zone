@@ -1,7 +1,7 @@
 import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
 
-from data_scraper.helpers import normalize_string
+from scraper.helpers import normalize_string
 
 
 class Professor(scrapy.Item):

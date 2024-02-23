@@ -6,9 +6,9 @@ import tqdm
 from scrapy.http import Response
 from scrapy.loader import ItemLoader
 
-from data_scraper.helpers import normalize_string
-from data_scraper.items import Professor
-from data_scraper.settings import filesystem
+from scraper.helpers import normalize_string
+from scraper.items import Professor
+from scraper.settings import filesystem
 
 RMP_LINK_PATTERN = re.compile(r"www\.ratemyprofessors\.com\/professor\/\d+\/?")
 DEPARTMENT_PATTERN = re.compile(r"in the (.+) department")

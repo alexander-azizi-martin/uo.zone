@@ -2,7 +2,7 @@ import json
 import re
 from collections import defaultdict
 
-from data_scraper.settings import filesystem
+from scraper.settings import filesystem
 
 SEASON_PATTERN = r"(winter|summer|fall) \d{4}"
 

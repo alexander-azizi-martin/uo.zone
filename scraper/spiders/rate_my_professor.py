@@ -5,7 +5,7 @@ from scrapy.http import Response
 from scrapy.loader import ItemLoader
 from scrapy_playwright.page import PageMethod
 
-from data_scraper.items import Professor
+from scraper.items import Professor
 
 
 class RateMyProfessorSpider(scrapy.Spider):
@@ -26,7 +26,9 @@ class RateMyProfessorSpider(scrapy.Spider):
     async def parse(self, response: Response):
         page = response.meta["playwright_page"]
 
-        results = Selector(await page.content()).css("[data-testid='pagination-header-main-results']::text")
+        results = Selector(await page.content()).css(
+            "[data-testid='pagination-header-main-results']::text"
+        )
         [num_results] = results.re(r"\d+")
 
         progress_bar = tqdm.tqdm(total=int(num_results), desc="Professors")
@@ -46,12 +48,19 @@ class RateMyProfessorSpider(scrapy.Spider):
         for professor_card in page_selector.css("[href^='/professor']"):
             professor_loader = ItemLoader(Professor(), professor_card)
 
-            professor_loader.add_value("link", response.urljoin(professor_card.attrib["href"]))
+            professor_loader.add_value(
+                "link", response.urljoin(professor_card.attrib["href"])
+            )
             professor_loader.add_css("name", "[class*='CardName']::text")
             professor_loader.add_css("department", "[class*='Department']::text")
             professor_loader.add_css("rating", "[class*='CardNumRatingNumber']::text")
-            professor_loader.add_css("difficulty", "[class*='CardFeedbackItem']:nth-child(3) [class*='CardFeedbackNumber']::text")
-            professor_loader.add_css("num_ratings", "[class*='CardNumRatingCount']::text", re=r"\d+")
+            professor_loader.add_css(
+                "difficulty",
+                "[class*='CardFeedbackItem']:nth-child(3) [class*='CardFeedbackNumber']::text",
+            )
+            professor_loader.add_css(
+                "num_ratings", "[class*='CardNumRatingCount']::text", re=r"\d+"
+            )
 
             yield professor_loader.load_item()
 

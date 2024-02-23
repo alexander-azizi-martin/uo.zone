@@ -1,8 +1,7 @@
 import scrapy
 from itemloaders.processors import Compose, Join, MapCompose, TakeFirst
 
-from data_scraper.helpers import (normalize_string, normalize_whitespace,
-                                  remove_whitespace)
+from scraper.helpers import normalize_string, normalize_whitespace, remove_whitespace
 
 
 def extract_languages(code: str) -> dict[str, int]:
