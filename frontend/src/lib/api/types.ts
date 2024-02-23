@@ -68,7 +68,7 @@ export interface RateMyProfessorReview {
   rating: number;
   difficulty: number;
   numRatings: number;
-  department: string;
+  department?: string;
 }
 
 export interface Professor {

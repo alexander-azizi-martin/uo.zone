@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('professor_id')->constrained();
             $table->float('rating');
             $table->float('difficulty');
-            $table->string('department');
             $table->integer('num_ratings')->unsigned();
+            $table->string('department')->nullable();
             $table->string('link');
             $table->timestamps();
         });

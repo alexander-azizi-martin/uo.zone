@@ -14,7 +14,7 @@ class RmpSeeder extends Seeder
      */
     public function run(): void
     {
-        $reviews = Storage::disk('static')->json('professors.json');
+        $reviews = Storage::disk('static')->json('rmp.json');
 
         foreach ($reviews as $review) {
             $professor = Professor::where('name', $review['name'])->first();

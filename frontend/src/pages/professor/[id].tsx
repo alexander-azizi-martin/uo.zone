@@ -36,7 +36,7 @@ export default function Professor({ professor }: ProfessorProps) {
     () => new Survey(professor.survey),
     [professor.survey]
   );
-
+  console.log(professor.rmpReview)
   return (
     <Layout>
       <SearchNav>
@@ -45,9 +45,11 @@ export default function Professor({ professor }: ProfessorProps) {
           <>
             <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
               <RmpRating review={professor.rmpReview} />
-              <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
-                {professor.rmpReview.department}
-              </Tag>
+              {professor.rmpReview.department && (
+                <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
+                  {professor.rmpReview.department}
+                </Tag>
+              )}
             </Stack>
             <Text my={4} fontSize={'sm'}>
               <ExternalLink
