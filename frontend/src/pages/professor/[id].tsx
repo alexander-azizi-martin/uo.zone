@@ -36,7 +36,7 @@ export default function Professor({ professor }: ProfessorProps) {
     () => new Survey(professor.survey),
     [professor.survey]
   );
-  console.log(professor.rmpReview)
+
   return (
     <Layout>
       <SearchNav>
@@ -87,10 +87,11 @@ export default function Professor({ professor }: ProfessorProps) {
           <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
             {survey.numQuestions() > 0 && (
               <BigNumberCard
-                info={tSurvey('overall')}
+                info={tSurvey('overall.info')}
                 value={survey
                   .averageScore(Object.keys(professorQuestions))
                   .toFixed(2)}
+                tooltip={tSurvey(`overall.tooltip`)}
                 total={5}
               />
             )}

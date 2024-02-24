@@ -124,10 +124,11 @@ export default function Course({ course }: CourseProps) {
               <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
                 {survey.numQuestions() > 0 && (
                   <BigNumberCard
-                    info={tSurvey('overall')}
+                    info={tSurvey('overall.info')}
                     value={survey
                       .averageScore(Object.keys(courseQuestions))
                       .toFixed(2)}
+                    tooltip={tSurvey(`overall.tooltip`)}
                     total={5}
                   />
                 )}
