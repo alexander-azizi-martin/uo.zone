@@ -13,8 +13,8 @@ SUBJECT_PATTERN = re.compile(r"(.+) \(([A-Z]{3})\)")
 UNITS_PATTERN = re.compile(r"([0-9]\.?[0-9]*) (unit|crédit)s?")
 
 
-class CourseSpider(scrapy.Spider):
-    name = "course"
+class CoursesSpider(scrapy.Spider):
+    name = "courses"
 
     def start_requests(self):
         yield scrapy.Request(
