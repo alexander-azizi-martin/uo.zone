@@ -85,6 +85,7 @@ export default function Subject({ subject }: SubjectProps) {
               rightIcon={<Icon as={SlidersIcon} />}
               size={'sm'}
               variant={'outline'}
+              minW={'fit-content'}
             >
               {tGeneral('filter')}
             </MenuButton>
