@@ -24,6 +24,7 @@ interface GradeSummaryProps {
   info?: ReactNode;
   gradeInfo?: GradeInfo;
   distributionSize?: 'sm' | 'md';
+  firstRender?: boolean;
 }
 
 export default function GradeSummary({
@@ -33,10 +34,11 @@ export default function GradeSummary({
   info,
   gradeInfo,
   distributionSize = 'md',
+  firstRender = true,
 }: GradeSummaryProps) {
   const tGrades = useTranslations('Grades');
   const [isLargerThan600] = useMediaQuery('(min-width: 650px)', {
-    ssr: true,
+    ssr: firstRender || typeof window === 'undefined',
     fallback: false,
   });
 

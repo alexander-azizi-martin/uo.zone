@@ -21,6 +21,7 @@
     "next": "latest",
     "next-axiom": "0.18.0",
     "next-intl": "3.0.0-beta.19",
+    "nuqs": "^1.17.1",
     "react": "latest",
     "react-dom": "latest",
     "react-markdown": "^9.0.1",

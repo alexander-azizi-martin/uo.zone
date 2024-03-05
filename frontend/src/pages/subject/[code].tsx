@@ -11,10 +11,11 @@ import {
   MenuOptionGroup,
   VStack,
 } from '@chakra-ui/react';
-import { useMemo } from 'react';
 import { SlidersIcon } from '@primer/octicons-react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
+import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from 'nuqs';
+import { useTransition } from 'react';
 
 import { LinkCard, SummaryCard } from '~/components/Card';
 import { GradeSummary } from '~/components/Grades';
@@ -23,7 +24,7 @@ import SearchNav from '~/components/Search';
 import {
   type CourseFilterOptions,
   useFilteredCourses,
-  useSessionStorage,
+  useFirstRender,
 } from '~/hooks';
 import { getSubject, type SubjectWithCourses } from '~/lib/api';
 import { getDictionary } from '~/lib/dictionary';
@@ -37,40 +38,52 @@ export default function Subject({ subject }: SubjectProps) {
   const tFilter = useTranslations('Filter');
   const tGrades = useTranslations('Grades');
   const tGeneral = useTranslations('General');
+  const startTransition = useTransition()[1];
+  const firstRender = useFirstRender();
 
-  const [filterOptions, setFilterOptions] =
-    useSessionStorage<CourseFilterOptions>(subject.code, {
-      sortBy: 'code',
-      years: [],
-      languages: [],
-    });
+  const [sortBy, setSortBy] = useQueryState(
+    'sort',
+    parseAsStringLiteral(['code', 'average', 'mode'])
+      .withDefault('code')
+      .withOptions({ clearOnDefault: true })
+  );
+
+  const [years, setYears] = useQueryState(
+    'years',
+    parseAsArrayOf(parseAsStringLiteral(['1', '2', '3', '4', '5']))
+      .withDefault([])
+      .withOptions({ clearOnDefault: true })
+  );
+
+  const [languages, setLanguages] = useQueryState(
+    'langs',
+    parseAsArrayOf(parseAsStringLiteral(['en', 'fr']))
+      .withDefault([])
+      .withOptions({ clearOnDefault: true })
+  );
 
   const handleFilterChange =
     (key: keyof CourseFilterOptions) => (value: any) => {
-      setFilterOptions({
-        ...filterOptions,
-        [key]: value,
+      startTransition(() => {
+        switch (key) {
+          case 'sortBy':
+            setSortBy(value);
+            break;
+          case 'years':
+            setYears(value);
+            break;
+          case 'languages':
+            setLanguages(value);
+            break;
+        }
       });
     };
 
-  const courseList = useMemo(
-    () =>
-      subject.courses.map((course) => (
-        <LinkCard href={`/course/${course.code}`} key={course.code}>
-          <GradeSummary
-            title={course.title}
-            subtitle={
-              !course?.gradeInfo?.total ? tGrades('no-data') : undefined
-            }
-            gradeInfo={course.gradeInfo}
-            distributionSize={'sm'}
-          />
-        </LinkCard>
-      )),
-    [subject.courses]
-  );
-
-  const filteredCourses = useFilteredCourses(subject.courses, filterOptions);
+  const filteredCourses = useFilteredCourses(subject.courses, {
+    sortBy,
+    years,
+    languages,
+  });
 
   return (
     <Layout>
@@ -91,7 +104,7 @@ export default function Subject({ subject }: SubjectProps) {
             </MenuButton>
             <MenuList>
               <MenuOptionGroup
-                value={filterOptions.sortBy}
+                value={sortBy}
                 onChange={handleFilterChange('sortBy')}
                 title={tFilter('sort-by')}
                 type="radio"
@@ -105,7 +118,7 @@ export default function Subject({ subject }: SubjectProps) {
               </MenuOptionGroup>
               <MenuDivider />
               <MenuOptionGroup
-                value={filterOptions.years}
+                value={years}
                 onChange={handleFilterChange('years')}
                 title={tFilter('filter-year')}
                 type="checkbox"
@@ -118,7 +131,7 @@ export default function Subject({ subject }: SubjectProps) {
               </MenuOptionGroup>
               <MenuDivider />
               <MenuOptionGroup
-                value={filterOptions.languages}
+                value={languages}
                 onChange={handleFilterChange('languages')}
                 title={tFilter('filter-language')}
                 type="checkbox"
@@ -146,7 +159,19 @@ export default function Subject({ subject }: SubjectProps) {
             </Heading>
           )}
 
-          {filteredCourses.map((i) => courseList[i])}
+          {filteredCourses.map((course) => (
+            <LinkCard href={`/course/${course.code}`} key={course.code}>
+              <GradeSummary
+                title={course.title}
+                subtitle={
+                  !course?.gradeInfo?.total ? tGrades('no-data') : undefined
+                }
+                gradeInfo={course.gradeInfo}
+                distributionSize={'sm'}
+                firstRender={firstRender}
+              />
+            </LinkCard>
+          ))}
         </VStack>
       </SearchNav>
     </Layout>

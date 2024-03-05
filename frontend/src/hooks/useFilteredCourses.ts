@@ -15,10 +15,7 @@ export default function useFilteredCourses(
   filterOptions: CourseFilterOptions
 ) {
   const filteredCourses = useMemo(() => {
-    return Array.from({ length: courses.length }, (_, i) => i)
-      .filter((i) => {
-        const course = courses[i];
-
+    return courses.filter((course) => {
         const includesLanguage =
           filterOptions.languages.length === 0 ||
           filterOptions.languages.some((language) => {
@@ -35,10 +32,7 @@ export default function useFilteredCourses(
 
         return includesLanguage && includesYear;
       })
-      .sort((i, j) => {
-        const a = courses[i];
-        const b = courses[j];
-
+      .sort((a, b) => {
         switch (filterOptions.sortBy) {
           case 'code':
             return Number(a.code > b.code);
