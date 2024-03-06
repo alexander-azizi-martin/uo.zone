@@ -76,8 +76,8 @@ export default function SearchResults(props: SearchResultsProps) {
 
   return (
     <>
-      <Courses courses={props.results.courses} />
       <Subjects subjects={props.results.subjects} />
+      <Courses courses={props.results.courses} />
       <Professors professors={props.results.professors} />
     </>
   );
