@@ -32,6 +32,9 @@ export default function LinkCard({
           background: 'rgba(255,255,255,0.25)',
           transition: 'opacity 0.1s',
         }}
+        _focus={{
+          outline: 'solid #651d32',
+        }}
       >
         {children}
         {clicked && !isExternal && (

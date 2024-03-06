@@ -56,7 +56,6 @@ export default function GradeSummary({
   return (
     <HStack
       justify={'center'}
-      align={'center'}
       width={'100%'}
       flexWrap={'wrap'}
       alignItems={'start'}

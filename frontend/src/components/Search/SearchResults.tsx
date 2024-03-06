@@ -1,5 +1,6 @@
 import { Heading, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
 
 import { LinkCard } from '~/components/Card';
 import {
@@ -14,6 +15,56 @@ interface SearchResultsProps {
 }
 
 export default function SearchResults(props: SearchResultsProps) {
+  const selectedResult = useRef<number>();
+
+  useEffect(() => {
+    const resultNodes =
+      document.querySelectorAll<HTMLElement>('.search-result');
+
+    selectedResult.current = undefined;
+    const handleKeyPress = (event: KeyboardEvent) => {
+      let resultMoved = false;
+
+      if (event.key === 'ArrowDown') {
+        if (selectedResult.current === undefined) {
+          selectedResult.current = 0;
+        } else if (selectedResult.current + 1 < resultNodes.length) {
+          selectedResult.current++;
+        }
+
+        resultMoved = true;
+      } else if (
+        event.key === 'ArrowUp' &&
+        selectedResult.current !== undefined &&
+        selectedResult.current - 1 >= 0
+      ) {
+        selectedResult.current--;
+        resultMoved = true;
+      }
+
+      if (resultMoved) {
+        event.preventDefault();
+
+        const resultNode = resultNodes[selectedResult.current as number];
+        const resultNodeRect = resultNode.getBoundingClientRect();
+        resultNode.focus();
+
+        window.scrollTo({
+          top:
+            resultNodeRect.top +
+            resultNodeRect.height / 2 +
+            window.scrollY -
+            window.innerHeight / 2,
+        });
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [props.results]);
+
   return (
     <>
       <Courses courses={props.results.courses} />
@@ -37,8 +88,12 @@ function Courses({ courses }: CoursesProps) {
       <Heading size={'md'} pt={4}>
         {tSearch('courses')}
       </Heading>
-      {courses.map((course) => (
-        <LinkCard key={course.code} href={`/course/${course.code}`}>
+      {courses.map((course, i) => (
+        <LinkCard
+          key={course.code}
+          href={`/course/${course.code}`}
+          className={'search-result'}
+        >
           {course.title}
         </LinkCard>
       ))}
@@ -61,7 +116,11 @@ function Professors({ professors }: ProfessorsProps) {
         {tSearch('professors')}
       </Heading>
       {professors.map((professor) => (
-        <LinkCard key={professor.id} href={`/professor/${professor.id}`}>
+        <LinkCard
+          key={professor.id}
+          href={`/professor/${professor.id}`}
+          className={'search-result'}
+        >
           {professor.name}
         </LinkCard>
       ))}
@@ -84,7 +143,11 @@ function Subjects({ subjects }: SubjectsProps) {
         {tSearch('subjects')}
       </Heading>
       {subjects.map((subject) => (
-        <LinkCard key={subject.code} href={`/subject/${subject.code}`}>
+        <LinkCard
+          key={subject.code}
+          href={`/subject/${subject.code}`}
+          className={'search-result'}
+        >
           {subject.code} - {subject.subject}
         </LinkCard>
       ))}
