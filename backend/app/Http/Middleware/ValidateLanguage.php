@@ -14,9 +14,14 @@ class ValidateLanguage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $languages = array_intersect($request->getLanguages(), config('app.valid_locales'));
+        $requestedLanguages = $request->getLanguages();
+        $languages = array_intersect($requestedLanguages, config('app.valid_locales'));
 
-        abort_if(empty($languages), 406, 'Languages not supported');
+        abort_if(
+            empty($languages) && ! empty($requestedLanguages),
+            406,
+            'Languages not supported'
+        );
 
         App::setLocale(head($languages));
 
