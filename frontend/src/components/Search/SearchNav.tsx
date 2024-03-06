@@ -38,6 +38,12 @@ export default function Search({
   const [results, setResults] = useState<SearchResultsType | null>();
   const searchBarRef = useRef<HTMLInputElement>();
 
+  useEffect(() => {
+    if (searchBarRef.current && pathname === '/') {
+      searchBarRef.current.select();
+    }
+  }, [searchBarRef.current]);
+
   const updateResults = useCallback(
     debounce((query: string) => {
       search(query, locale)
