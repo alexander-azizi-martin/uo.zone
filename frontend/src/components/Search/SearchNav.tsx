@@ -10,7 +10,7 @@ import debounce from 'lodash.debounce';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { SearchBar, SearchResults } from '~/components/Search';
 import { search, type SearchResults as SearchResultsType } from '~/lib/api';
@@ -36,6 +36,7 @@ export default function Search({
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<SearchResultsType | null>();
+  const searchBarRef = useRef<HTMLInputElement>();
 
   const updateResults = useCallback(
     debounce((query: string) => {
@@ -78,6 +79,7 @@ export default function Search({
         value={query}
         onChange={setQuery}
         placeholder={tSearch('placeholder')}
+        ref={searchBarRef}
       />
 
       <Collapse in={searching} startingHeight={1}>
@@ -114,7 +116,9 @@ export default function Search({
               </Heading>
             )}
 
-          {results && <SearchResults results={results} />}
+          {results && (
+            <SearchResults searchBar={searchBarRef} results={results} />
+          )}
         </VStack>
       </Collapse>
 

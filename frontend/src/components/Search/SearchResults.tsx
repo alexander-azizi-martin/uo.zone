@@ -1,6 +1,6 @@
 import { Heading, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 
 import { LinkCard } from '~/components/Card';
 import {
@@ -12,6 +12,7 @@ import {
 
 interface SearchResultsProps {
   results: SearchResultsType;
+  searchBar?: MutableRefObject<HTMLInputElement | undefined>;
 }
 
 export default function SearchResults(props: SearchResultsProps) {
@@ -25,7 +26,7 @@ export default function SearchResults(props: SearchResultsProps) {
     const handleKeyPress = (event: KeyboardEvent) => {
       let resultMoved = false;
 
-      if (event.key === 'ArrowDown') {
+      if (event.key === 'ArrowDown' && resultNodes.length > 0) {
         if (selectedResult.current === undefined) {
           selectedResult.current = 0;
         } else if (selectedResult.current + 1 < resultNodes.length) {
@@ -56,6 +57,14 @@ export default function SearchResults(props: SearchResultsProps) {
             window.scrollY -
             window.innerHeight / 2,
         });
+      }
+
+      if (
+        event.key !== 'ArrowDown' &&
+        event.key !== 'ArrowUp' &&
+        event.key !== 'Enter'
+      ) {
+        props.searchBar?.current?.focus();
       }
     };
 
