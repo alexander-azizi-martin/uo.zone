@@ -42,10 +42,13 @@ class Professor extends Model
     {
         return [
             'name' => $this->name,
-            'total_enrolled' => $this->total_enrolled,
+            'total_enrolled' => (int) ($this->grades->total ?? 0),
         ];
     }
 
+    /**
+     * Gets instance representing an unknown professor.
+     */
     public static function unknown(): Professor
     {
         $unknownProfessor = Professor::find(0);

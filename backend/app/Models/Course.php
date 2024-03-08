@@ -54,7 +54,7 @@ class Course extends Model
         return [
             'title' => $this->title->translations,
             'code' => $this->code,
-            'total_enrolled' => $this->total_enrolled,
+            'total_enrolled' => (int) ($this->grades->total ?? 0),
             'languages' => $this->languages,
         ];
     }
