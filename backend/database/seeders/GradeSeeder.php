@@ -30,7 +30,7 @@ class GradeSeeder extends Seeder
             ]);
 
             if (empty($courseSection)) {
-                $course = Course::where('code', Str::lower($gradeData['course']))->first();
+                $course = Course::firstWhere('code', Str::lower($gradeData['course']));
 
                 if (isset($course)) {
                     $courseSection = Professor::unknown()->sections()->create([

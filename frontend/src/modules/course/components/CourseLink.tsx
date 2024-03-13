@@ -1,7 +1,7 @@
 import { chakra } from '@chakra-ui/react';
 import Link from 'next/link';
 
-export default function CourseLink(props: any) {
+export function CourseLink(props: any) {
   return (
     <chakra.span
       color={'#8f001a'}

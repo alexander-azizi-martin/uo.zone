@@ -6,6 +6,7 @@ const nextConfig = {
     locales: ['en', 'fr'],
     defaultLocale: 'en',
   },
+  poweredByHeader: false,
   async rewrites() {
     return [
       {

@@ -97,7 +97,8 @@ export interface CourseWithProfessors extends Course {
 }
 
 export interface SubjectWithCourses extends Subject {
-  courses: Course[];
+  // courses: Course[];
+  coursesCount: number;
 }
 
 export interface CourseResult {

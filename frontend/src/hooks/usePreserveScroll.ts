@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 
-export default function usePreserveScroll() {
+export function usePreserveScroll() {
   const router = useRouter();
 
   const scrollPositions = useRef<{ [url: string]: number }>({});

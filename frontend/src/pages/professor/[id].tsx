@@ -1,28 +1,20 @@
-import {
-  Divider,
-  Heading,
-  Stack,
-  Tag,
-  Text,
-  VStack,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react';
+import { Divider, Heading, Stack, Tag, Text, VStack } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
 
-import { BigNumberCard, SummaryCard } from '~/components/Card';
-import ExternalLink from '~/components/ExternalLink';
-import { GradeSummary } from '~/components/Grades';
-import Layout from '~/components/Layout';
-import RmpRating from '~/components/RmpRating';
-import SearchNav from '~/components/Search';
-import SectionsSummary from '~/components/SectionsSummary';
+import {
+  ExternalLink,
+  GradeSummary,
+  Layout,
+  SearchNav,
+  SectionsSummary,
+  SummaryCard,
+  SurveySummary,
+} from '~/components';
 import { getProfessor, type ProfessorWithCourses } from '~/lib/api';
 import { professorQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
-import Survey from '~/lib/survey';
+import { RmpRating } from '~/modules/professor/components';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
@@ -30,12 +22,6 @@ interface ProfessorProps {
 
 export default function Professor({ professor }: ProfessorProps) {
   const tCourse = useTranslations('Course');
-  const tSurvey = useTranslations('Survey');
-
-  const survey = useMemo(
-    () => new Survey(professor.survey),
-    [professor.survey]
-  );
 
   return (
     <Layout>
@@ -51,6 +37,7 @@ export default function Professor({ professor }: ProfessorProps) {
                 </Tag>
               )}
             </Stack>
+
             <Text my={4} fontSize={'sm'}>
               <ExternalLink
                 href={professor.rmpReview.link}
@@ -62,40 +49,14 @@ export default function Professor({ professor }: ProfessorProps) {
             </Text>
           </>
         )}
-        <VStack spacing={4} align={'start'} pb={4}>
-          <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {Object.entries(professorQuestions)
-              .filter(([question]) => survey.has(question))
-              .map(([question, name], _, questions) => (
-                <WrapItem
-                  flexGrow={1}
-                  flexBasis={questions.length < 5 ? '45%' : '30%'}
-                  key={question}
-                >
-                  <BigNumberCard
-                    info={tSurvey(`${name}.info`)}
-                    tooltip={tSurvey(`${name}.tooltip`, {
-                      responses: survey.totalResponses(question),
-                    })}
-                    value={survey.score(question).toFixed(2)}
-                    total={5}
-                  />
-                </WrapItem>
-              ))}
-          </Wrap>
 
-          <Wrap spacing={'8px'} width={'100%'} overflow={'visible'}>
-            {survey.numQuestions() > 0 && (
-              <BigNumberCard
-                info={tSurvey('overall.info')}
-                value={survey
-                  .averageScore(Object.keys(professorQuestions))
-                  .toFixed(2)}
-                tooltip={tSurvey(`overall.tooltip`)}
-                total={5}
-              />
-            )}
-          </Wrap>
+        <VStack spacing={4} align={'start'} pb={4}>
+          {professor.survey.length > 0 && (
+            <SurveySummary
+              survey={professor.survey}
+              questions={professorQuestions}
+            />
+          )}
 
           <Divider
             orientation={'horizontal'}

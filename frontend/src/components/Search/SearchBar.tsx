@@ -5,7 +5,7 @@ import {
   InputGroupProps,
   InputLeftElement,
 } from '@chakra-ui/react';
-import { ChangeEventHandler, ForwardedRef, forwardRef } from 'react';
+import { type ChangeEventHandler, type ForwardedRef, forwardRef } from 'react';
 
 interface SearchBarProps extends InputGroupProps {
   placeholder?: string;
@@ -13,9 +13,9 @@ interface SearchBarProps extends InputGroupProps {
   onChange: (value: any) => void;
 }
 
-function SearchBar(
+export const SearchBar = forwardRef(function (
   { value, onChange, placeholder, ...props }: SearchBarProps,
-  ref: ForwardedRef<HTMLInputElement | undefined>
+  forwardedRef: ForwardedRef<HTMLInputElement>
 ) {
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     onChange?.(event.target.value);
@@ -45,10 +45,10 @@ function SearchBar(
           boxShadow: '0px 0px 20px rgba(111, 19, 29, 0.35)',
           background: 'rgba(255,255,255,0.9)',
         }}
-        ref={ref as any}
+        ref={forwardedRef}
       />
     </InputGroup>
   );
-}
+});
 
-export default forwardRef(SearchBar);
+SearchBar.displayName = 'SearchBar';

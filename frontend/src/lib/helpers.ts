@@ -1,7 +1,7 @@
-export function trackEvent(event: string, data?: object) {
+export function trackEvent(event: string, data?: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
-  if ((window as any).umami) {
-    (window as any).umami.track(event, data);
+  if (window.umami) {
+    window.umami.track(event, data);
   }
 }
 

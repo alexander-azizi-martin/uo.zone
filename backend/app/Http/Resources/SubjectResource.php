@@ -17,11 +17,11 @@ class SubjectResource extends JsonResource
             'code' => Str::upper($this->code),
             'subject' => $this->subject,
             'faculty' => $this->whenHas('faculty'),
+            'coursesCount' => $this->whenHas('courses_count', function () {
+                return $this->courses_count;
+            }),
             'gradeInfo' => $this->whenLoaded('grades', function () {
                 return isset($this->grades) ? new GradesResource($this->grades) : null;
-            }),
-            'courses' => $this->whenLoaded('courses', function () {
-                return CourseResource::collection($this->courses->sortBy('code'));
             }),
         ];
     }

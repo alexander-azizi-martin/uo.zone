@@ -1,10 +1,6 @@
-import { BaseCard, BaseCardProps } from '~/components/Card';
+import { BaseCard, type BaseCardProps } from '~/components';
 
-export default function SummaryCard({
-  children,
-  style,
-  ...props
-}: BaseCardProps) {
+export function SummaryCard({ children, style, ...props }: BaseCardProps) {
   return (
     <BaseCard
       {...props}

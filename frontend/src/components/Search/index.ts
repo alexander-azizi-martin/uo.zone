@@ -1,3 +1,3 @@
-export { default as SearchBar } from './SearchBar';
-export { default } from './SearchNav';
-export { default as SearchResults } from './SearchResults';
+export * from './SearchBar';
+export * from './SearchNav';
+export * from './SearchResults';

@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Link, LinkProps } from '@chakra-ui/react';
 
-export default function ExternalLink({ href, children, ...props }: LinkProps) {
+export function ExternalLink({ href, children, ...props }: LinkProps) {
   return (
     <Link
       href={href}

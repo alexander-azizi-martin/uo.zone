@@ -1,33 +1,22 @@
-import {
-  Button,
-  Flex,
-  Heading,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
-  VStack,
-} from '@chakra-ui/react';
-import { SlidersIcon } from '@primer/octicons-react';
+import { Flex, Heading, Skeleton, VStack } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
-import { parseAsArrayOf, parseAsStringLiteral, useQueryState } from 'nuqs';
-import { useTransition } from 'react';
+import { parseAsArrayOf, parseAsStringLiteral, useQueryStates } from 'nuqs';
+import useSWR from 'swr';
 
-import { LinkCard, SummaryCard } from '~/components/Card';
-import { GradeSummary } from '~/components/Grades';
-import Layout from '~/components/Layout';
-import SearchNav from '~/components/Search';
+import { GradeSummary, Layout, SearchNav, SummaryCard } from '~/components';
 import {
-  type CourseFilterOptions,
-  useFilteredCourses,
-  useFirstRender,
-} from '~/hooks';
-import { getSubject, type SubjectWithCourses } from '~/lib/api';
+  getSubject,
+  getSubjectCourses,
+  type SubjectWithCourses,
+} from '~/lib/api';
 import { getDictionary } from '~/lib/dictionary';
+import {
+  CourseFilterMenu,
+  VirtualCourseList,
+} from '~/modules/subject/components';
+import { useFilteredCourses } from '~/modules/subject/hooks';
 
 interface SubjectProps {
   subject: SubjectWithCourses;
@@ -35,55 +24,29 @@ interface SubjectProps {
 
 export default function Subject({ subject }: SubjectProps) {
   const tCourse = useTranslations('Course');
-  const tFilter = useTranslations('Filter');
-  const tGrades = useTranslations('Grades');
-  const tGeneral = useTranslations('General');
-  const startTransition = useTransition()[1];
-  const firstRender = useFirstRender();
 
-  const [sortBy, setSortBy] = useQueryState(
-    'sort',
-    parseAsStringLiteral(['code', 'average', 'mode'])
-      .withDefault('code')
-      .withOptions({ clearOnDefault: true })
+  const { query, locale } = useRouter();
+  const { data: courses, isLoading: isCoursesLoading } = useSWR(
+    `/subject/${query.code}/courses`,
+    getSubjectCourses.bind(null, query.code as string, locale)
   );
 
-  const [years, setYears] = useQueryState(
-    'years',
-    parseAsArrayOf(parseAsStringLiteral(['1', '2', '3', '4', '5']))
-      .withDefault([])
-      .withOptions({ clearOnDefault: true })
+  const [filterOptions, setFilterOptions] = useQueryStates(
+    {
+      sortBy: parseAsStringLiteral(['code', 'average', 'mode'])
+        .withDefault('code')
+        .withOptions({ clearOnDefault: true }),
+      years: parseAsArrayOf(parseAsStringLiteral(['1', '2', '3', '4', '5']))
+        .withDefault([])
+        .withOptions({ clearOnDefault: true }),
+      languages: parseAsArrayOf(parseAsStringLiteral(['en', 'fr']))
+        .withDefault([])
+        .withOptions({ clearOnDefault: true }),
+    },
+    { clearOnDefault: true }
   );
 
-  const [languages, setLanguages] = useQueryState(
-    'langs',
-    parseAsArrayOf(parseAsStringLiteral(['en', 'fr']))
-      .withDefault([])
-      .withOptions({ clearOnDefault: true })
-  );
-
-  const handleFilterChange =
-    (key: keyof CourseFilterOptions) => (value: any) => {
-      startTransition(() => {
-        switch (key) {
-          case 'sortBy':
-            setSortBy(value);
-            break;
-          case 'years':
-            setYears(value);
-            break;
-          case 'languages':
-            setLanguages(value);
-            break;
-        }
-      });
-    };
-
-  const filteredCourses = useFilteredCourses(subject.courses, {
-    sortBy,
-    years,
-    languages,
-  });
+  const filteredCourses = useFilteredCourses(courses ?? [], filterOptions);
 
   return (
     <Layout>
@@ -91,60 +54,13 @@ export default function Subject({ subject }: SubjectProps) {
         <Flex justify={'space-between'} align={'center'}>
           <Heading my={4}>{`${subject.code}: ${subject.subject}`}</Heading>
 
-          <Menu closeOnSelect={false} flip={false} placement={'bottom-end'}>
-            <MenuButton
-              as={Button}
-              iconSpacing={1}
-              rightIcon={<Icon as={SlidersIcon} />}
-              size={'sm'}
-              variant={'outline'}
-              minW={'fit-content'}
-            >
-              {tGeneral('filter')}
-            </MenuButton>
-            <MenuList>
-              <MenuOptionGroup
-                value={sortBy}
-                onChange={handleFilterChange('sortBy')}
-                title={tFilter('sort-by')}
-                type="radio"
-              >
-                <MenuItemOption value="code">{tGeneral('code')}</MenuItemOption>
-                <MenuItemOption value="average">
-                  {tGeneral('average')}
-                </MenuItemOption>
-                {/* <MenuItemOption value="median">Median</MenuItemOption> */}
-                <MenuItemOption value="mode">{tGeneral('mode')}</MenuItemOption>
-              </MenuOptionGroup>
-              <MenuDivider />
-              <MenuOptionGroup
-                value={years}
-                onChange={handleFilterChange('years')}
-                title={tFilter('filter-year')}
-                type="checkbox"
-              >
-                <MenuItemOption value="1">{tFilter('1st-year')}</MenuItemOption>
-                <MenuItemOption value="2">{tFilter('2nd-year')}</MenuItemOption>
-                <MenuItemOption value="3">{tFilter('3rd-year')}</MenuItemOption>
-                <MenuItemOption value="4">{tFilter('4th-year')}</MenuItemOption>
-                <MenuItemOption value="5">{tFilter('graduate')}</MenuItemOption>
-              </MenuOptionGroup>
-              <MenuDivider />
-              <MenuOptionGroup
-                value={languages}
-                onChange={handleFilterChange('languages')}
-                title={tFilter('filter-language')}
-                type="checkbox"
-              >
-                <MenuItemOption value="en">
-                  {tGeneral('english')}
-                </MenuItemOption>
-                <MenuItemOption value="fr">{tGeneral('french')}</MenuItemOption>
-              </MenuOptionGroup>
-            </MenuList>
-          </Menu>
+          <CourseFilterMenu
+            value={filterOptions}
+            onChange={(key, value) => setFilterOptions({ [key]: value })}
+          />
         </Flex>
-        <VStack spacing={4} align={'start'} pb={4} minH={'50vh'}>
+
+        <VStack spacing={0} align={'start'} pb={'11px'} minH={'50vh'}>
           <SummaryCard>
             <GradeSummary
               gradeInfo={subject.gradeInfo}
@@ -153,25 +69,19 @@ export default function Subject({ subject }: SubjectProps) {
             />
           </SummaryCard>
 
-          {filteredCourses.length === 0 && (
-            <Heading my={2} as={'h3'} size={'md'}>
-              {tCourse('no-filter-match')}
-            </Heading>
-          )}
-
-          {filteredCourses.map((course) => (
-            <LinkCard href={`/course/${course.code}`} key={course.code}>
-              <GradeSummary
-                title={course.title}
-                subtitle={
-                  !course?.gradeInfo?.total ? tGrades('no-data') : undefined
-                }
-                gradeInfo={course.gradeInfo}
-                distributionSize={'sm'}
-                firstRender={firstRender}
+          {isCoursesLoading ? (
+            Array.from({ length: subject.coursesCount }).map((_, i) => (
+              <Skeleton
+                key={i}
+                height={{ base: 240, sm: 175, lg: 112 }}
+                width={'100%'}
+                mt={4}
+                borderRadius={8}
               />
-            </LinkCard>
-          ))}
+            ))
+          ) : (
+            <VirtualCourseList courses={filteredCourses} />
+          )}
         </VStack>
       </SearchNav>
     </Layout>

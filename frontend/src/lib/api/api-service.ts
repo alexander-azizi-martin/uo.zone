@@ -3,11 +3,12 @@ import urlJoin from 'url-join';
 import { getRandomServerUrl } from '~/lib/helpers';
 
 import {
+  type Course,
   type CourseWithProfessors,
   type ProfessorWithCourses,
   type SearchResults,
   type SubjectWithCourses,
-} from './types';
+} from './api-types';
 
 export const API_URL =
   typeof window === 'undefined' ? urlJoin(getRandomServerUrl(), 'api') : '/api';
@@ -51,6 +52,13 @@ export async function getProfessor(id: string, lang: string = 'en') {
 export async function getSubject(code: string, lang: string = 'en') {
   const url = urlJoin(API_URL, 'subjects', code);
   return await fetchData<SubjectWithCourses>(url, {
+    headers: { 'Accept-Language': lang },
+  });
+}
+
+export async function getSubjectCourses(code: string, lang: string = 'en') {
+  const url = urlJoin(API_URL, 'subjects', code, 'courses');
+  return await fetchData<Course[]>(url, {
     headers: { 'Accept-Language': lang },
   });
 }

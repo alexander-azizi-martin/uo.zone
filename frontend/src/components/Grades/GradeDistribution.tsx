@@ -14,7 +14,7 @@ interface GradeDistributionProps {
   backgroundColor?: string;
 }
 
-export default function GradeDistribution({
+export function GradeDistribution({
   gradeInfo,
   width = 390,
   height = 55,
@@ -24,9 +24,9 @@ export default function GradeDistribution({
 
   const [selectedGrade, setSelectedGrade] = useState<LetterGrade>();
   const gradient = useGradient(gradeGradient);
-  const rootRef = useRef<HTMLDivElement>();
+  const rootRef = useRef<HTMLDivElement>(null);
   useOutsideClick({
-    ref: rootRef as any,
+    ref: rootRef,
     handler: () => setSelectedGrade(undefined),
   });
 
@@ -69,7 +69,7 @@ export default function GradeDistribution({
   return (
     <Flex direction={'column'}>
       <Flex
-        ref={rootRef as any}
+        ref={rootRef}
         w={`${width}px`}
         h={`${height}px`}
         borderRadius={4}

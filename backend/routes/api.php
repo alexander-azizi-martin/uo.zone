@@ -27,6 +27,7 @@ Route::get('/courses/{code}', [CourseController::class, 'getCourse']);
 
 Route::get('/subjects', [SubjectController::class, 'allSubjects'])->middleware(ThrottleRequests::using('list-all'));
 Route::get('/subjects/{code}', [SubjectController::class, 'getSubject']);
+Route::get('/subjects/{code}/courses', [SubjectController::class, 'getSubjectCourses']);
 
 Route::get('/professors', [ProfessorController::class, 'allProfessors'])->middleware(ThrottleRequests::using('list-all'));
 Route::get('/professors/{id}', [ProfessorController::class, 'getProfessor']);

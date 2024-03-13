@@ -2,10 +2,10 @@ import { Box, Button, Divider, HStack, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
 
-import ExternalLink from '~/components/ExternalLink';
+import { ExternalLink } from '~/components';
 import { trackEvent } from '~/lib/helpers';
 
-export default function Footer() {
+export function Footer() {
   const tFooter = useTranslations('Footer');
   const tGeneral = useTranslations('General');
 

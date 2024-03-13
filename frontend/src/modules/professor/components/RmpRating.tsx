@@ -1,7 +1,7 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { chakra, HStack, Tag } from '@chakra-ui/react';
 
-import Tooltip from '~/components/Tooltip';
+import { Tooltip } from '~/components';
 import { type RateMyProfessorReview } from '~/lib/api';
 
 function ratingToColor(rating: number): string {
@@ -17,7 +17,7 @@ interface RmpRatingProps {
   review: RateMyProfessorReview;
 }
 
-export default function RmpRating({ review }: RmpRatingProps) {
+export function RmpRating({ review }: RmpRatingProps) {
   return (
     <HStack spacing={2}>
       <Tooltip label={'RateMyProfessor rating'} hasArrow>

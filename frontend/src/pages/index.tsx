@@ -2,8 +2,7 @@ import { Box, useBoolean } from '@chakra-ui/react';
 import { Collapse, Flex, Heading, Image, Text, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
-import Layout from '~/components/Layout';
-import SearchNav from '~/components/Search';
+import { Layout, SearchNav } from '~/components';
 import { searchDurations } from '~/lib/config';
 
 export default function Home() {

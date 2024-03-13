@@ -1,8 +1,8 @@
 import { Heading, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { MutableRefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 
-import { LinkCard } from '~/components/Card';
+import { LinkCard } from '~/components';
 import {
   type CourseResult,
   type ProfessorResult,
@@ -12,11 +12,12 @@ import {
 
 interface SearchResultsProps {
   results: SearchResultsType;
-  searchBar?: MutableRefObject<HTMLInputElement | undefined>;
+  searchBar?: RefObject<HTMLInputElement>;
 }
 
-export default function SearchResults(props: SearchResultsProps) {
+export function SearchResults(props: SearchResultsProps) {
   const selectedResult = useRef<number>();
+  const lastSelectionPos = useRef<number>();
 
   useEffect(() => {
     const resultNodes =
@@ -26,21 +27,41 @@ export default function SearchResults(props: SearchResultsProps) {
     const handleKeyPress = (event: KeyboardEvent) => {
       let resultMoved = false;
 
-      if (event.key === 'ArrowDown' && resultNodes.length > 0) {
-        if (selectedResult.current === undefined) {
-          selectedResult.current = 0;
-        } else if (selectedResult.current + 1 < resultNodes.length) {
-          selectedResult.current++;
-        }
+      if (resultNodes.length > 0) {
+        if (event.key === 'ArrowDown') {
+          if (selectedResult.current === undefined) {
+            selectedResult.current = 0;
+          } else if (selectedResult.current + 1 < resultNodes.length) {
+            selectedResult.current++;
+          }
 
-        resultMoved = true;
-      } else if (
-        event.key === 'ArrowUp' &&
-        selectedResult.current !== undefined &&
-        selectedResult.current - 1 >= 0
-      ) {
-        selectedResult.current--;
-        resultMoved = true;
+          if (props?.searchBar?.current) {
+            lastSelectionPos.current =
+              props.searchBar.current.selectionStart ?? undefined;
+          }
+
+          resultMoved = true;
+        } else if (
+          event.key === 'ArrowUp' &&
+          selectedResult.current !== undefined
+        ) {
+          if (selectedResult.current - 1 >= 0) {
+            selectedResult.current--;
+            resultMoved = true;
+          } else {
+            selectedResult.current = undefined;
+            props.searchBar?.current?.focus();
+
+            requestAnimationFrame(() => {
+              if (props?.searchBar?.current && lastSelectionPos.current) {
+                props.searchBar.current.setSelectionRange(
+                  lastSelectionPos.current,
+                  lastSelectionPos.current
+                );
+              }
+            });
+          }
+        }
       }
 
       if (resultMoved) {
@@ -72,7 +93,7 @@ export default function SearchResults(props: SearchResultsProps) {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [props.results]);
+  }, [props.results, props.searchBar]);
 
   return (
     <>
@@ -97,7 +118,7 @@ function Courses({ courses }: CoursesProps) {
       <Heading size={'md'} pt={4}>
         {tSearch('courses')}
       </Heading>
-      {courses.map((course, i) => (
+      {courses.map((course) => (
         <LinkCard
           key={course.code}
           href={`/course/${course.code}`}

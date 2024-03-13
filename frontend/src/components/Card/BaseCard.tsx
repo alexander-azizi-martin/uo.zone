@@ -5,7 +5,7 @@ export interface BaseCardProps extends BoxProps {
   children?: React.ReactNode;
 }
 
-export default function BaseCard({
+export function BaseCard({
   children,
   onClick,
   style,

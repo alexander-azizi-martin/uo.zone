@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { SearchBar, SearchResults } from '~/components/Search';
+import { SearchBar, SearchResults } from '~/components';
 import { search, type SearchResults as SearchResultsType } from '~/lib/api';
 import { searchDurations } from '~/lib/config';
 
@@ -23,7 +23,7 @@ interface SearchProps {
   searchBarProps?: InputGroupProps;
 }
 
-export default function Search({
+export function SearchNav({
   onSearchClose,
   onSearchOpen,
   children,
@@ -36,13 +36,13 @@ export default function Search({
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<SearchResultsType | null>();
-  const searchBarRef = useRef<HTMLInputElement>();
+  const searchBarRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (searchBarRef.current && pathname === '/') {
       searchBarRef.current.select();
     }
-  }, [searchBarRef.current]);
+  }, [searchBarRef, pathname]);
 
   const updateResults = useCallback(
     debounce((query: string) => {

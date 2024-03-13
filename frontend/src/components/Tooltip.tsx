@@ -1,26 +1,27 @@
 import {
+  chakra,
   Tooltip as ChakraTooltip,
   type TooltipProps,
   useOutsideClick,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 
-export default function Tooltip(props: TooltipProps) {
+export function Tooltip(props: TooltipProps) {
   const [isOpen, setIsOpen] = useState<boolean>();
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
   useOutsideClick({
-    ref: ref as any,
+    ref: ref,
     handler: () => setIsOpen(undefined),
   });
 
   return (
-    <div
-      ref={ref as any}
+    <chakra.div
+      ref={ref}
       onClick={() => {
         setIsOpen(isOpen ? undefined : true);
       }}
     >
       <ChakraTooltip {...props} isOpen={isOpen} />
-    </div>
+    </chakra.div>
   );
 }

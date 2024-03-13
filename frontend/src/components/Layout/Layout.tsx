@@ -2,14 +2,14 @@ import { Box, Flex } from '@chakra-ui/react';
 import Head from 'next/head';
 import Script from 'next/script';
 
-import { Footer } from '~/components/Layout';
+import { Footer } from '~/components';
 import { openGraph } from '~/lib/config';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   return (
     <>
       <Head>
@@ -27,7 +27,10 @@ export default function Layout({ children }: LayoutProps) {
         <meta property={'twitter:card'} content={'summary_large_image'} />
         <meta property={'twitter:url'} content={openGraph.url} />
         <meta property={'twitter:title'} content={openGraph.title} />
-        <meta property={'twitter:description'} content={openGraph.description} />
+        <meta
+          property={'twitter:description'}
+          content={openGraph.description}
+        />
       </Head>
 
       <Flex direction={'row'} justifyContent={'center'}>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CourseResource;
 use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
@@ -22,10 +23,20 @@ class SubjectController extends Controller
 
     public function getSubject(string $code)
     {
-        $subject = Subject::with(['courses' => ['grades'], 'grades'])
+        $subject = Subject::with(['grades'])
+            ->withCount('courses')
             ->where('code', Str::lower($code))
             ->firstOrFail();
 
         return new SubjectResource($subject);
+    }
+
+    public function getSubjectCourses(string $code)
+    {
+        $subject = Subject::with(['courses' => ['grades']])
+            ->where('code', Str::lower($code))
+            ->firstOrFail();
+
+        return CourseResource::collection($subject->courses);
     }
 }

@@ -2,7 +2,7 @@ import { Box, Flex, Text, useBoolean, useOutsideClick, useToken } from '@chakra-
 import { useMemo, useRef } from 'react';
 
 import { GradeInfo } from '~/lib/api';
-import LetterGrade, { Letter } from '~/lib/letterGrade';
+import LetterGrade, { type Letter } from '~/lib/letterGrade';
 
 interface GradeHistogramProps {
   gradeInfo: GradeInfo;
@@ -11,7 +11,7 @@ interface GradeHistogramProps {
   backgroundColor?: string;
 }
 
-export default function GradeHistogram({
+export function GradeHistogram({
   gradeInfo,
   barWidth = 32,
   height = 55,
@@ -70,15 +70,15 @@ function Bar({
   const grade = new LetterGrade(letter);
   const [color] = useToken('colors', [`${grade.color()}.400`]);
   const [hovering, setHovering] = useBoolean(false);
-  const ref = useRef();
+  const ref = useRef(null);
   useOutsideClick({
-    ref: ref as any,
+    ref: ref,
     handler: setHovering.off,
   });
 
   return (
     <Flex
-      ref={ref as any}
+      ref={ref}
       w={`${barWidth}px`}
       flexDir={'column'}
       position={'relative'}

@@ -8,7 +8,7 @@ interface GradeTendenciesProps {
   gradeInfo: GradeInfo;
 }
 
-export default function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
+export function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
   const tGrades = useTranslations('Grades');
 
   const mean = new LetterGrade(gradeInfo.mean);

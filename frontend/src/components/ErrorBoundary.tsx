@@ -3,8 +3,7 @@ import { log } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import Layout from '~/components/Layout';
-import SearchNav from '~/components/Search';
+import { Layout, SearchNav } from '~/components';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -15,7 +14,7 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-class ErrorBoundary extends React.Component<
+class ErrorBoundaryClass extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
@@ -61,4 +60,4 @@ function withErrorTranslations(
   };
 }
 
-export default withErrorTranslations(ErrorBoundary);
+export const ErrorBoundary = withErrorTranslations(ErrorBoundaryClass);

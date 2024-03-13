@@ -7,11 +7,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { ReactNode, useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 
-import { BaseCard, LinkCard } from '~/components/Card';
-import { GradeSummary } from '~/components/Grades';
-import { CourseSection, GradeInfo } from '~/lib/api';
+import { BaseCard, GradeSummary, LinkCard } from '~/components';
+import { type CourseSection, type GradeInfo } from '~/lib/api';
 
 interface SectionsSummaryProps {
   title: ReactNode;
@@ -22,7 +21,7 @@ interface SectionsSummaryProps {
   };
 }
 
-export default function SectionsSummary({
+export function SectionsSummary({
   title,
   href,
   summarize,
@@ -61,11 +60,7 @@ export default function SectionsSummary({
         subtitle={
           <>
             {term}
-            {!summarize.gradeInfo && (
-              <>
-                <br /> {tGrades('no-data')}
-              </>
-            )}
+            {!summarize.gradeInfo && <Box>{tGrades('no-data')}</Box>}
           </>
         }
         gradeInfo={summarize.gradeInfo}

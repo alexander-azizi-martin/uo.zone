@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 export type Gradient = { color: string; offset: number }[];
 
-export default function useGradient(gradientData: Gradient) {
+export function useGradient(gradientData: Gradient) {
   const gradient = useMemo(() => {
     const gradientColors = gradientData
       .map(({ color, offset }) => `${color} ${offset}%`)

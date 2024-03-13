@@ -8,14 +8,14 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 import {
   GradeDistribution,
   GradeHistogram,
   GradeTendencies,
-} from '~/components/Grades';
-import { GradeInfo } from '~/lib/api';
+} from '~/components';
+import { type GradeInfo } from '~/lib/api';
 
 interface GradeSummaryProps {
   title?: ReactNode;
@@ -24,21 +24,21 @@ interface GradeSummaryProps {
   info?: ReactNode;
   gradeInfo?: GradeInfo;
   distributionSize?: 'sm' | 'md';
-  firstRender?: boolean;
+  ssr?: boolean;
 }
 
-export default function GradeSummary({
+export function GradeSummary({
   title,
   titleSize = 'lg',
   subtitle,
   info,
   gradeInfo,
   distributionSize = 'md',
-  firstRender = true,
+  ssr = true,
 }: GradeSummaryProps) {
   const tGrades = useTranslations('Grades');
   const [isLargerThan600] = useMediaQuery('(min-width: 650px)', {
-    ssr: firstRender || typeof window === 'undefined',
+    ssr,
     fallback: false,
   });
 
@@ -57,15 +57,25 @@ export default function GradeSummary({
     <HStack
       justify={'center'}
       width={'100%'}
+      height={'100%'}
       flexWrap={'wrap'}
-      alignItems={'start'}
+      alignItems={{
+        base: 'center',
+        lg: 'start',
+      }}
+      flexDir={{
+        base: 'column',
+        lg: 'row',
+      }}
     >
       <VStack
         align={'start'}
         flexGrow={1}
-        width={'50%'}
+        width={{
+          base: '100%',
+          lg: 'min-content',
+        }}
         justifyContent={'center'}
-        height={'100%'}
         spacing={0}
       >
         <Text fontSize={titleSize} fontWeight={'bold'} as={'div'}>
