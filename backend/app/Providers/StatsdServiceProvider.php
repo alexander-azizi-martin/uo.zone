@@ -13,24 +13,7 @@ class StatsdServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerStatsD();
-    }
-
-    /**
-     * Boot the service provider.
-     */
-    public function boot()
-    {
-    }
-
-    /**
-     * Register Statsd
-     *
-     * @return void
-     */
-    protected function registerStatsD()
-    {
-        $this->app->singleton(Statsd::class, function ($app) {
+        $this->app->singleton(Statsd::class, function () {
             $options = Arr::only(
                 config('statsd'),
                 ['host', 'port', 'namespace', 'timeout', 'throwConnectionExceptions']
@@ -38,5 +21,12 @@ class StatsdServiceProvider extends ServiceProvider
 
             return (new Statsd())->configure($options);
         });
+    }
+
+    /**
+     * Boot the service provider.
+     */
+    public function boot()
+    {
     }
 }

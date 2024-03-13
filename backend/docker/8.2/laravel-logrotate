@@ -1,5 +1,0 @@
-/var/www/html/storage/logs/*.log {
-    rotate 0
-    daily
-    missingok
-}

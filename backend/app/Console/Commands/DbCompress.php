@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
+use function Laravel\Prompts\spin;
 
 class DbCompress extends Command
 {
@@ -29,21 +30,33 @@ class DbCompress extends Command
         $archiveFilename = pathinfo($databaseFilename)['filename'].'.tar.xz';
         $archiveFilepath = database_path($archiveFilename);
 
-        $this->info('Compressing the database.');
+        if (! file_exists($databaseFilepath)) {
+            $this->error('The database file could not be found.');
 
-        $process = new Process([
-            'tar',
-            '-cJf',
-            $archiveFilepath,
-            $databaseFilepath,
-        ]);
-        $process->mustRun();
+            return;
+        }
+
+        spin(
+            function () use ($databaseFilepath, $archiveFilepath) {
+                $process = new Process([
+                    'tar',
+                    '-cJf',
+                    $archiveFilepath,
+                    $databaseFilepath,
+                ]);
+                $process->mustRun();
+            },
+            'Compressing the database.',
+        );
 
         if ($this->option('s3')) {
-            $this->info('Uploading the compressed database to s3.');
-
-            $archive_file = fopen($archiveFilepath, 'rb');
-            $success = Storage::disk('s3')->put($archiveFilename, $archive_file, 'public');
+            $success = spin(
+                function () use ($archiveFilename, $archiveFilepath) {
+                    $archive_file = fopen($archiveFilepath, 'rb');
+                    return Storage::disk('s3')->put($archiveFilename, $archive_file, 'public');
+                },
+                'Uploading the compressed database to s3.',
+            );
 
             if ($success) {
                 $this->info('Successfully uploaded the compressed database.');
