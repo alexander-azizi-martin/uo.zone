@@ -1,6 +1,6 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
-  chakra,
+  Box,
   HStack,
   Tab,
   TabList,
@@ -19,7 +19,6 @@ import {
   SurveySummary,
   Tooltip,
 } from '~/components';
-import { SurveyQuestionGraph } from '~/components/SurveyQuestionGraph';
 import { type CourseWithProfessors } from '~/lib/api';
 import { courseQuestions } from '~/lib/config';
 
@@ -29,6 +28,7 @@ interface CourseTabsProps {
 
 export function CourseTabs({ course }: CourseTabsProps) {
   const tCourse = useTranslations('Course');
+  const tGeneral = useTranslations('General');
 
   const [tab, setTab] = useQueryState(
     't',
@@ -36,7 +36,7 @@ export function CourseTabs({ course }: CourseTabsProps) {
       .withDefault('grades')
       .withOptions({ clearOnDefault: true })
   );
-  console.log(['grades', 'reviews', 'evaluations', 'graph'].indexOf(tab));
+
   return (
     <Tabs
       variant="enclosed"
@@ -44,17 +44,17 @@ export function CourseTabs({ course }: CourseTabsProps) {
       colorScheme="black"
       borderColor={'rgba(91,0,19,0.42)'}
       outline={'none'}
-      defaultIndex={['grades', 'reviews', 'evaluations', 'graph'].indexOf(tab)}
-      tabIndex={['grades', 'reviews', 'evaluations', 'graph'].indexOf(tab)}
+      defaultIndex={['grades', 'evaluations'].indexOf(tab)}
+      tabIndex={['grades', 'evaluations'].indexOf(tab)}
       onChange={(index) => {
-        setTab(['grades', 'reviews', 'evaluations', 'graph'][index] as any);
+        setTab(['grades', 'evaluations'][index] as any);
       }}
     >
       <TabList>
-        <Tab>Grades</Tab>
-        <Tab>Reviews</Tab>
-        <Tab>Course Evaluations</Tab>
-        <Tab>Graph</Tab>
+        <Tab>{tGeneral('grades')}</Tab>
+        {/* <Tab>Reviews</Tab> */}
+        <Tab>{tGeneral('course-evaluations')}</Tab>
+        {/* <Tab>Graph</Tab> */}
       </TabList>
 
       <TabPanels>
@@ -79,11 +79,11 @@ export function CourseTabs({ course }: CourseTabsProps) {
                       professor.name
                     ) : (
                       <HStack alignItems={'center'}>
-                        <chakra.span>
+                        <Box>
                           {tCourse('unknown-professor', {
                             count: professor.sections.length,
                           })}
-                        </chakra.span>
+                        </Box>
 
                         <Tooltip
                           label={tCourse('unknown-professor-info', {
@@ -108,31 +108,25 @@ export function CourseTabs({ course }: CourseTabsProps) {
               ))}
             </VStack>
           ) : (
-            <div>no grade data</div>
+            <Box>{tCourse('no-grade-data')}</Box>
           )}
         </TabPanel>
 
-        <TabPanel p={0} mt={6}>
+        {/* <TabPanel p={0} mt={6}>
           reviews
-        </TabPanel>
+        </TabPanel> */}
 
         <TabPanel p={0} mt={6}>
           {course.survey.length > 0 ? (
-            <>
-              <SurveySummary
-                survey={course.survey}
-                questions={courseQuestions}
-              />
-              <SurveyQuestionGraph surveyQuestion={course.survey[0]} />
-            </>
+            <SurveySummary survey={course.survey} questions={courseQuestions} />
           ) : (
-            <div>no survey data</div>
+            <Box>{tCourse('no-survey-data')}</Box>
           )}
         </TabPanel>
 
-        <TabPanel p={0} mt={6}>
+        {/* <TabPanel p={0} mt={6}>
           graph
-        </TabPanel>
+        </TabPanel> */}
       </TabPanels>
     </Tabs>
   );

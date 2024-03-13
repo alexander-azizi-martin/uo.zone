@@ -4,6 +4,8 @@
     "all-courses-for": "All Courses For {code}",
     "all-professors": "All Professors",
     "no-filter-match": "No course matches the filters.",
+    "no-grade-data": "No grade data.",
+    "no-survey-data": "No survey data.",
     "term": "{count} sections during {term}",
     "terms": "{count} sections from {start} to {stop}",
     "total-info": "This total also includes classes that they may not teach anymore.",
@@ -46,11 +48,15 @@
     "and": "and",
     "average": "Average",
     "code": "Code",
+    "components": "Components",
+    "course-evaluations": "Course Evaluations",
     "english": "English",
     "filter": "Filter",
     "french": "French",
+    "grades": "Grades",
     "median": "Median",
-    "mode": "Mode"
+    "mode": "Mode",
+    "requirements": "Requirements"
   },
   "Grades": {
     "mean": "{letter} Average ({value})",

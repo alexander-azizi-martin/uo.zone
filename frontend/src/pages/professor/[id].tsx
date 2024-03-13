@@ -15,6 +15,7 @@ import { getProfessor, type ProfessorWithCourses } from '~/lib/api';
 import { professorQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
 import { RmpRating } from '~/modules/professor/components';
+import { ProfessorTabs } from '~/modules/professor/components/ProfessorTabs';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
@@ -50,47 +51,7 @@ export default function Professor({ professor }: ProfessorProps) {
           </>
         )}
 
-        <VStack spacing={4} align={'start'} pb={4}>
-          {professor.survey.length > 0 && (
-            <SurveySummary
-              survey={professor.survey}
-              questions={professorQuestions}
-            />
-          )}
-
-          <Divider
-            orientation={'horizontal'}
-            style={{
-              borderColor: '#49080F',
-              borderBottomWidth: 1,
-              opacity: 0.15,
-            }}
-          />
-
-          {professor.gradeInfo && (
-            <SummaryCard>
-              <GradeSummary
-                gradeInfo={professor.gradeInfo}
-                title={tCourse('all-courses')}
-                titleSize={'3xl'}
-                info={
-                  <Text fontSize={'sm'} color={'gray.600'} mt={2}>
-                    {tCourse('total-info')}
-                  </Text>
-                }
-              />
-            </SummaryCard>
-          )}
-
-          {professor.courses.map((course) => (
-            <SectionsSummary
-              key={course.code}
-              title={course.title}
-              href={`/course/${course.code}`}
-              summarize={course}
-            />
-          ))}
-        </VStack>
+        <ProfessorTabs professor={professor} />
       </SearchNav>
     </Layout>
   );
