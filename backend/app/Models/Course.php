@@ -31,6 +31,14 @@ class Course extends Model
     ];
 
     /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
      * Get all of the course's sections.
      */
     public function sections(): HasMany
@@ -54,7 +62,7 @@ class Course extends Model
         return [
             'title' => $this->title->translations,
             'code' => $this->code,
-            'total_enrolled' => (int) ($this->grades->total ?? 0),
+            'total_enrolled' => (int) ($this->loadMissing('grades')->grades->total ?? 0),
             'languages' => $this->languages,
         ];
     }

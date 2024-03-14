@@ -21,6 +21,7 @@ services:
         volumes:
             - '.:/var/www/html'
             - '../static:/var/www/html/storage/static'
+            - '~/.ssh:/home/sail/.ssh'
         networks:
             - sail
         depends_on:

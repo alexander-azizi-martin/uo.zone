@@ -26,6 +26,14 @@ class Subject extends Model
     ];
 
     /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
      * Get all of the subject's courses.
      */
     public function courses(): HasMany
@@ -41,7 +49,7 @@ class Subject extends Model
         return [
             'subject' => $this->subject,
             'code' => $this->code,
-            'total_enrolled' => (int) ($this->grades->total ?? 0),
+            'total_enrolled' => (int) ($this->loadMissing('grades')->grades->total ?? 0),
         ];
     }
 }

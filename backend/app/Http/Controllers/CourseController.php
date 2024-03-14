@@ -6,7 +6,6 @@ use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -20,11 +19,14 @@ class CourseController extends Controller
         return response()->json(Cache::get('courses'));
     }
 
-    public function getCourse(string $code): CourseResource
+    public function getCourse(Course $course): CourseResource
     {
-        $course = Course::with(['sections' => ['professor' => ['rmpReview', 'grades'], 'grades'], 'survey', 'subject', 'grades'])
-            ->where('code', Str::lower($code))
-            ->firstOrFail();
+        $course->load([
+            'sections' => ['professor' => ['rmpReview', 'grades'], 'grades'],
+            'survey',
+            'subject',
+            'grades',
+        ]);
 
         return (new CourseResource($course))->withProfessors();
     }

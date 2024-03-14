@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProfessorResource;
 use App\Models\Professor;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -20,15 +19,14 @@ class ProfessorController extends Controller
         return response()->json(Cache::get('professors'));
     }
 
-    public function getProfessor(string $id): ProfessorResource
+    public function getProfessor(Professor $professor): ProfessorResource
     {
-        if (intval($id) === 0) {
-            throw (new ModelNotFoundException())->setModel(Professor::class, $id);
-        }
-
-        $professor = Professor::with(
-            ['sections' => ['course', 'grades'], 'survey', 'rmpReview', 'grades']
-        )->findOrFail($id);
+        $professor->load([
+            'sections' => ['course', 'grades'],
+            'survey',
+            'rmpReview',
+            'grades',
+        ]);
 
         return (new ProfessorResource($professor))->withCourses();
     }

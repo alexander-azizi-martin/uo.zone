@@ -42,7 +42,7 @@ class Professor extends Model
     {
         return [
             'name' => $this->name,
-            'total_enrolled' => (int) ($this->grades->total ?? 0),
+            'total_enrolled' => (int) ($this->loadMissing('grades')->grades->total ?? 0),
         ];
     }
 

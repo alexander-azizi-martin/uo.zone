@@ -50,14 +50,14 @@ export async function getProfessor(id: string, lang: string = 'en') {
 }
 
 export async function getSubject(code: string, lang: string = 'en') {
-  const url = urlJoin(API_URL, 'subjects', code);
+  const url = urlJoin(API_URL, 'subjects', code.toLowerCase());
   return await fetchData<SubjectWithCourses>(url, {
     headers: { 'Accept-Language': lang },
   });
 }
 
 export async function getSubjectCourses(code: string, lang: string = 'en') {
-  const url = urlJoin(API_URL, 'subjects', code, 'courses');
+  const url = urlJoin(API_URL, 'subjects', code.toLowerCase(), 'courses');
   return await fetchData<Course[]>(url, {
     headers: { 'Accept-Language': lang },
   });
