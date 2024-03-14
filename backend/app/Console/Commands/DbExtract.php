@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
+
 use function Laravel\Prompts\spin;
 
 class DbExtract extends Command
@@ -32,16 +33,18 @@ class DbExtract extends Command
 
         if (! is_null($this->option('file'))) {
             $success = spin(
-                function() use ($archiveFilename) {
+                function () use ($archiveFilename) {
                     $compressed_file = fopen($this->option('file'), 'rb');
+
                     return Storage::disk('database')->put($archiveFilename, $compressed_file);
                 },
                 "Downloading the compressed database from {$this->option('file')}."
             );
         } elseif ($this->option('s3')) {
             $success = spin(
-                function() use ($archiveFilename) {
+                function () use ($archiveFilename) {
                     $compressed_file = Storage::disk('s3')->readStream($archiveFilename);
+
                     return Storage::disk('database')->put($archiveFilename, $compressed_file);
                 },
                 'Downloading the database from s3.'
@@ -63,7 +66,7 @@ class DbExtract extends Command
         }
 
         spin(
-            function() use ($archiveFilepath) {
+            function () use ($archiveFilepath) {
                 $numPathComponents = str($archiveFilepath)->explode('/')->count() - 2;
                 $process = new Process([
                     'tar',

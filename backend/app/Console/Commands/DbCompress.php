@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
+
 use function Laravel\Prompts\spin;
 
 class DbCompress extends Command
@@ -53,6 +54,7 @@ class DbCompress extends Command
             $success = spin(
                 function () use ($archiveFilename, $archiveFilepath) {
                     $archive_file = fopen($archiveFilepath, 'rb');
+
                     return Storage::disk('s3')->put($archiveFilename, $archive_file, 'public');
                 },
                 'Uploading the compressed database to s3.',
