@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading();
+        Model::preventLazyLoading(! $this->app->runningInConsole());
         JsonResource::withoutWrapping();
 
         RateLimiter::for('api', function (Request $request) {

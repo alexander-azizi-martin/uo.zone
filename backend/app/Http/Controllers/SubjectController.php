@@ -7,6 +7,7 @@ use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class SubjectController extends Controller
 {
@@ -20,17 +21,19 @@ class SubjectController extends Controller
         return response()->json(Cache::get('subjects'));
     }
 
-    public function getSubject(Subject $subject)
+    public function getSubject(string $code)
     {
-        $subject->load('grades');
-        $subject->loadCount('courses');
+        $subject = Subject::with('grades')->withCount('courses')->firstWhere(['code' => Str::lower($code)]);
+        // $subject->load('grades');
+        // $subject->loadCount('courses');
 
         return new SubjectResource($subject);
     }
 
-    public function getSubjectCourses(Subject $subject)
+    public function getSubjectCourses(string $code)
     {
-        $subject->load(['courses' => ['grades']]);
+        $subject = Subject::with(['courses' => ['grades']])->firstWhere(['code' => Str::lower($code)]);
+        // $subject->load(['courses' => ['grades']]);
 
         return CourseResource::collection($subject->courses);
     }
