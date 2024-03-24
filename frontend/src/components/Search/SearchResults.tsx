@@ -1,8 +1,9 @@
 import { Heading, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
-import { type RefObject, useEffect, useRef } from 'react';
+import { type RefObject } from 'react';
 
 import { LinkCard } from '~/components';
+import { useSearchNavigation } from '~/hooks';
 import {
   type CourseResult,
   type ProfessorResult,
@@ -15,91 +16,14 @@ interface SearchResultsProps {
   searchBar?: RefObject<HTMLInputElement>;
 }
 
-export function SearchResults(props: SearchResultsProps) {
-  const selectedResult = useRef<number>();
-  const lastSelectionPos = useRef<number>();
-
-  useEffect(() => {
-    const resultNodes =
-      document.querySelectorAll<HTMLElement>('.search-result');
-
-    selectedResult.current = undefined;
-    const handleKeyPress = (event: KeyboardEvent) => {
-      let resultMoved = false;
-
-      if (resultNodes.length > 0) {
-        if (event.key === 'ArrowDown') {
-          if (selectedResult.current === undefined) {
-            selectedResult.current = 0;
-          } else if (selectedResult.current + 1 < resultNodes.length) {
-            selectedResult.current++;
-          }
-
-          if (props?.searchBar?.current) {
-            lastSelectionPos.current =
-              props.searchBar.current.selectionStart ?? undefined;
-          }
-
-          resultMoved = true;
-        } else if (
-          event.key === 'ArrowUp' &&
-          selectedResult.current !== undefined
-        ) {
-          if (selectedResult.current - 1 >= 0) {
-            selectedResult.current--;
-            resultMoved = true;
-          } else {
-            selectedResult.current = undefined;
-            props.searchBar?.current?.focus();
-
-            requestAnimationFrame(() => {
-              if (props?.searchBar?.current && lastSelectionPos.current) {
-                props.searchBar.current.setSelectionRange(
-                  lastSelectionPos.current,
-                  lastSelectionPos.current
-                );
-              }
-            });
-          }
-        }
-      }
-
-      if (resultMoved) {
-        event.preventDefault();
-
-        const resultNode = resultNodes[selectedResult.current as number];
-        const resultNodeRect = resultNode.getBoundingClientRect();
-        resultNode.focus();
-
-        window.scrollTo({
-          top:
-            resultNodeRect.top +
-            resultNodeRect.height / 2 +
-            window.scrollY -
-            window.innerHeight / 2,
-        });
-      }
-
-      if (
-        event.key !== 'ArrowDown' &&
-        event.key !== 'ArrowUp' &&
-        event.key !== 'Enter'
-      ) {
-        props.searchBar?.current?.focus();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyPress);
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [props.results, props.searchBar]);
+export function SearchResults({ results, searchBar }: SearchResultsProps) {
+  useSearchNavigation(searchBar?.current);
 
   return (
     <>
-      <Subjects subjects={props.results.subjects} />
-      <Courses courses={props.results.courses} />
-      <Professors professors={props.results.professors} />
+      <Subjects subjects={results.subjects} />
+      <Courses courses={results.courses} />
+      <Professors professors={results.professors} />
     </>
   );
 }
