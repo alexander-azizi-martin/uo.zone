@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'axiom' => [
+        'token' => env('AXIOM_TOKEN'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
