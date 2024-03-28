@@ -1,10 +1,11 @@
 <?php
 
+use App\Actions\ConfigureExceptions;
+use App\Http\Middleware\ReportMetrics;
+use App\Http\Middleware\ValidateLanguage;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,14 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->throttleWithRedis();
         $middleware->prependToGroup('api', 'throttle:api');
+        $middleware->appendToGroup('api', ValidateLanguage::class);
+        $middleware->append(ReportMetrics::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (HttpException $e, Request $request) {
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'error' => $e->getMessage(),
-                    'code' => $e->getStatusCode(),
-                ], $e->getStatusCode());
-            }
-        });
+        (new ConfigureExceptions)($exceptions);
     })->create();

@@ -16,6 +16,7 @@ return [
 
     'axiom' => [
         'token' => env('AXIOM_TOKEN'),
+        'dataset' => env('AXIOM_DATASET'),
     ],
 
     'postmark' => [
