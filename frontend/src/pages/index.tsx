@@ -69,11 +69,11 @@ export default function Home() {
               }}
             >
               <Image
-                pt={[10, 10, 0]}
+                pt={[20, 20, 0]}
                 pb={[5, 5, 0]}
                 src={'geegee.svg'}
                 alt={'Geegee'}
-                width={['400px', '400px', '500px']}
+                width={['280px', '300px', '500px']}
               />
             </Collapse>
           </Box>
