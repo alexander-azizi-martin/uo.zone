@@ -5,5 +5,5 @@ export * from './Grades';
 export * from './Layout';
 export * from './Search';
 export * from './SectionsSummary';
-export * from './SurveySummary';
+export * from './SurveyQuestionHistogram';
 export * from './Tooltip';

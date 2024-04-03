@@ -18,6 +18,7 @@
     "elkjs": "^0.8.2",
     "framer-motion": "^10.16.4",
     "lodash.debounce": "^4.0.8",
+    "lucide-react": "^0.364.0",
     "markdown-to-jsx": "^7.4.5",
     "next": "latest",
     "next-axiom": "0.18.0",

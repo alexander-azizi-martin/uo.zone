@@ -56,6 +56,7 @@
     "grades": "Notes",
     "median": "Médian",
     "mode": "Mode",
+    "responses": "réponses",
     "requirements": "Exigences"
   },
   "Grades": {
@@ -81,39 +82,39 @@
   "Survey": {
     "activities": {
       "info": "Activités",
-      "tooltip": "Les devoirs et/ou les examens reflètent fidèlement ce qui a été abordé dans le cours. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Les devoirs et/ou les examens reflètent fidèlement ce qui a été abordé dans le cours."
     },
     "availability": {
       "info": "Disponibilité",
-      "tooltip": "Le professeur est disponible pour répondre aux questions en dehors des cours. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Le professeur est disponible pour répondre aux questions en dehors des cours."
     },
     "communication": {
       "info": "Communication",
-      "tooltip": "Le professeur transmet efficacement le sujet. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Le professeur transmet efficacement le sujet."
     },
     "expectations": {
       "info": "Attentes",
-      "tooltip": "Les attentes en matière de cours sont clairement expliquées. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Les attentes en matière de cours sont clairement expliquées."
     },
     "feedback": {
       "info": "Commentaire",
-      "tooltip": "Les commentaires du professeur contribuent à mon apprentissage. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Les commentaires du professeur contribuent à mon apprentissage."
     },
     "instructions": {
       "info": "Instructions",
-      "tooltip": "Les instructions du professeur pour les devoirs sont claires. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Les instructions du professeur pour les devoirs sont claires."
     },
     "learning": {
       "info": "Apprentissage",
-      "tooltip": "Les étudiants ont beaucoup appris dans ce cours. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Les étudiants ont beaucoup appris dans ce cours."
     },
     "teacher": {
       "info": "Enseignant",
-      "tooltip": "Le professeur en tant qu'enseignant est bon. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Le professeur en tant qu'enseignant est bon."
     },
     "organized": {
       "info": "Organisé",
-      "tooltip": "Le cours est bien organisé. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Le cours est bien organisé."
     },
     "overall": {
       "info": "Total",
@@ -121,19 +122,19 @@
     },
     "prepared": {
       "info": "Préparé",
-      "tooltip": "Le professeur est bien préparé pour le cours. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Le professeur est bien préparé pour le cours."
     },
     "recommend": {
       "info": "Recommander",
-      "tooltip": "Je recommanderais ce cours à un autre étudiant. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Je recommanderais ce cours à un autre étudiant."
     },
     "respect": {
       "info": "Respect",
-      "tooltip": "Le professeur fait preuve de respect envers les étudiants. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "Le professeur fait preuve de respect envers les étudiants."
     },
     "workload": {
       "info": "Charge de travail",
-      "tooltip": "La charge de travail pour le cours est raisonnable. ({responses} réponses de l'enquête sur le cours)"
+      "tooltip": "La charge de travail pour le cours est raisonnable."
     }
   }
 }

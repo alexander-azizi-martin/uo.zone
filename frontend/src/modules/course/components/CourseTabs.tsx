@@ -1,6 +1,7 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Flex,
   HStack,
   Tab,
   TabList,
@@ -16,10 +17,10 @@ import {
   GradeSummary,
   SectionsSummary,
   SummaryCard,
-  SurveySummary,
+  SurveyQuestionHistogram,
   Tooltip,
 } from '~/components';
-import { type CourseWithProfessors } from '~/lib/api';
+import { type CourseWithProfessors,type SurveyQuestion } from '~/lib/api';
 import { courseQuestions } from '~/lib/config';
 
 interface CourseTabsProps {
@@ -29,6 +30,7 @@ interface CourseTabsProps {
 export function CourseTabs({ course }: CourseTabsProps) {
   const tCourse = useTranslations('Course');
   const tGeneral = useTranslations('General');
+  const tSurvey = useTranslations('Survey');
 
   const [tab, setTab] = useQueryState(
     't',
@@ -118,7 +120,25 @@ export function CourseTabs({ course }: CourseTabsProps) {
 
         <TabPanel p={0} mt={6}>
           {course.survey.length > 0 ? (
-            <SurveySummary survey={course.survey} questions={courseQuestions} />
+            <Flex
+              gap={[4, 4, 4, 8]}
+              justify={'center'}
+              width={'100%'}
+              wrap={'wrap'}
+            >
+              {Object.entries(courseQuestions).map(([question, name]) => (
+                <SurveyQuestionHistogram
+                  key={name}
+                  title={tSurvey(`${name}.info`)}
+                  tooltip={tSurvey(`${name}.tooltip`)}
+                  surveyQuestion={
+                    course.survey.find(
+                      (survey) => survey.question === question
+                    ) as SurveyQuestion
+                  }
+                />
+              ))}
+            </Flex>
           ) : (
             <Box>{tCourse('no-survey-data')}</Box>
           )}

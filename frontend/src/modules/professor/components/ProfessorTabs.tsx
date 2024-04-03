@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Tab,
   TabList,
   TabPanel,
@@ -15,9 +16,9 @@ import {
   GradeSummary,
   SectionsSummary,
   SummaryCard,
-  SurveySummary,
+  SurveyQuestionHistogram,
 } from '~/components';
-import { type ProfessorWithCourses } from '~/lib/api';
+import { type ProfessorWithCourses,type SurveyQuestion } from '~/lib/api';
 import { professorQuestions } from '~/lib/config';
 
 interface ProfessorTabsProps {
@@ -27,6 +28,7 @@ interface ProfessorTabsProps {
 export function ProfessorTabs({ professor }: ProfessorTabsProps) {
   const tCourse = useTranslations('Course');
   const tGeneral = useTranslations('General');
+  const tSurvey = useTranslations('Survey');
 
   const [tab, setTab] = useQueryState(
     't',
@@ -88,10 +90,25 @@ export function ProfessorTabs({ professor }: ProfessorTabsProps) {
 
         <TabPanel p={0} mt={6}>
           {professor.survey.length > 0 ? (
-            <SurveySummary
-              survey={professor.survey}
-              questions={professorQuestions}
-            />
+            <Flex
+              gap={[4, 4, 4, 8]}
+              justify={'center'}
+              width={'100%'}
+              wrap={'wrap'}
+            >
+              {Object.entries(professorQuestions).map(([question, name]) => (
+                <SurveyQuestionHistogram
+                  key={name}
+                  title={tSurvey(`${name}.info`)}
+                  tooltip={tSurvey(`${name}.tooltip`)}
+                  surveyQuestion={
+                    professor.survey.find(
+                      (survey) => survey.question === question
+                    ) as SurveyQuestion
+                  }
+                />
+              ))}
+            </Flex>
           ) : (
             <Box>{tCourse('no-survey-data')}</Box>
           )}

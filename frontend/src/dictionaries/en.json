@@ -56,6 +56,7 @@
     "grades": "Grades",
     "median": "Median",
     "mode": "Mode",
+    "responses": "responses",
     "requirements": "Requirements"
   },
   "Grades": {
@@ -81,39 +82,39 @@
   "Survey": {
     "activities": {
       "info": "Activities",
-      "tooltip": "Assignments and/or exams closely reflect what was covered in the course. ({responses} course survey responses)"
+      "tooltip": "Assignments and/or exams closely reflect what was covered in the course."
     },
     "availability": {
       "info": "Availability",
-      "tooltip": "The professor is available to address questions outside of class. ({responses} course survey responses)"
+      "tooltip": "The professor is available to address questions outside of class."
     },
     "communication": {
       "info": "Communication",
-      "tooltip": "The professor conveys subject matter effectively. ({responses} course survey responses)"
+      "tooltip": "The professor conveys subject matter effectively."
     },
     "expectations": {
       "info": "Expectations",
-      "tooltip": "Course expectations are clearly explained. ({responses} course survey responses)"
+      "tooltip": "Course expectations are clearly explained."
     },
     "feedback": {
       "info": "Feedback",
-      "tooltip": "The professor's feedback contributes to my learning. ({responses} course survey responses)"
+      "tooltip": "The professor's feedback contributes to my learning."
     },
     "instructions": {
       "info": "Instructions",
-      "tooltip": "The professor's instructions for assignments are clear. ({responses} course survey responses)"
+      "tooltip": "The professor's instructions for assignments are clear."
     },
     "learning": {
       "info": "Learning",
-      "tooltip": "Students learned a lot in this course. ({responses} course survey responses)"
+      "tooltip": "Students learned a lot in this course."
     },
     "teacher": {
       "info": "Teacher",
-      "tooltip": "The professor as a teacher is good. ({responses} course survey responses)"
+      "tooltip": "The professor as a teacher is good."
     },
     "organized": {
       "info": "Organized",
-      "tooltip": "The course is well organized. ({responses} course survey responses)"
+      "tooltip": "The course is well organized."
     },
     "overall": {
       "info": "Overall",
@@ -121,19 +122,19 @@
     },
     "prepared": {
       "info": "Prepared",
-      "tooltip": "The professor is well prepared for class. ({responses} course survey responses)"
+      "tooltip": "The professor is well prepared for class."
     },
     "recommend": {
       "info": "Recommend",
-      "tooltip": "I would recommend this course to another student. ({responses} course survey responses)"
+      "tooltip": "I would recommend this course to another student."
     },
     "respect": {
       "info": "Respect",
-      "tooltip": "The professor shows respect towards students. ({responses} course survey responses)"
+      "tooltip": "The professor shows respect towards students."
     },
     "workload": {
       "info": "Workload",
-      "tooltip": "The workload for the course is reasonable. ({responses} course survey responses)"
+      "tooltip": "The workload for the course is reasonable."
     }
   }
 }

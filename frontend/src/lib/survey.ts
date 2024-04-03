@@ -30,54 +30,16 @@ export default class Survey {
     'very heavy': 1,
   };
 
-  _question: { [question: string]: SurveyQuestion };
-  _numQuestions: number;
-
-  constructor(survey: SurveyQuestion[]) {
-    this._question = {};
-    this._numQuestions = survey.length;
-
-    for (let question of survey) {
-      this._question[question.question] = question;
-    }
-  }
-
   /**
-   * Checks whether one of the surveys has the given question.
+   * Calculates the average response out of 5 for the given
+   * survey question.
    */
-  has(question: string): boolean {
-    return question in this._question;
-  }
-
-  /**
-   * Gets the number of questions in the survey.
-   */
-  numQuestions() {
-    return this._numQuestions;
-  }
-
-  /**
-   * Gets the total number of responses for the given question.
-   */
-  totalResponses(question: string): number {
-    let responses = 0;
-    for (let option in this._question[question]?.options) {
-      if (option in Survey.RESPONSE_VALUES) {
-        responses += this._question[question].options[option];
-      }
-    }
-    return responses;
-  }
-
-  /**
-   * Calculates the average response out of 5 for the given question.
-   */
-  score(question: string): number {
+  static score(question: SurveyQuestion) {
     let totalValue = 0;
     let totalResponses = 0;
-    for (let option in this._question[question]?.options) {
+    for (let option in question.options) {
       if (option in Survey.RESPONSE_VALUES) {
-        let numResponses = this._question[question].options[option];
+        let numResponses = question.options[option];
 
         totalValue += Survey.RESPONSE_VALUES[option] * numResponses;
         totalResponses += numResponses;
@@ -86,24 +48,5 @@ export default class Survey {
 
     if (totalResponses === 0) return NaN;
     return totalValue / totalResponses;
-  }
-
-  /**
-   * Calculated the average score of the given questions.
-   */
-  averageScore(questions: string[]): number {
-    let totalScore = 0;
-    let numQuestions = 0;
-    for (let question of questions) {
-      let score = this.score(question);
-
-      if (!Number.isNaN(score)) {
-        totalScore += this.score(question);
-        numQuestions++;
-      }
-    }
-
-    if (numQuestions === 0) return NaN;
-    return totalScore / numQuestions;
   }
 }
