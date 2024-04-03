@@ -15,7 +15,7 @@ export function useNProgress() {
 
     const handleRouteChangeStart = (url: string) => {
       routeChanged.current =
-        removeQueryString(url) !== removeQueryString(router.asPath);
+        removeQueryString(url) !== removeQueryString(window.location.pathname);
       if (routeChanged.current) {
         NProgress.start();
       }
