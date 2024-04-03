@@ -36,7 +36,11 @@ export function SurveyQuestionHistogram({
       <Flex pb={6} justify={'space-between'}>
         <Box>
           <Flex align={'center'}>
-            <Text fontSize={'3xl'} fontWeight={'bold'} lineHeight={'36px'}>
+            <Text
+              fontSize={['2xl', '4xl', '5xl']}
+              fontWeight={'bold'}
+              lineHeight={'36px'}
+            >
               {title}
             </Text>
 
@@ -53,10 +57,10 @@ export function SurveyQuestionHistogram({
         </Box>
 
         <HStack alignItems={'start'}>
-          <Heading m={0} color={'black'} fontSize={'5xl'}>
+          <Heading m={0} color={'black'} fontSize={['3xl', '4xl', '5xl']}>
             {score.toFixed(2)}
           </Heading>
-          <Heading fontSize={'xl'} color={'black'} pt={2}>
+          <Heading fontSize={['md', 'lg', 'xl']} color={'black'} pt={2}>
             / 5
           </Heading>
         </HStack>

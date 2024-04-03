@@ -21,16 +21,18 @@ export function CourseInfo({ course }: CourseInfoProps) {
       </Text>
 
       {course.components.length > 0 && (
-        <HStack>
+        <HStack align={'start'}>
           <Text fontWeight={'bold'} fontSize={'sm'}>
             {tGeneral('components')}:
           </Text>
 
-          {course.components.map((component) => (
-            <Tag size={'sm'} key={component}>
-              {component}
-            </Tag>
-          ))}
+          <HStack flexWrap={'wrap'}>
+            {course.components.map((component) => (
+              <Tag size={'sm'} key={component} width={'max-content'}>
+                {component}
+              </Tag>
+            ))}
+          </HStack>
         </HStack>
       )}
       {course.requirements && (
