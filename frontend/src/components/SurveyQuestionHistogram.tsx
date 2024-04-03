@@ -37,7 +37,7 @@ export function SurveyQuestionHistogram({
         <Box>
           <Flex align={'center'}>
             <Text
-              fontSize={['2xl', '4xl', '5xl']}
+              fontSize={['2xl', '3xl', '3xl']}
               fontWeight={'bold'}
               lineHeight={'36px'}
             >
