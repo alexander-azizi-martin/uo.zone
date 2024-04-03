@@ -18,7 +18,7 @@ import {
   SummaryCard,
   SurveyQuestionHistogram,
 } from '~/components';
-import { type ProfessorWithCourses,type SurveyQuestion } from '~/lib/api';
+import { type ProfessorWithCourses, type SurveyQuestion } from '~/lib/api';
 import { professorQuestions } from '~/lib/config';
 
 interface ProfessorTabsProps {
@@ -96,18 +96,22 @@ export function ProfessorTabs({ professor }: ProfessorTabsProps) {
               width={'100%'}
               wrap={'wrap'}
             >
-              {Object.entries(professorQuestions).map(([question, name]) => (
-                <SurveyQuestionHistogram
-                  key={name}
-                  title={tSurvey(`${name}.info`)}
-                  tooltip={tSurvey(`${name}.tooltip`)}
-                  surveyQuestion={
-                    professor.survey.find(
-                      (survey) => survey.question === question
-                    ) as SurveyQuestion
-                  }
-                />
-              ))}
+              {Object.entries(professorQuestions).map(([question, name]) => {
+                const surveyQuestion = professor.survey.find(
+                  (survey) => survey.question === question
+                );
+
+                if (surveyQuestion === undefined) return null;
+
+                return (
+                  <SurveyQuestionHistogram
+                    key={name}
+                    title={tSurvey(`${name}.info`)}
+                    tooltip={tSurvey(`${name}.tooltip`)}
+                    surveyQuestion={surveyQuestion}
+                  />
+                );
+              })}
             </Flex>
           ) : (
             <Box>{tCourse('no-survey-data')}</Box>
