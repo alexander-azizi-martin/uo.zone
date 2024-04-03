@@ -26,4 +26,14 @@ export default extendTheme({
       },
     },
   },
+  styles: {
+    global: {
+      '#nprogress .bar': {
+        background: '#8f001a !important',
+      },
+      '#nprogress .peg': {
+        boxShadow: '0 0 10px #8f001a, 0 0 5px #8f001a',
+      },
+    },
+  },
 });

@@ -1,13 +1,16 @@
+import 'nprogress/nprogress.css';
+
 import { ChakraProvider } from '@chakra-ui/provider';
 import { type AppProps } from 'next/app';
 import { NextIntlClientProvider } from 'next-intl';
 
 import { ErrorBoundary } from '~/components';
-import { usePreserveScroll } from '~/hooks';
+import { useNProgress, usePreserveScroll } from '~/hooks';
 import theme from '~/lib/theme';
 
 export default function App({ Component, pageProps }: AppProps) {
   usePreserveScroll();
+  useNProgress();
 
   return (
     <NextIntlClientProvider messages={pageProps.messages}>

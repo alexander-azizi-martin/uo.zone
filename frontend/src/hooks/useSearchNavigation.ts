@@ -10,7 +10,7 @@ export function useSearchNavigation(
     const resultNodes =
       document.querySelectorAll<HTMLElement>('.search-result');
 
-    const focusedSelected = () => {
+    const focusSelected = () => {
       const resultNode = resultNodes[selectedIndex.current];
       const resultNodeRect = resultNode.getBoundingClientRect();
       resultNode.focus();
@@ -45,13 +45,12 @@ export function useSearchNavigation(
     const handleKeyPress = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowUp':
-          if (selectedIndex.current > 0) {
-            selectedIndex.current -= 1;
-            focusedSelected();
-            event.preventDefault();
-          } else if (selectedIndex.current === 0) {
-            selectedIndex.current -= 1;
+          if (selectedIndex.current === 0) {
             focusSearchbar(true);
+          } else if (selectedIndex.current > 0) {
+            selectedIndex.current -= 1;
+            focusSelected();
+            event.preventDefault();
           }
 
           break;
@@ -61,13 +60,13 @@ export function useSearchNavigation(
           }
           if (resultNodes.length > selectedIndex.current + 1) {
             selectedIndex.current += 1;
-            focusedSelected();
+            focusSelected();
             event.preventDefault();
           }
 
           break;
         default:
-          if (selectedIndex.current >= 0) {
+          if (selectedIndex.current >= 0 && event.key !== 'Enter') {
             focusSearchbar(false);
           }
 

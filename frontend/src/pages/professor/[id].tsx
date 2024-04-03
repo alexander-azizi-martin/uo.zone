@@ -1,18 +1,13 @@
-import { Divider, Heading, Stack, Tag, Text, VStack } from '@chakra-ui/react';
+import { Heading, Stack, Tag, Text } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 
 import {
   ExternalLink,
-  GradeSummary,
   Layout,
   SearchNav,
-  SectionsSummary,
-  SummaryCard,
-  SurveySummary,
 } from '~/components';
 import { getProfessor, type ProfessorWithCourses } from '~/lib/api';
-import { professorQuestions } from '~/lib/config';
 import { getDictionary } from '~/lib/dictionary';
 import { RmpRating } from '~/modules/professor/components';
 import { ProfessorTabs } from '~/modules/professor/components/ProfessorTabs';

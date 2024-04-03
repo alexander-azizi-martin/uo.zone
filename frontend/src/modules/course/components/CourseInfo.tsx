@@ -1,6 +1,6 @@
 import { HStack, Tag, Text, VStack } from '@chakra-ui/react';
+import Markdown from 'markdown-to-jsx';
 import { useTranslations } from 'next-intl';
-import Markdown from 'react-markdown';
 
 import { type Course } from '~/lib/api';
 import { CourseLink } from '~/modules/course/components';
@@ -15,7 +15,9 @@ export function CourseInfo({ course }: CourseInfoProps) {
   return (
     <VStack my={6} spacing={4} align={'start'}>
       <Text fontSize={'md'} as="div">
-        <Markdown components={{ a: CourseLink }}>{course.description}</Markdown>
+        <Markdown options={{ overrides: { a: CourseLink } }}>
+          {course.description}
+        </Markdown>
       </Text>
 
       {course.components.length > 0 && (
@@ -37,8 +39,8 @@ export function CourseInfo({ course }: CourseInfoProps) {
             {tGeneral('requirements')}:
           </Text>
           <Text fontSize={'sm'} as={'div'}>
-            <Markdown components={{ a: CourseLink }}>
-              {course.requirements}
+            <Markdown options={{ overrides: { a: CourseLink } }}>
+              {course.description}
             </Markdown>
           </Text>
         </HStack>

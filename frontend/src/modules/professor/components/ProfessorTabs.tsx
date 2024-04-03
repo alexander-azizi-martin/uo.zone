@@ -16,7 +16,6 @@ import {
   SectionsSummary,
   SummaryCard,
   SurveySummary,
-  Tooltip,
 } from '~/components';
 import { type ProfessorWithCourses } from '~/lib/api';
 import { professorQuestions } from '~/lib/config';

@@ -73,7 +73,7 @@ export default function Home() {
                 pb={[5, 5, 0]}
                 src={'geegee.svg'}
                 alt={'Geegee'}
-                width={['280px', '300px', '500px']}
+                width={['250px', '300px', '500px']}
               />
             </Collapse>
           </Box>
