@@ -24,7 +24,7 @@ class Professor extends Model
      */
     public function sections(): HasMany
     {
-        return $this->HasMany(CourseSection::class);
+        return $this->hasMany(CourseSection::class);
     }
 
     /**

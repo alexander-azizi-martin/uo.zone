@@ -38,7 +38,7 @@ class Subject extends Model
      */
     public function courses(): HasMany
     {
-        return $this->HasMany(Course::class);
+        return $this->hasMany(Course::class);
     }
 
     /**

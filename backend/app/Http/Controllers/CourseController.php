@@ -26,6 +26,8 @@ class CourseController extends Controller
             'survey',
             'subject',
             'grades',
+            'frenchEquivalent',
+            'englishEquivalent',
         ]);
 
         return (new CourseResource($course))->withProfessors();

@@ -27,6 +27,12 @@ class CourseResource extends JsonResource
             'languages' => $this->whenHas('languages', function () {
                 return collect($this->languages)->filter()->keys();
             }),
+            'englishEquivalent' => $this->whenLoaded('englishEquivalent', function () {
+                return $this->englishEquivalent->code;
+            }),
+            'frenchEquivalent' => $this->whenLoaded('frenchEquivalent', function () {
+                return $this->frenchEquivalent->code;
+            }),
             'gradeInfo' => $this->whenLoaded('grades', function () {
                 return isset($this->grades) ? new GradesResource($this->grades) : null;
             }),

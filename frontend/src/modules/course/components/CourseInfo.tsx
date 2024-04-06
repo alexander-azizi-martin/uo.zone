@@ -42,8 +42,36 @@ export function CourseInfo({ course }: CourseInfoProps) {
           </Text>
           <Text fontSize={'sm'} as={'div'}>
             <Markdown options={{ overrides: { a: CourseLink } }}>
-              {course.description}
+              {course.requirements}
             </Markdown>
+          </Text>
+        </HStack>
+      )}
+      {course.englishEquivalent && (
+        <HStack>
+          <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
+            {tGeneral('english-equivalent')}:
+          </Text>
+          <Text fontSize={'sm'} as={'div'}>
+            <CourseLink href={`/course/${course.englishEquivalent}`}>
+              {course.englishEquivalent.slice(0, 3).toUpperCase() +
+                ' ' +
+                course.englishEquivalent.slice(3)}
+            </CourseLink>
+          </Text>
+        </HStack>
+      )}
+      {course.frenchEquivalent && (
+        <HStack>
+          <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
+            {tGeneral('french-equivalent')}:
+          </Text>
+          <Text fontSize={'sm'} as={'div'}>
+            <CourseLink href={`/course/${course.frenchEquivalent}`}>
+              {course.frenchEquivalent.slice(0, 3).toUpperCase() +
+                ' ' +
+                course.frenchEquivalent.slice(3)}
+            </CourseLink>
           </Text>
         </HStack>
       )}

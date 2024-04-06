@@ -43,7 +43,7 @@ class Course extends Model
      */
     public function sections(): HasMany
     {
-        return $this->HasMany(CourseSection::class);
+        return $this->hasMany(CourseSection::class);
     }
 
     /**
@@ -51,7 +51,23 @@ class Course extends Model
      */
     public function subject(): BelongsTo
     {
-        return $this->BelongsTo(Subject::class);
+        return $this->belongsTo(Subject::class);
+    }
+
+    /**
+     * Get the course's english equivalent.
+     */
+    public function englishEquivalent(): BelongsTo
+    {
+        return $this->belongsTo(Course::class, 'en_equivalent_id');
+    }
+
+    /**
+     * Get the course's french equivalent.
+     */
+    public function frenchEquivalent(): BelongsTo
+    {
+        return $this->belongsTo(Course::class, 'fr_equivalent_id');
     }
 
     /**
@@ -59,11 +75,15 @@ class Course extends Model
      */
     public function toSearchableArray(): array
     {
+        $this->loadMissing(['grades', 'englishEquivalent', 'frenchEquivalent']);
+
         return [
             'title' => $this->title->translations,
             'code' => $this->code,
-            'total_enrolled' => (int) ($this->loadMissing('grades')->grades->total ?? 0),
+            'total_enrolled' => (int) ($this->grades->total ?? 0),
             'languages' => $this->languages,
+            'english_equivalent_title' => $this->englishEquivalent->title->translations ?? null,
+            'french_equivalent_title' => $this->frenchEquivalent->title->translations ?? null,
         ];
     }
 }

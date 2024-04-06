@@ -161,7 +161,12 @@ return [
                     }),
                     'total_enrolled',
                 ],
-                'searchableAttributes' => ['code', 'title'],
+                'searchableAttributes' => [
+                    'code',
+                    'title',
+                    'english_equivalent_title',
+                    'french_equivalent_title',
+                ],
             ],
             Professor::class => [
                 'displayedAttributes' => ['id', 'name'],
