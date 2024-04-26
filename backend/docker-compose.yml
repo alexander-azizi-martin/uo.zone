@@ -17,7 +17,7 @@ services:
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
-            SUPERVISOR_PHP_COMMAND: "/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=80"
+            SUPERVISOR_PHP_COMMAND: '${SUPERVISOR_PHP_COMMAND}'
         volumes:
             - '.:/var/www/html'
             - '../static:/var/www/html/storage/static'
