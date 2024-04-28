@@ -3,7 +3,7 @@ import pathlib
 import browser_cookie3
 import dotenv
 
-env_file = pathlib.Path(__file__).parent.joinpath('../.env').resolve()
+env_file = pathlib.Path(__file__).parent.joinpath("../.env").resolve()
 env_values = dotenv.dotenv_values(env_file)
 
 cookies = browser_cookie3.firefox()
@@ -13,6 +13,6 @@ for cookie in cookies:
     elif cookie.name == "CookieName":
         env_values["BLUERA_COOKIE"] = cookie.value
 
-with env_file.open('w') as f:
+with env_file.open("w") as f:
     for key in env_values:
         f.write(f'{key}="{env_values[key]}"\n')

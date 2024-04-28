@@ -15,6 +15,8 @@ from scraper.helpers import normalize_string
 from scraper.items import Question, Survey
 from scraper.settings import filesystem
 
+SURVEYS_PER_PAGE = 10
+
 
 class CourseSurveysSpider(scrapy.Spider):
     name = "surveys"
@@ -40,7 +42,7 @@ class CourseSurveysSpider(scrapy.Spider):
         cache_file_data = filesystem.get(cache_file_name, "[]")
 
         self.saved_surveys = set(json.loads(cache_file_data))
-        self.start_page = (len(self.saved_surveys) // 10) + 1
+        self.start_page = (len(self.saved_surveys) // SURVEYS_PER_PAGE) + 1
         self.current_page = 1
 
     @classmethod
@@ -88,76 +90,70 @@ class CourseSurveysSpider(scrapy.Spider):
                 "#ViewList_ctl04_lblTopPageStatus::text"
             ).re_first(r"Results: \d+ - \d+ of (\d+) Item\(s\)")
 
-            self.progress_bar = tqdm.tqdm(total=int(num_surveys), desc="Surveys parsed")
+            self.progress_bar = tqdm.tqdm(
+                total=int(num_surveys), desc="Surveys parsed", disable=False
+            )
 
         if self.current_page < self.start_page:
             offset = 0 if self.current_page <= 10 else 1
             jump = min(10, self.start_page - self.current_page)
-            self.current_page += jump
-            self.progress_bar.update(jump * 10)
 
-            new_page_request = {
-                "__EVENTTARGET": f"ViewList$ctl04$listing$ctl01$ctl{jump + offset}",
-                "__EVENTARGUMENT": "",
-                "__VIEWSTATE": response.css(
-                    "input[name=__VIEWSTATE]::attr(value)"
-                ).get(),
-                "__VIEWSTATEGENERATOR": response.css(
-                    "input[name=__VIEWSTATEGENERATOR]::attr(value)"
-                ).get(),
-                "__VIEWSTATEENCRYPTED": "",
-                "__EVENTVALIDATION": response.css(
-                    "input[name=__EVENTVALIDATION]::attr(value)"
-                ).get(),
-                "ViewList$dplField": "Title",
-                "ViewList$dplOperator": "contains",
-                "ViewList$tbxValue": "",
-            }
+            starting_position = int(
+                response.css("tr:first-of-type :is(a, span)::text").getall()[offset]
+            )
+            relative_position = (self.current_page - starting_position) + jump + offset
+
+            self.current_page += jump
+            self.progress_bar.update(jump * SURVEYS_PER_PAGE)
 
             yield scrapy.FormRequest(
                 url=response.url,
-                formdata=new_page_request,
                 callback=self.jump_to_start,
                 cookies=self.cookies,
+                formdata={
+                    "__VIEWSTATE": response.css(
+                        "input[name=__VIEWSTATE]::attr(value)"
+                    ).get(),
+                    "__VIEWSTATEGENERATOR": response.css(
+                        "input[name=__VIEWSTATEGENERATOR]::attr(value)"
+                    ).get(),
+                    "__EVENTVALIDATION": response.css(
+                        "input[name=__EVENTVALIDATION]::attr(value)"
+                    ).get(),
+                    "__EVENTTARGET": f"ViewList$ctl04$listing$ctl01$ctl{relative_position}",
+                    "__EVENTARGUMENT": "",
+                    "__VIEWSTATEENCRYPTED": "",
+                    "ViewList$dplField": "Title",
+                    "ViewList$dplOperator": "contains",
+                    "ViewList$tbxValue": "",
+                },
             )
         else:
             yield from self.parse_survey_list(response)
 
     def parse_survey_list(self, response: Response):
-        # Parse all the surveys on the page
-        survey_links = response.css("a[href^='rpvf-eng.aspx']:not([href$='pdf=true'])")
+        survey_links = response.css("td:nth-child(3) > a")
         for link in survey_links:
-            url = response.urljoin(link.attrib["href"])
-            self.progress_bar.update(1)
+            title = link.css("a::text").get()
+            relative_url = link.attrib.get("href", None)
 
-            if url in self.saved_surveys:
+            self.progress_bar.update(1)
+            if title in self.saved_surveys:
                 continue
 
-            self.saved_surveys.add(url)
+            self.saved_surveys.add(title)
 
-            yield scrapy.Request(
-                url=url,
-                callback=self.parse_survey,
-                cookies=self.cookies,
-            )
-
-        # Goes to the next page
-        new_page_request = {
-            "__EVENTTARGET": "",
-            "__EVENTARGUMENT": "",
-            "__VIEWSTATE": response.css("input[name=__VIEWSTATE]::attr(value)").get(),
-            "__VIEWSTATEGENERATOR": response.css(
-                "input[name=__VIEWSTATEGENERATOR]::attr(value)"
-            ).get(),
-            "__VIEWSTATEENCRYPTED": "",
-            "__EVENTVALIDATION": response.css(
-                "input[name=__EVENTVALIDATION]::attr(value)"
-            ).get(),
-            "ViewList$dplField": "Title",
-            "ViewList$dplOperator": "contains",
-            "ViewList$tbxValue": "",
-            "ViewList$ctl04$listing$ctl01$btnNext": "",
-        }
+            survey = Survey(title=title, term=self.term.capitalize())
+            if relative_url is not None:
+                url = response.urljoin(relative_url)
+                yield scrapy.Request(
+                    url=url,
+                    callback=self.parse_survey,
+                    cookies=self.cookies,
+                    meta={"survey": survey},
+                )
+            else:
+                yield survey
 
         next_page_input = response.css(
             "input[name='ViewList$ctl04$listing$ctl01$btnNext']"
@@ -165,32 +161,42 @@ class CourseSurveysSpider(scrapy.Spider):
         if "aria-disabled" not in next_page_input.attrib:
             yield scrapy.FormRequest(
                 url=response.url,
-                formdata=new_page_request,
                 callback=self.parse_survey_list,
                 cookies=self.cookies,
+                formdata={
+                    "__VIEWSTATE": response.css(
+                        "input[name=__VIEWSTATE]::attr(value)"
+                    ).get(),
+                    "__VIEWSTATEGENERATOR": response.css(
+                        "input[name=__VIEWSTATEGENERATOR]::attr(value)"
+                    ).get(),
+                    "__EVENTVALIDATION": response.css(
+                        "input[name=__EVENTVALIDATION]::attr(value)"
+                    ).get(),
+                    "__EVENTTARGET": "",
+                    "__EVENTARGUMENT": "",
+                    "__VIEWSTATEENCRYPTED": "",
+                    "ViewList$dplField": "Title",
+                    "ViewList$dplOperator": "contains",
+                    "ViewList$tbxValue": "",
+                    "ViewList$ctl04$listing$ctl01$btnNext": "",
+                },
             )
 
     def parse_survey(self, response: Response):
-        survey_loader = ItemLoader(Survey(), response)
-        survey_loader.add_value("link", response.url)
-
-        sub_survey_loader = survey_loader.nested_css("ul:first-child ")
-        sub_survey_loader.add_css("term", "li:nth-child(1)::text")
-        sub_survey_loader.add_css("faculty", "li:nth-child(2)::text")
-        sub_survey_loader.add_css("professor", "li:nth-child(3)::text")
-        sub_survey_loader.add_css("course", "li:nth-child(4)::text")
-        sub_survey_loader.add_css("sections", "li:nth-child(4)::text")
+        response.meta["survey"]["link"] = response.url
 
         question_blocks = response.css(".report-block").getall()
         if self.term_year > 2018 and self.term != "winter 2019":
-            questions = self.thread_pool.starmap(
+            response.meta["survey"]["questions"] = self.thread_pool.starmap(
                 parse_question_block_v1, zip(question_blocks, repeat(response.url))
             )
         else:
-            questions = self.thread_pool.map(parse_question_block_v2, question_blocks)
+            response.meta["survey"]["questions"] = self.thread_pool.map(
+                parse_question_block_v2, question_blocks
+            )
 
-        survey_loader.add_value("questions", questions)
-        yield survey_loader.load_item()
+        yield response.meta["survey"]
 
 
 def parse_question_block_v1(text: str, url: str) -> Question:

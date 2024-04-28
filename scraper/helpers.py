@@ -39,9 +39,7 @@ def download_image(url: str) -> Image:
 class AdBlocker:
     def __init__(self) -> None:
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        block_list = os.path.join(
-            current_directory,
-            "ublock-origin-blocklist.txt")
+        block_list = os.path.join(current_directory, "ublock-origin-blocklist.txt")
         with open(block_list) as f:
             self.blocked_domains = set(domain.strip() for domain in f)
 
@@ -72,8 +70,7 @@ class S3Filesystem:
                 return default
 
     def listdir(self, directory: str = "") -> list[str]:
-        results = self.s3.list_objects(
-            Bucket=self.bucket, Prefix=directory.strip("/"))
+        results = self.s3.list_objects(Bucket=self.bucket, Prefix=directory.strip("/"))
         return [result["key"] for result in results["Contents"]]
 
 
@@ -84,7 +81,7 @@ class LocalFilesystem:
     def put(self, filename: str, data: str) -> str:
         file_path = self.path / filename
         file_path.parents[0].mkdir(parents=True, exist_ok=True)
-    
+
         with file_path.open("w") as f:
             f.write(data)
 

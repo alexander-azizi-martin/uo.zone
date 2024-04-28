@@ -23,14 +23,16 @@ for name in tqdm.tqdm(missing_professors):
     time.sleep(2)
     data = ratemyprofessor.get_professor_by_school_and_name(ottawa, name)
     if data is not None:
-        missing_professors_data.append({
-            "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
-            "name": name,
-            "department": data.department,
-            "rating": data.rating,
-            "difficulty": data.difficulty,
-            "num_ratings": data.num_ratings
-        })
+        missing_professors_data.append(
+            {
+                "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
+                "name": name,
+                "department": data.department,
+                "rating": data.rating,
+                "difficulty": data.difficulty,
+                "num_ratings": data.num_ratings,
+            }
+        )
         missing_professors.remove(name)
         with (storage_dir / "missing-professors.json").open("w") as f:
             json.dump(list(missing_professors), f)
@@ -39,14 +41,16 @@ for name in tqdm.tqdm(missing_professors):
     time.sleep(2)
     data = ratemyprofessor.get_professor_by_school_and_name(carleton, name)
     if data is not None:
-        missing_professors_data.append({
-            "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
-            "name": name,
-            "department": data.department,
-            "rating": data.rating,
-            "difficulty": data.difficulty,
-            "num_ratings": data.num_ratings
-        })
+        missing_professors_data.append(
+            {
+                "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
+                "name": name,
+                "department": data.department,
+                "rating": data.rating,
+                "difficulty": data.difficulty,
+                "num_ratings": data.num_ratings,
+            }
+        )
         missing_professors.remove(name)
         with (storage_dir / "missing-professors.json").open("w") as f:
             json.dump(list(missing_professors), f)
@@ -55,39 +59,44 @@ for name in tqdm.tqdm(missing_professors):
     name_parts = name.split(" ")
     if name_parts != 3:
         continue
-    
+
     first, middle, last = name_parts
     name_without_middle = f"{first} {last}"
-    
+
     time.sleep(2)
     data = ratemyprofessor.get_professor_by_school_and_name(ottawa, name_without_middle)
     if data is not None:
-        missing_professors_data.append({
-            "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
-            "name": name,
-            "department": data.department,
-            "rating": data.rating,
-            "difficulty": data.difficulty,
-            "num_ratings": data.num_ratings
-        })
+        missing_professors_data.append(
+            {
+                "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
+                "name": name,
+                "department": data.department,
+                "rating": data.rating,
+                "difficulty": data.difficulty,
+                "num_ratings": data.num_ratings,
+            }
+        )
         missing_professors.remove(name)
         with (storage_dir / "missing-professors.json").open("w") as f:
             json.dump(list(missing_professors), f)
         continue
 
     time.sleep(2)
-    data = ratemyprofessor.get_professor_by_school_and_name(carleton, name_without_middle)
+    data = ratemyprofessor.get_professor_by_school_and_name(
+        carleton, name_without_middle
+    )
     if data is not None:
-        missing_professors_data.append({
-            "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
-            "name": name,
-            "department": data.department,
-            "rating": data.rating,
-            "difficulty": data.difficulty,
-            "num_ratings": data.num_ratings
-        })
+        missing_professors_data.append(
+            {
+                "link": f"https://www.ratemyprofessors.com/professor/{data.id}",
+                "name": name,
+                "department": data.department,
+                "rating": data.rating,
+                "difficulty": data.difficulty,
+                "num_ratings": data.num_ratings,
+            }
+        )
         missing_professors.remove(name)
         with (storage_dir / "missing-professors.json").open("w") as f:
             json.dump(list(missing_professors), f)
         continue
-

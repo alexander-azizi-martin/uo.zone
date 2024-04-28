@@ -6,69 +6,75 @@ from pydantic import BaseModel, Field
 
 
 class CourseRequirements(BaseModel):
-    student_program: Optional[str] = Field(
-        description="The program relevant to these course requirements. This does not include any requirements.",
-        examples=[
-            (
-                "Prerequisites: CSI 2110, CSI 2101 or for honors mathematics students: CSI 2110, (MAT 2141 or MAT 2143).",
-                "honors mathematics",
-            ),
-        ],
-    ),
-    prerequisites: str = Field(
-        description="Prerequisite courses a student must take in order to enroll in a class. Provide the courses in a format where '&' species a conjunction between two classes that must have been taken, '|' species a disjunction between two classes where either class could have been taken, and '(' and ')' groups together a set of prerequisite courses in the same format previously described.",
-        examples=[
-            (
-                "Préalables: PSY 1501, PSY 1502, PSY 2701.",
-                "PSY 1501&PSY 1502&PSY 2701",
-            ),
-            (
-                "Préalables: PSY 1501, PSY 1502, PSY 2701.",
-                "PSY 1501&PSY 1502&PSY 2701",
-            ),
-            (
-                "Prerequisites: One of Calculus and Vectors (MCV4U) or MAT 1339.",
-                "Calculus and Vectors (MCV4U)|MAT 1339",
-            ),
-            (
-                "Prerequisite: One of Advanced Functions (MHF4U) or MAT 1318 or an equivalent",
-                "Advanced Functions (MHF4U)|MAT 1318|an equivalent",
-            ),
-            (
-                "Prerequisites: MAT 1341, ((MAT 2371, MAT 2375) or MAT 2377)",
-                "MAT 1341&((MAT 2371&MAT 2375)|MAT 2377)",
-            ),
-            (
-                "Prerequisites: CSI 2132, (CSI 3120 or SEG 2106), MAT 2377 or (MAT 2371 and MAT 2375).",
-                "CSI 2132&(CSI 3120|SEG 2106)&(MAT 2377|(MAT 2371&MAT 2375))",
-            ),
-            (
-                "Prerequisite: undergraduate honours algebra, including group theory and finite fields.",
-                "undergraduate honours algebra&group theory&finite fields",
-            ),
-            (
-                "Préalable: MAT 3520 ou MAT 3553.", 
-                "MAT 3520|MAT 3553",
-            ),
-            (
-                "Préalables: MAT 2543, MAT 3520, (MAT 3541 ou MAT 3543 ou MAT 3741).",
-                "MAT 2543&MAT 3520&(MAT 3541|MAT 3543|MAT 3741)",
-            ),
-        ],
-    ),
-    corequisites: str = Field(
-        description="Corequisite courses a student must take in order to enroll in a class. Provide the courses in a format where '&' species a conjunction between two classes that must take, '|' species a disjunction between two classes where either class could be taken, and '(' and ')' groups together a set of corequisite courses in the same format previously described.",
-        examples=[
-            (
-                "ITI 1120, ENG 1112 are corequisite to SEG 2900.",
-                "ITI 1120&ENG 1112",
-            ),
-            (
-                "PSY 3307 is corequisite to PSY 4276",
-                "PSY 3307",
-            ),
-        ],
-    ),
+    student_program: Optional[str] = (
+        Field(
+            description="The program relevant to these course requirements. This does not include any requirements.",
+            examples=[
+                (
+                    "Prerequisites: CSI 2110, CSI 2101 or for honors mathematics students: CSI 2110, (MAT 2141 or MAT 2143).",
+                    "honors mathematics",
+                ),
+            ],
+        ),
+    )
+    prerequisites: str = (
+        Field(
+            description="Prerequisite courses a student must take in order to enroll in a class. Provide the courses in a format where '&' species a conjunction between two classes that must have been taken, '|' species a disjunction between two classes where either class could have been taken, and '(' and ')' groups together a set of prerequisite courses in the same format previously described.",
+            examples=[
+                (
+                    "Préalables: PSY 1501, PSY 1502, PSY 2701.",
+                    "PSY 1501&PSY 1502&PSY 2701",
+                ),
+                (
+                    "Préalables: PSY 1501, PSY 1502, PSY 2701.",
+                    "PSY 1501&PSY 1502&PSY 2701",
+                ),
+                (
+                    "Prerequisites: One of Calculus and Vectors (MCV4U) or MAT 1339.",
+                    "Calculus and Vectors (MCV4U)|MAT 1339",
+                ),
+                (
+                    "Prerequisite: One of Advanced Functions (MHF4U) or MAT 1318 or an equivalent",
+                    "Advanced Functions (MHF4U)|MAT 1318|an equivalent",
+                ),
+                (
+                    "Prerequisites: MAT 1341, ((MAT 2371, MAT 2375) or MAT 2377)",
+                    "MAT 1341&((MAT 2371&MAT 2375)|MAT 2377)",
+                ),
+                (
+                    "Prerequisites: CSI 2132, (CSI 3120 or SEG 2106), MAT 2377 or (MAT 2371 and MAT 2375).",
+                    "CSI 2132&(CSI 3120|SEG 2106)&(MAT 2377|(MAT 2371&MAT 2375))",
+                ),
+                (
+                    "Prerequisite: undergraduate honours algebra, including group theory and finite fields.",
+                    "undergraduate honours algebra&group theory&finite fields",
+                ),
+                (
+                    "Préalable: MAT 3520 ou MAT 3553.",
+                    "MAT 3520|MAT 3553",
+                ),
+                (
+                    "Préalables: MAT 2543, MAT 3520, (MAT 3541 ou MAT 3543 ou MAT 3741).",
+                    "MAT 2543&MAT 3520&(MAT 3541|MAT 3543|MAT 3741)",
+                ),
+            ],
+        ),
+    )
+    corequisites: str = (
+        Field(
+            description="Corequisite courses a student must take in order to enroll in a class. Provide the courses in a format where '&' species a conjunction between two classes that must take, '|' species a disjunction between two classes where either class could be taken, and '(' and ')' groups together a set of corequisite courses in the same format previously described.",
+            examples=[
+                (
+                    "ITI 1120, ENG 1112 are corequisite to SEG 2900.",
+                    "ITI 1120&ENG 1112",
+                ),
+                (
+                    "PSY 3307 is corequisite to PSY 4276",
+                    "PSY 3307",
+                ),
+            ],
+        ),
+    )
     requirements: List[str] = Field(
         description="None prerequisites and corequisite requirements that a student must meet in order to enroll in the class.",
         examples=[
@@ -107,16 +113,15 @@ class CourseRequirements(BaseModel):
         ],
     )
 
+
 from langchain.llms import HuggingFaceEndpoint
 
-endpoint_url = (
-    "https://nrush39pk5hhu876.us-east-1.aws.endpoints.huggingface.cloud"
-)
+endpoint_url = "https://nrush39pk5hhu876.us-east-1.aws.endpoints.huggingface.cloud"
 hf = HuggingFaceEndpoint(
     endpoint_url=endpoint_url,
-    huggingfacehub_api_token="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"
+    huggingfacehub_api_token="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",
 )
-hf.task = 'text-generation'
+hf.task = "text-generation"
 
 schema, validator = from_pydantic(
     CourseRequirements,
@@ -130,7 +135,7 @@ schema, validator = from_pydantic(
                     "prerequisites": "PSY 1101&PSY 1102&PSY 2106&PSY 2116&PSY 2174",
                     "corequisites": "PSY 3307",
                     "requirements": [
-                        "81 university units", 
+                        "81 university units",
                         "CGPA of at least 8.0",
                     ],
                 }
@@ -167,9 +172,11 @@ schema, validator = from_pydantic(
             ],
         ),
     ],
-    many=True
+    many=True,
 )
 
-chain = create_extraction_chain(hf, schema, encoder_or_encoder_class="json", validator=validator)
+chain = create_extraction_chain(
+    hf, schema, encoder_or_encoder_class="json", validator=validator
+)
 # print(chain.prompt.format_prompt(text="Prerequisites: 12 course units in CSI or SDS at the 3000 level.").to_string())
 print(chain.run(("Prerequisites: 12 course units in CSI or SDS at the 3000 level.")))

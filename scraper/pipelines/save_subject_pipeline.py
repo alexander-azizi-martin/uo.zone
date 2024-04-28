@@ -14,7 +14,7 @@ def split_title_languages(s: str) -> dict[str, str]:
     parts = len(titles)
     if parts == 1:
         return {
-            "en": f"{subject} {code} {titles[0]}",
+            "en": f"{subject} {code} {s}",
         }
 
     fr_title = titles[: parts // 2]
@@ -30,7 +30,7 @@ def split_description_languages(s: str) -> dict[str, str]:
     parts = len(descriptions)
     if parts == 1 or parts % 2 == 1:
         return {
-            "en": descriptions[0],
+            "en": s,
         }
 
     fr_description = descriptions[: parts // 2]
@@ -57,7 +57,7 @@ def split_requirement_languages(s: str) -> dict[str, str]:
     parts = len(requirements)
     if parts == 1:
         return {
-            "en": requirements[0],
+            "en": s,
         }
 
     fr_requirements = requirements[: parts // 2]
@@ -77,6 +77,8 @@ class SaveSubjectPipeline:
         self.french_subjects_buffer = io.BytesIO()
         self.french_subjects = JsonItemExporter(self.french_subjects_buffer)
         self.french_subjects.start_exporting()
+
+        self.saved_items = 0
 
     def process_item(self, subject, spider):
         if not isinstance(subject, Subject):
@@ -140,12 +142,17 @@ class SaveSubjectPipeline:
 
         if subject["language"] == "en":
             self.english_subjects.export_item(subject)
+            self.saved_items += 1
         elif subject["language"] == "fr":
             self.french_subjects.export_item(subject)
+            self.saved_items += 1
 
         raise DropItem()
 
     def close_spider(self, spider):
+        if self.saved_items == 0:
+            return
+
         self.english_subjects.finish_exporting()
         filesystem.put(
             "subjects_en.json", self.english_subjects_buffer.getvalue().decode()
