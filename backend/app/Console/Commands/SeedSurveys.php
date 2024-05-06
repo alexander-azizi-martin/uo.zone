@@ -7,6 +7,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\progress;
+
 class SeedSurveys extends Command
 {
     /**
@@ -24,27 +27,29 @@ class SeedSurveys extends Command
      */
     public function handle(SurveySeeder $surveySeeder)
     {
-        $termDirectories = collect(['all', ...Storage::disk('static')->directories('surveys')])
+        $directories = collect(Storage::disk('static')->directories('surveys'))
             ->sort()
             ->values()
             ->toArray();
 
-        $directory = $this->choice(
+        $selectedDirectories = multiselect(
             'What term\'s surveys should be seeded?',
-            $termDirectories,
+            $directories,
+            required: true,
         );
 
-        if ($directory == 'all') {
-            $directory = 'surveys';
-        }
-
-        $files = collect(Storage::disk('static')->allFiles($directory))
+        $files = collect($selectedDirectories)
+            ->flatMap(function ($directory) {
+                return Storage::disk('static')->allFiles($directory);
+            })
             ->filter(function (string $file) {
                 return Str::endsWith($file, '.json') && ! Str::endsWith($file, '.cache.json');
             });
 
-        $this->withProgressBar($files, function (string $file) use ($surveySeeder) {
-            $surveySeeder->run($file);
-        });
+        progress(
+            'Seeding surveys',
+            $files,
+            fn ($file) => $surveySeeder->run($file),
+        );
     }
 }

@@ -2,54 +2,45 @@
 
 namespace Database\Seeders;
 
-use App\Models\Course;
+use App\Models\Course\Course;
+use App\Models\Course\CourseComponent;
 use App\Models\Subject;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
+use function Laravel\Prompts\progress;
+
 class SubjectSeeder extends Seeder
 {
-    const COMPONENT_ENGLISH_TO_FRENCH = [
-        'Lecture' => 'Cours magistral',
-        'Tutorial' => 'Tutoriel',
-        'Discussion Group' => 'Groupe de discussion',
-        'Laboratory' => 'Laboratoire',
-        'Theory and Laboratory' => 'Théorie et laboratoire',
-        'Research' => 'Recherche',
-        'Certification Test' => 'Test de compétence',
-        'Seminar' => 'Séminaire',
-        'Work Term' => 'Stage',
-    ];
-
-    const COMPONENT_FRENCH_TO_ENGLISH = [
-        'Cours magistral' => 'Lecture',
-        'Tutoriel' => 'Tutorial',
-        'Groupe de discussion' => 'Discussion Group',
-        'Laboratoire' => 'Laboratory',
-        'Théorie et laboratoire' => 'Theory and Laboratory',
-        'Recherche' => 'Research',
-        'Test de compétence' => 'Certification Test',
-        'Séminaire' => 'Seminar',
-        'Stage' => 'Work Term',
-    ];
-
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $subjects = Storage::disk('static')->json('subjects_en.json');
+        Course::disableSearchSyncing();
+        Subject::disableSearchSyncing();
+
+        $subjects = json_decode(Storage::disk('static')->get('subjects_en.json'), true);
+
+        $progress = progress('Seeding subjects', count($subjects), null);
+        $progress->start();
 
         foreach ($subjects as $subjectData) {
-            if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
+            if (
+                ! Arr::exists($subjectData, 'code') ||
+                ! Arr::exists($subjectData, 'faculty')
+            ) {
+                $progress->advance();
+
                 continue;
             }
 
-            $subject = Subject::create(Arr::only($subjectData, ['code']));
-            $subject->subject->setTranslation('en', $subjectData['subject']);
-            $subject->faculty->setTranslation('en', $subjectData['faculty']);
-            $subject->save();
+            $subject = Subject::create([
+                'code' => $subjectData['code'],
+                'subject' => ['en' => $subjectData['subject']],
+                'faculty' => ['en' => $subjectData['faculty']],
+            ]);
 
             foreach ($subjectData['courses'] as $courseData) {
                 if (is_null($courseData['description'])) {
@@ -62,7 +53,6 @@ class SubjectSeeder extends Seeder
                             'code',
                             'title',
                             'description',
-                            'components',
                             'requirements',
                             'languages',
                             'units',
@@ -70,29 +60,61 @@ class SubjectSeeder extends Seeder
                     )
                 );
 
-                static::translateComponents($course);
+                $componentIds = collect(head($courseData['components']))
+                    ->unique()
+                    ->map(function ($value) {
+                        $translatedComponents = [
+                            'en' => __('course-components.'.$value, locale: 'en'),
+                            'fr' => __('course-components.'.$value, locale: 'fr'),
+                        ];
+
+                        return CourseComponent::firstOrCreate([
+                            'component' => json_encode($translatedComponents),
+                        ])->id;
+                    });
+
+                $course->components()->attach($componentIds);
             }
+
+            $progress->advance();
         }
 
+        $progress->finish();
+
         foreach (Course::lazy() as $course) {
-            $course->description->mapTranslations(
-                fn (string $text) => static::addCourseLinks($text, $course->code)
-            );
-            $course->requirements->mapTranslations(
-                fn (string $text) => static::addCourseLinks($text, $course->code)
-            );
+            if ($course->getRawOriginal('description')) {
+                $course->description = Arr::map(
+                    json_decode($course->getRawOriginal('description'), true),
+                    fn (string $text) => static::addCourseLinks($text, $course->code),
+                );
+            }
+            if ($course->getRawOriginal('requirements')) {
+                $course->requirements = Arr::map(
+                    json_decode($course->getRawOriginal('requirements'), true),
+                    fn (string $text) => static::addCourseLinks($text, $course->code),
+                );
+            }
             $course->save();
         }
 
-        $frenchSubjects = Storage::disk('static')->json('subjects_fr.json');
+        $frenchSubjects = json_decode(Storage::disk('static')->get('subjects_fr.json'), true);
         foreach ($frenchSubjects as $subjectData) {
-            if (! Arr::exists($subjectData, 'code') || ! Arr::exists($subjectData, 'faculty')) {
+            if (
+                ! Arr::exists($subjectData, 'code') ||
+                ! Arr::exists($subjectData, 'faculty')
+            ) {
                 continue;
             }
 
             $subject = Subject::where('code', $subjectData['code'])->firstOrFail();
-            $subject->subject->setTranslation('fr', $subjectData['subject']);
-            $subject->faculty->setTranslation('fr', $subjectData['faculty']);
+            $subject->subject = array_merge(
+                json_decode($subject->getRawOriginal('subject'), true),
+                ['fr' => $subjectData['subject']]
+            );
+            $subject->faculty = array_merge(
+                json_decode($subject->getRawOriginal('faculty'), true),
+                ['fr' => $subjectData['faculty']]
+            );
             $subject->save();
         }
     }
@@ -102,47 +124,18 @@ class SubjectSeeder extends Seeder
      */
     public static function addCourseLinks(string $text, string $courseCode): string
     {
-        return str($text)
-            ->replaceMatches('/[a-zA-Z]{3} ?\d{4,5}/', function (array $matches) use ($courseCode) {
+        return str($text)->replaceMatches(
+            '/[a-zA-Z]{3} ?\d{4,5}/',
+            function (array $matches) use ($courseCode) {
                 $code = str($matches[0])->lower()->remove(' ');
+                $courseExists = Course::where('code', $code)->exists();
 
-                if ($code != $courseCode && ! is_null(Course::firstWhere('code', $code))) {
+                if ($code != $courseCode && $courseExists) {
                     return "[$matches[0]](/course/$code)";
                 } else {
                     return $matches[0];
                 }
-            });
-    }
-
-    /**
-     * Adds translations for the components of the given course.
-     */
-    public static function translateComponents(Course $course): void
-    {
-        if (! $course->components->hasLanguage('en')) {
-            $translatedComponents = [];
-
-            foreach ($course->components->getTranslation('fr') as $component) {
-                $translatedComponents[] = (
-                    self::COMPONENT_FRENCH_TO_ENGLISH[$component] ?? $component
-                );
             }
-
-            $course->components->setTranslation('en', $translatedComponents);
-        }
-
-        if (! $course->components->hasLanguage('fr')) {
-            $translatedComponents = [];
-
-            foreach ($course->components->getTranslation('en') as $component) {
-                $translatedComponents[] = (
-                    self::COMPONENT_ENGLISH_TO_FRENCH[$component] ?? $component
-                );
-            }
-
-            $course->components->setTranslation('fr', $translatedComponents);
-        }
-
-        $course->save();
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Professor;
+use App\Models\Professor\Professor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +14,7 @@ class RmpSeeder extends Seeder
      */
     public function run(): void
     {
-        $reviews = Storage::disk('static')->json('rmp.json');
+        $reviews = json_decode(Storage::disk('static')->get('rmp.json'), true);
 
         foreach ($reviews as $review) {
             $professor = Professor::firstWhere('name', $review['name']);
@@ -23,7 +23,9 @@ class RmpSeeder extends Seeder
                 continue;
             }
 
-            $professor->rmpReview()->updateOrCreate(Arr::except($review, ['name']));
+            $professor->rmpReview()->updateOrCreate(
+                Arr::except($review, ['name'])
+            );
         }
     }
 }

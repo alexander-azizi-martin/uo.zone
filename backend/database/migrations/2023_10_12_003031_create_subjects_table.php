@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->jsonb('subject')->default('[]');
-            $table->jsonb('faculty')->default('[]');
+            $table->char('code', 3)->unique();
+            $table->text('subject');
+            $table->text('faculty');
             $table->timestamps();
         });
     }

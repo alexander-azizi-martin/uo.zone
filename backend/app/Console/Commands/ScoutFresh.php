@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Course;
-use App\Models\Professor;
+use App\Models\Course\Course;
+use App\Models\Professor\Professor;
 use App\Models\Subject;
 use Illuminate\Console\Command;
 

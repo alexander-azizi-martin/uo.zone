@@ -15,9 +15,9 @@ class GradesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $grades = [];
-        foreach (Grades::GRADE_VALUES as $grade => $_) {
-            $grades[$grade] = $this->getAttribute($grade);
+        $distribution = [];
+        foreach (array_keys(Grades::GRADE_VALUES) as $grade) {
+            $distribution[$grade] = $this->getAttribute($grade);
         }
 
         return [
@@ -25,7 +25,7 @@ class GradesResource extends JsonResource
             'median' => $this->median,
             'mode' => $this->mode,
             'total' => $this->total,
-            'grades' => $grades,
+            'distribution' => $distribution,
         ];
     }
 }

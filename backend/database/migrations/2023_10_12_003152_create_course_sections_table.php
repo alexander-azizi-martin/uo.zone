@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained();
-            $table->foreignId('professor_id')->constrained();
             $table->unsignedInteger('term_id');
-            $table->string('code');
             $table->string('section');
             $table->timestamps();
         });

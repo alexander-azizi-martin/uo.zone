@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\SurveyQuestion;
+use App\Models\Survey\SurveyQuestion;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasSurvey

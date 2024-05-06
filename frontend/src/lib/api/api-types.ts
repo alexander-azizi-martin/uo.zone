@@ -43,7 +43,6 @@ export interface Subject {
 
 export interface CourseSection {
   term: string;
-  code: string;
   section: string;
   gradeInfo?: GradeInfo;
   totalEnrolled: number;

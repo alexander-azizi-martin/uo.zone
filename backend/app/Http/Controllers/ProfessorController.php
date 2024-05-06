@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProfessorResource;
-use App\Models\Professor;
+use App\Http\Resources\Professor\ProfessorResource;
+use App\Models\Professor\Professor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -22,7 +22,7 @@ class ProfessorController extends Controller
     public function getProfessor(Professor $professor): ProfessorResource
     {
         $professor->load([
-            'sections' => ['course', 'grades'],
+            'sections' => ['course' => ['grades'], 'grades'],
             'survey',
             'rmpReview',
             'grades',

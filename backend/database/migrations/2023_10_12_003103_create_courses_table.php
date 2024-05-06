@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subject_id')->constrained();
-            $table->string('code')->unique();
-            $table->jsonb('title');
-            $table->jsonb('description');
-            $table->jsonb('components')->nullable();
-            $table->jsonb('requirements')->nullable();
-            $table->jsonb('languages')->default('[]');
+            $table->char('code', 8)->unique();
+            $table->text('title');
+            $table->text('description');
+            $table->text('requirements')->nullable();
+            $table->text('languages');
             $table->float('units')->nullable();
             $table->timestamps();
         });

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CourseResource;
+use App\Http\Resources\Course\CourseResource;
 use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;

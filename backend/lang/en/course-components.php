@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'Certification Test' => 'Certification Test',
+    'Test de compétence' => 'Certification Test',
+    'Discussion Group' => 'Discussion Group',
+    'Groupe de discussion' => 'Discussion Group',
+    'Laboratory' => 'Laboratory',
+    'Laboratoire' => 'Laboratory',
+    'Lecture' => 'Lecture',
+    'Cours magistral' => 'Lecture',
+    'Cours magistral / Lecture' => 'Lecture',
+    'Praticum' => 'Praticum',
+    'Expérience pratique' => 'Praticum',
+    'Research' => 'Research',
+    'Recherche' => 'Research',
+    'Seminar' => 'Seminar',
+    'Séminaire' => 'Seminar',
+    'Séminaire / Seminar' => 'Seminar',
+    'Theory and Laboratory' => 'Theory and Laboratory',
+    'Théorie et laboratoire' => 'Theory and Laboratory',
+    'Tutorial' => 'Tutorial',
+    'Tutoriel' => 'Tutorial',
+    'Work Term' => 'Work Term',
+    'Stage' => 'Work Term',
+];

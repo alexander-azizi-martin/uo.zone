@@ -20,7 +20,7 @@ class SubjectResource extends JsonResource
             'coursesCount' => $this->whenHas('courses_count', function () {
                 return $this->courses_count;
             }),
-            'gradeInfo' => $this->whenLoaded('grades', function () {
+            'grades' => $this->whenLoaded('grades', function () {
                 return isset($this->grades) ? new GradesResource($this->grades) : null;
             }),
         ];

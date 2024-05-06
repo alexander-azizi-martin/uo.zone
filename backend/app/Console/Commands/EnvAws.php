@@ -28,7 +28,7 @@ class EnvAws extends Command
             'SecretId' => 'prod/uozone/env',
         ]);
 
-        $envContents = collect(json_decode($result['SecretString']))
+        $envContents = collect(json_decode($result['SecretString'], true))
             ->map(function (string $value, string $key) {
                 return "$key=$value";
             })

@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Translations;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -27,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading();
+        Model::shouldBeStrict();
         JsonResource::withoutWrapping();
 
         RateLimiter::for('api', function (Request $request) {
@@ -54,12 +53,6 @@ class AppServiceProvider extends ServiceProvider
                 $models = new Collection();
 
                 foreach ($results['hits'] as $item) {
-                    foreach ($item as $key => $value) {
-                        if (is_array($value) && array_key_exists('translations', $value)) {
-                            $item[$key] = new Translations($value['translations']);
-                        }
-                    }
-
                     $models->push(new $className($item));
                 }
 

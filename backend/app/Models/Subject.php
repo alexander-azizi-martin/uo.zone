@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\Translation;
+use App\Models\Course\Course;
 use App\Traits\HasGrades;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,8 +23,8 @@ class Subject extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'subject' => Translations::class,
-        'faculty' => Translations::class,
+        'subject' => Translation::class,
+        'faculty' => Translation::class,
     ];
 
     /**
@@ -46,10 +48,12 @@ class Subject extends Model
      */
     public function toSearchableArray(): array
     {
+        $this->loadMissing('grades');
+
         return [
-            'subject' => $this->subject,
+            'subject' => $this->getRawOriginal('subject'),
             'code' => $this->code,
-            'total_enrolled' => (int) ($this->loadMissing('grades')->grades->total ?? 0),
+            'total_enrolled' => (int) ($this->grades->total ?? 0),
         ];
     }
 }
