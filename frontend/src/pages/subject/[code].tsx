@@ -1,22 +1,26 @@
-import { Flex, Heading, Skeleton, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import { parseAsArrayOf, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import useSWR from 'swr';
 
-import { GradeSummary, Layout, SearchNav, SummaryCard } from '~/components';
+import { GradeSummary } from '@/components/grades';
+import { Layout } from '@/components/layout';
+import { SearchNav } from '@/components/search';
+import { Paper } from '@/components/ui/paper';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   getSubject,
   getSubjectCourses,
   type SubjectWithCourses,
-} from '~/lib/api';
-import { getDictionary } from '~/lib/dictionary';
+} from '@/lib/api';
+import { getDictionary } from '@/lib/dictionary';
 import {
   CourseFilterMenu,
   VirtualCourseList,
-} from '~/modules/subject/components';
-import { useFilteredCourses } from '~/modules/subject/hooks';
+} from '@/modules/subject/components';
+import { useFilteredCourses } from '@/modules/subject/hooks';
+import { useCallback } from 'react';
 
 interface SubjectProps {
   subject: SubjectWithCourses;
@@ -27,8 +31,8 @@ export default function Subject({ subject }: SubjectProps) {
 
   const { query, locale } = useRouter();
   const { data: courses, isLoading: isCoursesLoading } = useSWR(
-    `/subject/${query.code}/courses`,
-    getSubjectCourses.bind(null, query.code as string, locale)
+    ['/subject/courses', query.code as string, locale],
+    ([_, code, locale]) => getSubjectCourses(code, locale),
   );
 
   const [filterOptions, setFilterOptions] = useQueryStates(
@@ -43,46 +47,48 @@ export default function Subject({ subject }: SubjectProps) {
         .withDefault([])
         .withOptions({ clearOnDefault: true }),
     },
-    { clearOnDefault: true }
+    { clearOnDefault: true },
   );
+
+  const resetFilterOptions = useCallback(() => {
+    setFilterOptions({ sortBy: 'code', years: [], languages: [] });
+  }, [setFilterOptions]);
 
   const filteredCourses = useFilteredCourses(courses ?? [], filterOptions);
 
   return (
     <Layout>
       <SearchNav>
-        <Flex justify={'space-between'} align={'center'}>
-          <Heading my={4}>{`${subject.code}: ${subject.subject}`}</Heading>
+        <div className='flex items-center justify-between'>
+          <h2 className='my-4'>{`${subject.code}: ${subject.subject}`}</h2>
 
           <CourseFilterMenu
             value={filterOptions}
             onChange={(key, value) => setFilterOptions({ [key]: value })}
+            onReset={resetFilterOptions}
           />
-        </Flex>
+        </div>
 
-        <VStack spacing={0} align={'start'} pb={'11px'} minH={'50vh'}>
-          <SummaryCard>
-            <GradeSummary
+        <div className='stack min-h-[50vh] items-start pb-3'>
+          <Paper size='lg'>
+          <GradeSummary
               gradeInfo={subject.gradeInfo}
               title={tCourse('all-courses-for', { code: subject.code })}
               titleSize={'3xl'}
             />
-          </SummaryCard>
+          </Paper>
 
           {isCoursesLoading ? (
             Array.from({ length: subject.coursesCount }).map((_, i) => (
               <Skeleton
                 key={i}
-                height={{ base: 240, sm: 175, lg: 112 }}
-                width={'100%'}
-                mt={4}
-                borderRadius={8}
+                className='mt-4 h-[240px] w-full rounded-md sm:h-[175px] lg:h-[112px]'
               />
             ))
           ) : (
             <VirtualCourseList courses={filteredCourses} />
           )}
-        </VStack>
+        </div>
       </SearchNav>
     </Layout>
   );
@@ -93,7 +99,7 @@ export const getServerSideProps = withAxiomGetServerSideProps(
     try {
       const subject = await getSubject(
         context.params?.code as string,
-        context.locale
+        context.locale,
       );
 
       return {
@@ -113,5 +119,5 @@ export const getServerSideProps = withAxiomGetServerSideProps(
 
       throw new Error('Internal Server Error');
     }
-  }
+  },
 );

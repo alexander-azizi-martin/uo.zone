@@ -1,25 +1,13 @@
-import {
-  Box,
-  Flex,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
-import {
-  GradeSummary,
-  SectionsSummary,
-  SummaryCard,
-  SurveyQuestionHistogram,
-} from '~/components';
-import { type ProfessorWithCourses, type SurveyQuestion } from '~/lib/api';
-import { professorQuestions } from '~/lib/config';
+import { GradeSummary } from '@/components/grades';
+import { SectionsSummary } from '@/components/SectionsSummary';
+import { SurveyQuestionHistogram } from '@/components/SurveyQuestionHistogram';
+import { Paper } from '@/components/ui/paper';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { type ProfessorWithCourses } from '@/lib/api';
+import { professorQuestions } from '@/lib/config';
 
 interface ProfessorTabsProps {
   professor: ProfessorWithCourses;
@@ -34,90 +22,74 @@ export function ProfessorTabs({ professor }: ProfessorTabsProps) {
     't',
     parseAsStringLiteral(['grades', 'reviews', 'evaluations', 'graph'])
       .withDefault('grades')
-      .withOptions({ clearOnDefault: true })
+      .withOptions({ clearOnDefault: true }),
   );
 
   return (
-    <Tabs
-      variant="enclosed"
-      color="black"
-      colorScheme="black"
-      borderColor={'rgba(91,0,19,0.42)'}
-      outline={'none'}
-      defaultIndex={['grades', 'evaluations', 'graph'].indexOf(tab)}
-      tabIndex={['grades', 'evaluations', 'graph'].indexOf(tab)}
-      onChange={(index) => {
-        setTab(['grades', 'evaluations', 'graph'][index] as any);
-      }}
-    >
-      <TabList>
-        <Tab>{tGeneral('grades')}</Tab>
-        <Tab>{tGeneral('course-evaluations')}</Tab>
-      </TabList>
+    <Tabs value={tab} onValueChange={setTab as any}>
+      <TabsList className='grid w-full grid-cols-2'>
+        <TabsTrigger value='grades'>{tGeneral('grades')}</TabsTrigger>
+        <TabsTrigger value='evaluations'>
+          {tGeneral('course-evaluations')}
+        </TabsTrigger>
+      </TabsList>
 
-      <TabPanels>
-        <TabPanel p={0} mt={6}>
-          {professor.courses.length > 0 ? (
-            <VStack spacing={4} align={'start'}>
-              {professor.gradeInfo && (
-                <SummaryCard>
-                  <GradeSummary
-                    gradeInfo={professor.gradeInfo}
-                    title={tCourse('all-courses')}
-                    titleSize={'3xl'}
-                    info={
-                      <Text fontSize={'sm'} color={'gray.600'} mt={2}>
-                        {tCourse('total-info')}
-                      </Text>
-                    }
-                  />
-                </SummaryCard>
-              )}
-
-              {professor.courses.map((course) => (
-                <SectionsSummary
-                  key={course.code}
-                  title={course.title}
-                  href={`/course/${course.code}`}
-                  summarize={course}
+      <TabsContent value='grades'>
+        {professor.courses.length > 0 ? (
+          <div className='stack items-start gap-4'>
+            {professor.gradeInfo && (
+              <Paper size='lg'>
+                <GradeSummary
+                  gradeInfo={professor.gradeInfo}
+                  title={tCourse('all-courses')}
+                  titleSize={'3xl'}
+                  info={
+                    <p className='mt-2 text-sm text-gray-600'>
+                      {tCourse('total-info')}
+                    </p>
+                  }
                 />
-              ))}
-            </VStack>
-          ) : (
-            <Box>{tCourse('no-grade-data')}</Box>
-          )}
-        </TabPanel>
+              </Paper>
+            )}
 
-        <TabPanel p={0} mt={6}>
-          {professor.survey.length > 0 ? (
-            <Flex
-              gap={[4, 4, 4, 8]}
-              justify={'center'}
-              width={'100%'}
-              wrap={'wrap'}
-            >
-              {Object.entries(professorQuestions).map(([question, name]) => {
-                const surveyQuestion = professor.survey.find(
-                  (survey) => survey.question === question
-                );
+            {professor.courses.map((course) => (
+              <SectionsSummary
+                key={course.code}
+                title={course.title}
+                href={`/course/${course.code}`}
+                summarize={course}
+              />
+            ))}
+          </div>
+        ) : (
+          <div>{tCourse('no-grade-data')}</div>
+        )}
+      </TabsContent>
 
-                if (surveyQuestion === undefined) return null;
+      <TabsContent value='evaluations'>
+        {professor.survey.length > 0 ? (
+          <div className='flex w-full flex-wrap gap-4 lg:gap-8'>
+            {Object.entries(professorQuestions).map(([question, name]) => {
+              const surveyQuestion = professor.survey.find(
+                (survey) => survey.question === question,
+              );
 
-                return (
-                  <SurveyQuestionHistogram
-                    key={name}
-                    title={tSurvey(`${name}.info`)}
-                    tooltip={tSurvey(`${name}.tooltip`)}
-                    surveyQuestion={surveyQuestion}
-                  />
-                );
-              })}
-            </Flex>
-          ) : (
-            <Box>{tCourse('no-survey-data')}</Box>
-          )}
-        </TabPanel>
-      </TabPanels>
+              if (surveyQuestion === undefined) return null;
+
+              return (
+                <SurveyQuestionHistogram
+                  key={name}
+                  title={tSurvey(`${name}.info`)}
+                  tooltip={tSurvey(`${name}.tooltip`)}
+                  surveyQuestion={surveyQuestion}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div>{tCourse('no-survey-data')}</div>
+        )}
+      </TabsContent>
     </Tabs>
   );
 }

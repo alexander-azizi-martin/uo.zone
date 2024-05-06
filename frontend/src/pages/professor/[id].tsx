@@ -1,16 +1,14 @@
-import { Heading, Stack, Tag, Text } from '@chakra-ui/react';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 
-import {
-  ExternalLink,
-  Layout,
-  SearchNav,
-} from '~/components';
-import { getProfessor, type ProfessorWithCourses } from '~/lib/api';
-import { getDictionary } from '~/lib/dictionary';
-import { RmpRating } from '~/modules/professor/components';
-import { ProfessorTabs } from '~/modules/professor/components/ProfessorTabs';
+import { ExternalLink } from '@/components/ExternalLink';
+import { Layout } from '@/components/layout';
+import { SearchNav } from '@/components/search';
+import { Badge } from '@/components/ui/badge';
+import { getProfessor, type ProfessorWithCourses } from '@/lib/api';
+import { getDictionary } from '@/lib/dictionary';
+import { RmpRating } from '@/modules/professor/components';
+import { ProfessorTabs } from '@/modules/professor/components/ProfessorTabs';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
@@ -22,27 +20,26 @@ export default function Professor({ professor }: ProfessorProps) {
   return (
     <Layout>
       <SearchNav>
-        <Heading my={4}>{professor.name}</Heading>
+        <h2 className='my-4'>{professor.name}</h2>
         {professor.rmpReview && professor.rmpReview.numRatings > 0 && (
           <>
-            <Stack direction={'row'} mt={1} spacing={2} wrap={'wrap'}>
+            <div className='mt-1 flex flex-wrap gap-2'>
               <RmpRating review={professor.rmpReview} />
               {professor.rmpReview.department && (
-                <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
+                <Badge className='bg-blue'>
                   {professor.rmpReview.department}
-                </Tag>
+                </Badge>
               )}
-            </Stack>
+            </div>
 
-            <Text my={4} fontSize={'sm'}>
+            <p className='my-4 text-sm'>
               <ExternalLink
                 href={professor.rmpReview.link}
-                color={'gray.600'}
-                fontSize={'sm'}
+                className='text-sm text-gray-600'
               >
                 {tCourse('rmp')}
               </ExternalLink>
-            </Text>
+            </p>
           </>
         )}
 
@@ -57,7 +54,7 @@ export const getServerSideProps = withAxiomGetServerSideProps(
     try {
       const professor = await getProfessor(
         context.params?.id as string,
-        context.locale
+        context.locale,
       );
 
       return {
@@ -77,5 +74,5 @@ export const getServerSideProps = withAxiomGetServerSideProps(
 
       throw new Error('Internal Server Error');
     }
-  }
+  },
 );

@@ -1,15 +1,21 @@
-import { chakra } from '@chakra-ui/react';
 import Link from 'next/link';
+import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 
-export function CourseLink(props: any) {
+import { cn } from '@/lib/utils';
+
+export const CourseLink = forwardRef<
+  HTMLAnchorElement,
+  ComponentPropsWithoutRef<typeof Link>
+>(({ className, ...props }, ref) => {
   return (
-    <chakra.span
-      color={'#8f001a'}
-      textDecoration={'underline'}
-      textDecorationThickness={'1px'}
-      _hover={{ textDecorationThickness: '2px' }}
-    >
-      <Link {...props} />
-    </chakra.span>
+    <Link
+      {...props}
+      ref={ref}
+      className={cn(
+        'text-garnet underline decoration-1 hover:decoration-2',
+        className,
+      )}
+    />
   );
-}
+});
+CourseLink.displayName = 'CourseLink';

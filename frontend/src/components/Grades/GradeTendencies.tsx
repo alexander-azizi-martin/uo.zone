@@ -1,8 +1,8 @@
-import { HStack, Tag } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
-import { type GradeInfo } from '~/lib/api';
-import LetterGrade from '~/lib/letterGrade';
+import { Badge } from '@/components/ui/badge';
+import { type GradeInfo } from '@/lib/api';
+import { Grade } from '@/lib/grade';
 
 interface GradeTendenciesProps {
   gradeInfo: GradeInfo;
@@ -11,29 +11,36 @@ interface GradeTendenciesProps {
 export function GradeTendencies({ gradeInfo }: GradeTendenciesProps) {
   const tGrades = useTranslations('Grades');
 
-  const mean = new LetterGrade(gradeInfo.mean);
-  const mode = new LetterGrade(gradeInfo.mode);
-
   return (
-    <HStack>
-      {gradeInfo.mean !== null && gradeInfo.total > 0 && (
-        <Tag size={'sm'} textAlign={'center'} colorScheme={mean.color()} py={1}>
-          {tGrades('mean', {
-            letter: mean.letter(),
-            value: mean.value().toFixed(3),
-          })}
-        </Tag>
-      )}
-      {gradeInfo.mode !== null && gradeInfo.total > 0 && (
-        <Tag size={'sm'} textAlign={'center'} colorScheme={mode.color()} py={1}>
-          {tGrades('mode', {
-            letter: mode.letter(),
-            percent: Math.round(
-              (gradeInfo.grades[mode.letter()] / gradeInfo.total) * 100
-            ),
-          })}
-        </Tag>
-      )}
-    </HStack>
+    <div className='flex gap-2'>
+      {gradeInfo.mean !== undefined &&
+        gradeInfo.mean !== null &&
+        gradeInfo.total > 0 && (
+          <Badge
+            className={`py-1 text-center ${Grade.badgeColor(gradeInfo.mean)}`}
+            size={'sm'}
+          >
+            {tGrades('mean', {
+              letter: Grade.letter(gradeInfo.mean),
+              value: gradeInfo.mean.toFixed(3),
+            })}
+          </Badge>
+        )}
+      {gradeInfo.mode !== undefined &&
+        gradeInfo.mode !== null &&
+        gradeInfo.total > 0 && (
+          <Badge
+            className={`py-1 text-center ${Grade.badgeColor(gradeInfo.mode)}`}
+            size={'sm'}
+          >
+            {tGrades('mode', {
+              letter: gradeInfo.mode,
+              percent: Math.round(
+                (gradeInfo.grades[gradeInfo.mode] / gradeInfo.total) * 100,
+              ),
+            })}
+          </Badge>
+        )}
+    </div>
   );
 }

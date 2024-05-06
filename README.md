@@ -5,7 +5,7 @@
 
 ## Tech Stack
 
-The frontend is written in typescript using nextjs and chakra ui. 
+The frontend is written in typescript using nextjs, shadcn ui, and tailwind css. 
 
 The backend is written in php using laravel, sqlite, and meilisearch. 
 

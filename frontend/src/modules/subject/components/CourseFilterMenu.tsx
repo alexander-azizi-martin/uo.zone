@@ -1,28 +1,38 @@
-import {
-  Button,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
-} from '@chakra-ui/react';
-import { SlidersIcon } from '@primer/octicons-react';
+import { SlidersHorizontalIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 
-import { type CourseFilterOptions } from '~/modules/subject/hooks';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenuCheckboxGroup,
+  DropdownMenuCheckboxItem,
+} from '@/components/ui/dropdown-menu-checkbox';
+import { type CourseFilterOptions } from '@/modules/subject/hooks';
 
 interface CourseFilterMenuProps {
   value: CourseFilterOptions;
   onChange: (
     key: 'sortBy' | 'years' | 'languages',
-    value: string | string[]
+    value: string | string[],
   ) => void;
+  onReset: () => void;
 }
 
-export function CourseFilterMenu({ value, onChange }: CourseFilterMenuProps) {
+export function CourseFilterMenu({
+  value,
+  onChange,
+  onReset,
+}: CourseFilterMenuProps) {
   const tFilter = useTranslations('Filter');
   const tGeneral = useTranslations('General');
 
@@ -35,54 +45,91 @@ export function CourseFilterMenu({ value, onChange }: CourseFilterMenuProps) {
       });
     };
 
+  const preventDefault = (event: Event) => {
+    event.preventDefault();
+  };
+
   return (
-    <Menu closeOnSelect={false} flip={false} placement={'bottom-end'}>
-      <MenuButton
-        as={Button}
-        iconSpacing={1}
-        rightIcon={<Icon as={SlidersIcon} />}
-        size={'sm'}
-        variant={'outline'}
-        minW={'fit-content'}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className='h-8 font-semibold ' variant='outline'>
+          {tGeneral('filter')}
+          <SlidersHorizontalIcon className='ml-1' size={14} />
+        </Button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        className='w-48'
+        align='end'
+        onCloseAutoFocus={preventDefault}
       >
-        {tGeneral('filter')}
-      </MenuButton>
-      <MenuList>
-        <MenuOptionGroup
+        <DropdownMenuLabel>{tFilter('sort-by')}</DropdownMenuLabel>
+
+        <DropdownMenuRadioGroup
           value={value.sortBy}
-          onChange={handleChange('sortBy')}
-          title={tFilter('sort-by')}
-          type="radio"
+          onValueChange={handleChange('sortBy')}
         >
-          <MenuItemOption value="code">{tGeneral('code')}</MenuItemOption>
-          <MenuItemOption value="average">{tGeneral('average')}</MenuItemOption>
-          {/* <MenuItemOption value="median">Median</MenuItemOption> */}
-          <MenuItemOption value="mode">{tGeneral('mode')}</MenuItemOption>
-        </MenuOptionGroup>
-        <MenuDivider />
-        <MenuOptionGroup
-          value={value.years}
-          onChange={handleChange('years')}
-          title={tFilter('filter-year')}
-          type="checkbox"
+          <DropdownMenuRadioItem value='code' onSelect={preventDefault}>
+            {tGeneral('code')}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value='average' onSelect={preventDefault}>
+            {tGeneral('average')}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value='mode' onSelect={preventDefault}>
+            {tGeneral('mode')}
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuLabel>{tFilter('filter-year')}</DropdownMenuLabel>
+        <DropdownMenuCheckboxGroup
+          values={value.years}
+          onValuesChange={handleChange('years')}
         >
-          <MenuItemOption value="1">{tFilter('1st-year')}</MenuItemOption>
-          <MenuItemOption value="2">{tFilter('2nd-year')}</MenuItemOption>
-          <MenuItemOption value="3">{tFilter('3rd-year')}</MenuItemOption>
-          <MenuItemOption value="4">{tFilter('4th-year')}</MenuItemOption>
-          <MenuItemOption value="5">{tFilter('graduate')}</MenuItemOption>
-        </MenuOptionGroup>
-        <MenuDivider />
-        <MenuOptionGroup
-          value={value.languages}
-          onChange={handleChange('languages')}
-          title={tFilter('filter-language')}
-          type="checkbox"
+          <DropdownMenuCheckboxItem value='1' onSelect={preventDefault}>
+            {tFilter('1st-year')}
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem value='2' onSelect={preventDefault}>
+            {tFilter('2nd-year')}
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem value='3' onSelect={preventDefault}>
+            {tFilter('3rd-year')}
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem value='4' onSelect={preventDefault}>
+            {tFilter('4th-year')}
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem value='5' onSelect={preventDefault}>
+            {tFilter('graduate')}
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuCheckboxGroup>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuLabel>{tFilter('filter-language')}</DropdownMenuLabel>
+        <DropdownMenuCheckboxGroup
+          values={value.languages}
+          onValuesChange={handleChange('languages')}
         >
-          <MenuItemOption value="en">{tGeneral('english')}</MenuItemOption>
-          <MenuItemOption value="fr">{tGeneral('french')}</MenuItemOption>
-        </MenuOptionGroup>
-      </MenuList>
-    </Menu>
+          <DropdownMenuCheckboxItem value='en' onSelect={preventDefault}>
+            {tGeneral('english')}
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem value='fr' onSelect={preventDefault}>
+            {tGeneral('french')}
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuCheckboxGroup>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          onSelect={preventDefault}
+          onClick={() => {
+            startTransition(onReset);
+          }}
+        >
+          Reset Filters
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import NProgress from 'nprogress';
 import { useEffect, useRef } from 'react';
 
-import { removeQueryString } from '~/lib/helpers';
+import { removeQueryString } from '@/lib/helpers';
 
 export function useNProgress() {
   const router = useRouter();

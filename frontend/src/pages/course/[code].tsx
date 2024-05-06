@@ -1,12 +1,13 @@
-import { Heading, HStack, Link, Tag } from '@chakra-ui/react';
-import NextLink from 'next/link';
+import Link from 'next/link';
 import { withAxiomGetServerSideProps } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 
-import { Layout, SearchNav } from '~/components';
-import { type CourseWithProfessors, getCourse } from '~/lib/api';
-import { getDictionary } from '~/lib/dictionary';
-import { CourseInfo, CourseTabs } from '~/modules/course/components';
+import { Layout } from '@/components/layout';
+import { SearchNav } from '@/components/search';
+import { Badge } from '@/components/ui/badge';
+import { type CourseWithProfessors, getCourse } from '@/lib/api';
+import { getDictionary } from '@/lib/dictionary';
+import { CourseInfo, CourseTabs } from '@/modules/course/components';
 
 interface CourseProps {
   course: CourseWithProfessors;
@@ -20,31 +21,29 @@ export default function Course({ course }: CourseProps) {
   return (
     <Layout>
       <SearchNav>
-        <Heading mt={4} position={'relative'}>
+        <h2 className='relative mt-4 sm:text-4xl'>
           <Link
-            as={NextLink}
             href={`/subject/${subjectCode}`}
-            textDecor={'underline'}
-            textDecorationThickness={'2px'}
+            className='underline decoration-2 hover:decoration-4'
           >
             {subjectCode}
           </Link>
 
           {course.title.slice(3)}
-        </Heading>
+        </h2>
 
-        <HStack mt={1} spacing={2} wrap={'wrap'}>
+        <div className='mt-1 flex flex-wrap gap-2'>
           {course.units !== null && (
-            <Tag size={'md'}>{tCourse('units', { units: course.units })}</Tag>
+            <Badge>{tCourse('units', { units: course.units })}</Badge>
           )}
 
-          <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
+          <Badge className='bg-[#3182ce]' size='sm'>
             {course.subject.subject}
-          </Tag>
-          <Tag colorScheme={'blue'} variant={'solid'} size={'sm'}>
+          </Badge>
+          <Badge className='bg-[#3182ce]' size='sm'>
             {course.subject.faculty}
-          </Tag>
-        </HStack>
+          </Badge>
+        </div>
 
         <CourseInfo course={course} />
 
@@ -59,7 +58,7 @@ export const getServerSideProps = withAxiomGetServerSideProps(
     try {
       const course = await getCourse(
         context.params?.code as string,
-        context.locale
+        context.locale,
       );
 
       return {
@@ -79,5 +78,5 @@ export const getServerSideProps = withAxiomGetServerSideProps(
 
       throw new Error('Internal Server Error');
     }
-  }
+  },
 );

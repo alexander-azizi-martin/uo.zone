@@ -1,9 +1,9 @@
-import { HStack, Tag, Text, VStack } from '@chakra-ui/react';
 import Markdown from 'markdown-to-jsx';
 import { useTranslations } from 'next-intl';
 
-import { type Course } from '~/lib/api';
-import { CourseLink } from '~/modules/course/components';
+import { Badge } from '@/components/ui/badge';
+import { type Course } from '@/lib/api';
+import { CourseLink } from '@/modules/course/components';
 
 interface CourseInfoProps {
   course: Course;
@@ -13,68 +13,70 @@ export function CourseInfo({ course }: CourseInfoProps) {
   const tGeneral = useTranslations('General');
 
   return (
-    <VStack my={6} spacing={4} align={'start'}>
-      <Text fontSize={'md'} as="div">
+    <div className='stack my-6 items-start gap-4'>
+      <div className='text-base leading-6'>
         <Markdown options={{ overrides: { a: CourseLink } }}>
           {course.description}
         </Markdown>
-      </Text>
+      </div>
 
       {course.components.length > 0 && (
-        <HStack align={'start'}>
-          <Text fontWeight={'bold'} fontSize={'sm'}>
-            {tGeneral('components')}:
-          </Text>
+        <div className='flex flex-wrap items-center gap-2'>
+          <p className='mb-auto text-sm font-bold'>{tGeneral('components')}:</p>
 
-          <HStack flexWrap={'wrap'}>
+          <div className='flex flex-wrap gap-2'>
             {course.components.map((component) => (
-              <Tag size={'sm'} key={component} width={'max-content'}>
+              <Badge
+                className='w-max-content text-center'
+                size='sm'
+                key={component}
+              >
                 {component}
-              </Tag>
+              </Badge>
             ))}
-          </HStack>
-        </HStack>
+          </div>
+        </div>
       )}
       {course.requirements && (
-        <HStack>
-          <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
+        <div className='flex gap-2'>
+          <p className='mb-auto text-sm font-bold'>
             {tGeneral('requirements')}:
-          </Text>
-          <Text fontSize={'sm'} as={'div'}>
+          </p>
+          <div className='text-sm'>
             <Markdown options={{ overrides: { a: CourseLink } }}>
               {course.requirements}
             </Markdown>
-          </Text>
-        </HStack>
+          </div>
+        </div>
       )}
       {course.englishEquivalent && (
-        <HStack>
-          <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
+        <div className='flex gap-2'>
+          <p className='mb-auto text-sm font-bold'>
             {tGeneral('english-equivalent')}:
-          </Text>
-          <Text fontSize={'sm'} as={'div'}>
+          </p>
+          <div className='text-sm'>
             <CourseLink href={`/course/${course.englishEquivalent}`}>
               {course.englishEquivalent.slice(0, 3).toUpperCase() +
                 ' ' +
                 course.englishEquivalent.slice(3)}
             </CourseLink>
-          </Text>
-        </HStack>
+          </div>
+        </div>
       )}
       {course.frenchEquivalent && (
-        <HStack>
-          <Text fontWeight={'bold'} fontSize={'sm'} mb={'auto'}>
+        <div className='flex gap-2'>
+          <p className='mb-auto text-sm font-bold'>
             {tGeneral('french-equivalent')}:
-          </Text>
-          <Text fontSize={'sm'} as={'div'}>
+          </p>
+          <div className='text-sm'>
             <CourseLink href={`/course/${course.frenchEquivalent}`}>
               {course.frenchEquivalent.slice(0, 3).toUpperCase() +
                 ' ' +
                 course.frenchEquivalent.slice(3)}
             </CourseLink>
-          </Text>
-        </HStack>
+          </div>
+        </div>
       )}
-    </VStack>
+    </div>
   );
 }

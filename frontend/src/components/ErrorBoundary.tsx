@@ -1,9 +1,9 @@
-import { Heading } from '@chakra-ui/react';
 import { log } from 'next-axiom';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import { Layout, SearchNav } from '~/components';
+import { Layout } from '@/components/layout';
+import { SearchNav } from '@/components/search';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -41,7 +41,7 @@ class ErrorBoundaryClass extends React.Component<
       return (
         <Layout>
           <SearchNav>
-            <Heading mt={4}>{this.props.tError('client')}</Heading>
+            <h2 className='mt-4'>{this.props.tError('client')}</h2>
           </SearchNav>
         </Layout>
       );
@@ -52,7 +52,7 @@ class ErrorBoundaryClass extends React.Component<
 }
 
 function withErrorTranslations(
-  Component: React.ComponentType<ErrorBoundaryProps>
+  Component: React.ComponentType<ErrorBoundaryProps>,
 ) {
   return function WrappedComponent(props: Omit<ErrorBoundaryProps, 'tError'>) {
     const tError = useTranslations('Error');

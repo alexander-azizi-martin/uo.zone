@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 export function useSearchNavigation(
-  searchbar: HTMLInputElement | null | undefined,
+  searchBar: HTMLInputElement | null | undefined,
 ) {
   const selectedIndex = useRef<number>(-1);
   const lastCursorPosition = useRef<number | null>();
 
   useEffect(() => {
-    const resultNodes =
-      document.querySelectorAll<HTMLElement>('.search-result');
+    const resultNodes = document.querySelectorAll<HTMLElement>(
+      '[data-search-result=""]',
+    );
 
     const focusSelected = () => {
       const resultNode = resultNodes[selectedIndex.current];
@@ -24,13 +25,13 @@ export function useSearchNavigation(
       });
     };
 
-    const focusSearchbar = (setCursor: boolean) => {
-      searchbar?.focus();
+    const focusSearchBar = (setCursor: boolean) => {
+      searchBar?.focus();
 
       // Needed because won't work if synchronous
       requestAnimationFrame(() => {
-        if (searchbar && lastCursorPosition.current && setCursor) {
-          searchbar.setSelectionRange(
+        if (searchBar && lastCursorPosition.current && setCursor) {
+          searchBar.setSelectionRange(
             lastCursorPosition.current,
             lastCursorPosition.current,
           );
@@ -43,10 +44,14 @@ export function useSearchNavigation(
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
+      if (document.activeElement === searchBar) {
+        selectedIndex.current = -1;
+      }
+
       switch (event.key) {
         case 'ArrowUp':
           if (selectedIndex.current === 0) {
-            focusSearchbar(true);
+            focusSearchBar(true);
           } else if (selectedIndex.current > 0) {
             selectedIndex.current -= 1;
             focusSelected();
@@ -56,7 +61,7 @@ export function useSearchNavigation(
           break;
         case 'ArrowDown':
           if (selectedIndex.current === -1) {
-            lastCursorPosition.current = searchbar?.selectionStart;
+            lastCursorPosition.current = searchBar?.selectionStart;
           }
           if (resultNodes.length > selectedIndex.current + 1) {
             selectedIndex.current += 1;
@@ -67,7 +72,7 @@ export function useSearchNavigation(
           break;
         default:
           if (selectedIndex.current >= 0 && event.key !== 'Enter') {
-            focusSearchbar(false);
+            focusSearchBar(false);
           }
 
           break;

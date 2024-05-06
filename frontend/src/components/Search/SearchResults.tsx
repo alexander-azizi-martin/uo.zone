@@ -1,15 +1,11 @@
-import { Heading, VStack } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { type RefObject } from 'react';
+import { ReactNode, type RefObject } from 'react';
 
-import { LinkCard } from '~/components';
-import { useSearchNavigation } from '~/hooks';
-import {
-  type CourseResult,
-  type ProfessorResult,
-  type SearchResults as SearchResultsType,
-  type SubjectResult,
-} from '~/lib/api';
+import { Paper } from '@/components/ui/paper';
+import { type SearchResults as SearchResultsType } from '@/lib/api';
+
+import { useSearchNavigation } from './hooks/useSearchNavigation';
 
 interface SearchResultsProps {
   results: SearchResultsType;
@@ -17,94 +13,75 @@ interface SearchResultsProps {
 }
 
 export function SearchResults({ results, searchBar }: SearchResultsProps) {
+  const tSearch = useTranslations('Search');
+
   useSearchNavigation(searchBar?.current);
+
+  const numResults =
+    results.subjects.length +
+    results.courses.length +
+    results.professors.length;
 
   return (
     <>
-      <Subjects subjects={results.subjects} />
-      <Courses courses={results.courses} />
-      <Professors professors={results.professors} />
+      {numResults === 0 && <h3>{tSearch('empty')}</h3>}
+
+      <SearchResultCollection
+        collection={results.subjects}
+        header={tSearch('subjects')}
+        itemTitle={(item) => `${item.code} - ${item.subject}`}
+        itemLink={(item) => `/subject/${item.code}`}
+      />
+      <SearchResultCollection
+        collection={results.courses}
+        header={tSearch('courses')}
+        itemTitle={(item) => item.title}
+        itemLink={(item) => `/course/${item.code}`}
+      />
+      <SearchResultCollection
+        collection={results.professors}
+        header={tSearch('professors')}
+        itemTitle={(item) => item.name}
+        itemLink={(item) => `/professor/${item.id}`}
+      />
     </>
   );
 }
 
-interface CoursesProps {
-  courses: CourseResult[];
+interface SearchResultCollectionProps<T> {
+  collection: T[];
+  header: ReactNode;
+  itemTitle: (item: T) => string;
+  itemLink: (item: T) => string;
 }
 
-function Courses({ courses }: CoursesProps) {
-  const tSearch = useTranslations('Search');
-
-  if (courses.length === 0) return null;
+function SearchResultCollection<T>({
+  collection,
+  header,
+  itemTitle,
+  itemLink,
+}: SearchResultCollectionProps<T>) {
+  if (collection.length === 0) return null;
 
   return (
-    <VStack spacing={2} width={'100%'} align={'start'}>
-      <Heading size={'md'} pt={4}>
-        {tSearch('courses')}
-      </Heading>
-      {courses.map((course) => (
-        <LinkCard
-          key={course.code}
-          href={`/course/${course.code}`}
-          className={'search-result'}
-        >
-          {course.title}
-        </LinkCard>
-      ))}
-    </VStack>
-  );
-}
+    <div className='flex w-full flex-col items-start gap-2'>
+      <h3 className='text-md'>{header}</h3>
+      {collection.map((item) => {
+        const title = itemTitle(item);
+        const link = itemLink(item);
 
-interface ProfessorsProps {
-  professors: ProfessorResult[];
-}
-
-function Professors({ professors }: ProfessorsProps) {
-  const tSearch = useTranslations('Search');
-
-  if (professors.length === 0) return null;
-
-  return (
-    <VStack spacing={2} width={'100%'} align={'start'}>
-      <Heading size={'md'} pt={4}>
-        {tSearch('professors')}
-      </Heading>
-      {professors.map((professor) => (
-        <LinkCard
-          key={professor.id}
-          href={`/professor/${professor.id}`}
-          className={'search-result'}
-        >
-          {professor.name}
-        </LinkCard>
-      ))}
-    </VStack>
-  );
-}
-
-interface SubjectsProps {
-  subjects: SubjectResult[];
-}
-
-function Subjects({ subjects }: SubjectsProps) {
-  const tSearch = useTranslations('Search');
-
-  if (subjects.length === 0) return null;
-
-  return (
-    <VStack spacing={2} width={'100%'} align={'start'}>
-      <Heading size={'md'} pt={4}>
-        {tSearch('subjects')}
-      </Heading>
-      {subjects.map((subject) => (
-        <LinkCard
-          key={subject.code}
-          href={`/subject/${subject.code}`}
-          className={'search-result'}
-        >
-          {subject.code} - {subject.subject}
-        </LinkCard>
-      ))}
-    </VStack>
+        return (
+          <Paper
+            asChild
+            key={link}
+            variant='link'
+            className='focus-visible:outline focus-visible:outline-geegee'
+            data-search-result=''
+          >
+            <Link href={link}>{title}</Link>
+          </Paper>
+        );
+      })}
+    </div>
   );
 }

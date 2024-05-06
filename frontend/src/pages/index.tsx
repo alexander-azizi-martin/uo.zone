@@ -1,92 +1,74 @@
-import { Box, useBoolean } from '@chakra-ui/react';
-import { Collapse, Flex, Heading, Image, Text, VStack } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
-import { Layout, SearchNav } from '~/components';
-import { searchDurations } from '~/lib/config';
+import { Layout } from '@/components/layout';
+import { SearchNav } from '@/components/search';
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
+import { useBoolean } from '@/hooks/useBoolean';
+import { useEffect, useRef } from 'react';
 
 export default function Home() {
   const tHome = useTranslations('Home');
 
   const [searching, setSearching] = useBoolean();
+  const searchBarRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    console.log("hello")
+    searchBarRef.current?.select();
+  }, [searchBarRef]);
 
   return (
     <Layout>
-      <VStack
-        alignItems={['center', 'center', 'start']}
-        spacing={0}
-        width={'100%'}
-        pb={'100px'}
-      >
-        <Flex
-          alignItems={['center', 'center', 'end']}
-          justifyContent={['center', 'space-between', 'space-between']}
-          flexDirection={['column-reverse', 'column-reverse', 'row']}
-          width={'100%'}
+      <div className='stack w-full items-center md:items-start'>
+        <Collapsible
+          open={!searching}
+          className={`
+            flex w-full flex-col-reverse items-center justify-center 
+            md:flex-row md:items-end md:justify-between
+          `}
         >
-          <Collapse
-            unmountOnExit={false}
-            in={!searching}
-            startingHeight={0.01}
-            animateOpacity
-            transition={{
-              exit: { duration: searchDurations.exit },
-              enter: { duration: searchDurations.enter },
-            }}
-            style={{ minWidth: '410px' }}
-          >
-            <Heading
-              fontSize={['50px', '55px', '90px']}
-              paddingTop={[0, 10, 'calc(50vh - 185px)']}
-              textAlign={['center', 'center', 'left']}
-              minW={'max-content'}
+          <CollapsibleContent className='min-w-[410px]'>
+            <h1
+              className={` 
+                min-w-max text-center text-[50px] 
+                sm:pt-2.5 sm:text-[55px] 
+                md:pt-[calc(50vh-185px)] md:text-left md:text-[90px]
+              `}
             >
               UO Grades
-            </Heading>
-            <Text
-              style={{ color: 'black' }}
-              textAlign={['center', 'center', 'left']}
-              fontWeight={300}
-              py={2}
-            >
+            </h1>
+            <p className='py-2 text-center font-light md:text-left'>
               {tHome('description')}
-            </Text>
-          </Collapse>
-          <Box
-            opacity={[1, 1, 0.5]}
-            position={'relative'}
-            top={[0, 0, '90px', '160px', '160px']}
-            pl={8}
+            </p>
+          </CollapsibleContent>
+          <CollapsibleContent
+            className={`
+                relative 
+                sm:pl-8
+                md:top-24 md:opacity-50 
+                lg:top-40
+             `}
           >
-            <Collapse
-              unmountOnExit={false}
-              in={!searching}
-              startingHeight={0.01}
-              animateOpacity
-              transition={{
-                exit: { duration: searchDurations.exit },
-                enter: { duration: searchDurations.enter },
-              }}
-            >
-              <Image
-                pt={[20, 20, 0]}
-                pb={[5, 5, 0]}
-                src={'geegee.svg'}
-                alt={'Geegee'}
-                width={['250px', '300px', '500px']}
-              />
-            </Collapse>
-          </Box>
-        </Flex>
+            <img
+              className={`
+                w-[250px] pb-5 pt-20 
+                sm:w-[300px] 
+                md:w-[500px] md:pb-0 md:pt-0
+              `}
+              src={'geegee.svg'}
+              alt={'Geegee'}
+            />
+          </CollapsibleContent>
+        </Collapsible>
 
         <SearchNav
           onSearchOpen={setSearching.on}
           onSearchClose={setSearching.off}
-          searchBarProps={{ w: ['100%', '100%', '60%'] }}
+          searchBarProps={{ ref: searchBarRef, className: 'w-full md:w-3/5' }}
         />
-      </VStack>
+      </div>
     </Layout>
   );
 }
 
-export { getStaticProps } from '~/lib/dictionary';
+export { getStaticProps } from '@/lib/dictionary';

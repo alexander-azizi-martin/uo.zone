@@ -1,16 +1,16 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Collapse,
-  IconButton,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { type ReactNode, useMemo } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 
-import { BaseCard, GradeSummary, LinkCard } from '~/components';
-import { type CourseSection, type GradeInfo } from '~/lib/api';
+import { GradeSummary } from '@/components/grades';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import { Paper } from '@/components/ui/paper';
+import { type CourseSection, type GradeInfo } from '@/lib/api';
 
 interface SectionsSummaryProps {
   title: ReactNode;
@@ -29,11 +29,11 @@ export function SectionsSummary({
   const tCourse = useTranslations('Course');
   const tGrades = useTranslations('Grades');
 
-  const { isOpen, onToggle } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
 
   const term = useMemo(() => {
-    let oldestTerm = summarize.sections[summarize.sections.length - 1].term;
-    let newestTerm = summarize.sections[0].term;
+    const oldestTerm = summarize.sections[summarize.sections.length - 1].term;
+    const newestTerm = summarize.sections[0].term;
 
     let term: string;
     if (summarize.sections.length === 1)
@@ -60,58 +60,61 @@ export function SectionsSummary({
         subtitle={
           <>
             {term}
-            {!summarize.gradeInfo && <Box>{tGrades('no-data')}</Box>}
+            {!summarize.gradeInfo && <div>{tGrades('no-data')}</div>}
           </>
         }
         gradeInfo={summarize.gradeInfo}
-        distributionSize={'sm'}
+        graphSize={'sm'}
       />
 
-      {summarize.sections.length > 1 && (
-        <Collapse in={isOpen} animateOpacity>
-          <VStack spacing={3} p={2} pt={3}>
+      <CollapsibleContent>
+        {summarize.sections.length > 1 && (
+          <div className='stack gap-3 p-2 pt-3'>
             {summarize.sections.map((section) => (
-              <BaseCard key={`${section.term} - ${section.section}`}>
+              <Paper key={`${section.term} - ${section.section}`}>
                 <GradeSummary
                   subtitle={`${section.term} - ${section.section}`}
                   gradeInfo={section.gradeInfo}
-                  distributionSize={'sm'}
+                  graphSize={'sm'}
                 />
-              </BaseCard>
+              </Paper>
             ))}
-          </VStack>
-        </Collapse>
-      )}
+          </div>
+        )}
+      </CollapsibleContent>
     </>
   );
 
   return (
-    <Box position={'relative'} w={'100%'}>
+    <Collapsible
+      className='relative w-full'
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
       {href ? (
-        <LinkCard href={href}>{summaryMarkup}</LinkCard>
+        <Paper asChild variant={'link'}>
+          <Link href={href}>{summaryMarkup}</Link>
+        </Paper>
       ) : (
-        <BaseCard>{summaryMarkup}</BaseCard>
+        <Paper>{summaryMarkup}</Paper>
       )}
 
       {summarize.sections.length > 1 && (
-        <IconButton
-          pos={'absolute'}
-          size={'xs'}
-          top={'36.5px'}
-          left={'1px'}
-          aria-label={'toggle dropdown'}
-          variant={'ghost'}
-          colorScheme={'blackAlpha'}
-          cursor={'pointer'}
-          rounded={'full'}
-          onClick={() => {
-            onToggle();
-          }}
-          as={'div'}
-        >
-          {isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
-        </IconButton>
+        <CollapsibleTrigger asChild>
+          <button
+            className={`
+              absolute left-px top-[36.5px] flex h-6 w-6 items-center 
+              justify-center rounded-full p-0 hover:bg-accent/40
+          `}
+          >
+            {isOpen ? (
+              <ChevronDownIcon size={12} />
+            ) : (
+              <ChevronRightIcon size={12} />
+            )}
+          </button>
+        </CollapsibleTrigger>
       )}
-    </Box>
+    </Collapsible>
   );
 }

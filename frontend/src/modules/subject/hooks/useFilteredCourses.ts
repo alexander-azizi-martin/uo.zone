@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { type Course } from '~/lib/api';
-import { arrayGt, arrayLt } from '~/lib/helpers';
-import LetterGrade from '~/lib/letterGrade';
+import { type Course } from '@/lib/api';
+import { Grade } from '@/lib/grade';
+import { arrayGt, arrayLt, percent } from '@/lib/helpers';
 
 export interface CourseFilterOptions {
   sortBy: string;
@@ -12,7 +12,7 @@ export interface CourseFilterOptions {
 
 export function useFilteredCourses(
   courses: Course[],
-  filterOptions: CourseFilterOptions
+  filterOptions: CourseFilterOptions,
 ) {
   const filteredCourses = useMemo(
     () =>
@@ -59,24 +59,28 @@ export function useFilteredCourses(
               if (!a.gradeInfo) return 1;
               if (!b.gradeInfo) return -1;
 
-              const aMedian = new LetterGrade(a.gradeInfo.median);
-              const aMedianPercent =
-                a.gradeInfo.grades[aMedian.letter()] / a.gradeInfo.total;
-              const bMedian = new LetterGrade(b.gradeInfo.median);
-              const bMedianPercent =
-                b.gradeInfo.grades[bMedian.letter()] / b.gradeInfo.total;
+              const aMedian = Grade.value(a.gradeInfo.median);
+              const aMedianPercent = percent(
+                a.gradeInfo.grades[a.gradeInfo.median],
+                a.gradeInfo.total,
+              );
+              const bMedian = Grade.value(b.gradeInfo.median);
+              const bMedianPercent = percent(
+                b.gradeInfo.grades[b.gradeInfo.median],
+                b.gradeInfo.total,
+              );
 
               if (
                 arrayLt(
-                  [aMedian.value() || 0, aMedianPercent],
-                  [bMedian.value() || 0, bMedianPercent]
+                  [aMedian || 0, aMedianPercent],
+                  [bMedian || 0, bMedianPercent],
                 )
               ) {
                 return 1;
               } else if (
                 arrayGt(
-                  [aMedian.value() || 0, aMedianPercent],
-                  [bMedian.value() || 0, bMedianPercent]
+                  [aMedian || 0, aMedianPercent],
+                  [bMedian || 0, bMedianPercent],
                 )
               ) {
                 return -1;
@@ -88,25 +92,23 @@ export function useFilteredCourses(
               if (!a.gradeInfo) return 1;
               if (!b.gradeInfo) return -1;
 
-              const aMode = new LetterGrade(a.gradeInfo.mode);
-              const aModePercent =
-                a.gradeInfo.grades[aMode.letter()] / a.gradeInfo.total;
-              const bMode = new LetterGrade(b.gradeInfo.mode);
-              const bModePercent =
-                b.gradeInfo.grades[bMode.letter()] / b.gradeInfo.total;
+              const aMode = Grade.value(a.gradeInfo.mode);
+              const aModePercent = percent(
+                a.gradeInfo.grades[a.gradeInfo.mode],
+                a.gradeInfo.total,
+              );
+              const bMode = Grade.value(b.gradeInfo.mode);
+              const bModePercent = percent(
+                b.gradeInfo.grades[b.gradeInfo.mode],
+                b.gradeInfo.total,
+              );
 
               if (
-                arrayGt(
-                  [aMode.value() || 0, aModePercent],
-                  [bMode.value() || 0, bModePercent]
-                )
+                arrayGt([aMode || 0, aModePercent], [bMode || 0, bModePercent])
               ) {
                 return -1;
               } else if (
-                arrayLt(
-                  [aMode.value() || 0, aModePercent],
-                  [bMode.value() || 0, bModePercent]
-                )
+                arrayLt([aMode || 0, aModePercent], [bMode || 0, bModePercent])
               ) {
                 return 1;
               }
@@ -122,7 +124,7 @@ export function useFilteredCourses(
       filterOptions.sortBy,
       filterOptions.languages,
       filterOptions.years,
-    ]
+    ],
   );
 
   return filteredCourses;

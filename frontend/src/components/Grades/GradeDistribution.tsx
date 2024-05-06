@@ -1,48 +1,71 @@
-import { Box, Circle, Flex, Text, useOutsideClick } from '@chakra-ui/react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState } from 'react';
 
-import { useGradient } from '~/hooks';
-import { type GradeInfo } from '~/lib/api';
-import { gradeGradient } from '~/lib/config';
-import LetterGrade from '~/lib/letterGrade';
+import { Trapezoid } from '@/components/ui/trapezoid';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { type GradeInfo } from '@/lib/api';
+import { gradeGradient } from '@/lib/config';
+import { Grade, type Letter } from '@/lib/grade';
+import { pairwise, percent, createGradient } from '@/lib/helpers';
 
-interface GradeDistributionProps {
+const gradeDistributionVariants = cva(
+  `
+    relative flex touch-none overflow-hidden rounded 
+    h-[--grade-distribution-height] w-[--grade-distribution-width]
+  `,
+  {
+    variants: {
+      size: {
+        sm: `
+          [--grade-distribution-height:40px]
+          [--grade-distribution-width:250px] 
+          sm:[--grade-distribution-width:300px]
+        `,
+        md: ` 
+          [--grade-distribution-height:55px]
+          [--grade-distribution-width:300px] 
+          sm:[--grade-distribution-width:390px]
+        `,
+      },
+    },
+    defaultVariants: {
+      size: 'md',
+    },
+  },
+);
+
+interface GradeDistributionProps
+  extends VariantProps<typeof gradeDistributionVariants> {
   gradeInfo: GradeInfo;
-  width?: number;
-  height?: number;
-  backgroundColor?: string;
 }
 
-export function GradeDistribution({
-  gradeInfo,
-  width = 390,
-  height = 55,
-  backgroundColor = 'white',
-}: GradeDistributionProps) {
+const NUM_BINS = Grade.NUMERICAL_GRADES.length - 1;
+
+export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
   const tGrades = useTranslations('Grades');
 
-  const [selectedGrade, setSelectedGrade] = useState<LetterGrade>();
-  const gradient = useGradient(gradeGradient);
+  const [selectedGrade, setSelectedGrade] = useState<Letter>();
+  const gradient = createGradient(gradeGradient);
   const rootRef = useRef<HTMLDivElement>(null);
   useOutsideClick({
     ref: rootRef,
     handler: () => setSelectedGrade(undefined),
   });
 
-  const heights = useMemo(() => {
-    return LetterGrade.NUMERICAL_GRADES.map((letter) => {
-      if (gradeInfo.total == 0) return height;
+  const heightPercents = useMemo(() => {
+    const numericalTotal = Grade.NUMERICAL_GRADES.reduce(
+      (acc, letter) => acc + gradeInfo.grades[letter],
+      0,
+    );
 
-      const percent = gradeInfo.grades[letter] / gradeInfo.total;
-      const complement = Math.max(0, 1 - percent * 4);
+    return Grade.NUMERICAL_GRADES.map((letter) => {
+      const gradePercent = percent(gradeInfo.grades[letter], numericalTotal);
+      const heightPercent = 1 - gradePercent * 4;
 
-      return Math.round(height * complement);
+      return Math.max(0, heightPercent);
     });
-  }, [gradeInfo, height]);
-
-  const blockWidth = width / 10;
-  const gradeOffset = (grade: number) => grade * blockWidth;
+  }, [gradeInfo]);
 
   const handleMouseMove = (event: any) => {
     if (!rootRef.current) return;
@@ -52,10 +75,10 @@ export function GradeDistribution({
     const rootRect = rootRef.current.getBoundingClientRect();
     const x = (event.clientX || event.touches[0].clientX) - rootRect.left;
 
-    let minDistance = width;
+    let minDistance = Infinity;
     let closestGrade = -1;
     for (let grade = 0; grade < 11; grade++) {
-      const distance = Math.abs(gradeOffset(grade) - x);
+      const distance = Math.abs(rootRect.width * (grade / NUM_BINS) - x);
 
       if (distance < minDistance) {
         minDistance = distance;
@@ -63,154 +86,101 @@ export function GradeDistribution({
       }
     }
 
-    setSelectedGrade(new LetterGrade(closestGrade));
+    setSelectedGrade(Grade.letter(closestGrade));
   };
 
   return (
-    <Flex direction={'column'}>
-      <Flex
+    <div className='flex flex-col'>
+      <div
         ref={rootRef}
-        w={`${width}px`}
-        h={`${height}px`}
-        borderRadius={4}
-        background={gradient}
-        overflow={'hidden'}
-        position={'relative'}
-        style={{ touchAction: 'none' }}
+        className={gradeDistributionVariants({ size })}
+        style={{ background: gradient }}
         onMouseMove={handleMouseMove}
         onTouchMove={handleMouseMove}
         onMouseLeave={() => setSelectedGrade(undefined)}
       >
-        {heights.map((_, i) => {
-          if (i + 1 >= heights.length) return null;
-
-          let currentHeight = heights[i];
-          let nextHeight = heights[i + 1];
-
-          const rectHeight = Math.min(currentHeight, nextHeight);
-          const trigHeight = Math.abs(currentHeight - nextHeight);
-
-          return (
-            <Box w={`${blockWidth}px`} key={i}>
-              <Box
-                w="100%"
-                opacity={'0.92'}
-                borderTop={`${rectHeight}px solid ${backgroundColor}`}
-              ></Box>
-              <Box
-                w="100%"
-                opacity={'0.92'}
-                style={{
-                  [currentHeight < nextHeight
-                    ? 'borderLeft'
-                    : 'borderRight']: `${blockWidth}px solid transparent`,
-                }}
-                borderTop={`${trigHeight}px solid ${backgroundColor}`}
-              ></Box>
-            </Box>
-          );
-        })}
+        {pairwise(heightPercents).map(([currentPercent, nextPercent], i) => (
+          <Trapezoid
+            key={i}
+            className='text-white/90'
+            width={`calc(var(--grade-distribution-width) * ${1 / NUM_BINS})`}
+            heights={[
+              `round(calc(var(--grade-distribution-height) * ${currentPercent}), 1px)`,
+              `round(calc(var(--grade-distribution-height) * ${nextPercent}), 1px)`,
+            ]}
+            leaning={currentPercent > nextPercent ? 'left' : 'right'}
+          />
+        ))}
 
         {selectedGrade !== undefined && (
           <>
             <PinPoint
-              x={gradeOffset(selectedGrade.value())}
-              y={heights[selectedGrade.value()]}
+              x={`calc(100% * ${(1 / NUM_BINS) * Grade.value(selectedGrade)})`}
+              y={`round(calc(100% * ${heightPercents[Grade.value(selectedGrade)]}), 1px)`}
             />
 
-            <Text
-              style={{
-                width: 'max-content',
-                color: '#1B202B',
-                userSelect: 'none',
-                fontSize: 12,
-                fontWeight: 'bold',
-                margin: 'auto',
-                position: 'absolute',
-                left: 0,
-                right: 0,
-              }}
+            <p
+              className={`
+                color-[#1B202B] absolute left-0 right-0 m-auto w-max 
+                select-none text-xs font-bold
+              `}
             >
               {tGrades('occurrence', {
-                letter: selectedGrade.letter(),
-                letterClass: selectedGrade.letter()[0],
-                occurrences: gradeInfo.grades[selectedGrade.letter()],
+                letter: selectedGrade,
+                letterClass: selectedGrade[0],
+                occurrences: gradeInfo.grades[selectedGrade],
                 percent:
                   gradeInfo.total > 0
                     ? Math.round(
-                        (gradeInfo.grades[selectedGrade.letter()] /
-                          gradeInfo.total) *
-                          100
+                        (gradeInfo.grades[selectedGrade] / gradeInfo.total) *
+                          100,
                       )
                     : 0,
               })}
-            </Text>
+            </p>
           </>
         )}
-      </Flex>
+      </div>
 
-      <Box position={'relative'} h={'14px'}>
-        {LetterGrade.NUMERICAL_GRADES.map((letter, i) => {
-          if (i % 2 == 1) return null;
-
-          return (
-            <Text
+      <div className='relative h-3.5'>
+        {Grade.NUMERICAL_GRADES.filter((_, i) => i % 2 === 0).map(
+          (letter, i) => (
+            <p
               key={letter}
-              style={{
-                fontSize: '9px',
-                opacity: '0.6',
-                transform: 'translateX(-50%)',
-                position: 'absolute',
-                top: 0,
-                left: `${gradeOffset(i)}px`,
-              }}
+              className='absolute top-0 -translate-x-1/2 text-3xs leading-3 opacity-60'
+              style={{ left: `calc(100% * ${(i / NUM_BINS) * 2})` }}
             >
               {letter}
-            </Text>
-          );
-        })}
-      </Box>
-    </Flex>
+            </p>
+          ),
+        )}
+      </div>
+    </div>
   );
 }
 
 interface PinPointProps {
-  x: number;
-  y: number;
+  x: string;
+  y: string;
 }
 
 function PinPoint({ x, y }: PinPointProps) {
-  const lineWidth = 2;
-  const circleRadius = 3;
-
   return (
     <>
-      <Box
-        w={'100%'}
-        h={`${lineWidth}px`}
-        background={'black'}
-        opacity={'0.1'}
-        position={'absolute'}
-        top={`${y - lineWidth / 2}px`}
-      ></Box>
-      <Box
-        w={`${lineWidth}px`}
-        h={'100%'}
-        background={'black'}
-        opacity={'0.2'}
-        position={'absolute'}
-        left={`${x - lineWidth / 2}px`}
-      ></Box>
-      <Circle
-        position={'absolute'}
-        left={`${x - circleRadius / 2}px`}
-        top={`${y - circleRadius / 2}px`}
-        style={{
-          width: `${circleRadius}px`,
-          height: `${circleRadius}px`,
-          background: 'black',
-          opacity: '0.4',
-        }}
+      <div
+        className='absolute h-0.5 w-full -translate-y-1/2 bg-black/10'
+        style={{ top: y }}
+      />
+      <div
+        className='absolute h-full w-0.5 -translate-x-1/2 bg-black/20'
+        style={{ left: x }}
+      />
+      <div
+        className={`
+          absolute h-1 w-1 -translate-x-1/2 -translate-y-1/2 
+          rounded-full bg-black/40
+        `}
+        style={{ left: x, top: y }}
       />
     </>
   );

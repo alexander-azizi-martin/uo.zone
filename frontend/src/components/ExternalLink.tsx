@@ -1,19 +1,25 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Link, LinkProps } from '@chakra-ui/react';
+import { ExternalLinkIcon } from 'lucide-react';
+import { type AnchorHTMLAttributes } from 'react';
 
-export function ExternalLink({ href, children, ...props }: LinkProps) {
+import { cn } from '@/lib/utils';
+
+export function ExternalLink({
+  href,
+  children,
+  className,
+  ...props
+}: AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
-    <Link
+    <a
       href={href}
-      fontWeight={500}
-      color={'gray.700'}
-      isExternal={true}
-      display={'inline-flex'}
-      alignItems={'center'}
+      className={cn(
+        'inline-flex items-center font-medium text-gray-700 hover:underline',
+        className,
+      )}
       {...props}
     >
       {children}
-      <ExternalLinkIcon mx={'2px'} />
-    </Link>
+      <ExternalLinkIcon className='mx-0.5' size={14} />
+    </a>
   );
 }

@@ -1,9 +1,8 @@
-import { Box, Flex } from '@chakra-ui/react';
 import Head from 'next/head';
 import Script from 'next/script';
 
-import { Footer } from '~/components';
-import { openGraph } from '~/lib/config';
+import { Footer } from '@/components/layout';
+import { openGraph } from '@/lib/config';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,12 +32,12 @@ export function Layout({ children }: LayoutProps) {
         />
       </Head>
 
-      <Flex direction={'row'} justifyContent={'center'}>
-        <Box px={[2, 5, 10]} maxW={'1300px'} width={'100%'}>
-          <Box minH={'100vh'}>{children}</Box>
+      <div className='flex justify-center'>
+        <div className='w-full max-w-[1300px] px-5 sm:px-5 md:px-10'>
+          <div className='min-h-[100vh]'>{children}</div>
           <Footer />
-        </Box>
-      </Flex>
+        </div>
+      </div>
 
       <Script
         async

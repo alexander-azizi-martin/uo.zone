@@ -1,20 +1,14 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Text,
-  useBoolean,
-  useOutsideClick,
-} from '@chakra-ui/react';
 import { InfoIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useRef } from 'react';
 
-import { type SurveyQuestion } from '~/lib/api';
-import Survey from '~/lib/survey';
-
-import { BaseCard, Tooltip } from '.';
+import { Tooltip } from '@/components/Tooltip';
+import { Paper } from '@/components/ui/paper';
+import { useBoolean } from '@/hooks/useBoolean';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { type SurveyQuestion } from '@/lib/api';
+import { percent } from '@/lib/helpers';
+import { Survey } from '@/lib/survey';
 
 interface SurveyQuestionHistogramProps {
   title: string;
@@ -32,44 +26,36 @@ export function SurveyQuestionHistogram({
   const score = useMemo(() => Survey.score(surveyQuestion), [surveyQuestion]);
 
   return (
-    <BaseCard style={{ width: '525px', paddingRight: 32, paddingBottom: 32 }}>
-      <Flex pb={6} justify={'space-between'}>
-        <Box>
-          <Flex align={'center'}>
-            <Text
-              fontSize={['2xl', '3xl', '3xl']}
-              fontWeight={'bold'}
-              lineHeight={'36px'}
-            >
-              {title}
-            </Text>
+    <Paper className='w-[525px] pb-8 pr-8'>
+      <div className='flex justify-between pb-6'>
+        <div>
+          <div className='flex items-center'>
+            <p className='text-2xl font-bold leading-8 sm:text-3xl'>{title}</p>
 
             <Tooltip label={tooltip}>
-              <Box ml={1} color={'gray.400'}>
+              <div className='ml-1 text-gray-400'>
                 <InfoIcon size={18} />
-              </Box>
+              </div>
             </Tooltip>
-          </Flex>
+          </div>
 
-          <Text fontSize={'sm'} fontWeight={'light'} lineHeight={'18px'}>
+          <p className='text-sm font-light leading-5'>
             {surveyQuestion.totalResponses} {tGeneral('responses')}
-          </Text>
-        </Box>
+          </p>
+        </div>
 
-        <HStack alignItems={'start'}>
-          <Heading m={0} color={'black'} fontSize={['3xl', '4xl', '5xl']}>
+        <div className='flex items-start gap-2'>
+          <h2 className='text-3xl sm:text-4xl md:text-5xl'>
             {score.toFixed(2)}
-          </Heading>
-          <Heading fontSize={['md', 'lg', 'xl']} color={'black'} pt={2}>
-            / 5
-          </Heading>
-        </HStack>
-      </Flex>
+          </h2>
+          <h3 className='text-md pt-2 sm:text-lg md:text-xl'>/ 5</h3>
+        </div>
+      </div>
 
-      <Box pos={'relative'}>
+      <div className='relative'>
         {Object.entries(surveyQuestion.options)
           .sort(
-            ([a], [b]) => Survey.RESPONSE_VALUES[b] - Survey.RESPONSE_VALUES[a]
+            ([a], [b]) => Survey.RESPONSE_VALUES[b] - Survey.RESPONSE_VALUES[a],
           )
           .map(([option, responses]) => (
             <HistogramBar
@@ -83,8 +69,8 @@ export function SurveyQuestionHistogram({
         {[25, 50, 75, 100].map((percent) => (
           <HistogramPercentBoundary key={percent} percent={percent} />
         ))}
-      </Box>
-    </BaseCard>
+      </div>
+    </Paper>
   );
 }
 
@@ -96,50 +82,40 @@ interface HistogramBar {
 
 function HistogramBar({ label, value, total }: HistogramBar) {
   const [hovering, setHovering] = useBoolean(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   useOutsideClick({
     ref: ref,
     handler: setHovering.off,
   });
 
-  const valuePercent = total > 0 ? Math.round((value / total) * 100) : 0;
+  const valuePercent = percent(value, total);
 
   return (
-    <Flex
-      align={'center'}
-      w={'100%'}
+    <div
+      ref={ref}
+      className='flex w-full items-center'
       onMouseEnter={setHovering.on}
       onMouseLeave={setHovering.off}
       onClick={setHovering.on}
     >
-      <Box
-        pos={'relative'}
-        borderRight={'1px solid black'}
-        minW={'100px'}
-        maxW={'100px'}
-        py={4}
-        pr={3}
-        textAlign={'right'}
+      <div
+        className={`
+          relative w-[100px] border border-solid border-black 
+          py-4 pr-3 text-center
+        `}
       >
         {label}
-      </Box>
+      </div>
 
-      <Flex
-        zIndex={1}
-        align={'center'}
-        w={'100%'}
-        h={4}
-        _before={{
-          w: `${valuePercent}%`,
-          h: '100%',
-          mr: 1.5,
-          bgColor: '#651d32',
-          content: `''`,
-        }}
-      >
+      <div className='z-10 flex h-4 w-full items-center'>
+        <div
+          className='mr-1.5 h-full bg-[#651d32]'
+          style={{ width: `${valuePercent}%` }}
+        />
+
         {hovering ? value : `${valuePercent}%`}
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 }
 
@@ -149,31 +125,25 @@ interface HistogramPercentBoundaryProps {
 
 function HistogramPercentBoundary({ percent }: HistogramPercentBoundaryProps) {
   return (
-    <Box
-      pos={'absolute'}
-      top={0}
-      left={`calc(${percent / 100} * (100% - 100px) + 100px)`}
-      h={'100%'}
-      _before={{
-        display: 'block',
-        borderLeft: '1px solid black',
-        w: '1px',
-        h: '100%',
-        opacity: 0.1,
-        transform: 'translateX(-50%)',
-        content: `''`,
-      }}
+    <div
+      className='absolute top-0 h-full'
+      style={{ left: `calc(${percent / 100} * (100% - 100px) + 100px)` }}
     >
-      <Box
-        pos={'absolute'}
-        bottom={0}
-        w={'fit-content'}
-        fontSize={'xs'}
-        opacity={0.5}
-        transform={'translate(-50%, 100%)'}
+      <div
+        className={`
+          h-full w-px -translate-x-1/2
+          border-l border-solid border-black/10 
+        `}
+      />
+
+      <div
+        className={`
+          absolute bottom-0 w-fit -translate-x-1/2 translate-y-full 
+          text-xs opacity-50
+        `}
       >
         {percent}%
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

@@ -1,27 +1,16 @@
-import { InfoOutlineIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Flex,
-  HStack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  VStack,
-} from '@chakra-ui/react';
+import { InfoIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
-import {
-  GradeSummary,
-  SectionsSummary,
-  SummaryCard,
-  SurveyQuestionHistogram,
-  Tooltip,
-} from '~/components';
-import { type CourseWithProfessors, type SurveyQuestion } from '~/lib/api';
-import { courseQuestions } from '~/lib/config';
+import { GradeSummary } from '@/components/grades';
+import { SectionsSummary } from '@/components/SectionsSummary';
+import { SurveyQuestionHistogram } from '@/components/SurveyQuestionHistogram';
+import { Tooltip } from '@/components/Tooltip';
+import { Paper } from '@/components/ui/paper';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { type CourseWithProfessors } from '@/lib/api';
+import { courseQuestions } from '@/lib/config';
+import { Grade } from '@/lib/grade';
 
 interface CourseTabsProps {
   course: CourseWithProfessors;
@@ -36,122 +25,94 @@ export function CourseTabs({ course }: CourseTabsProps) {
     't',
     parseAsStringLiteral(['grades', 'reviews', 'evaluations', 'graph'])
       .withDefault('grades')
-      .withOptions({ clearOnDefault: true })
+      .withOptions({ clearOnDefault: true }),
   );
 
   return (
-    <Tabs
-      variant="enclosed"
-      color="black"
-      colorScheme="black"
-      borderColor={'rgba(91,0,19,0.42)'}
-      outline={'none'}
-      defaultIndex={['grades', 'evaluations'].indexOf(tab)}
-      tabIndex={['grades', 'evaluations'].indexOf(tab)}
-      onChange={(index) => {
-        setTab(['grades', 'evaluations'][index] as any);
-      }}
-    >
-      <TabList>
-        <Tab>{tGeneral('grades')}</Tab>
-        {/* <Tab>Reviews</Tab> */}
-        <Tab>{tGeneral('course-evaluations')}</Tab>
-        {/* <Tab>Graph</Tab> */}
-      </TabList>
+    <Tabs value={tab} onValueChange={setTab as any}>
+      <TabsList className='grid w-full grid-cols-2'>
+        <TabsTrigger value='grades'>{tGeneral('grades')}</TabsTrigger>
+        <TabsTrigger value='evaluations'>
+          {tGeneral('course-evaluations')}
+        </TabsTrigger>
+      </TabsList>
 
-      <TabPanels>
-        <TabPanel p={0} mt={6}>
-          {course.professors.length > 0 ? (
-            <VStack spacing={4} align={'start'}>
-              {course.gradeInfo && (
-                <SummaryCard>
-                  <GradeSummary
-                    gradeInfo={course.gradeInfo}
-                    title={tCourse('all-professors')}
-                    titleSize={'3xl'}
-                  />
-                </SummaryCard>
-              )}
-
-              {course.professors.map((professor) => (
-                <SectionsSummary
-                  key={professor.id}
-                  title={
-                    professor.id !== 0 ? (
-                      professor.name
-                    ) : (
-                      <HStack alignItems={'center'}>
-                        <Box>
-                          {tCourse('unknown-professor', {
-                            count: professor.sections.length,
-                          })}
-                        </Box>
-
-                        <Tooltip
-                          label={tCourse('unknown-professor-info', {
-                            count: professor.sections.length,
-                          })}
-                          fontSize={'sm'}
-                          textAlign={'center'}
-                          hasArrow
-                        >
-                          <InfoOutlineIcon fontSize={'sm'} />
-                        </Tooltip>
-                      </HStack>
-                    )
-                  }
-                  href={
-                    professor.id !== 0
-                      ? `/professor/${professor.id}`
-                      : undefined
-                  }
-                  summarize={professor}
+      <TabsContent value='grades'>
+        {course.professors.length > 0 ? (
+          <div className='flex flex-col items-start gap-4'>
+            {course.gradeInfo && (
+              <Paper size='lg'>
+                <GradeSummary
+                  gradeInfo={course.gradeInfo}
+                  title={tCourse('all-professors')}
+                  titleSize={'3xl'}
                 />
-              ))}
-            </VStack>
-          ) : (
-            <Box>{tCourse('no-grade-data')}</Box>
-          )}
-        </TabPanel>
+              </Paper>
+            )}
 
-        {/* <TabPanel p={0} mt={6}>
-          reviews
-        </TabPanel> */}
+            {course.professors.map((professor) => (
+              <SectionsSummary
+                key={professor.id}
+                title={
+                  professor.id !== 0 ? (
+                    professor.name
+                  ) : (
+                    <div className='flex items-start gap-2'>
+                      <div>
+                        {tCourse('unknown-professor', {
+                          count: professor.sections.length,
+                        })}
+                      </div>
 
-        <TabPanel p={0} mt={6}>
-          {course.survey.length > 0 ? (
-            <Flex
-              gap={[4, 4, 4, 8]}
-              justify={'center'}
-              width={'100%'}
-              wrap={'wrap'}
-            >
-              {Object.entries(courseQuestions).map(([question, name]) => {
-                const surveyQuestion = course.survey.find(
-                  (survey) => survey.question === question
-                );
+                      <Tooltip
+                        label={tCourse('unknown-professor-info', {
+                          count: professor.sections.length,
+                        })}
+                        fontSize={'sm'}
+                        textAlign={'center'}
+                        hasArrow
+                      >
+                        <InfoIcon size={14} />
+                      </Tooltip>
+                    </div>
+                  )
+                }
+                href={
+                  professor.id !== 0 ? `/professor/${professor.id}` : undefined
+                }
+                summarize={professor}
+              />
+            ))}
+          </div>
+        ) : (
+          <div>{tCourse('no-grade-data')}</div>
+        )}
+      </TabsContent>
 
-                if (surveyQuestion === undefined) return null;
+      <TabsContent value='evaluations'>
+        {course.survey.length > 0 ? (
+          <div className='flex w-full flex-wrap justify-center gap-4 lg:gap-8'>
+            {Object.entries(courseQuestions).map(([question, name]) => {
+              const surveyQuestion = course.survey.find(
+                (survey) => survey.question === question,
+              );
 
-                return (
-                  <SurveyQuestionHistogram
-                    key={name}
-                    title={tSurvey(`${name}.info`)}
-                    tooltip={tSurvey(`${name}.tooltip`)}
-                    surveyQuestion={surveyQuestion}
-                  />
-                );
-              })}
-            </Flex>
-          ) : (
-            <Box>{tCourse('no-survey-data')}</Box>
-          )}
-        </TabPanel>
+              if (surveyQuestion === undefined) return null;
 
-        {/* <TabPanel p={0} mt={6}>
-          graph
-        </TabPanel> */}
-      </TabPanels>
+              return (
+                <SurveyQuestionHistogram
+                  key={name}
+                  title={tSurvey(`${name}.info`)}
+                  tooltip={tSurvey(`${name}.tooltip`)}
+                  surveyQuestion={surveyQuestion}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div>{tCourse('no-survey-data')}</div>
+        )}
+      </TabsContent>
     </Tabs>
   );
 }

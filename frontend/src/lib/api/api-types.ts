@@ -1,4 +1,4 @@
-import { type Letter } from "~/lib/letterGrade";
+import { type Letter } from '@/lib/grade';
 
 export interface SurveyQuestion {
   question: string;

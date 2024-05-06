@@ -1,5 +1,5 @@
 .DS_STORE
 .cache
-TODO.md
 .vercel
-static
+.vscode
+/static

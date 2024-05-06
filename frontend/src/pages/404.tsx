@@ -1,7 +1,7 @@
-import { Heading } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 
-import {Layout, SearchNav} from '~/components';
+import { Layout } from '@/components/layout';
+import { SearchNav } from '@/components/search';
 
 export default function NotFound() {
   const t = useTranslations('Error');
@@ -9,10 +9,10 @@ export default function NotFound() {
   return (
     <Layout>
       <SearchNav>
-        <Heading mt={4}>{t('404')}</Heading>
+        <h2 className='mt-4'>{t('404')}</h2>
       </SearchNav>
     </Layout>
   );
 }
 
-export { getStaticProps } from '~/lib/dictionary';
+export { getStaticProps } from '@/lib/dictionary';

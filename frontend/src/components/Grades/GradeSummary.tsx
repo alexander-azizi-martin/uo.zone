@@ -1,12 +1,3 @@
-import {
-  Badge,
-  Flex,
-  HStack,
-  Spacer,
-  Text,
-  useMediaQuery,
-  VStack,
-} from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import { type ReactNode } from 'react';
 
@@ -14,8 +5,9 @@ import {
   GradeDistribution,
   GradeHistogram,
   GradeTendencies,
-} from '~/components';
-import { type GradeInfo } from '~/lib/api';
+} from '@/components/grades';
+import { Tag } from '@/components/ui/tag';
+import { type GradeInfo } from '@/lib/api';
 
 interface GradeSummaryProps {
   title?: ReactNode;
@@ -23,8 +15,7 @@ interface GradeSummaryProps {
   subtitle?: ReactNode;
   info?: ReactNode;
   gradeInfo?: GradeInfo;
-  distributionSize?: 'sm' | 'md';
-  ssr?: boolean;
+  graphSize?: 'sm' | 'md';
 }
 
 export function GradeSummary({
@@ -33,94 +24,50 @@ export function GradeSummary({
   subtitle,
   info,
   gradeInfo,
-  distributionSize = 'md',
-  ssr = true,
+  graphSize = 'md',
 }: GradeSummaryProps) {
   const tGrades = useTranslations('Grades');
-  const [isLargerThan600] = useMediaQuery('(min-width: 650px)', {
-    ssr,
-    fallback: false,
-  });
-
-  let distributionWidth;
-  let distributionHeight;
-
-  if (distributionSize == 'sm') {
-    distributionWidth = isLargerThan600 ? 300 : 250;
-    distributionHeight = 40;
-  } else if (distributionSize == 'md') {
-    distributionWidth = isLargerThan600 ? 390 : 300;
-    distributionHeight = 55;
-  }
 
   return (
-    <HStack
-      justify={'center'}
-      width={'100%'}
-      height={'100%'}
-      flexWrap={'wrap'}
-      alignItems={{
-        base: 'center',
-        lg: 'start',
-      }}
-      flexDir={{
-        base: 'column',
-        lg: 'row',
-      }}
+    <div
+      className={`
+        stack h-full w-full flex-wrap items-center justify-center gap-2 
+        lg:flex-row lg:items-start
+      `}
     >
-      <VStack
-        align={'start'}
-        flexGrow={1}
-        width={{
-          base: '100%',
-          lg: 'min-content',
-        }}
-        justifyContent={'center'}
-        spacing={0}
-      >
-        <Text fontSize={titleSize} fontWeight={'bold'} as={'div'}>
-          {title}
-        </Text>
+      <div className='stack w-full grow items-start justify-center lg:w-min'>
+        <div className={`font-bold text-${titleSize}`}>{title}</div>
 
-        {subtitle && (
-          <Text fontSize={'xs'} fontWeight={'200'} as={'div'}>
-            {subtitle}
-          </Text>
-        )}
+        {subtitle && <div className='text-sm font-extralight'>{subtitle}</div>}
 
-        <Spacer mt={3} />
+        <span className='mt-3' />
 
         {gradeInfo && <GradeTendencies gradeInfo={gradeInfo} />}
 
         {info && info}
-      </VStack>
+      </div>
 
       {gradeInfo && (
-        <VStack
-          gap={2}
+        <div
+          className='flex flex-col gap-2'
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
           }}
         >
-          <Badge margin={'auto'}>
-            {tGrades('students', { totalStudents: gradeInfo.total })}
-          </Badge>
+          <Tag>{tGrades('students', { totalStudents: gradeInfo.total })}</Tag>
 
-          <Flex
-            alignItems={['center', 'flex-end', 'flex-end']}
-            gap={'10px'}
-            flexDir={['column-reverse', 'row', 'row']}
+          <div
+            className={`
+            flex flex-col-reverse items-center gap-2.5 
+            sm:flex-row sm:items-start
+          `}
           >
-            <GradeHistogram gradeInfo={gradeInfo} height={distributionHeight} />
-            <GradeDistribution
-              gradeInfo={gradeInfo}
-              width={distributionWidth}
-              height={distributionHeight}
-            />
-          </Flex>
-        </VStack>
+            <GradeHistogram gradeInfo={gradeInfo} size={graphSize} />
+            <GradeDistribution gradeInfo={gradeInfo} size={graphSize} />
+          </div>
+        </div>
       )}
-    </HStack>
+    </div>
   );
 }

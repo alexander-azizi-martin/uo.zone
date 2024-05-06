@@ -1,153 +1,129 @@
-import {
-  Box,
-  Collapse,
-  Heading,
-  InputGroupProps,
-  Spinner,
-  VStack,
-} from '@chakra-ui/react';
-import debounce from 'lodash.debounce';
 import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+  useImperativeHandle,
+} from 'react';
 
-import { SearchBar, SearchResults } from '~/components';
-import { search, type SearchResults as SearchResultsType } from '~/lib/api';
-import { searchDurations } from '~/lib/config';
+import {
+  SearchBar,
+  type SearchBarProps,
+  SearchResults,
+} from '@/components/search';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+} from '@/components/ui/accordion';
+import { Spinner } from '@/components/ui/spinner';
 
-interface SearchProps {
+import { useResizeOnAnimation } from './hooks/useResizeOnAnimation';
+import { useSearchResults } from './hooks/useSearchResults';
+
+interface SearchProps extends PropsWithChildren {
   onSearchOpen?: () => void;
   onSearchClose?: () => void;
-  children?: React.ReactNode;
-  searchBarProps?: InputGroupProps;
+  searchBarProps?: Omit<SearchBarProps, 'value' | 'onChange' | 'placeholder'>;
 }
 
 export function SearchNav({
-  onSearchClose,
   onSearchOpen,
+  onSearchClose,
   children,
   searchBarProps,
 }: SearchProps) {
   const tSearch = useTranslations('Search');
-  const { locale } = useRouter();
-  const pathname = usePathname();
 
-  const [query, setQuery] = useState('');
-  const [searching, setSearching] = useState(false);
-  const [results, setResults] = useState<SearchResultsType | null>();
+  const searchResultsRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  useResizeOnAnimation(searchResultsRef);
+  useResizeOnAnimation(contentRef);
+
   const searchBarRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (searchBarRef.current && pathname === '/') {
-      searchBarRef.current.select();
-    }
-  }, [searchBarRef, pathname]);
-
-  const updateResults = useCallback(
-    debounce((query: string) => {
-      search(query, locale)
-        .then((data) => {
-          setResults(data);
-        })
-        .catch(() => {
-          setResults({ courses: [], professors: [], subjects: [] });
-        });
-    }, 300),
-    [locale]
+  useImperativeHandle(
+    searchBarProps?.ref,
+    () => searchBarRef.current as HTMLInputElement,
+    [],
   );
 
-  // Removes query when page changes
+  const pathname = usePathname();
+  const [query, setQuery] = useState('');
+  const { searching, loading, results } = useSearchResults(query);
+
   useEffect(() => {
     setQuery('');
   }, [pathname]);
 
-  // Sends search request when query or language changes
   useEffect(() => {
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
-    const trimmedQuery = query.trim();
-    setResults(null);
-    setSearching(!!trimmedQuery);
-    updateResults.cancel();
-    if (trimmedQuery) updateResults(trimmedQuery);
-  }, [query, locale, updateResults]);
-
-  // Updates search listeners
-  useEffect(() => {
-    if (searching) onSearchOpen?.();
-    else onSearchClose?.();
+    if (searching) {
+      onSearchOpen?.();
+    } else {
+      onSearchClose?.();
+    }
   }, [searching, onSearchClose, onSearchOpen]);
 
   return (
-    <Box pt={8} w={'100%'}>
+    <Accordion
+      type='single'
+      value={searching ? 'search-results' : 'content'}
+      className='w-full py-8'
+    >
       <SearchBar
         {...searchBarProps}
-        value={query}
-        onChange={setQuery}
-        placeholder={tSearch('placeholder')}
         ref={searchBarRef}
+        value={query}
+        onChange={(event) => {
+          setQuery(event.target.value);
+        }}
+        placeholder={tSearch('placeholder')}
       />
 
-      <Collapse in={searching} startingHeight={1}>
-        <VStack
-          spacing={4}
-          width={'100%'}
-          align={'start'}
-          px={2}
-          pt={2}
-          pb={16}
-          minH={'75vh'}
+      <AccordionItem value='search-results' className='border-0'>
+        <AccordionContent
+          ref={searchResultsRef}
+          className={`
+            stack min-h-[calc(100vh-theme(spacing.16))]
+            w-full items-start gap-8 px-2 pt-6
+            ${
+              searching
+                ? 'duration-700 animate-in fade-in fill-mode-forwards'
+                : 'duration-200 animate-out fade-out fill-mode-forwards'
+            }
+          `}
         >
-          <Heading pt={4}>
+          <h2 className='text-4xl'>
             {tSearch.rich('result', {
               query: query.trim(),
               quotes: (text) => <>&ldquo;{text}&rdquo;</>,
             })}
-          </Heading>
+          </h2>
 
-          {!results && query.trim() && (
-            <Heading size={'md'} pt={4}>
-              <Spinner size={'sm'} mr={2} />
+          {loading && (
+            <h3>
+              <Spinner className='mr-2' size={'sm'} />
               {tSearch('loading')}
-            </Heading>
+            </h3>
           )}
-
-          {results &&
-            results.courses.length +
-              results.professors.length +
-              results.subjects.length ===
-              0 && (
-              <Heading size={'md'} pt={4}>
-                {tSearch('empty')}
-              </Heading>
-            )}
 
           {results && (
             <SearchResults searchBar={searchBarRef} results={results} />
           )}
-        </VStack>
-      </Collapse>
+        </AccordionContent>
+      </AccordionItem>
 
       {children && (
-        <Collapse
-          unmountOnExit={false}
-          in={!searching}
-          startingHeight={0.01}
-          animateOpacity
-          transition={{
-            exit: { duration: searchDurations.exit },
-            enter: { duration: searchDurations.enter },
-          }}
-        >
-          <Box
-            px={'10px'}
-            pb={10}
-            style={{ transition: 'opacity 0.2s', opacity: searching ? 0 : 1 }}
+        <AccordionItem value='content' className='border-0'>
+          <AccordionContent
+            ref={contentRef}
+            className='min-h-[calc(100vh-theme(spacing.16))] px-2'
           >
             {children}
-          </Box>
-        </Collapse>
+          </AccordionContent>
+        </AccordionItem>
       )}
-    </Box>
+    </Accordion>
   );
 }

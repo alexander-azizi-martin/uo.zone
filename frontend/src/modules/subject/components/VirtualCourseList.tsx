@@ -1,9 +1,10 @@
-import { Box, Heading } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Virtuoso } from 'react-virtuoso';
 
-import { GradeSummary, LinkCard } from '~/components';
-import { type Course } from '~/lib/api';
+import { GradeSummary } from '@/components/grades';
+import { Paper } from '@/components/ui/paper';
+import { type Course } from '@/lib/api';
 
 interface VirtualCourseListProps {
   courses: Course[];
@@ -16,34 +17,29 @@ export function VirtualCourseList({ courses }: VirtualCourseListProps) {
   return (
     <>
       {courses.length === 0 && (
-        <Heading pt={4} as={'h3'} size={'md'}>
-          {tCourse('no-filter-match')}
-        </Heading>
+        <h3 className='pt-4'>{tCourse('no-filter-match')}</h3>
       )}
       <Virtuoso
         useWindowScroll
         data={courses}
         computeItemKey={(_, course) => course.code}
+        className='w-full'
         itemContent={(_, course) => (
-          <Box pt={4} key={course.code}>
-            <LinkCard
-              href={`/course/${course.code}`}
-              display={'block'}
-              height={'100%'}
-            >
-              <GradeSummary
-                title={course.title}
-                subtitle={
-                  !course.gradeInfo?.total ? tGrades('no-data') : undefined
-                }
-                gradeInfo={course.gradeInfo}
-                distributionSize={'sm'}
-                ssr={false}
-              />
-            </LinkCard>
-          </Box>
+          <div className='pt-4' key={course.code}>
+            <Paper asChild variant='link'>
+              <Link href={`/course/${course.code}`}>
+                <GradeSummary
+                  title={course.title}
+                  subtitle={
+                    !course.gradeInfo?.total ? tGrades('no-data') : undefined
+                  }
+                  gradeInfo={course.gradeInfo}
+                  graphSize={'sm'}
+                />
+              </Link>
+            </Paper>
+          </div>
         )}
-        style={{ width: '100%' }}
       />
     </>
   );
