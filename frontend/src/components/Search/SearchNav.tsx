@@ -1,5 +1,4 @@
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import {
   type PropsWithChildren,
   useEffect,
@@ -22,6 +21,8 @@ import { Spinner } from '@/components/ui/spinner';
 
 import { useResizeOnAnimation } from './hooks/useResizeOnAnimation';
 import { useSearchResults } from './hooks/useSearchResults';
+import { Trans, msg, t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 interface SearchProps extends PropsWithChildren {
   onSearchOpen?: () => void;
@@ -35,7 +36,7 @@ export function SearchNav({
   children,
   searchBarProps,
 }: SearchProps) {
-  const tSearch = useTranslations('Search');
+  const { _ } = useLingui();
 
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -78,7 +79,7 @@ export function SearchNav({
         onChange={(event) => {
           setQuery(event.target.value);
         }}
-        placeholder={tSearch('placeholder')}
+        placeholder={_(msg`Search by Course, Professor, or Subject`)}
       />
 
       <AccordionItem value='search-results' className='border-0'>
@@ -95,16 +96,13 @@ export function SearchNav({
           `}
         >
           <h2 className='text-4xl'>
-            {tSearch.rich('result', {
-              query: query.trim(),
-              quotes: (text) => <>&ldquo;{text}&rdquo;</>,
-            })}
+            <Trans>Search Results for &ldquo;{query}&rdquo;</Trans>
           </h2>
 
           {loading && (
             <h3>
               <Spinner className='mr-2' size={'sm'} />
-              {tSearch('loading')}
+              <Trans>Loading...</Trans>
             </h3>
           )}
 

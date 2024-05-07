@@ -1,18 +1,15 @@
-import { useTranslations } from 'next-intl';
-
 import { Layout } from '@/components/layout';
 import { SearchNav } from '@/components/search';
+import { Trans } from '@lingui/macro';
 
 export default function InternalError() {
-  const tError = useTranslations('Error');
-
   return (
     <Layout>
       <SearchNav>
-        <h2 className='mt-4'>{tError('500')}</h2>
+        <h2 className='mt-4'>
+          <Trans>Something went wrong during your request.</Trans>
+        </h2>
       </SearchNav>
     </Layout>
   );
 }
-
-export { getStaticProps } from '@/lib/dictionary';

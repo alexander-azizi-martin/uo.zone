@@ -1,22 +1,19 @@
 import { withAxiomGetServerSideProps } from 'next-axiom';
-import { useTranslations } from 'next-intl';
 
 import { ExternalLink } from '@/components/ExternalLink';
 import { Layout } from '@/components/layout';
 import { SearchNav } from '@/components/search';
 import { Badge } from '@/components/ui/badge';
 import { getProfessor, type ProfessorWithCourses } from '@/lib/api';
-import { getDictionary } from '@/lib/dictionary';
 import { RmpRating } from '@/modules/professor/components';
 import { ProfessorTabs } from '@/modules/professor/components/ProfessorTabs';
+import { Trans } from '@lingui/macro';
 
 interface ProfessorProps {
   professor: ProfessorWithCourses;
 }
 
 export default function Professor({ professor }: ProfessorProps) {
-  const tCourse = useTranslations('Course');
-
   return (
     <Layout>
       <SearchNav>
@@ -37,7 +34,7 @@ export default function Professor({ professor }: ProfessorProps) {
                 href={professor.rmpReview.link}
                 className='text-sm text-gray-600'
               >
-                {tCourse('rmp')}
+                <Trans>View on RateMyProfessor</Trans>
               </ExternalLink>
             </p>
           </>
@@ -60,7 +57,6 @@ export const getServerSideProps = withAxiomGetServerSideProps(
       return {
         props: {
           professor,
-          messages: await getDictionary(context.locale),
         },
       };
     } catch (error: any) {

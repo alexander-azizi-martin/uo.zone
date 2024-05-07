@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl';
 import { type ReactNode } from 'react';
 
 import {
@@ -8,6 +7,7 @@ import {
 } from '@/components/grades';
 import { Tag } from '@/components/ui/tag';
 import { type GradeInfo } from '@/lib/api';
+import { Plural, Trans } from '@lingui/macro';
 
 interface GradeSummaryProps {
   title?: ReactNode;
@@ -26,8 +26,6 @@ export function GradeSummary({
   gradeInfo,
   graphSize = 'md',
 }: GradeSummaryProps) {
-  const tGrades = useTranslations('Grades');
-
   return (
     <div
       className={`
@@ -55,7 +53,16 @@ export function GradeSummary({
             event.stopPropagation();
           }}
         >
-          <Tag>{tGrades('students', { totalStudents: gradeInfo.total })}</Tag>
+          <Tag>
+            <Trans>
+              {gradeInfo.total}{' '}
+              <Plural
+                value={gradeInfo.total}
+                one='student'
+                other='students'
+              />
+            </Trans>
+          </Tag>
 
           <div
             className={`

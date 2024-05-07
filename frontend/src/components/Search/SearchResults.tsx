@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { ReactNode, type RefObject } from 'react';
 
 import { Paper } from '@/components/ui/paper';
 import { type SearchResults as SearchResultsType } from '@/lib/api';
 
 import { useSearchNavigation } from './hooks/useSearchNavigation';
+import { Trans } from '@lingui/macro';
 
 interface SearchResultsProps {
   results: SearchResultsType;
@@ -13,8 +13,6 @@ interface SearchResultsProps {
 }
 
 export function SearchResults({ results, searchBar }: SearchResultsProps) {
-  const tSearch = useTranslations('Search');
-
   useSearchNavigation(searchBar?.current);
 
   const numResults =
@@ -24,23 +22,27 @@ export function SearchResults({ results, searchBar }: SearchResultsProps) {
 
   return (
     <>
-      {numResults === 0 && <h3>{tSearch('empty')}</h3>}
+      {numResults === 0 && (
+        <h3>
+          <Trans>No results found.</Trans>
+        </h3>
+      )}
 
       <SearchResultCollection
         collection={results.subjects}
-        header={tSearch('subjects')}
+        header={<Trans>Subjects</Trans>}
         itemTitle={(item) => `${item.code} - ${item.subject}`}
         itemLink={(item) => `/subject/${item.code}`}
       />
       <SearchResultCollection
         collection={results.courses}
-        header={tSearch('courses')}
+        header={<Trans>Courses</Trans>}
         itemTitle={(item) => item.title}
         itemLink={(item) => `/course/${item.code}`}
       />
       <SearchResultCollection
         collection={results.professors}
-        header={tSearch('professors')}
+        header={<Trans>Professors</Trans>}
         itemTitle={(item) => item.name}
         itemLink={(item) => `/professor/${item.id}`}
       />

@@ -6,9 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "extract": "lingui extract --clean",
+    "compile": "lingui compile"
   },
   "dependencies": {
+    "@lingui/macro": "^4.10.1",
+    "@lingui/react": "^4.10.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -23,9 +27,8 @@
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.364.0",
     "markdown-to-jsx": "^7.4.5",
-    "next": "latest",
+    "next": "^14.1.0",
     "next-axiom": "0.18.0",
-    "next-intl": "3.0.0-beta.19",
     "nprogress": "^0.2.0",
     "nuqs": "^1.17.1",
     "react": "latest",
@@ -39,6 +42,9 @@
     "url-join": "^5.0.0"
   },
   "devDependencies": {
+    "@lingui/cli": "^4.10.1",
+    "@lingui/loader": "^4.10.1",
+    "@lingui/swc-plugin": "^4.0.7",
     "@next/bundle-analyzer": "^14.1.4",
     "@types/lodash.debounce": "^4.0.8",
     "@types/node": "latest",

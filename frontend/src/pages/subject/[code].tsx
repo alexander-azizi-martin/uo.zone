@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { withAxiomGetServerSideProps } from 'next-axiom';
-import { useTranslations } from 'next-intl';
 import { parseAsArrayOf, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import useSWR from 'swr';
 
@@ -14,21 +13,19 @@ import {
   getSubjectCourses,
   type SubjectWithCourses,
 } from '@/lib/api';
-import { getDictionary } from '@/lib/dictionary';
 import {
   CourseFilterMenu,
   VirtualCourseList,
 } from '@/modules/subject/components';
 import { useFilteredCourses } from '@/modules/subject/hooks';
 import { useCallback } from 'react';
+import { Trans } from '@lingui/macro';
 
 interface SubjectProps {
   subject: SubjectWithCourses;
 }
 
 export default function Subject({ subject }: SubjectProps) {
-  const tCourse = useTranslations('Course');
-
   const { query, locale } = useRouter();
   const { data: courses, isLoading: isCoursesLoading } = useSWR(
     ['/subject/courses', query.code as string, locale],
@@ -71,9 +68,9 @@ export default function Subject({ subject }: SubjectProps) {
 
         <div className='stack min-h-[50vh] items-start pb-3'>
           <Paper size='lg'>
-          <GradeSummary
+            <GradeSummary
               gradeInfo={subject.gradeInfo}
-              title={tCourse('all-courses-for', { code: subject.code })}
+              title={<Trans>All Courses For {subject.code}</Trans>}
               titleSize={'3xl'}
             />
           </Paper>
@@ -105,7 +102,6 @@ export const getServerSideProps = withAxiomGetServerSideProps(
       return {
         props: {
           subject,
-          messages: await getDictionary(context.locale),
         },
       };
     } catch (error: any) {

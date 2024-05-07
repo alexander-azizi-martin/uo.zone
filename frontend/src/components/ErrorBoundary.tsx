@@ -1,24 +1,19 @@
 import { log } from 'next-axiom';
-import { useTranslations } from 'next-intl';
-import React from 'react';
+import { type PropsWithChildren, Component } from 'react';
 
 import { Layout } from '@/components/layout';
 import { SearchNav } from '@/components/search';
-
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  tError: ReturnType<typeof useTranslations<string>>;
-}
+import { Trans } from '@lingui/macro';
 
 interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-class ErrorBoundaryClass extends React.Component<
-  ErrorBoundaryProps,
+export class ErrorBoundary extends Component<
+  PropsWithChildren,
   ErrorBoundaryState
 > {
-  constructor(props: ErrorBoundaryProps) {
+  constructor(props: PropsWithChildren) {
     super(props);
 
     this.state = { hasError: false };
@@ -41,7 +36,9 @@ class ErrorBoundaryClass extends React.Component<
       return (
         <Layout>
           <SearchNav>
-            <h2 className='mt-4'>{this.props.tError('client')}</h2>
+            <h2 className='mt-4'>
+              <Trans>An error occurred.</Trans>
+            </h2>
           </SearchNav>
         </Layout>
       );
@@ -50,14 +47,3 @@ class ErrorBoundaryClass extends React.Component<
     return this.props.children;
   }
 }
-
-function withErrorTranslations(
-  Component: React.ComponentType<ErrorBoundaryProps>,
-) {
-  return function WrappedComponent(props: Omit<ErrorBoundaryProps, 'tError'>) {
-    const tError = useTranslations('Error');
-    return <Component {...props} tError={tError} />;
-  };
-}
-
-export const ErrorBoundary = withErrorTranslations(ErrorBoundaryClass);

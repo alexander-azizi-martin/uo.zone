@@ -1,19 +1,15 @@
-import { useTranslations } from 'next-intl';
-
 import { Layout } from '@/components/layout';
 import { SearchNav } from '@/components/search';
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useEffect, useRef } from 'react';
+import { Trans } from '@lingui/macro';
 
 export default function Home() {
-  const tHome = useTranslations('Home');
-
   const [searching, setSearching] = useBoolean();
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    console.log("hello")
     searchBarRef.current?.select();
   }, [searchBarRef]);
 
@@ -38,7 +34,10 @@ export default function Home() {
               UO Grades
             </h1>
             <p className='py-2 text-center font-light md:text-left'>
-              {tHome('description')}
+              <Trans>
+                View all the past grades for courses taken at the University of
+                Ottawa.
+              </Trans>
             </p>
           </CollapsibleContent>
           <CollapsibleContent

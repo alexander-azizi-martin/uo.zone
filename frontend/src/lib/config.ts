@@ -1,3 +1,5 @@
+import { msg } from "@lingui/macro";
+
 export const searchDurations = {
   enter: 0.3,
   exit: 0.75,
@@ -16,22 +18,22 @@ export const gradeGradient = [
 ];
 
 export const professorQuestions = {
-  // 'I find that the professor as a teacher is': 'teacher',
-  'I find the professor well prepared for class': 'prepared',
-  'I think the professor conveys the subject matter effectively': 'communication',
-  'The professors feedback contributes to my learning': 'feedback',
-  'The professor is available to address questions outside of class': 'availability',
-  'The professor shows respect towards the students': 'respect',
-  'Instructions for completing activities and assignments are clear': 'instructions',
+  // 'I find that the professor as a teacher is': msg`teacher`,
+  'I find the professor well prepared for class': msg`Prepared`,
+  'I think the professor conveys the subject matter effectively': msg`Communication`,
+  'The professors feedback contributes to my learning': msg`Feedback`,
+  'The professor is available to address questions outside of class': msg`Availability`,
+  'The professor shows respect towards the students': msg`Respect`,
+  'Instructions for completing activities and assignments are clear': msg`Instructions`,
 };
 
 export const courseQuestions = {
-  'The course is well organized': 'organized',
-  'Course expectations are clearly explained': 'expectations',
-  'I have learned a lot in this course': 'learning',
-  'I would recommend this course to another student': 'recommend',
-  'In comparison with my other courses, the workload for this course is': 'workload',
-  'Assignments and/or exams closely reflect what is covered in class': 'activities',
+  'The course is well organized': msg`Organized`,
+  'Course expectations are clearly explained': msg`Expectations`,
+  'I have learned a lot in this course': msg`Learning`,
+  'I would recommend this course to another student': msg`Recommend`,
+  'In comparison with my other courses, the workload for this course is': msg`Workload`,
+  'Assignments and/or exams closely reflect what is covered in class': msg`Activities`,
 };
 
 export const openGraph = {

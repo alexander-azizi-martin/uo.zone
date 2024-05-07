@@ -1,6 +1,5 @@
 import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { type ReactNode, useMemo, useState } from 'react';
 
 import { GradeSummary } from '@/components/grades';
@@ -11,6 +10,8 @@ import {
 } from '@/components/ui/collapsible';
 import { Paper } from '@/components/ui/paper';
 import { type CourseSection, type GradeInfo } from '@/lib/api';
+import { Trans, msg, plural } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 interface SectionsSummaryProps {
   title: ReactNode;
@@ -26,8 +27,7 @@ export function SectionsSummary({
   href,
   summarize,
 }: SectionsSummaryProps) {
-  const tCourse = useTranslations('Course');
-  const tGrades = useTranslations('Grades');
+  const { _ } = useLingui();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,22 +36,18 @@ export function SectionsSummary({
     const newestTerm = summarize.sections[0].term;
 
     let term: string;
-    if (summarize.sections.length === 1)
+    if (summarize.sections.length === 1) {
       term = `${oldestTerm} - ${summarize.sections[0].section}`;
-    else if (oldestTerm == newestTerm)
-      term = tCourse('term', {
-        count: summarize.sections.length,
-        term: oldestTerm,
-      });
-    else
-      term = tCourse('terms', {
-        count: summarize.sections.length,
-        start: oldestTerm,
-        stop: newestTerm,
-      });
+    } else if (oldestTerm == newestTerm) {
+      term = _(msg`${summarize.sections.length} sections during ${oldestTerm}`);
+    } else {
+      term = _(
+        msg`${summarize.sections.length} sections from ${oldestTerm} to ${newestTerm}`,
+      );
+    }
 
     return term;
-  }, [summarize, tCourse]);
+  }, [summarize, _]);
 
   const summaryMarkup = (
     <>
@@ -60,7 +56,11 @@ export function SectionsSummary({
         subtitle={
           <>
             {term}
-            {!summarize.gradeInfo && <div>{tGrades('no-data')}</div>}
+            {!summarize.gradeInfo && (
+              <div>
+                <Trans>No grade data available for this course.</Trans>
+              </div>
+            )}
           </>
         }
         gradeInfo={summarize.gradeInfo}

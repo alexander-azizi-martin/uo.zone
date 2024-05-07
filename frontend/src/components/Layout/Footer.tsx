@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
-import { useTranslations } from 'next-intl';
 
 import { ExternalLink } from '@/components/ExternalLink';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { trackEvent } from '@/lib/helpers';
+import { Trans, msg } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 export function Footer() {
-  const tFooter = useTranslations('Footer');
-  const tGeneral = useTranslations('General');
+  const { _ } = useLingui();
 
   const router = useRouter();
   const { pathname, asPath, query } = router;
@@ -16,6 +16,9 @@ export function Footer() {
   const switchLanguages = (locale: string) => () => {
     router.push({ pathname, query }, asPath, { locale });
   };
+
+  const aipoUrl = _(msg`https://www.uottawa.ca/about-us/aipo`);
+  const uozoneUrl = _(msg`https://uozone2.uottawa.ca/en/apps/s-reports`);
 
   return (
     <footer className='pb-10'>
@@ -31,7 +34,9 @@ export function Footer() {
           >
             English
           </Button>
+
           <Separator orientation={'vertical'} />
+
           <Button
             className='text-xs'
             variant='ghost'
@@ -43,14 +48,13 @@ export function Footer() {
         </div>
 
         <p className='text-center text-sm font-light text-gray-600'>
-          {tFooter('dataSource.text')}{' '}
-          <ExternalLink href={tFooter('dataSource.office.link')}>
-            {tFooter('dataSource.office.text')}
-          </ExternalLink>{' '}
-          {tGeneral('and')}{' '}
-          <ExternalLink href={tFooter('dataSource.uozone.link')}>
-            {tFooter('dataSource.uozone.text')}
-          </ExternalLink>
+          <Trans>
+            Data from Fall 2017 to Winter 2023 provided by{' '}
+            <ExternalLink href={aipoUrl}>
+              The Access to Information and Privacy Office
+            </ExternalLink>{' '}
+            and <ExternalLink href={uozoneUrl}>uoZone</ExternalLink>
+          </Trans>
         </p>
 
         <p className='text-center text-sm font-light text-gray-600'>
@@ -62,7 +66,7 @@ export function Footer() {
           >
             Github
           </ExternalLink>{' '}
-          {tFooter('maintainer')}{' '}
+          <Trans>maintained by</Trans>{' '}
           <ExternalLink
             href={'mailto:alexander.azizi-martin@uo.zone'}
             onClick={() => {

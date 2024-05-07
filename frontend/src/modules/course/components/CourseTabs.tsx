@@ -1,5 +1,4 @@
 import { InfoIcon } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import { GradeSummary } from '@/components/grades';
@@ -10,16 +9,15 @@ import { Paper } from '@/components/ui/paper';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type CourseWithProfessors } from '@/lib/api';
 import { courseQuestions } from '@/lib/config';
-import { Grade } from '@/lib/grade';
+import { Plural, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 interface CourseTabsProps {
   course: CourseWithProfessors;
 }
 
 export function CourseTabs({ course }: CourseTabsProps) {
-  const tCourse = useTranslations('Course');
-  const tGeneral = useTranslations('General');
-  const tSurvey = useTranslations('Survey');
+  const { _ } = useLingui();
 
   const [tab, setTab] = useQueryState(
     't',
@@ -31,9 +29,11 @@ export function CourseTabs({ course }: CourseTabsProps) {
   return (
     <Tabs value={tab} onValueChange={setTab as any}>
       <TabsList className='grid w-full grid-cols-2'>
-        <TabsTrigger value='grades'>{tGeneral('grades')}</TabsTrigger>
+        <TabsTrigger value='grades'>
+          <Trans>Grades</Trans>
+        </TabsTrigger>
         <TabsTrigger value='evaluations'>
-          {tGeneral('course-evaluations')}
+          <Trans>Course Evaluations</Trans>
         </TabsTrigger>
       </TabsList>
 
@@ -44,7 +44,7 @@ export function CourseTabs({ course }: CourseTabsProps) {
               <Paper size='lg'>
                 <GradeSummary
                   gradeInfo={course.gradeInfo}
-                  title={tCourse('all-professors')}
+                  title={<Trans>All Professors</Trans>}
                   titleSize={'3xl'}
                 />
               </Paper>
@@ -59,15 +59,28 @@ export function CourseTabs({ course }: CourseTabsProps) {
                   ) : (
                     <div className='flex items-start gap-2'>
                       <div>
-                        {tCourse('unknown-professor', {
-                          count: professor.sections.length,
-                        })}
+                        <Trans>
+                          Unknown{' '}
+                          <Plural
+                            value={professor.sections.length}
+                            one='Professor'
+                            other='Professors'
+                          />
+                        </Trans>
                       </div>
 
                       <Tooltip
-                        label={tCourse('unknown-professor-info', {
-                          count: professor.sections.length,
-                        })}
+                        label={
+                          <Trans>
+                            The{' '}
+                            <Plural
+                              value={professor.sections.length}
+                              one='professor for this course section is'
+                              other='professors for these course sections are'
+                            />{' '}
+                            not known.
+                          </Trans>
+                        }
                         fontSize={'sm'}
                         textAlign={'center'}
                         hasArrow
@@ -85,32 +98,37 @@ export function CourseTabs({ course }: CourseTabsProps) {
             ))}
           </div>
         ) : (
-          <div>{tCourse('no-grade-data')}</div>
+          <div>
+            <Trans>No grade data.</Trans>
+          </div>
         )}
       </TabsContent>
 
       <TabsContent value='evaluations'>
         {course.survey.length > 0 ? (
           <div className='flex w-full flex-wrap justify-center gap-4 lg:gap-8'>
-            {Object.entries(courseQuestions).map(([question, name]) => {
+            {Object.entries(courseQuestions).map(([question, titleMsg]) => {
               const surveyQuestion = course.survey.find(
                 (survey) => survey.question === question,
               );
 
               if (surveyQuestion === undefined) return null;
 
+              const title = _(titleMsg);
               return (
                 <SurveyQuestionHistogram
-                  key={name}
-                  title={tSurvey(`${name}.info`)}
-                  tooltip={tSurvey(`${name}.tooltip`)}
+                  key={title}
+                  title={title}
+                  tooltip={question}
                   surveyQuestion={surveyQuestion}
                 />
               );
             })}
           </div>
         ) : (
-          <div>{tCourse('no-survey-data')}</div>
+          <div>
+            <Trans>No survey data.</Trans>
+          </div>
         )}
       </TabsContent>
     </Tabs>

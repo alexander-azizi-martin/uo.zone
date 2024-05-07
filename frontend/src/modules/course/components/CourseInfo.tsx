@@ -1,17 +1,15 @@
 import Markdown from 'markdown-to-jsx';
-import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { type Course } from '@/lib/api';
 import { CourseLink } from '@/modules/course/components';
+import { Trans } from '@lingui/macro';
 
 interface CourseInfoProps {
   course: Course;
 }
 
 export function CourseInfo({ course }: CourseInfoProps) {
-  const tGeneral = useTranslations('General');
-
   return (
     <div className='stack my-6 items-start gap-4'>
       <div className='text-base leading-6'>
@@ -22,7 +20,9 @@ export function CourseInfo({ course }: CourseInfoProps) {
 
       {course.components.length > 0 && (
         <div className='flex flex-wrap items-center gap-2'>
-          <p className='mb-auto text-sm font-bold'>{tGeneral('components')}:</p>
+          <p className='mb-auto text-sm font-bold'>
+            <Trans>Components</Trans>:
+          </p>
 
           <div className='flex flex-wrap gap-2'>
             {course.components.map((component) => (
@@ -40,7 +40,7 @@ export function CourseInfo({ course }: CourseInfoProps) {
       {course.requirements && (
         <div className='flex gap-2'>
           <p className='mb-auto text-sm font-bold'>
-            {tGeneral('requirements')}:
+            <Trans>Requirements</Trans>:
           </p>
           <div className='text-sm'>
             <Markdown options={{ overrides: { a: CourseLink } }}>
@@ -52,7 +52,7 @@ export function CourseInfo({ course }: CourseInfoProps) {
       {course.englishEquivalent && (
         <div className='flex gap-2'>
           <p className='mb-auto text-sm font-bold'>
-            {tGeneral('english-equivalent')}:
+            <Trans>English Equivalent</Trans>:
           </p>
           <div className='text-sm'>
             <CourseLink href={`/course/${course.englishEquivalent}`}>
@@ -66,7 +66,7 @@ export function CourseInfo({ course }: CourseInfoProps) {
       {course.frenchEquivalent && (
         <div className='flex gap-2'>
           <p className='mb-auto text-sm font-bold'>
-            {tGeneral('french-equivalent')}:
+            <Trans>French Equivalent</Trans>:
           </p>
           <div className='text-sm'>
             <CourseLink href={`/course/${course.frenchEquivalent}`}>

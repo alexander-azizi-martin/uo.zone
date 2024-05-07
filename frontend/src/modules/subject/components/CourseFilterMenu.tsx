@@ -1,5 +1,4 @@
 import { SlidersHorizontalIcon } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import {
   DropdownMenuCheckboxItem,
 } from '@/components/ui/dropdown-menu-checkbox';
 import { type CourseFilterOptions } from '@/modules/subject/hooks';
+import { Trans } from '@lingui/macro';
 
 interface CourseFilterMenuProps {
   value: CourseFilterOptions;
@@ -33,9 +33,6 @@ export function CourseFilterMenu({
   onChange,
   onReset,
 }: CourseFilterMenuProps) {
-  const tFilter = useTranslations('Filter');
-  const tGeneral = useTranslations('General');
-
   const [, startTransition] = useTransition();
 
   const handleChange =
@@ -53,7 +50,7 @@ export function CourseFilterMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className='h-8 font-semibold ' variant='outline'>
-          {tGeneral('filter')}
+          <Trans>Filter</Trans>
           <SlidersHorizontalIcon className='ml-1' size={14} />
         </Button>
       </DropdownMenuTrigger>
@@ -63,59 +60,65 @@ export function CourseFilterMenu({
         align='end'
         onCloseAutoFocus={preventDefault}
       >
-        <DropdownMenuLabel>{tFilter('sort-by')}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <Trans>Sort By</Trans>
+        </DropdownMenuLabel>
 
         <DropdownMenuRadioGroup
           value={value.sortBy}
           onValueChange={handleChange('sortBy')}
         >
           <DropdownMenuRadioItem value='code' onSelect={preventDefault}>
-            {tGeneral('code')}
+            <Trans>Code</Trans>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value='average' onSelect={preventDefault}>
-            {tGeneral('average')}
+            <Trans>Average</Trans>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value='mode' onSelect={preventDefault}>
-            {tGeneral('mode')}
+            <Trans>Mode</Trans>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel>{tFilter('filter-year')}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <Trans>Filter Year</Trans>
+        </DropdownMenuLabel>
         <DropdownMenuCheckboxGroup
           values={value.years}
           onValuesChange={handleChange('years')}
         >
           <DropdownMenuCheckboxItem value='1' onSelect={preventDefault}>
-            {tFilter('1st-year')}
+            <Trans>1st Year</Trans>
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem value='2' onSelect={preventDefault}>
-            {tFilter('2nd-year')}
+            <Trans>2nd Year</Trans>
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem value='3' onSelect={preventDefault}>
-            {tFilter('3rd-year')}
+            <Trans>3rd Year</Trans>
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem value='4' onSelect={preventDefault}>
-            {tFilter('4th-year')}
+            <Trans>4th Year</Trans>
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem value='5' onSelect={preventDefault}>
-            {tFilter('graduate')}
+            <Trans>Graduate</Trans>
           </DropdownMenuCheckboxItem>
         </DropdownMenuCheckboxGroup>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel>{tFilter('filter-language')}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <Trans>Filter Language</Trans>
+        </DropdownMenuLabel>
         <DropdownMenuCheckboxGroup
           values={value.languages}
           onValuesChange={handleChange('languages')}
         >
           <DropdownMenuCheckboxItem value='en' onSelect={preventDefault}>
-            {tGeneral('english')}
+            <Trans>English</Trans>
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem value='fr' onSelect={preventDefault}>
-            {tGeneral('french')}
+            <Trans>French</Trans>
           </DropdownMenuCheckboxItem>
         </DropdownMenuCheckboxGroup>
 
@@ -127,7 +130,7 @@ export function CourseFilterMenu({
             startTransition(onReset);
           }}
         >
-          Reset Filters
+          <Trans>Reset Filters</Trans>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

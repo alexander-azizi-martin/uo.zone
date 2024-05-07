@@ -1,5 +1,4 @@
 import { InfoIcon } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useMemo, useRef } from 'react';
 
 import { Tooltip } from '@/components/Tooltip';
@@ -9,6 +8,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { type SurveyQuestion } from '@/lib/api';
 import { percent } from '@/lib/helpers';
 import { Survey } from '@/lib/survey';
+import { Trans } from '@lingui/macro';
 
 interface SurveyQuestionHistogramProps {
   title: string;
@@ -21,8 +21,6 @@ export function SurveyQuestionHistogram({
   tooltip,
   surveyQuestion,
 }: SurveyQuestionHistogramProps) {
-  const tGeneral = useTranslations('General');
-
   const score = useMemo(() => Survey.score(surveyQuestion), [surveyQuestion]);
 
   return (
@@ -40,7 +38,7 @@ export function SurveyQuestionHistogram({
           </div>
 
           <p className='text-sm font-light leading-5'>
-            {surveyQuestion.totalResponses} {tGeneral('responses')}
+            {surveyQuestion.totalResponses} <Trans>responses</Trans>
           </p>
         </div>
 

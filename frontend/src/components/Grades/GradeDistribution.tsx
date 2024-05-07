@@ -1,5 +1,4 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState } from 'react';
 
 import { Trapezoid } from '@/components/ui/trapezoid';
@@ -8,6 +7,8 @@ import { type GradeInfo } from '@/lib/api';
 import { gradeGradient } from '@/lib/config';
 import { Grade, type Letter } from '@/lib/grade';
 import { pairwise, percent, createGradient } from '@/lib/helpers';
+import { Plural, Select, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 
 const gradeDistributionVariants = cva(
   `
@@ -43,7 +44,7 @@ interface GradeDistributionProps
 const NUM_BINS = Grade.NUMERICAL_GRADES.length - 1;
 
 export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
-  const tGrades = useTranslations('Grades');
+  const { i18n } = useLingui();
 
   const [selectedGrade, setSelectedGrade] = useState<Letter>();
   const gradient = createGradient(gradeGradient);
@@ -125,18 +126,21 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
                 select-none text-xs font-bold
               `}
             >
-              {tGrades('occurrence', {
-                letter: selectedGrade,
-                letterClass: selectedGrade[0],
-                occurrences: gradeInfo.grades[selectedGrade],
-                percent:
-                  gradeInfo.total > 0
-                    ? Math.round(
-                        (gradeInfo.grades[selectedGrade] / gradeInfo.total) *
-                          100,
-                      )
-                    : 0,
-              })}
+              <Trans>
+                {gradeInfo.grades[selectedGrade]}{' '}
+                <Plural
+                  value={gradeInfo.grades[selectedGrade]}
+                  one='student'
+                  other='students'
+                />{' '}
+                got <Select value={selectedGrade[0]} _A={'an'} other={'a'} />{' '}
+                {selectedGrade} (
+                {i18n.number(
+                  percent(gradeInfo.grades[selectedGrade], gradeInfo.total),
+                  { style: 'percent' },
+                )}
+                )
+              </Trans>
             </p>
           </>
         )}

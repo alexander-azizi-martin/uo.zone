@@ -2,13 +2,14 @@ import 'nprogress/nprogress.css';
 import '@/styles/global.css';
 
 import { type AppProps } from 'next/app';
-import { NextIntlClientProvider } from 'next-intl';
 import { IBM_Plex_Sans, Inter } from 'next/font/google';
 
+import { I18nProvider } from '@/components/layout/I18nProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useNProgress } from '@/hooks/useNProgress';
 import { usePreserveScroll } from '@/hooks/usePreserveScroll';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/router';
 
 export const inter = Inter({
   subsets: ['latin'],
@@ -27,13 +28,15 @@ export default function App({ Component, pageProps }: AppProps) {
   usePreserveScroll();
   useNProgress();
 
+  const router = useRouter();
+
   return (
     <div id='body' className={cn(inter.variable, ibmPlexSans.variable)}>
-      <NextIntlClientProvider messages={pageProps.messages}>
+      <I18nProvider locale={router.locale!} messages={pageProps.messages}>
         <ErrorBoundary>
           <Component {...pageProps} />
         </ErrorBoundary>
-      </NextIntlClientProvider>
+      </I18nProvider>
     </div>
   );
 }
