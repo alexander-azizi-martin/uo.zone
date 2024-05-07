@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Process\Process;
 
 use function Laravel\Prompts\spin;
 
@@ -34,18 +34,18 @@ class DbExtract extends Command
         if (! is_null($this->option('file'))) {
             $success = spin(
                 function () use ($archiveFilename) {
-                    $compressed_file = fopen($this->option('file'), 'rb');
+                    $compressedFile = fopen($this->option('file'), 'rb');
 
-                    return Storage::disk('database')->put($archiveFilename, $compressed_file);
+                    return Storage::disk('database')->put($archiveFilename, $compressedFile);
                 },
                 "Downloading the compressed database from {$this->option('file')}."
             );
         } elseif ($this->option('s3')) {
             $success = spin(
                 function () use ($archiveFilename) {
-                    $compressed_file = Storage::disk('s3')->readStream($archiveFilename);
+                    $compressedFile = Storage::disk('s3')->readStream($archiveFilename);
 
-                    return Storage::disk('database')->put($archiveFilename, $compressed_file);
+                    return Storage::disk('database')->put($archiveFilename, $compressedFile);
                 },
                 'Downloading the database from s3.'
             );
@@ -65,21 +65,17 @@ class DbExtract extends Command
             return;
         }
 
-        spin(
-            function () use ($archiveFilepath) {
-                $numPathComponents = str($archiveFilepath)->explode('/')->count() - 2;
-                $process = new Process([
-                    'tar',
-                    '-xf',
-                    $archiveFilepath,
-                    '-C',
-                    database_path(),
-                    "--strip-components=$numPathComponents",
-                ]);
-                $process->mustRun();
-            },
-            'Extracting the database.'
-        );
+        $numPathComponents = str($archiveFilepath)->explode('/')->count() - 2;
+        $extractDB = Process::command([
+            'tar',
+            '-xf',
+            $archiveFilepath,
+            '-C',
+            database_path(),
+            "--strip-components=$numPathComponents",
+        ]);
+
+        spin(fn () => $extractDB->run()->throw(), 'Extracting the database.');
 
         $this->info('Successfully extracted the compressed database.');
     }

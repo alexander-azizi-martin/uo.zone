@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Process\Process;
 
 use function Laravel\Prompts\spin;
 
@@ -37,18 +37,16 @@ class DbCompress extends Command
             return;
         }
 
-        spin(
-            function () use ($databaseFilepath, $archiveFilepath) {
-                $process = new Process([
-                    'tar',
-                    '-cJf',
-                    $archiveFilepath,
-                    $databaseFilepath,
-                ]);
-                $process->mustRun();
-            },
-            'Compressing the database.',
-        );
+        $compressDB = Process::command([
+            'tar',
+            '-cJf',
+            $archiveFilepath,
+            $databaseFilepath,
+        ]);
+
+        spin(fn () => $compressDB->run()->throw(), 'Compressing the database.');
+
+        $this->info('Successfully compressed the database.');
 
         if ($this->option('s3')) {
             $success = spin(
