@@ -36,7 +36,7 @@ docker run --rm \
 
 cp .env.example .env
 
-bun install
+npm install
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan db:extract \
