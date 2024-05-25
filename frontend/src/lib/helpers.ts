@@ -49,3 +49,29 @@ export function removeQueryString(url: string) {
   const i = url.indexOf('?');
   return url.substring(0, (i + url.length + 1) % (url.length + 1));
 }
+
+export function pairwise<T>(array: Array<T>) {
+  const result: Array<[T, T]> = [];
+
+  for (let i = 0; i < array.length - 1; i++) {
+    result.push([array[i], array[i + 1]]);
+  }
+
+  return result;
+}
+
+export type Gradient = { color: string; offset: number }[];
+
+export function createGradient(gradientData: Gradient) {
+  const gradientColors = gradientData
+    .map(({ color, offset }) => `${color} ${offset}%`)
+    .join(',');
+
+  return `linear-gradient(to right, ${gradientColors})`;
+}
+
+export function percent(value: number, total: number) {
+  if (total === 0) return 0;
+
+  return value / total;
+}

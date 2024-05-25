@@ -1,6 +1,6 @@
-import { type SurveyQuestion } from '~/lib/api';
+import { type SurveyQuestion } from '@/lib/api';
 
-export default class Survey {
+export class Survey {
   // prettier-ignore
   static RESPONSE_VALUES: any = {
     'excellent': 5,
@@ -37,9 +37,9 @@ export default class Survey {
   static score(question: SurveyQuestion) {
     let totalValue = 0;
     let totalResponses = 0;
-    for (let option in question.options) {
+    for (const option in question.options) {
       if (option in Survey.RESPONSE_VALUES) {
-        let numResponses = question.options[option];
+        const numResponses = question.options[option];
 
         totalValue += Survey.RESPONSE_VALUES[option] * numResponses;
         totalResponses += numResponses;

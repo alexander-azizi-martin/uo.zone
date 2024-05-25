@@ -1,32 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import urlJoin from 'url-join';
+import { type NextRequest } from 'next/server';
 
-import { getRandomServerUrl } from '~/lib/helpers';
+import { apiMiddleware } from './middleware/api-middleware';
+import { filterParamMiddleware } from './middleware/filter-param-middleware';
+import { localeMiddleware } from './middleware/locale-middleware';
 
-const NEW_PARAM_NAME: { [k: string]: string } = {
-  sort: 'sortBy',
-  langs: 'languages',
-};
+const middlewares = [apiMiddleware, filterParamMiddleware, localeMiddleware];
 
-export default async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    const serverUrl = urlJoin(getRandomServerUrl(), request.nextUrl.pathname);
-
-    return NextResponse.rewrite(serverUrl, {
-      headers: { 'X-Forwarded-For': request.ip ?? '127.0.0.1' },
-    });
-  }
-
-  const parsedUrl = new URL(request.url);
-  for (const [param, value] of parsedUrl.searchParams.entries()) {
-    if (param in NEW_PARAM_NAME) {
-      parsedUrl.searchParams.set(NEW_PARAM_NAME[param], value ?? '');
-      parsedUrl.searchParams.delete(param);
-    }
-  }
-
-  const newUrl = parsedUrl.toString();
-  if (newUrl !== request.url) {
-    return NextResponse.redirect(newUrl);
+export function middleware(request: NextRequest) {
+  for (const m of middlewares) {
+    const response = m(request);
+    if (response) return response;
   }
 }
+
+export const config = {
+  matcher: '/((?!_next/static|_next/image|favicon.ico|static).*)',
+};

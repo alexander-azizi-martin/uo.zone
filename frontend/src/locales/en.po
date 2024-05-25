@@ -1,0 +1,279 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2024-05-06 13:51-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/components/grades/GradeSummary.tsx:52
+msgid "{0} {1, plural, one {student} other {students}}"
+msgstr "{0} {1, plural, one {student} other {students}}"
+
+#: src/components/grades/GradeDistribution.tsx:135
+msgid "{0} {1, plural, one {student} other {students}} got {2, select, A {an} other {a}} {selectedGrade} ({3})"
+msgstr "{0} {1, plural, one {student} other {students}} got {2, select, A {an} other {a}} {selectedGrade} ({3})"
+
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:41
+msgid "{0} {1, plural, one {unit} other {units}}"
+msgstr "{0} {1, plural, one {unit} other {units}}"
+
+#: src/components/grades/GradeTendencies.tsx:25
+msgid "{0} Average ({1})"
+msgstr "{0} Average ({1})"
+
+#: src/components/common/SectionsSummary.tsx:42
+msgid "{0} sections during {oldestTerm}"
+msgstr "{0} sections during {oldestTerm}"
+
+#: src/components/common/SectionsSummary.tsx:45
+msgid "{0} sections from {oldestTerm} to {newestTerm}"
+msgstr "{0} sections from {oldestTerm} to {newestTerm}"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:92
+msgid "1st Year"
+msgstr "1st Year"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:95
+msgid "2nd Year"
+msgstr "2nd Year"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:98
+msgid "3rd Year"
+msgstr "3rd Year"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:101
+msgid "4th Year"
+msgstr "4th Year"
+
+#: src/lib/config.ts:31
+msgid "Activities"
+msgstr "Activities"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/components/ProfessorTabs.tsx:47
+msgid "All Courses"
+msgstr "All Courses"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/page.tsx:37
+msgid "All Courses For {0}"
+msgstr "All Courses For {0}"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseTabs.tsx:46
+msgid "All Professors"
+msgstr "All Professors"
+
+#: src/lib/config.ts:20
+msgid "Availability"
+msgstr "Availability"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:75
+msgid "Average"
+msgstr "Average"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:72
+msgid "Code"
+msgstr "Code"
+
+#: src/lib/config.ts:18
+msgid "Communication"
+msgstr "Communication"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseInfo.tsx:25
+msgid "Components"
+msgstr "Components"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseTabs.tsx:35
+#: src/app/[locale]/(search-nav)/professor/[id]/components/ProfessorTabs.tsx:36
+msgid "Course Evaluations"
+msgstr "Course Evaluations"
+
+#: src/components/search/SearchResults.tsx:41
+msgid "Courses"
+msgstr "Courses"
+
+#: src/app/[locale]/components/Footer.tsx:34
+msgid "Data from Fall 2017 to Winter 2023 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+msgstr "Data from Fall 2017 to Winter 2023 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:118
+msgid "English"
+msgstr "English"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseInfo.tsx:56
+msgid "English Equivalent"
+msgstr "English Equivalent"
+
+#: src/lib/config.ts:27
+msgid "Expectations"
+msgstr "Expectations"
+
+#: src/lib/config.ts:19
+msgid "Feedback"
+msgstr "Feedback"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:53
+msgid "Filter"
+msgstr "Filter"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:111
+msgid "Filter Language"
+msgstr "Filter Language"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:85
+msgid "Filter Year"
+msgstr "Filter Year"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:121
+msgid "French"
+msgstr "French"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseInfo.tsx:70
+msgid "French Equivalent"
+msgstr "French Equivalent"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseTabs.tsx:32
+#: src/app/[locale]/(search-nav)/professor/[id]/components/ProfessorTabs.tsx:33
+msgid "Grades"
+msgstr "Grades"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:104
+msgid "Graduate"
+msgstr "Graduate"
+
+#: src/app/[locale]/components/Footer.tsx:14
+msgid "https://uozone2.uottawa.ca/en/apps/s-reports"
+msgstr "https://uozone2.uottawa.ca/en/apps/s-reports"
+
+#: src/app/[locale]/components/Footer.tsx:13
+msgid "https://www.uottawa.ca/about-us/aipo"
+msgstr "https://www.uottawa.ca/about-us/aipo"
+
+#: src/lib/config.ts:22
+msgid "Instructions"
+msgstr "Instructions"
+
+#: src/lib/config.ts:28
+msgid "Learning"
+msgstr "Learning"
+
+#: src/components/search/SearchNav.tsx:93
+msgid "Loading..."
+msgstr "Loading..."
+
+#: src/app/[locale]/components/Footer.tsx:49
+msgid "maintained by"
+msgstr "maintained by"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:78
+msgid "Mode"
+msgstr "Mode"
+
+#: src/components/grades/GradeTendencies.tsx:38
+msgid "Most Common: {0} ({1})"
+msgstr "Most Common: {0} ({1})"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/VirtualCourseList.tsx:24
+msgid "No course matches the filters."
+msgstr "No course matches the filters."
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/VirtualCourseList.tsx:40
+#: src/components/common/SectionsSummary.tsx:61
+msgid "No grade data available for this course."
+msgstr "No grade data available for this course."
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseTabs.tsx:99
+#: src/app/[locale]/(search-nav)/professor/[id]/components/ProfessorTabs.tsx:72
+msgid "No grade data."
+msgstr "No grade data."
+
+#: src/components/search/SearchResults.tsx:29
+msgid "No results found."
+msgstr "No results found."
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseTabs.tsx:127
+#: src/app/[locale]/(search-nav)/professor/[id]/components/ProfessorTabs.tsx:100
+msgid "No survey data."
+msgstr "No survey data."
+
+#: src/lib/config.ts:26
+msgid "Organized"
+msgstr "Organized"
+
+#: src/lib/config.ts:17
+msgid "Prepared"
+msgstr "Prepared"
+
+#: src/components/search/SearchResults.tsx:47
+msgid "Professors"
+msgstr "Professors"
+
+#: src/lib/config.ts:29
+msgid "Recommend"
+msgstr "Recommend"
+
+#: src/app/[locale]/(search-nav)/course/[code]/components/CourseInfo.tsx:44
+msgid "Requirements"
+msgstr "Requirements"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:133
+msgid "Reset Filters"
+msgstr "Reset Filters"
+
+#: src/lib/config.ts:21
+msgid "Respect"
+msgstr "Respect"
+
+#: src/components/common/SurveyQuestionHistogram.tsx:41
+msgid "responses"
+msgstr "responses"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/components/RmpRating.tsx:49
+msgid "RMP Difficulty"
+msgstr "RMP Difficulty"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/components/RmpRating.tsx:35
+msgid "RMP Rating"
+msgstr "RMP Rating"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/components/RmpRating.tsx:60
+msgid "RMP ratings"
+msgstr "RMP ratings"
+
+#: src/components/search/SearchNav.tsx:70
+msgid "Search by Course, Professor, or Subject"
+msgstr "Search by Course, Professor, or Subject"
+
+#: src/components/search/SearchNav.tsx:87
+msgid "Search Results for “{query}”"
+msgstr "Search Results for “{query}”"
+
+#: src/app/[locale]/(search-nav)/subject/[code]/components/CourseFilterMenu.tsx:64
+msgid "Sort By"
+msgstr "Sort By"
+
+#: src/components/search/SearchResults.tsx:35
+msgid "Subjects"
+msgstr "Subjects"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/components/ProfessorTabs.tsx:51
+msgid "This total also includes classes that they may not teach anymore."
+msgstr "This total also includes classes that they may not teach anymore."
+
+#: src/app/[locale]/page.tsx:32
+msgid "View all the past grades for courses taken at the University of Ottawa."
+msgstr "View all the past grades for courses taken at the University of Ottawa."
+
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:41
+msgid "View on RateMyProfessor"
+msgstr "View on RateMyProfessor"
+
+#: src/lib/config.ts:30
+msgid "Workload"
+msgstr "Workload"

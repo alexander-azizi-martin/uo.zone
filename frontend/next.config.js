@@ -1,15 +1,10 @@
-const { withAxiom } = require('next-axiom');
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
-})
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  i18n: {
-    locales: ['en', 'fr'],
-    defaultLocale: 'en',
-  },
+  reactStrictMode: true,
   poweredByHeader: false,
   async rewrites() {
     return [
@@ -20,6 +15,16 @@ const nextConfig = {
       },
     ];
   },
+  experimental: {
+    swcPlugins: [
+      [
+        '@lingui/swc-plugin',
+        {
+          // the same options as in .swcrc
+        },
+      ],
+    ],
+  },
 };
 
-module.exports = withBundleAnalyzer(withAxiom(nextConfig));
+module.exports = withBundleAnalyzer(nextConfig);

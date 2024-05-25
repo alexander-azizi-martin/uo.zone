@@ -1,6 +1,6 @@
 import urlJoin from 'url-join';
 
-import { getRandomServerUrl } from '~/lib/helpers';
+import { getRandomServerUrl } from '@/lib/helpers';
 
 import {
   type Course,
