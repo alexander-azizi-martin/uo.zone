@@ -22,18 +22,17 @@ export function useResizeOnAnimation(ref: RefObject<HTMLElement>) {
       isAnimating = false;
     };
 
-    ref.current.addEventListener('animationstart', onAnimation);
-    ref.current.addEventListener('animationend', onAnimationEnd);
-    ref.current.addEventListener('animationcancel', onAnimationEnd);
+    const node = ref.current;
+    node.addEventListener('animationstart', onAnimation);
+    node.addEventListener('animationend', onAnimationEnd);
+    node.addEventListener('animationcancel', onAnimationEnd);
 
     return () => {
       isAnimating = false;
 
-      if (ref.current === null) return;
-
-      ref.current.removeEventListener('animationstart', onAnimation);
-      ref.current.removeEventListener('animationend', onAnimationEnd);
-      ref.current.removeEventListener('animationcancel', onAnimationEnd);
+      node.removeEventListener('animationstart', onAnimation);
+      node.removeEventListener('animationend', onAnimationEnd);
+      node.removeEventListener('animationcancel', onAnimationEnd);
     };
   }, [ref]);
 }

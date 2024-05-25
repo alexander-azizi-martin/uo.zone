@@ -1,7 +1,10 @@
+'use client';
+
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
 import * as React from 'react';
 
+import { useIsFirstRender } from '@/hooks/useIsFirstRender';
 import { cn } from '@/lib/utils';
 
 const Accordion = AccordionPrimitive.Root;
@@ -38,25 +41,26 @@ const AccordionTrigger = React.forwardRef<
 ));
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
-export interface AccordionContentProps
-  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> {
-  animateOpacity?: boolean;
-}
-
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
-  AccordionContentProps
->(({ animateOpacity, className, children, ...props }, ref) => (
-  <AccordionPrimitive.Content
-    ref={ref}
-    className={
-      'overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down'
-    }
-    {...props}
-  >
-    <div className={cn('pb-4 pt-0', className)}>{children}</div>
-  </AccordionPrimitive.Content>
-));
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+>(({ className, children, ...props }, ref) => {
+  const isFirstRender = useIsFirstRender();
+
+  return (
+    <AccordionPrimitive.Content
+      ref={ref}
+      className={cn(
+        'overflow-hidden text-sm transition-all',
+        !isFirstRender &&
+          'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
+      )}
+      {...props}
+    >
+      <div className={cn('pb-4 pt-0', className)}>{children}</div>
+    </AccordionPrimitive.Content>
+  );
+});
 
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 

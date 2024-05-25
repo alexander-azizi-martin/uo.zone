@@ -93,6 +93,5 @@ module.exports = {
       },
     },
   },
-  safelist: ['text-3xl', 'text-lg'],
   plugins: [require('tailwindcss-animate')],
 };

@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server';
+import { type NextRequest,NextResponse } from 'next/server';
 
 const NEW_FILTER_PARAM_NAME: { [k: string]: string } = {
   sort: 'sortBy',

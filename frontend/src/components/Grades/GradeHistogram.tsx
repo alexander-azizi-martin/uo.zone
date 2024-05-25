@@ -1,3 +1,5 @@
+'use client';
+
 import { cva, VariantProps } from 'class-variance-authority';
 import { useMemo, useRef } from 'react';
 
@@ -7,11 +9,11 @@ import { GradeInfo } from '@/lib/api';
 import { Grade, type Letter } from '@/lib/grade';
 import { percent } from '@/lib/helpers';
 
-const gradeHistogramVariants = cva('flex', {
+const gradeHistogramVariants = cva('flex hover:cursor-default', {
   variants: {
     size: {
-      sm: 'h-[40px]',
-      md: 'h-[55px]',
+      sm: '[--grade-histogram-bar-height:40px]',
+      md: '[--grade-histogram-bar-height:55px]',
     },
   },
   defaultVariants: {
@@ -78,17 +80,17 @@ function Bar({ letter, gradeInfo, barHeightPercent }: BarProps) {
       onMouseLeave={setHovering.off}
       onClick={setHovering.on}
     >
-      <div className='relative flex h-full grow flex-col'>
+      <div className='relative flex h-[--grade-histogram-bar-height] grow flex-col'>
         <div
-          className={`h-[--height] w-full ${Grade.barColor(letter)} opacity-10`}
+          className={`w-full ${Grade.barColor(letter)} opacity-10`}
           style={{
-            ['--height' as any]: `calc(100% * ${barHeightPercent})`,
+            height: `calc(100% * ${barHeightPercent})`,
           }}
         />
         <div
-          className={`h-[--height] w-full ${Grade.barColor(letter)}`}
+          className={`w-full ${Grade.barColor(letter)}`}
           style={{
-            ['--height' as any]: `calc(100% * ${1 - barHeightPercent})`,
+            height: `calc(100% * ${1 - barHeightPercent})`,
           }}
         />
 

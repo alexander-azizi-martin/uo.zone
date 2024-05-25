@@ -1,5 +1,3 @@
-const { withAxiom } = require('next-axiom');
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -8,10 +6,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  i18n: {
-    locales: ['en', 'fr'],
-    defaultLocale: 'en',
-  },
   async rewrites() {
     return [
       {
@@ -31,17 +25,6 @@ const nextConfig = {
       ],
     ],
   },
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.po/,
-      use: [
-        {
-          loader: '@lingui/loader',
-        },
-      ],
-    });
-    return config;
-  },
 };
 
-module.exports = withBundleAnalyzer(withAxiom(nextConfig));
+module.exports = withBundleAnalyzer(nextConfig);

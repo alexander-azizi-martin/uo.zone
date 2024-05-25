@@ -1,18 +1,19 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import styles from '@/styles/trapezoid.module.css';
 
-export interface TrapezoidProps extends React.HTMLAttributes<HTMLSpanElement> {
+import styles from './styles/trapezoid.module.css';
+
+export interface TrapezoidProps extends React.HTMLAttributes<HTMLDivElement> {
   leaning?: 'left' | 'right';
   heights: [string, string];
   width: string;
 }
 
-const Trapezoid = React.forwardRef<HTMLSpanElement, TrapezoidProps>(
+const Trapezoid = React.forwardRef<HTMLDivElement, TrapezoidProps>(
   ({ className, leaning, heights, width, ...props }, ref) => {
     return (
-      <span
+      <div
         ref={ref}
         className={cn(styles.trapezoid, className)}
         data-leaning={leaning || 'left'}
@@ -22,7 +23,7 @@ const Trapezoid = React.forwardRef<HTMLSpanElement, TrapezoidProps>(
           ['--trapezoid-width' as any]: width,
         }}
         {...props}
-      />
+      ></div>
     );
   },
 );

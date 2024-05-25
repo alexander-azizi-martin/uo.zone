@@ -1,9 +1,10 @@
+import { Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+
 import { Badge } from '@/components/ui/badge';
 import { type GradeInfo } from '@/lib/api';
 import { Grade } from '@/lib/grade';
-import { Trans } from '@lingui/macro';
 import { percent } from '@/lib/helpers';
-import { useLingui } from '@lingui/react';
 
 interface GradeTendenciesProps {
   gradeInfo: GradeInfo;

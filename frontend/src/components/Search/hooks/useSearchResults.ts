@@ -1,13 +1,13 @@
 import debounce from 'lodash.debounce';
+import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
 
 import { search, type SearchResults as SearchResultsType } from '@/lib/api';
 
 export function useSearchResults(query: string) {
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<SearchResultsType | null>();
-  const { locale } = useRouter();
+  const { locale } = useParams<{ locale: string }>()!;
 
   const updateResults = useMemo(
     () =>
@@ -23,18 +23,15 @@ export function useSearchResults(query: string) {
     [locale],
   );
 
-  const debounceSetSearching = useMemo(() => debounce(setSearching, 500), []);
-
   useEffect(() => {
     window.scrollTo({ top: 0 });
 
     const trimmedQuery = query.trim();
 
-    if (!!trimmedQuery) {
-      debounceSetSearching.cancel();
+    if (trimmedQuery) {
       setSearching(true);
     } else {
-      debounceSetSearching(false);
+      setSearching(false);
     }
 
     updateResults.cancel();

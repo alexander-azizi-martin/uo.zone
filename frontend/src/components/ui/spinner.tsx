@@ -8,11 +8,11 @@ const spinnerVariants = cva(
   {
     variants: {
       size: {
-        xs: 'h-3 w-3',
-        sm: 'h-4 w-4',
-        md: 'h-6 w-6',
-        lg: 'h-8 w-8',
-        xl: 'h-12 w-12',
+        xs: 'size-3',
+        sm: 'size-4',
+        md: 'size-6',
+        lg: 'size-8',
+        xl: 'size-12',
       },
     },
     defaultVariants: {
@@ -25,15 +25,13 @@ const Spinner = React.forwardRef<
   HTMLSpanElement,
   React.ButtonHTMLAttributes<HTMLSpanElement> &
     VariantProps<typeof spinnerVariants>
->(({ className, size, ...props }, ref) => {
-  return (
-    <span
-      ref={ref}
-      className={cn(spinnerVariants({ size, className }))}
-      {...props}
-    />
-  );
-});
+>(({ className, size, ...props }, ref) => (
+  <span
+    ref={ref}
+    className={cn(spinnerVariants({ size, className }))}
+    {...props}
+  />
+));
 Spinner.displayName = 'Spinner';
 
-export { Spinner };
+export { Spinner, spinnerVariants };

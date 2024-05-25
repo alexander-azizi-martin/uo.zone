@@ -1,11 +1,13 @@
-import Link from 'next/link';
+'use client';
+
+import { Trans } from '@lingui/macro';
 import { ReactNode, type RefObject } from 'react';
 
+import { Link } from '@/components/links/Link';
 import { Paper } from '@/components/ui/paper';
 import { type SearchResults as SearchResultsType } from '@/lib/api';
 
 import { useSearchNavigation } from './hooks/useSearchNavigation';
-import { Trans } from '@lingui/macro';
 
 interface SearchResultsProps {
   results: SearchResultsType;

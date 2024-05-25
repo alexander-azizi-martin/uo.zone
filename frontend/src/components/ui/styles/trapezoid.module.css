@@ -1,0 +1,42 @@
+@supports not (width: round(1px, 1px)) {
+  .trapezoid {
+    --trapezoid-min-height: min(var(--trapezoid-height-1), var(--trapezoid-height-0));
+    --trapezoid-max-height: max(var(--trapezoid-height-1), var(--trapezoid-height-0));
+  }
+}
+
+@supports (width: round(1px, 1px)) {
+  .trapezoid {
+    --trapezoid-min-height: round(min(var(--trapezoid-height-1), var(--trapezoid-height-0)), 1px);
+    --trapezoid-max-height: round(max(var(--trapezoid-height-1), var(--trapezoid-height-0)), 1px);
+  }
+}
+
+.trapezoid {
+  width: var(--trapezoid-width);
+  --triangle-height: calc(var(--trapezoid-max-height) - var(--trapezoid-min-height));
+  --rectangle-height: var(--trapezoid-min-height);
+}
+
+/* Rectangle part of right trapezoid */
+.trapezoid::before {
+  display: block;
+  height: var(--rectangle-height);
+  background-color: currentcolor;
+  content: '';
+}
+
+/* Triangle part of right trapezoid */
+.trapezoid::after {
+  display: block;
+  border-top: var(--triangle-height) solid currentcolor;
+  content: '';
+}
+
+.trapezoid[data-leaning="left"]::after {
+  border-right: var(--trapezoid-width) solid transparent;
+}
+
+.trapezoid[data-leaning="right"]::after {
+  border-left: var(--trapezoid-width) solid transparent;
+}

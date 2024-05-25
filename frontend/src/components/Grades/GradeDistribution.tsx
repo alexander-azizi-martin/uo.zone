@@ -1,3 +1,7 @@
+'use client';
+
+import { Plural, Select, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useMemo, useRef, useState } from 'react';
 
@@ -6,9 +10,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { type GradeInfo } from '@/lib/api';
 import { gradeGradient } from '@/lib/config';
 import { Grade, type Letter } from '@/lib/grade';
-import { pairwise, percent, createGradient } from '@/lib/helpers';
-import { Plural, Select, Trans } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { createGradient, pairwise, percent } from '@/lib/helpers';
 
 const gradeDistributionVariants = cva(
   `
@@ -64,7 +66,7 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
       const gradePercent = percent(gradeInfo.grades[letter], numericalTotal);
       const heightPercent = 1 - gradePercent * 4;
 
-      return Math.max(0, heightPercent);
+      return Math.max(0, heightPercent).toFixed(2);
     });
   }, [gradeInfo]);
 
@@ -91,7 +93,7 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
   };
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col hover:cursor-default'>
       <div
         ref={rootRef}
         className={gradeDistributionVariants({ size })}
@@ -106,8 +108,8 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
             className='text-white/90'
             width={`calc(var(--grade-distribution-width) * ${1 / NUM_BINS})`}
             heights={[
-              `round(calc(var(--grade-distribution-height) * ${currentPercent}), 1px)`,
-              `round(calc(var(--grade-distribution-height) * ${nextPercent}), 1px)`,
+              `calc(var(--grade-distribution-height) * ${currentPercent})`,
+              `calc(var(--grade-distribution-height) * ${nextPercent})`,
             ]}
             leaning={currentPercent > nextPercent ? 'left' : 'right'}
           />
@@ -117,7 +119,7 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
           <>
             <PinPoint
               x={`calc(100% * ${(1 / NUM_BINS) * Grade.value(selectedGrade)})`}
-              y={`round(calc(100% * ${heightPercents[Grade.value(selectedGrade)]}), 1px)`}
+              y={`calc(100% * ${heightPercents[Grade.value(selectedGrade)]})`}
             />
 
             <p
@@ -181,7 +183,7 @@ function PinPoint({ x, y }: PinPointProps) {
       />
       <div
         className={`
-          absolute h-1 w-1 -translate-x-1/2 -translate-y-1/2 
+          absolute size-1 -translate-x-1/2 -translate-y-1/2 
           rounded-full bg-black/40
         `}
         style={{ left: x, top: y }}

@@ -1,10 +1,5 @@
 import { msg } from "@lingui/macro";
 
-export const searchDurations = {
-  enter: 0.3,
-  exit: 0.75,
-};
-
 export const gradeGradient = [
   { color: '#ff0000', offset: 0 },
   { color: '#ec6c17', offset: 40 },

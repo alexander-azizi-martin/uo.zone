@@ -19,7 +19,7 @@ The idea for UO Grades was inspired by [Gopher Grades](https://umn.lol/) a simil
 
 ## Prerequisites
 
-- [bun](https://bun.sh/)
+- [nodejs](https://nodejs.org/en)
 - [docker](https://docs.docker.com/engine/install/)
 
 ## Backend
@@ -51,8 +51,8 @@ cd frontend
 
 cp .env.example .env.local
 
-bun install
-bun dev
+npm install
+npm run dev
 
 # live at http://localhost:3000
 ```

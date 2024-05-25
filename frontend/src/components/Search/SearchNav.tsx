@@ -1,17 +1,10 @@
-import { usePathname } from 'next/navigation';
-import {
-  type PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-  useImperativeHandle,
-} from 'react';
+'use client';
 
-import {
-  SearchBar,
-  type SearchBarProps,
-  SearchResults,
-} from '@/components/search';
+import { msg, Trans } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { usePathname } from 'next/navigation';
+import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
+
 import {
   Accordion,
   AccordionContent,
@@ -21,8 +14,8 @@ import { Spinner } from '@/components/ui/spinner';
 
 import { useResizeOnAnimation } from './hooks/useResizeOnAnimation';
 import { useSearchResults } from './hooks/useSearchResults';
-import { Trans, msg, t } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
+import { SearchBar, type SearchBarProps } from './SearchBar';
+import { SearchResults } from './SearchResults';
 
 interface SearchProps extends PropsWithChildren {
   onSearchOpen?: () => void;
@@ -44,11 +37,6 @@ export function SearchNav({
   useResizeOnAnimation(contentRef);
 
   const searchBarRef = useRef<HTMLInputElement>(null);
-  useImperativeHandle(
-    searchBarProps?.ref,
-    () => searchBarRef.current as HTMLInputElement,
-    [],
-  );
 
   const pathname = usePathname();
   const [query, setQuery] = useState('');
