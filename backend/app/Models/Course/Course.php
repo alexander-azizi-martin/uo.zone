@@ -81,6 +81,20 @@ class Course extends Model
     }
 
     /**
+     * Get the term ids the course was previously offered in.
+     */
+    public function previousTermIds(): array
+    {
+        return $this->sections()
+            ->groupBy('term_id')
+            ->select('term_id')
+            ->toBase()
+            ->get()
+            ->pluck('term_id')
+            ->all();
+    }
+
+    /**
      * Get the indexable data array for the model.
      */
     public function toSearchableArray(): array

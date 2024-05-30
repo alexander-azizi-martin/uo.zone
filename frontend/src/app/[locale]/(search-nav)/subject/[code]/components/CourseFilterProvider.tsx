@@ -12,6 +12,7 @@ export interface CourseFilterOptions {
   sortBy: 'code' | 'average' | 'median' | 'mode';
   years: ('1' | '2' | '3' | '4' | '5')[];
   languages: ('en' | 'fr')[];
+  term: ('fall' | 'winter' | 'summer')[];
 }
 
 export const CourseFilterContext = createContext<{
@@ -35,12 +36,20 @@ export function CourseFilterProvider({ children }: PropsWithChildren) {
       languages: parseAsArrayOf(parseAsStringLiteral(['en', 'fr']))
         .withDefault([])
         .withOptions({ clearOnDefault: true }),
+      term: parseAsArrayOf(parseAsStringLiteral(['fall', 'winter', 'summer']))
+        .withDefault([])
+        .withOptions({ clearOnDefault: true }),
     },
     { clearOnDefault: true },
   );
 
   const resetFilterOptions = useCallback(() => {
-    setFilterOptionsObject({ sortBy: 'code', years: [], languages: [] });
+    setFilterOptionsObject({
+      sortBy: 'code',
+      years: [],
+      languages: [],
+      term: [],
+    });
   }, [setFilterOptionsObject]);
 
   const setFilterOptions = useCallback(

@@ -6,11 +6,7 @@ import { arrayGt, arrayLt, percent } from '@/lib/helpers';
 
 import { CourseFilterContext } from '../components/CourseFilterProvider';
 
-export interface CourseFilterOptions {
-  sortBy: string;
-  years: string[];
-  languages: string[];
-}
+const TERM_TO_ID = { fall: 2, winter: 0, summer: 1 };
 
 export function useFilteredCourses(courses: Course[]) {
   const courseFilterContext = useContext(CourseFilterContext);
@@ -33,14 +29,23 @@ export function useFilteredCourses(courses: Course[]) {
             });
 
           const courseYear = Math.min(5, parseInt(course.code[3])).toString();
-
           const includesYear =
             filterOptions.years.length === 0 ||
             filterOptions.years.some((year) => {
               return courseYear === year;
             });
 
-          return includesLanguage && includesYear;
+          // const includesTerm =
+          //   filterOptions.term.length === 0 ||
+          //   filterOptions.term.some((term) => {
+          //     return course.previousTermIds.some(
+          //       (termId) => (termId % 10) === TERM_TO_ID[term],
+          //     );
+          //   });
+
+          const includesTerm = filterOptions.term.length === 0;
+
+          return includesLanguage && includesYear && includesTerm;
         })
         .sort((a, b) => {
           switch (filterOptions.sortBy) {
