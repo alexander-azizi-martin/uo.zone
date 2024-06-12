@@ -1,12 +1,13 @@
 import { Plural, Trans } from '@lingui/macro';
+import { InfoIcon } from 'lucide-react';
 
-import { Link } from '@/components/links/Link';
-import { Badge } from '@/components/ui/badge';
-import { getCourse } from '@/lib/api';
+import { SectionsSummary } from '@/components/common/sections-summary';
+import { GradeSummary } from '@/components/grades/grade-summary';
+import { Paper } from '@/components/ui/paper';
+import { Tooltip } from '@/components/ui/tooltip';
+import { client } from '@/lib/api/client';
+import { type components } from '@/lib/api/schema';
 import { loadI18n } from '@/lib/i18n';
-
-import { CourseInfo } from './components/CourseInfo';
-import { CourseTabs } from './components/CourseTabs';
 
 interface CoursePageProps {
   params: {
@@ -15,47 +16,101 @@ interface CoursePageProps {
   };
 }
 
-export default async function CoursePage({ params }: CoursePageProps) {
+export default async function GradeCoursePage({ params }: CoursePageProps) {
   await loadI18n(params.locale);
-  const course = await getCourse(params.code, params.locale);
 
-  const subjectCode = course.title.slice(0, 3);
-  const courseTitle = course.title.slice(3);
+  const course = (
+    await client.GET('/courses/{course}', {
+      params: {
+        path: { course: params.code },
+        header: { 'Accept-Language': params.locale },
+      },
+    })
+  ).data!;
+
+  const professors = (
+    await client.GET('/courses/{course}/professors', {
+      params: {
+        path: { course: params.code },
+        header: { 'Accept-Language': params.locale },
+      },
+    })
+  ).data!;
+
+  if (professors.length === 0) {
+    return (
+      <div>
+        <Trans>No grade data.</Trans>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <h2 className='relative mt-4 sm:text-4xl'>
-        <Link
-          href={`/subject/${subjectCode}`}
-          className='underline decoration-2 hover:decoration-4'
-        >
-          {subjectCode}
-        </Link>
-
-        {courseTitle}
-      </h2>
-
-      <div className='mt-1 flex flex-wrap gap-2'>
-        {course.units !== null && (
-          <Badge className='text-black bg-muted'>
-            <Trans>
-              {course.units}{' '}
-              <Plural value={course.units} one='unit' other='units' />
-            </Trans>
-          </Badge>
+      <div className='flex flex-col items-start gap-4'>
+        {course.grades && (
+          <Paper size='lg'>
+            <GradeSummary
+              grades={course.grades}
+              title={<Trans>All Professors</Trans>}
+              titleSize={'3xl'}
+            />
+          </Paper>
         )}
 
-        <Badge className='bg-blue-500' size='sm'>
-          {course.subject.subject}
-        </Badge>
-        <Badge className='bg-blue-500' size='sm'>
-          {course.subject.faculty}
-        </Badge>
+        {professors.map((professor) => (
+          <SectionsSummary
+            key={professor.id}
+            title={
+              professor.id !== 0 ? (
+                professor.name
+              ) : (
+                <UnknownProfessor professor={professor} />
+              )
+            }
+            href={professor.id !== 0 ? `/professor/${professor.id}` : undefined}
+            summarize={professor}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface UnknownProfessorProps {
+  professor: components['schemas']['ProfessorWithSectionsResource'];
+}
+
+function UnknownProfessor({ professor }: UnknownProfessorProps) {
+  return (
+    <div className='flex items-start gap-2'>
+      <div>
+        <Trans>
+          Unknown{' '}
+          <Plural
+            value={professor.sections.length}
+            one='Professor'
+            other='Professors'
+          />
+        </Trans>
       </div>
 
-      <CourseInfo course={course} />
-
-      <CourseTabs course={course} />
+      <Tooltip
+        label={
+          <Trans>
+            The{' '}
+            <Plural
+              value={professor.sections.length}
+              one='professor for this course section is'
+              other='professors for these course sections are'
+            />{' '}
+            not known.
+          </Trans>
+        }
+        className='text-center text-sm'
+      >
+        <InfoIcon size={14} />
+      </Tooltip>
     </div>
   );
 }

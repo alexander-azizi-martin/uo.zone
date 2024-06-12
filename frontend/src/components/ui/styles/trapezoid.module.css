@@ -14,14 +14,14 @@
 
 .trapezoid {
   width: var(--trapezoid-width);
-  --triangle-height: calc(var(--trapezoid-max-height) - var(--trapezoid-min-height));
-  --rectangle-height: var(--trapezoid-min-height);
+  --trapezoid-triangle-height: calc(var(--trapezoid-max-height) - var(--trapezoid-min-height));
+  --trapezoid-rectangle-height: var(--trapezoid-min-height);
 }
 
 /* Rectangle part of right trapezoid */
 .trapezoid::before {
   display: block;
-  height: var(--rectangle-height);
+  height: var(--trapezoid-rectangle-height);
   background-color: currentcolor;
   content: '';
 }
@@ -29,7 +29,7 @@
 /* Triangle part of right trapezoid */
 .trapezoid::after {
   display: block;
-  border-top: var(--triangle-height) solid currentcolor;
+  border-top: var(--trapezoid-triangle-height) solid currentcolor;
   content: '';
 }
 

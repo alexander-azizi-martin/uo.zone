@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { type ComponentProps, useMemo } from 'react';
 
-import linguiConfig from '@/lingui.config';
+import linguiConfig, { type Locale } from '@/lingui.config';
 
 interface LocalLink extends Omit<ComponentProps<typeof Link>, 'href'> {
   locale: Locale;
 }
 
-export function LocaleLink({ locale, ...props }: LocalLink) {
+function LocaleLink({ locale, ...props }: LocalLink) {
   const pathname = usePathname() as string;
   const searchParams = useSearchParams();
 
@@ -34,3 +34,5 @@ export function LocaleLink({ locale, ...props }: LocalLink) {
 
   return <Link href={href} {...props} />;
 }
+
+export { LocaleLink };

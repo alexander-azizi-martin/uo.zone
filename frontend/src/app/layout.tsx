@@ -1,13 +1,27 @@
 import './global.css';
 import 'nprogress/nprogress.css';
 
+import { IBM_Plex_Sans, Inter } from 'next/font/google';
 import Script from 'next/script';
 import { type PropsWithChildren } from 'react';
 
-export default async function LanguageLayout({ children }: PropsWithChildren) {
+const inter = Inter({
+  subsets: ['latin'],
+  fallback: ['system-ui', 'arial'],
+  variable: '--font-inter',
+});
+
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: '700',
+  subsets: ['latin'],
+  display: 'block',
+  variable: '--font-plex',
+});
+
+export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html>
-      <body>
+      <body className={`${inter.variable} ${ibmPlexSans.variable}`}>
         {children}
 
         <Script

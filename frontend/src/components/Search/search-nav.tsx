@@ -2,6 +2,7 @@
 
 import { msg, Trans } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
+import cntl from 'cntl';
 import { usePathname } from 'next/navigation';
 import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
 
@@ -14,21 +15,21 @@ import { Spinner } from '@/components/ui/spinner';
 
 import { useResizeOnAnimation } from './hooks/useResizeOnAnimation';
 import { useSearchResults } from './hooks/useSearchResults';
-import { SearchBar, type SearchBarProps } from './SearchBar';
-import { SearchResults } from './SearchResults';
+import { SearchBar, type SearchBarProps } from './search-bar';
+import { SearchResults } from './search-results';
 
-interface SearchProps extends PropsWithChildren {
+interface SearchNavProps extends PropsWithChildren {
   onSearchOpen?: () => void;
   onSearchClose?: () => void;
   searchBarProps?: Omit<SearchBarProps, 'value' | 'onChange' | 'placeholder'>;
 }
 
-export function SearchNav({
+function SearchNav({
   onSearchOpen,
   onSearchClose,
   children,
   searchBarProps,
-}: SearchProps) {
+}: SearchNavProps) {
   const { _ } = useLingui();
 
   const searchResultsRef = useRef<HTMLDivElement>(null);
@@ -73,7 +74,7 @@ export function SearchNav({
       <AccordionItem value='search-results' className='border-0'>
         <AccordionContent
           ref={searchResultsRef}
-          className={`
+          className={cntl`
             stack min-h-[calc(100vh-theme(spacing.16))]
             w-full items-start gap-8 px-2 pt-6
             ${
@@ -113,3 +114,7 @@ export function SearchNav({
     </Accordion>
   );
 }
+
+export { SearchNav };
+
+export type { SearchNavProps };

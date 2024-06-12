@@ -8,10 +8,12 @@ import {
   useMemo,
 } from 'react';
 
+import { type Locale } from '@/lingui.config';
+
 export interface CourseFilterOptions {
   sortBy: 'code' | 'average' | 'median' | 'mode';
   years: ('1' | '2' | '3' | '4' | '5')[];
-  languages: ('en' | 'fr')[];
+  languages: Locale[];
   term: ('fall' | 'winter' | 'summer')[];
 }
 

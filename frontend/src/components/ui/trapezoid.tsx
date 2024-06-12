@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 import styles from './styles/trapezoid.module.css';
 
-export interface TrapezoidProps extends React.HTMLAttributes<HTMLDivElement> {
+interface TrapezoidProps extends React.HTMLAttributes<HTMLDivElement> {
   leaning?: 'left' | 'right';
   heights: [string, string];
   width: string;
@@ -30,3 +30,5 @@ const Trapezoid = React.forwardRef<HTMLDivElement, TrapezoidProps>(
 Trapezoid.displayName = 'Trapezoid';
 
 export { Trapezoid };
+
+export type { TrapezoidProps };

@@ -1,50 +1,76 @@
 import { Trans } from '@lingui/macro';
 
-import { ExternalLink } from '@/components/links/ExternalLink';
-import { Badge } from '@/components/ui/badge';
-import { getProfessor } from '@/lib/api';
+import { SectionsSummary } from '@/components/common/sections-summary';
+import { GradeSummary } from '@/components/grades/grade-summary';
+import { Paper } from '@/components/ui/paper';
+import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 
-import { ProfessorTabs } from './components/ProfessorTabs';
-import { RmpRating } from './components/RmpRating';
 
 interface ProfessorPageProps {
   params: {
-    id: string;
+    id: number;
     locale: string;
   };
 }
 
 export default async function ProfessorPage({ params }: ProfessorPageProps) {
   await loadI18n(params.locale);
-  const professor = await getProfessor(params.id, params.locale);
+
+  const professor = (
+    await client.GET('/professors/{professor}', {
+      params: {
+        path: { professor: params.id },
+        header: { 'Accept-Language': params.locale },
+      },
+    })
+  ).data!;
+
+  const courses = (
+    await client.GET('/professors/{professor}/courses', {
+      params: {
+        path: { professor: params.id },
+        header: { 'Accept-Language': params.locale },
+      },
+    })
+  ).data!;
+
+  if (courses.length === 0) {
+    return (
+      <div>
+        <Trans>No grade data.</Trans>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h2 className='my-4 mt-4 sm:text-4xl'>{professor.name}</h2>
-      {professor.rmpReview && professor.rmpReview.numRatings > 0 && (
-        <>
-          <div className='mt-1 flex flex-wrap gap-2'>
-            <RmpRating review={professor.rmpReview} />
-            {professor.rmpReview.department && (
-              <Badge className='bg-blue-500' size='sm'>
-                {professor.rmpReview.department}
-              </Badge>
-            )}
-          </div>
-
-          <p className='my-4 text-sm'>
-            <ExternalLink
-              href={professor.rmpReview.link}
-              className='text-sm text-gray-600'
-            >
-              <Trans>View on RateMyProfessor</Trans>
-            </ExternalLink>
-          </p>
-        </>
+    <div className='stack items-start gap-4'>
+      {professor.grades && (
+        <Paper size='lg'>
+          <GradeSummary
+            grades={professor.grades}
+            title={<Trans>All Courses</Trans>}
+            titleSize={'3xl'}
+            info={
+              <p className='mt-2 text-sm text-gray-600'>
+                <Trans>
+                  This total also includes classes that they may not teach
+                  anymore.
+                </Trans>
+              </p>
+            }
+          />
+        </Paper>
       )}
 
-      <ProfessorTabs professor={professor} />
+      {courses.map((course) => (
+        <SectionsSummary
+          key={course.code}
+          title={course.title}
+          href={`/course/${course.code}`}
+          summarize={course}
+        />
+      ))}
     </div>
   );
 }

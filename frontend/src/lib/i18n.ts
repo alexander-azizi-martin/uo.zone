@@ -18,6 +18,7 @@ export async function loadI18n(locale: string) {
 
   const i18n = getI18n();
   setI18n(i18n);
+
   if (i18n.locale !== locale) {
     const messages = await loadMessages(locale);
     i18n.loadAndActivate({ locale, messages });

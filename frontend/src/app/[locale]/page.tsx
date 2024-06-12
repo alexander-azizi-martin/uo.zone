@@ -1,8 +1,9 @@
 'use client';
 
 import { Trans } from '@lingui/macro';
+import cntl from 'cntl';
 
-import { SearchNav } from '@/components/search/SearchNav';
+import { SearchNav } from '@/components/search/search-nav';
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { useBoolean } from '@/hooks/useBoolean';
 
@@ -13,14 +14,14 @@ export default function IndexPage() {
     <div className='stack w-full items-center md:items-start'>
       <Collapsible
         open={!searching}
-        className={`
+        className={cntl`
           flex w-full flex-col-reverse items-center justify-center 
           md:flex-row md:items-end md:justify-between
         `}
       >
         <CollapsibleContent className='min-w-[410px]'>
           <h1
-            className={` 
+            className={cntl` 
               min-w-max text-center text-[50px] 
               sm:pt-2.5 sm:text-[55px] 
               md:pt-[calc(50vh-185px)] md:text-left md:text-[90px]
@@ -36,15 +37,15 @@ export default function IndexPage() {
           </p>
         </CollapsibleContent>
         <CollapsibleContent
-          className={`
-              relative 
-              sm:pl-8
-              md:top-24 md:opacity-50 
-              lg:top-40
+          className={cntl`
+            relative 
+            sm:pl-8
+            md:top-24 md:opacity-50 
+            lg:top-40
           `}
         >
           <img
-            className={`
+            className={cntl`
               w-[250px] pb-5 pt-20 
               sm:w-[300px] 
               md:w-[500px] md:pb-0 md:pt-0

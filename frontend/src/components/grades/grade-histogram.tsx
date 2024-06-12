@@ -5,9 +5,9 @@ import { useMemo, useRef } from 'react';
 
 import { useBoolean } from '@/hooks/useBoolean';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { GradeInfo } from '@/lib/api';
+import { type components } from '@/lib/api/schema';
 import { Grade, type Letter } from '@/lib/grade';
-import { percent } from '@/lib/helpers';
+import { percent } from '@/lib/utils';
 
 const gradeHistogramVariants = cva('flex hover:cursor-default', {
   variants: {
@@ -23,26 +23,26 @@ const gradeHistogramVariants = cva('flex hover:cursor-default', {
 
 interface GradeHistogramProps
   extends VariantProps<typeof gradeHistogramVariants> {
-  gradeInfo: GradeInfo;
+  grades: components['schemas']['GradesResource'];
 }
 
-export function GradeHistogram({ gradeInfo, size }: GradeHistogramProps) {
+function GradeHistogram({ grades, size }: GradeHistogramProps) {
   const heightPercents = useMemo(() => {
     const nonNumericalTotal = Grade.NON_NUMERICAL_GRADES.reduce(
-      (acc, letter) => acc + gradeInfo.grades[letter],
+      (acc, letter) => acc + grades.distribution[letter],
       0,
     );
 
     return Grade.NON_NUMERICAL_GRADES.map((letter) => {
       const heightPercent = percent(
-        gradeInfo.grades[letter],
+        grades.distribution[letter],
         nonNumericalTotal,
       );
       const complement = Math.max(0, 1 - heightPercent);
 
       return complement;
     });
-  }, [gradeInfo]);
+  }, [grades]);
 
   return (
     <div className={gradeHistogramVariants({ size })}>
@@ -50,7 +50,7 @@ export function GradeHistogram({ gradeInfo, size }: GradeHistogramProps) {
         <Bar
           key={i}
           letter={Grade.NON_NUMERICAL_GRADES[i]}
-          gradeInfo={gradeInfo}
+          grades={grades}
           barHeightPercent={heightPercent}
         />
       ))}
@@ -60,11 +60,11 @@ export function GradeHistogram({ gradeInfo, size }: GradeHistogramProps) {
 
 interface BarProps {
   letter: Letter;
-  gradeInfo: GradeInfo;
+  grades: components['schemas']['GradesResource'];
   barHeightPercent: number;
 }
 
-function Bar({ letter, gradeInfo, barHeightPercent }: BarProps) {
+function Bar({ letter, grades, barHeightPercent }: BarProps) {
   const [hovering, setHovering] = useBoolean(false);
   const ref = useRef(null);
   useOutsideClick({
@@ -100,8 +100,12 @@ function Bar({ letter, gradeInfo, barHeightPercent }: BarProps) {
       </div>
 
       <p className='m-auto h-3 w-fit text-2xs leading-3 opacity-80'>
-        {hovering ? gradeInfo.grades[letter] : letter}
+        {hovering ? grades.distribution[letter] : letter}
       </p>
     </div>
   );
 }
+
+export { GradeHistogram };
+
+export type { GradeHistogramProps };

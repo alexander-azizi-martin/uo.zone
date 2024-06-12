@@ -1,14 +1,14 @@
 import { useContext, useMemo } from 'react';
 
-import { type Course } from '@/lib/api';
+import { type components } from '@/lib/api/schema';
 import { Grade } from '@/lib/grade';
-import { arrayGt, arrayLt, percent } from '@/lib/helpers';
+import { percent, TERM_TO_ID } from '@/lib/utils';
 
 import { CourseFilterContext } from '../components/CourseFilterProvider';
 
-const TERM_TO_ID = { fall: 2, winter: 0, summer: 1 };
-
-export function useFilteredCourses(courses: Course[]) {
+export function useFilteredCourses(
+  courses: components['schemas']['CourseResource'][],
+) {
   const courseFilterContext = useContext(CourseFilterContext);
   if (courseFilterContext === null) {
     throw new Error(
@@ -35,15 +35,13 @@ export function useFilteredCourses(courses: Course[]) {
               return courseYear === year;
             });
 
-          // const includesTerm =
-          //   filterOptions.term.length === 0 ||
-          //   filterOptions.term.some((term) => {
-          //     return course.previousTermIds.some(
-          //       (termId) => (termId % 10) === TERM_TO_ID[term],
-          //     );
-          //   });
-
-          const includesTerm = filterOptions.term.length === 0;
+          const includesTerm =
+            filterOptions.term.length === 0 ||
+            filterOptions.term.some((term) => {
+              return course.previousTermIds.some(
+                (termId) => (termId % 10) === TERM_TO_ID[term],
+              );
+            });
 
           return includesLanguage && includesYear && includesTerm;
         })
@@ -52,13 +50,13 @@ export function useFilteredCourses(courses: Course[]) {
             case 'code':
               return Number(a.code > b.code);
             case 'average': {
-              if (!a?.gradeInfo?.mean && !b?.gradeInfo?.mean)
+              if (!a?.grades?.mean && !b?.grades?.mean)
                 return Number(a.code > b.code);
-              if (!a?.gradeInfo?.mean) return 1;
-              if (!b?.gradeInfo?.mean) return -1;
+              if (!a?.grades?.mean) return 1;
+              if (!b?.grades?.mean) return -1;
 
-              const aAverage = a.gradeInfo.mean;
-              const bAverage = b.gradeInfo.mean;
+              const aAverage = a.grades.mean;
+              const bAverage = b.grades.mean;
 
               if (aAverage < bAverage) {
                 return 1;
@@ -69,66 +67,48 @@ export function useFilteredCourses(courses: Course[]) {
               return 0;
             }
             case 'median': {
-              if (!a.gradeInfo && !b.gradeInfo) return Number(a.code > b.code);
-              if (!a.gradeInfo) return 1;
-              if (!b.gradeInfo) return -1;
+              if (!a.grades && !b.grades) return Number(a.code > b.code);
+              if (!a.grades) return 1;
+              if (!b.grades) return -1;
 
-              const aMedian = Grade.value(a.gradeInfo.median);
+              const aMedian = Grade.value(a.grades.median as any);
               const aMedianPercent = percent(
-                a.gradeInfo.grades[a.gradeInfo.median],
-                a.gradeInfo.total,
+                a.grades.distribution[a.grades.median as any],
+                a.grades.total,
               );
-              const bMedian = Grade.value(b.gradeInfo.median);
+              const bMedian = Grade.value(b.grades.median as any);
               const bMedianPercent = percent(
-                b.gradeInfo.grades[b.gradeInfo.median],
-                b.gradeInfo.total,
+                b.grades.distribution[b.grades.median as any],
+                b.grades.total,
               );
 
-              if (
-                arrayLt(
-                  [aMedian || 0, aMedianPercent],
-                  [bMedian || 0, bMedianPercent],
-                )
-              ) {
-                return 1;
-              } else if (
-                arrayGt(
-                  [aMedian || 0, aMedianPercent],
-                  [bMedian || 0, bMedianPercent],
-                )
-              ) {
-                return -1;
-              }
-
-              return 0;
+              if (aMedian < bMedian) return 1;
+              else if (bMedian > aMedian) return -1;
+              else if (aMedianPercent < bMedianPercent) return 1;
+              else if (aMedianPercent > bMedianPercent) return -1;
+              else return 0;
             }
             case 'mode': {
-              if (!a.gradeInfo && !b.gradeInfo) return Number(a.code > b.code);
-              if (!a.gradeInfo) return 1;
-              if (!b.gradeInfo) return -1;
+              if (!a.grades && !b.grades) return Number(a.code > b.code);
+              if (!a.grades) return 1;
+              if (!b.grades) return -1;
 
-              const aMode = Grade.value(a.gradeInfo.mode);
+              const aMode = Grade.value(a.grades.mode as any);
               const aModePercent = percent(
-                a.gradeInfo.grades[a.gradeInfo.mode],
-                a.gradeInfo.total,
+                a.grades.distribution[a.grades.mode as any],
+                a.grades.total,
               );
-              const bMode = Grade.value(b.gradeInfo.mode);
+              const bMode = Grade.value(b.grades.mode as any);
               const bModePercent = percent(
-                b.gradeInfo.grades[b.gradeInfo.mode],
-                b.gradeInfo.total,
+                b.grades.distribution[b.grades.mode as any],
+                b.grades.total,
               );
 
-              if (
-                arrayGt([aMode || 0, aModePercent], [bMode || 0, bModePercent])
-              ) {
-                return -1;
-              } else if (
-                arrayLt([aMode || 0, aModePercent], [bMode || 0, bModePercent])
-              ) {
-                return 1;
-              }
-
-              return 0;
+              if (aMode < bMode) return 1;
+              else if (aMode > bMode) return -1;
+              else if (aModePercent < bModePercent) return 1;
+              else if (aModePercent > bModePercent) return -1;
+              else return 0;
             }
             default:
               return 0;
@@ -140,6 +120,7 @@ export function useFilteredCourses(courses: Course[]) {
       filterOptions.sortBy,
       filterOptions.languages,
       filterOptions.years,
+      filterOptions.term,
     ],
   );
 

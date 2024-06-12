@@ -3,18 +3,18 @@
 import { Trans } from '@lingui/macro';
 import { ReactNode, type RefObject } from 'react';
 
-import { Link } from '@/components/links/Link';
+import { Link } from '@/components/links/link';
 import { Paper } from '@/components/ui/paper';
-import { type SearchResults as SearchResultsType } from '@/lib/api';
 
 import { useSearchNavigation } from './hooks/useSearchNavigation';
+import { type SearchResultsType } from './hooks/useSearchResults';
 
 interface SearchResultsProps {
   results: SearchResultsType;
   searchBar?: RefObject<HTMLInputElement>;
 }
 
-export function SearchResults({ results, searchBar }: SearchResultsProps) {
+function SearchResults({ results, searchBar }: SearchResultsProps) {
   useSearchNavigation(searchBar?.current);
 
   const numResults =
@@ -89,3 +89,7 @@ function SearchResultCollection<T>({
     </div>
   );
 }
+
+export { SearchResults };
+
+export type { SearchResultsProps };

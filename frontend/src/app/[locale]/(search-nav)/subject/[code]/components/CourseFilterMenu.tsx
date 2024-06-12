@@ -1,6 +1,7 @@
 'use client';
 
 import { Trans } from '@lingui/macro';
+import cntl from 'cntl';
 import { SlidersHorizontalIcon } from 'lucide-react';
 import { useContext, useTransition } from 'react';
 
@@ -64,7 +65,7 @@ export function CourseFilterMenu() {
         onCloseAutoFocus={preventDefault}
       >
         <div
-          className={`
+          className={cntl`
             scrollbar-thin h-[500px] overflow-x-hidden 
             overflow-y-scroll overscroll-contain
           `}

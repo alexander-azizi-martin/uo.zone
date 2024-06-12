@@ -1,4 +1,5 @@
 import { type PropsWithChildren } from 'react';
+
 import { loadI18n } from '@/lib/i18n';
 
 import { I18nProvider } from './components/I18nProvider';

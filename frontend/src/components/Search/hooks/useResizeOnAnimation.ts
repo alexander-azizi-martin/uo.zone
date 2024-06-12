@@ -1,6 +1,6 @@
 import { type RefObject, useEffect } from 'react';
 
-export function useResizeOnAnimation(ref: RefObject<HTMLElement>) {
+function useResizeOnAnimation(ref: RefObject<HTMLElement>) {
   useEffect(() => {
     if (ref.current === null) return;
 
@@ -36,3 +36,5 @@ export function useResizeOnAnimation(ref: RefObject<HTMLElement>) {
     };
   }, [ref]);
 }
+
+export { useResizeOnAnimation };

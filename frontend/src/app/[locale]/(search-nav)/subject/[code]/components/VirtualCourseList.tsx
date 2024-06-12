@@ -3,15 +3,15 @@
 import { Trans } from '@lingui/macro';
 import { Virtuoso } from 'react-virtuoso';
 
-import { GradeSummary } from '@/components/grades/GradeSummary';
-import { Link } from '@/components/links/Link';
+import { GradeSummary } from '@/components/grades/grade-summary';
+import { Link } from '@/components/links/link';
 import { Paper } from '@/components/ui/paper';
-import { type Course } from '@/lib/api';
+import { type components } from '@/lib/api/schema';
 
 import { useFilteredCourses } from '../hooks/useFilteredCourses';
 
 interface VirtualCourseListProps {
-  courses: Course[];
+  courses: components['schemas']['CourseResource'][];
 }
 
 export function VirtualCourseList({ courses }: VirtualCourseListProps) {
@@ -36,11 +36,11 @@ export function VirtualCourseList({ courses }: VirtualCourseListProps) {
                 <GradeSummary
                   title={course.title}
                   subtitle={
-                    !course.gradeInfo?.total ? (
+                    !course.grades?.total ? (
                       <Trans>No grade data available for this course.</Trans>
                     ) : undefined
                   }
-                  gradeInfo={course.gradeInfo}
+                  grades={course.grades}
                   graphSize={'sm'}
                 />
               </Link>

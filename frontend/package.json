@@ -7,8 +7,10 @@
     "build": "lingui compile && next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "extract": "lingui extract --clean",
-    "compile": "lingui compile"
+    "compile": "lingui compile",
+    "type-check": "tsc"
   },
   "dependencies": {
     "@lingui/core": "^4.10.1",
@@ -24,6 +26,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cntl": "^1.0.0",
     "d3-timer": "^3.0.1",
     "elkjs": "^0.8.2",
     "lodash.debounce": "^4.0.8",
@@ -33,6 +36,7 @@
     "next": "^14.1.0",
     "nprogress": "^0.2.0",
     "nuqs": "^1.17.1",
+    "openapi-fetch": "^0.9.7",
     "react": "latest",
     "react-dom": "latest",
     "react-error-boundary": "^4.0.13",
@@ -46,6 +50,7 @@
   },
   "devDependencies": {
     "@lingui/cli": "^4.10.1",
+    "@lingui/conf": "^4.11.1",
     "@lingui/loader": "^4.10.1",
     "@lingui/swc-plugin": "^4.0.7",
     "@next/bundle-analyzer": "^14.1.4",
@@ -64,6 +69,7 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unused-imports": "^3.0.0",
     "mini-css-extract-plugin": "^2.7.6",
+    "openapi-typescript-helpers": "^0.0.8",
     "postcss": "latest",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.13",

@@ -1,6 +1,6 @@
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 
-import { Link } from '@/components/links/Link';
+import { Link } from '@/components/links/link';
 import { cn } from '@/lib/utils';
 
 export const CourseLink = forwardRef<

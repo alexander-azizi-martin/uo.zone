@@ -83,7 +83,11 @@ export class Grade {
   static badgeColor(grade: Letter | number) {
     const letterGrade = Grade.letter(grade);
 
-    return Grade.BADGE_GRADE_COLOR[letterGrade];
+    if (letterGrade in Grade.BADGE_GRADE_COLOR) {
+      return Grade.BADGE_GRADE_COLOR[letterGrade];
+    }
+
+    throw new Error(`No badge color for '${grade}'.`);
   }
 
   static barColor(grade: Letter | number) {
@@ -93,7 +97,7 @@ export class Grade {
       return Grade.BAR_GRADE_COLOR[letterGrade as 'P' | 'S' | 'NS'];
     }
 
-    return undefined;
+    throw new Error(`No bar color for '${grade}'.`);
   }
 
   static letter(grade: Letter | number) {

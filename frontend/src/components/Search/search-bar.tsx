@@ -1,11 +1,12 @@
+import cntl from 'cntl';
 import { SearchIcon } from 'lucide-react';
 import { type ComponentPropsWithRef, forwardRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export type SearchBarProps = ComponentPropsWithRef<'input'>;
+type SearchBarProps = ComponentPropsWithRef<'input'>;
 
-export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
+const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
   ({ className, ...props }, ref) => (
     <div
       className={cn(
@@ -21,13 +22,17 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
         {...props}
         ref={ref}
         type='text'
-        className={`
+        className={cntl`
           h-10 w-full rounded-[inherit] pl-10 pr-4 outline-none 
           transition-shadow placeholder:text-gray-500 
-           focus:shadow-[0_0_20px_rgba(111,19,29,0.35)]
+          focus:shadow-[0_0_20px_rgba(111,19,29,0.35)]
         `}
       />
     </div>
   ),
 );
 SearchBar.displayName = 'SearchBar';
+
+export { SearchBar };
+
+export type { SearchBarProps };

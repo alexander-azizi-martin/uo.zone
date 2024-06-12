@@ -3,7 +3,7 @@ import { type AnchorHTMLAttributes } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export function ExternalLink({
+function ExternalLink({
   href,
   children,
   className,
@@ -24,3 +24,5 @@ export function ExternalLink({
     </a>
   );
 }
+
+export { ExternalLink };

@@ -2,9 +2,16 @@ import debounce from 'lodash.debounce';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
-import { search, type SearchResults as SearchResultsType } from '@/lib/api';
+import { client } from '@/lib/api/client';
+import { type components } from '@/lib/api/schema';
 
-export function useSearchResults(query: string) {
+interface SearchResultsType {
+  subjects: components['schemas']['SubjectSearchRecourse'][];
+  courses: components['schemas']['CourseSearchRecourse'][];
+  professors: components['schemas']['ProfessorSearchRecourse'][];
+}
+
+function useSearchResults(query: string) {
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<SearchResultsType | null>();
   const { locale } = useParams<{ locale: string }>()!;
@@ -12,8 +19,12 @@ export function useSearchResults(query: string) {
   const updateResults = useMemo(
     () =>
       debounce((query: string) => {
-        search(query, locale)
-          .then((data) => {
+        client
+          .POST('/search', {
+            body: { q: query },
+            params: { header: { 'Accept-Language': locale } },
+          })
+          .then(({ data }) => {
             setResults(data);
           })
           .catch(() => {
@@ -43,3 +54,7 @@ export function useSearchResults(query: string) {
 
   return { searching, results, loading: searching && !results };
 }
+
+export { useSearchResults };
+
+export type { SearchResultsType };

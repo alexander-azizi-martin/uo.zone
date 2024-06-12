@@ -102,14 +102,48 @@
 
 @layer utilities {
   .stack {
-    @apply flex flex-col;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: auto;
+    content: "";
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .prevent-parent-hover {
+    position: relative;
+  }
+
+  .prevent-parent-hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  .prevent-parent-hover:hover::before {
+    top: -50px;
+    bottom: -50px;
+    left: -50px;
+    right: -50px;
   }
 }
 
 #nprogress .bar {
-  background: theme(colors.garnet) !important;
+  background: theme('colors.garnet') !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px theme(colors.garnet), 0 0 5px theme(colors.garnet);
+  box-shadow: 0 0 10px theme('colors.garnet'), 0 0 5px theme('colors.garnet');
 }

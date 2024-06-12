@@ -1,8 +1,7 @@
 import { msg, Trans } from '@lingui/macro';
 
-import { TrackClick } from '@/components/common/TrackClick';
-import { ExternalLink } from '@/components/links/ExternalLink';
-import { LocaleLink } from '@/components/links/LocaleLink';
+import { ExternalLink } from '@/components/links/external-link';
+import { LocaleLink } from '@/components/links/locale-link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getI18n } from '@/lib/i18n';
@@ -41,17 +40,19 @@ export async function Footer() {
         </p>
 
         <p className='text-center text-sm font-light text-gray-600'>
-          <TrackClick event='button.github.click'>
-            <ExternalLink href='https://github.com/alexander-azizi-martin/uo.zone'>
-              Github
-            </ExternalLink>
-          </TrackClick>{' '}
+          <ExternalLink
+            href='https://github.com/alexander-azizi-martin/uo.zone'
+            data-umami-event='button.github.click'
+          >
+            Github
+          </ExternalLink>
           <Trans>maintained by</Trans>{' '}
-          <TrackClick event='button.alexander_azizi-martin.email.click'>
-            <ExternalLink href='mailto:alexander.azizi-martin@uo.zone'>
-              Alexander Azizi-Martin
-            </ExternalLink>
-          </TrackClick>
+          <ExternalLink
+            href='mailto:alexander.azizi-martin@uo.zone'
+            data-umami-event='button.alexander_azizi-martin.email.click'
+          >
+            Alexander Azizi-Martin
+          </ExternalLink>
         </p>
       </div>
     </footer>

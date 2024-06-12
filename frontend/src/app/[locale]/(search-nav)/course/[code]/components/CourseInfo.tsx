@@ -1,16 +1,37 @@
-import { Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
 import Markdown from 'markdown-to-jsx';
+import { useMemo } from 'react';
 
+import { Link } from '@/components/links/link';
 import { Badge } from '@/components/ui/badge';
-import { type Course } from '@/lib/api';
+import { type components } from '@/lib/api/schema';
+import { getI18n } from '@/lib/i18n';
+import { TERM_TO_ID } from '@/lib/utils';
 
 import { CourseLink } from './CourseLink';
 
 interface CourseInfoProps {
-  course: Course;
+  course: components['schemas']['CourseResource'];
 }
 
 export function CourseInfo({ course }: CourseInfoProps) {
+  const i18n = getI18n();
+
+  const terms = useMemo(() => {
+    type Term = keyof typeof TERM_TO_ID;
+
+    const terms: Term[] = [];
+    for (const term in TERM_TO_ID) {
+      const hasTerm = course.previousTermIds.some(
+        (termId) => termId % 10 === TERM_TO_ID[term as Term],
+      );
+
+      if (hasTerm) terms.push(term as Term);
+    }
+
+    return terms;
+  }, [course]);
+
   return (
     <div className='stack my-6 items-start gap-4'>
       <div className='text-base leading-6'>
@@ -18,7 +39,6 @@ export function CourseInfo({ course }: CourseInfoProps) {
           {course.description}
         </Markdown>
       </div>
-
       {course.components.length > 0 && (
         <div className='flex flex-wrap items-center gap-2'>
           <p className='mb-auto text-sm font-bold'>
@@ -47,6 +67,25 @@ export function CourseInfo({ course }: CourseInfoProps) {
             <Markdown options={{ overrides: { a: CourseLink } }}>
               {course.requirements}
             </Markdown>
+          </div>
+        </div>
+      )}
+      {terms.length > 0 && (
+        <div className='flex flex-wrap items-center gap-2'>
+          <p className='mb-auto text-sm font-bold'>
+            <Trans>Previously Offered Terms</Trans>:
+          </p>
+
+          <div className='flex flex-wrap gap-2'>
+            {terms.map((term) => (
+              <Badge
+                className='w-max-content bg-muted text-center text-black'
+                size='sm'
+                key={term}
+              >
+                {i18n._(TERMS[term])}
+              </Badge>
+            ))}
           </div>
         </div>
       )}
@@ -81,3 +120,9 @@ export function CourseInfo({ course }: CourseInfoProps) {
     </div>
   );
 }
+
+const TERMS = {
+  winter: msg`Winter`,
+  summer: msg`Summer`,
+  fall: msg`Fall`,
+};

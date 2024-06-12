@@ -1,4 +1,4 @@
-import { type SurveyQuestion } from '@/lib/api';
+import { type components } from '@/lib/api/schema';
 
 export class Survey {
   // prettier-ignore
@@ -34,14 +34,12 @@ export class Survey {
    * Calculates the average response out of 5 for the given
    * survey question.
    */
-  static score(question: SurveyQuestion) {
+  static score(question: components['schemas']['SurveyQuestionResource']) {
     let totalValue = 0;
     let totalResponses = 0;
-    for (const option in question.options) {
-      if (option in Survey.RESPONSE_VALUES) {
-        const numResponses = question.options[option];
-
-        totalValue += Survey.RESPONSE_VALUES[option] * numResponses;
+    for (const { response, numResponses } of question.responses) {
+      if (response in Survey.RESPONSE_VALUES) {
+        totalValue += Survey.RESPONSE_VALUES[response] * numResponses;
         totalResponses += numResponses;
       }
     }

@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export function useSearchNavigation(
-  searchBar: HTMLInputElement | null | undefined,
-) {
+function useSearchNavigation(searchBar: HTMLInputElement | null | undefined) {
   const selectedIndex = useRef<number>(-1);
   const lastCursorPosition = useRef<number | null>();
 
@@ -85,3 +83,5 @@ export function useSearchNavigation(
     };
   });
 }
+
+export { useSearchNavigation };

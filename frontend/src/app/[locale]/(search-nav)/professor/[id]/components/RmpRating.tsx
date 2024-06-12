@@ -1,10 +1,11 @@
 import { Trans } from '@lingui/macro';
+import cntl from 'cntl';
 import { StarHalfIcon, StarIcon } from 'lucide-react';
 import { type HTMLAttributes } from 'react';
 
-import { Tooltip } from '@/components/common/Tooltip';
 import { Badge } from '@/components/ui/badge';
-import { type RateMyProfessorReview } from '@/lib/api';
+import { Tooltip } from '@/components/ui/tooltip';
+import { type components } from '@/lib/api/schema';
 import { cn } from '@/lib/utils';
 
 function ratingToColor(rating: number): string {
@@ -24,15 +25,15 @@ function difficultyToColor(rating: number): string {
 }
 
 interface RmpRatingProps {
-  review: RateMyProfessorReview;
+  review: components['schemas']['RateMyProfessorReviewResource'];
 }
 
 export function RmpRating({ review }: RmpRatingProps) {
   return (
     <div className='flex flex-wrap gap-2'>
-      <Tooltip label='RateMyProfessor rating' hasArrow>
+      <Tooltip label='RateMyProfessor rating'>
         <Badge
-          className={`
+          className={cntl`
             min-w-max border-current text-center
             ${ratingToColor(review.rating)}
           `}
@@ -44,9 +45,9 @@ export function RmpRating({ review }: RmpRatingProps) {
         </Badge>
       </Tooltip>
 
-      <Tooltip label='RateMyProfessor difficulty' hasArrow>
+      <Tooltip label='RateMyProfessor difficulty'>
         <Badge
-          className={`
+          className={cntl`
             min-w-max border-current text-center
             ${difficultyToColor(review.difficulty)}
           `}
@@ -58,7 +59,7 @@ export function RmpRating({ review }: RmpRatingProps) {
         </Badge>
       </Tooltip>
 
-      <Tooltip label='Number of RateMyProfessor ratings' hasArrow>
+      <Tooltip label='Number of RateMyProfessor reviews'>
         <Badge
           className='min-w-max border-current text-center text-blue-500'
           variant='outline'
@@ -80,7 +81,7 @@ function StarRating({ rating, className, ...props }: StarRatingInterface) {
   const numStars = Math.round(rating * 2) / 2;
 
   return (
-    <span {...props} className={cn(className, 'flex')}>
+  <span {...props} className={cn(className, 'flex')}>
       {Array.from({ length: Math.floor(numStars) }).map((_, i) => (
         <StarIcon key={i} className='size-3.5 fill-current' />
       ))}

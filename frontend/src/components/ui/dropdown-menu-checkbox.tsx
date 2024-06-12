@@ -17,12 +17,12 @@ const CheckboxGroupContext = createContext<{
   toggleValue: (value: string) => void;
 } | null>(null);
 
-export interface DropdownMenuCheckboxGroupProps extends PropsWithChildren {
+interface DropdownMenuCheckboxGroupProps extends PropsWithChildren {
   values: string[];
   onValuesChange: (values: string[]) => void;
 }
 
-export const DropdownMenuCheckboxGroup = ({
+const DropdownMenuCheckboxGroup = ({
   children,
   values,
   onValuesChange,
@@ -54,7 +54,7 @@ export const DropdownMenuCheckboxGroup = ({
   );
 };
 
-export interface DropdownMenuCheckboxItemProps
+interface DropdownMenuCheckboxItemProps
   extends Omit<
     ComponentPropsWithoutRef<typeof DropdownMenuPrimitiveCheckboxItem>,
     'checked' | 'onCheckedChange'
@@ -62,7 +62,7 @@ export interface DropdownMenuCheckboxItemProps
   value: string;
 }
 
-export const DropdownMenuCheckboxItem = forwardRef<
+const DropdownMenuCheckboxItem = forwardRef<
   ElementRef<typeof DropdownMenuPrimitiveCheckboxItem>,
   DropdownMenuCheckboxItemProps
 >(({ value, ...props }, ref) => {
@@ -85,3 +85,7 @@ export const DropdownMenuCheckboxItem = forwardRef<
 });
 DropdownMenuCheckboxItem.displayName =
   DropdownMenuPrimitiveCheckboxItem.displayName;
+
+export { DropdownMenuCheckboxGroup, DropdownMenuCheckboxItem };
+
+export type { DropdownMenuCheckboxGroupProps, DropdownMenuCheckboxItemProps };

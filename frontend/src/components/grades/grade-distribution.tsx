@@ -3,29 +3,29 @@
 import { Plural, Select, Trans } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import cntl from 'cntl';
 import { useMemo, useRef, useState } from 'react';
 
 import { Trapezoid } from '@/components/ui/trapezoid';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { type GradeInfo } from '@/lib/api';
-import { gradeGradient } from '@/lib/config';
+import { type components } from '@/lib/api/schema';
 import { Grade, type Letter } from '@/lib/grade';
-import { createGradient, pairwise, percent } from '@/lib/helpers';
+import { pairwise, percent } from '@/lib/utils';
 
 const gradeDistributionVariants = cva(
-  `
-    relative flex touch-none overflow-hidden rounded 
+  cntl`
+    relative flex touch-none overflow-hidden rounded bg-grades-gradient
     h-[--grade-distribution-height] w-[--grade-distribution-width]
   `,
   {
     variants: {
       size: {
-        sm: `
+        sm: cntl`
           [--grade-distribution-height:40px]
           [--grade-distribution-width:250px] 
           sm:[--grade-distribution-width:300px]
         `,
-        md: ` 
+        md: cntl` 
           [--grade-distribution-height:55px]
           [--grade-distribution-width:300px] 
           sm:[--grade-distribution-width:390px]
@@ -40,16 +40,15 @@ const gradeDistributionVariants = cva(
 
 interface GradeDistributionProps
   extends VariantProps<typeof gradeDistributionVariants> {
-  gradeInfo: GradeInfo;
+  grades: components['schemas']['GradesResource'];
 }
 
 const NUM_BINS = Grade.NUMERICAL_GRADES.length - 1;
 
-export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
+function GradeDistribution({ grades, size }: GradeDistributionProps) {
   const { i18n } = useLingui();
 
   const [selectedGrade, setSelectedGrade] = useState<Letter>();
-  const gradient = createGradient(gradeGradient);
   const rootRef = useRef<HTMLDivElement>(null);
   useOutsideClick({
     ref: rootRef,
@@ -58,17 +57,17 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
 
   const heightPercents = useMemo(() => {
     const numericalTotal = Grade.NUMERICAL_GRADES.reduce(
-      (acc, letter) => acc + gradeInfo.grades[letter],
+      (acc, letter) => acc + grades.distribution[letter],
       0,
     );
 
     return Grade.NUMERICAL_GRADES.map((letter) => {
-      const gradePercent = percent(gradeInfo.grades[letter], numericalTotal);
+      const gradePercent = percent(grades.distribution[letter], numericalTotal);
       const heightPercent = 1 - gradePercent * 4;
 
       return Math.max(0, heightPercent).toFixed(2);
     });
-  }, [gradeInfo]);
+  }, [grades]);
 
   const handleMouseMove = (event: any) => {
     if (!rootRef.current) return;
@@ -97,7 +96,6 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
       <div
         ref={rootRef}
         className={gradeDistributionVariants({ size })}
-        style={{ background: gradient }}
         onMouseMove={handleMouseMove}
         onTouchMove={handleMouseMove}
         onMouseLeave={() => setSelectedGrade(undefined)}
@@ -123,22 +121,22 @@ export function GradeDistribution({ gradeInfo, size }: GradeDistributionProps) {
             />
 
             <p
-              className={`
+              className={cntl`
                 color-[#1B202B] absolute left-0 right-0 m-auto w-max 
                 select-none text-xs font-bold
               `}
             >
               <Trans>
-                {gradeInfo.grades[selectedGrade]}{' '}
+                {grades.distribution[selectedGrade]}{' '}
                 <Plural
-                  value={gradeInfo.grades[selectedGrade]}
+                  value={grades.distribution[selectedGrade]}
                   one='student'
                   other='students'
                 />{' '}
                 got <Select value={selectedGrade[0]} _A={'an'} other={'a'} />{' '}
                 {selectedGrade} (
                 {i18n.number(
-                  percent(gradeInfo.grades[selectedGrade], gradeInfo.total),
+                  percent(grades.distribution[selectedGrade], grades.total),
                   { style: 'percent' },
                 )}
                 )
@@ -182,7 +180,7 @@ function PinPoint({ x, y }: PinPointProps) {
         style={{ left: x }}
       />
       <div
-        className={`
+        className={cntl`
           absolute size-1 -translate-x-1/2 -translate-y-1/2 
           rounded-full bg-black/40
         `}
@@ -191,3 +189,7 @@ function PinPoint({ x, y }: PinPointProps) {
     </>
   );
 }
+
+export { GradeDistribution };
+
+export type { GradeDistributionProps };

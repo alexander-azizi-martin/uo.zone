@@ -1,3 +1,25 @@
+const plugin = require('tailwindcss/plugin')
+
+const gradeGradient = [
+  { color: '#ff0000', offset: 0 },
+  { color: '#ec6c17', offset: 40 },
+  { color: '#e89029', offset: 50 },
+  { color: '#ecc94b', offset: 65 },
+  { color: '#ecc94b', offset: 80 },
+  { color: '#c0c246', offset: 85 },
+  { color: '#93ba41', offset: 90 },
+  { color: '#38a169', offset: 95 },
+  { color: '#38a169', offset: 100 },
+];
+
+function createGradient(gradientData) {
+  const gradientColors = gradientData
+    .map(({ color, offset }) => `${color} ${offset}%`)
+    .join(',');
+
+  return `linear-gradient(to right, ${gradientColors})`;
+}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -91,7 +113,16 @@ module.exports = {
           to: { height: '0' },
         },
       },
+      backgroundImage: {
+        'grades-gradient': createGradient(gradeGradient),
+      },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar'),
+    plugin(function ({ addVariant }) {
+      addVariant('preventable-hover', '&:hover:not(:has(.prevent-hover:hover))');
+    }),
+  ],
 };

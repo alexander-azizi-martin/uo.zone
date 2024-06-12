@@ -12,8 +12,7 @@ function Skeleton({
   );
 }
 
-export interface SkeletonListProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface SkeletonListProps extends React.HTMLAttributes<HTMLDivElement> {
   length: number;
 }
 
@@ -24,3 +23,5 @@ function SkeletonList({ className, length }: SkeletonListProps) {
 }
 
 export { Skeleton, SkeletonList };
+
+export type { SkeletonListProps };
