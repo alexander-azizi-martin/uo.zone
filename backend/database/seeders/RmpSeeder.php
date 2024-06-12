@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
+use function Laravel\Prompts\progress;
+
 class RmpSeeder extends Seeder
 {
     /**
@@ -15,6 +17,7 @@ class RmpSeeder extends Seeder
     public function run(): void
     {
         $reviews = json_decode(Storage::disk('static')->get('rmp.json'), true);
+        $progress = progress('', count($reviews), null);
 
         foreach ($reviews as $review) {
             $professor = Professor::firstWhere('name', $review['name']);
@@ -26,6 +29,10 @@ class RmpSeeder extends Seeder
             $professor->rmpReview()->updateOrCreate(
                 Arr::except($review, ['name'])
             );
+
+            $progress->advance();
         }
+
+        $professor->finish();
     }
 }

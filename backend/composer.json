@@ -21,6 +21,8 @@
         "meilisearch/meilisearch-php": "^1.7"
     },
     "require-dev": {
+        "dedoc/scramble": "^0.10.13",
+        "doctrine/dbal": "^4.0",
         "fakerphp/faker": "^1.23",
         "laravel/envoy": "^2.9",
         "laravel/pint": "^1.13",

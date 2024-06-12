@@ -24,24 +24,26 @@ class GradeSeeder extends Seeder
         while ($row = fgetcsv($gradesCSV)) {
             $gradeData = array_combine($header, $row);
 
+            $course = Course::firstWhere('code', Str::lower($gradeData['course']));
+
+            if (empty($course)) {
+                continue;
+            }
+
             $courseSection = CourseSection::firstWhere([
-                'code' => "{$gradeData['course']} {$gradeData['section']}",
+                'course_id' => $course->id,
                 'term_id' => $gradeData['term_id'],
             ]);
 
             if (empty($courseSection)) {
-                $course = Course::firstWhere('code', Str::lower($gradeData['course']));
-
-                if (isset($course)) {
-                    $courseSection = Professor::unknown()->sections()->create([
-                        'course_id' => $course->id,
-                        'term_id' => $gradeData['term_id'],
-                        'section' => Str::lower($gradeData['section']),
-                    ]);
-                }
+                $courseSection = Professor::unknown()->sections()->create([
+                    'course_id' => $course->id,
+                    'term_id' => $gradeData['term_id'],
+                    'section' => Str::lower($gradeData['section']),
+                ]);
             }
 
-            if (empty($courseSection) || isset($courseSection->grades)) {
+            if (isset($courseSection->grades)) {
                 continue;
             }
 

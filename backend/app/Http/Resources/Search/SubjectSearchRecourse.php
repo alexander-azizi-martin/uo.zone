@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Resources\Survey;
+namespace App\Http\Resources\Search;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin App\Models\Survey\SurveyResponse
+ * @mixin App\Models\Section
  */
-class SurveyResponseResource extends JsonResource
+class SubjectSearchRecourse extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,8 @@ class SurveyResponseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'response' => $this->response,
-            'numResponses' => $this->num_responses,
+            'code' => $this->code,
+            'subject' => $this->subject,
         ];
     }
 }

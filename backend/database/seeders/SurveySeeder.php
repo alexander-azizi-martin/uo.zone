@@ -75,31 +75,22 @@ class SurveySeeder extends Seeder
      */
     public static function updateQuestion(Model $surveyable, mixed $questionData): void
     {
-        $translatedQuestion = [
+        $translatedQuestion = json_encode([
             'en' => __('survey-questions.'.$questionData['question'], locale: 'en'),
             'fr' => __('survey-questions.'.$questionData['question'], locale: 'fr'),
-        ];
-
-        $question = $surveyable->survey()->firstOrCreate([
-            'question' => json_encode($translatedQuestion),
         ]);
 
-        foreach ($questionData['options'] as $option) {
-            $translatedResponse = [
-                'en' => __('survey-responses.'.$option['description'], locale: 'en'),
-                'fr' => __('survey-responses.'.$option['description'], locale: 'fr'),
-            ];
+        $question = $surveyable->survey()->firstOrCreate(['question' => $translatedQuestion]);
 
-            $response = $question->responses()->firstOrCreate([
-                'response' => json_encode($translatedResponse),
+        foreach ($questionData['responses'] as $response) {
+            $translatedResponse = json_encode([
+                'en' => __('survey-responses.'.$response['description'], locale: 'en'),
+                'fr' => __('survey-responses.'.$response['description'], locale: 'fr'),
             ]);
 
-            $response->num_responses += $option['responses'];
-            $response->save();
-
-            $question->total_responses += $option['responses'];
+            $question->responses()
+                ->firstOrCreate(['response' => $translatedResponse])
+                ->increment('num_responses', $response['num_responses']);
         }
-
-        $question->save();
     }
 }

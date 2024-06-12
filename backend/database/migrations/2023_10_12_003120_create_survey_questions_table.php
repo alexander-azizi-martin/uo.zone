@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('survey_questions', function (Blueprint $table) {
             $table->id();
             $table->text('question');
-            $table->unsignedInteger('total_responses')->default(0);
             $table->morphs('surveyable');
             $table->timestamps();
         });

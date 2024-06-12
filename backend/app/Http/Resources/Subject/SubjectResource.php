@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Subject;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin App\Models\Subject
+ */
 class SubjectResource extends JsonResource
 {
     /**
@@ -13,16 +16,11 @@ class SubjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'code' => Str::upper($this->code),
             'subject' => $this->subject,
-            'faculty' => $this->whenHas('faculty'),
-            'coursesCount' => $this->whenHas('courses_count', function () {
-                return $this->courses_count;
-            }),
-            'grades' => $this->whenLoaded('grades', function () {
-                return isset($this->grades) ? new GradesResource($this->grades) : null;
-            }),
+            'faculty' => $this->faculty,
         ];
     }
 }

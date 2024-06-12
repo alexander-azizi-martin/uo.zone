@@ -30,13 +30,13 @@ class Subject extends Model
     /**
      * Get the route key for the model.
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'code';
     }
 
     /**
-     * Get all of the subject's courses.
+     * Get all the subject's courses.
      */
     public function courses(): HasMany
     {

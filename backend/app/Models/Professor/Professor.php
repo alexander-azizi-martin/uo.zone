@@ -41,9 +41,11 @@ class Professor extends Model
      */
     public function toSearchableArray(): array
     {
+        $this->loadMissing('grades');
+
         return [
             'name' => $this->name,
-            'total_enrolled' => (int) ($this->loadMissing('grades')->grades->total ?? 0),
+            'total_enrolled' => (int) ($this->grades->total ?? 0),
         ];
     }
 

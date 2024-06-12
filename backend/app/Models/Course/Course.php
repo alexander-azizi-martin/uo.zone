@@ -18,6 +18,11 @@ class Course extends Model
     use HasFactory, HasGrades, HasSurvey, Searchable;
 
     /**
+     * The relations to eager load on every query.
+     */
+    protected $with = ['components'];
+
+    /**
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
@@ -29,13 +34,13 @@ class Course extends Model
         'title' => Translation::class,
         'description' => Translation::class,
         'requirements' => Translation::class,
-        'languages' => 'array',
+        'languages' => 'collection',
     ];
 
     /**
      * Get the route key for the model.
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'code';
     }
@@ -82,20 +87,18 @@ class Course extends Model
 
     /**
      * Get the term ids the course was previously offered in.
+     *
+     * @return array<int>
      */
-    public function previousTermIds(): array
+    public function getPreviousTermIdsAttribute(): array
     {
-        return $this->sections()
-            ->groupBy('term_id')
-            ->select('term_id')
-            ->toBase()
-            ->get()
-            ->pluck('term_id')
-            ->all();
+        return $this->sections->pluck('term_id')->unique()->all();
     }
 
     /**
      * Get the indexable data array for the model.
+     *
+     * @return array<mixed>
      */
     public function toSearchableArray(): array
     {

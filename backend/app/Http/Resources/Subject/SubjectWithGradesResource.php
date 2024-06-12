@@ -1,24 +1,26 @@
 <?php
 
-namespace App\Http\Resources\Course;
+namespace App\Http\Resources\Subject;
 
 use App\Http\Resources\GradesResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin App\Models\Course\CourseSection
+ * @mixin App\Models\Subject
  */
-class CourseSectionResource extends JsonResource
+class SubjectWithGradesResource extends SubjectResource
 {
     /**
      * Transform the resource into an array.
      */
     public function toArray(Request $request): array
     {
+
         return [
-            'term' => $this->term,
-            'section' => $this->section,
+            $this->merge(parent::toArray($request)),
+
+            /** @var int */
+            'coursesCount' => $this->courses_count,
             'grades' => new GradesResource($this->grades),
         ];
     }

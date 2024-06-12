@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Course\CourseResource;
-use App\Http\Resources\Professor\ProfessorResource;
-use App\Http\Resources\SubjectResource;
+use App\Http\Resources\Search\CourseSearchRecourse;
+use App\Http\Resources\Search\ProfessorSearchRecourse;
+use App\Http\Resources\Search\SubjectSearchRecourse;
 use App\Models\Course\Course;
 use App\Models\Professor\Professor;
 use App\Models\Subject;
@@ -16,7 +16,7 @@ class SearchController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
-        $query = str($request->input('q', ''))->limit(255, '');
+        $query = $request->validate(['q' => 'required|max:255'])['q'];
 
         $courses = Course::search($query)
             ->orderBy('languages.'.App::getLocale(), 'desc')
@@ -35,9 +35,9 @@ class SearchController extends Controller
             ->hydrate();
 
         return response()->json([
-            'courses' => CourseResource::collection($courses),
-            'subjects' => SubjectResource::collection($subjects),
-            'professors' => ProfessorResource::collection($professors),
+            'courses' => CourseSearchRecourse::collection($courses),
+            'professors' => ProfessorSearchRecourse::collection($professors),
+            'subjects' => SubjectSearchRecourse::collection($subjects),
         ]);
     }
 }

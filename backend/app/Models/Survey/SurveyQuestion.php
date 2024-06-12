@@ -35,4 +35,12 @@ class SurveyQuestion extends Model
     {
         return $this->hasMany(SurveyResponse::class);
     }
+
+    /**
+     * Gets the total number of responses to the survey question.
+     */
+    public function getTotalResponsesAttribute(): int
+    {
+        return $this->responses->sum('num_responses');
+    }
 }

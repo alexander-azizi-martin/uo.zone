@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Resources\Professor;
+namespace App\Http\Resources\Search;
 
-use App\Http\Resources\GradesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin App\Models\Professor\Professor
  */
-class ProfessorResource extends JsonResource
+class ProfessorSearchRecourse extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,8 +18,6 @@ class ProfessorResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'grades' => new GradesResource($this->grades),
-            'rmpReview' => new RateMyProfessorReviewResource($this->rmpReview),
         ];
     }
 }

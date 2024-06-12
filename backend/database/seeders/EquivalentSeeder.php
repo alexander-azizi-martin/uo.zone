@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Course;
+use App\Models\Course\Course;
 use Illuminate\Database\Seeder;
 
 use function Laravel\Prompts\progress;

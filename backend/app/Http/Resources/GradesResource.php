@@ -6,6 +6,9 @@ use App\Models\Grades;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin App\Models\Grades
+ */
 class GradesResource extends JsonResource
 {
     /**
@@ -21,10 +24,14 @@ class GradesResource extends JsonResource
         }
 
         return [
-            'mean' => $this->mean,
-            'median' => $this->median,
-            'mode' => $this->mode,
             'total' => $this->total,
+            /** @var float|null */
+            'mean' => $this->mean,
+            /** @var string|null */
+            'median' => $this->median,
+            /** @var string|null */
+            'mode' => $this->mode,
+            /** @var array<string,int> */
             'distribution' => $distribution,
         ];
     }

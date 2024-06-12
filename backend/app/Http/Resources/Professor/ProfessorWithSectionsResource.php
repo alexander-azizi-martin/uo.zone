@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Professor;
 
+use App\Http\Resources\Course\CourseSectionResource;
 use App\Http\Resources\GradesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -9,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin App\Models\Professor\Professor
  */
-class ProfessorResource extends JsonResource
+class ProfessorWithSectionsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +21,7 @@ class ProfessorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'grades' => new GradesResource($this->grades),
-            'rmpReview' => new RateMyProfessorReviewResource($this->rmpReview),
+            'sections' => CourseSectionResource::collection($this->sections),
         ];
     }
 }
