@@ -36,7 +36,7 @@ class DuckDuckGoRMPSpider(scrapy.Spider):
         professor_loader = None
 
         # Find first rate my professor result
-        for search_result in response.css("#links"):
+        for search_result in response.css("#links .result"):
             url = normalize_string(search_result.css(".result__url::text").get())
 
             if RMP_LINK_PATTERN.search(url) is None:

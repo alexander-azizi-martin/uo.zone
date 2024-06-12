@@ -3,6 +3,7 @@ import os
 from itertools import repeat
 from multiprocessing import Pool
 from urllib.parse import urljoin
+import time
 
 import browser_cookie3
 import parsel
@@ -87,7 +88,7 @@ class CourseSurveysSpider(scrapy.Spider):
     def jump_to_start(self, response: Response):
         if self.progress_bar is None:
             num_surveys = response.css(
-                "#ViewList_ctl04_lblTopPageStatus::text"
+                "#ctl00_ContentPlaceHolder1_ViewList_ctl01_lblTopPageStatus::text"
             ).re_first(r"Results: \d+ - \d+ of (\d+) Item\(s\)")
 
             self.progress_bar = tqdm.tqdm(
@@ -95,6 +96,7 @@ class CourseSurveysSpider(scrapy.Spider):
             )
 
         if self.current_page < self.start_page:
+            print(self.current_page)
             offset = 0 if self.current_page <= 10 else 1
             jump = min(10, self.start_page - self.current_page)
 
@@ -111,28 +113,25 @@ class CourseSurveysSpider(scrapy.Spider):
                 callback=self.jump_to_start,
                 cookies=self.cookies,
                 formdata={
-                    "__VIEWSTATE": response.css(
-                        "input[name=__VIEWSTATE]::attr(value)"
-                    ).get(),
+                    "__VIEWSTATE": response.css("#__VIEWSTATE::attr(value)").get(),
                     "__VIEWSTATEGENERATOR": response.css(
-                        "input[name=__VIEWSTATEGENERATOR]::attr(value)"
+                        "#__VIEWSTATEGENERATOR::attr(value)"
                     ).get(),
                     "__EVENTVALIDATION": response.css(
-                        "input[name=__EVENTVALIDATION]::attr(value)"
+                        "#__EVENTVALIDATION::attr(value)"
                     ).get(),
-                    "__EVENTTARGET": f"ViewList$ctl04$listing$ctl01$ctl{relative_position}",
+                    "__EVENTTARGET": f"ctl00$ContentPlaceHolder1$ViewList$ctl01$listing$ctl14$ctl{relative_position}",
                     "__EVENTARGUMENT": "",
                     "__VIEWSTATEENCRYPTED": "",
-                    "ViewList$dplField": "Title",
-                    "ViewList$dplOperator": "contains",
-                    "ViewList$tbxValue": "",
+                    "ctl00$ddlLanguageInput": "en-US",
+                    "ctl00$ContentPlaceHolder1$ViewList$tbxValue": "",
                 },
             )
         else:
             yield from self.parse_survey_list(response)
 
     def parse_survey_list(self, response: Response):
-        survey_links = response.css("td:nth-child(3) > a")
+        survey_links = response.css("td:nth-child(2) > a")
         for link in survey_links:
             title = link.css("a::text").get()
             relative_url = link.attrib.get("href", None)
@@ -155,31 +154,28 @@ class CourseSurveysSpider(scrapy.Spider):
             else:
                 yield survey
 
-        next_page_input = response.css(
-            "input[name='ViewList$ctl04$listing$ctl01$btnNext']"
-        )
-        if "aria-disabled" not in next_page_input.attrib:
+        next_page_button = response.css(
+            "#ctl00_ContentPlaceHolder1_ViewList_ctl01_listing_ctl14_btnNext"
+        ).get()
+        if next_page_button is not None:
             yield scrapy.FormRequest(
                 url=response.url,
                 callback=self.parse_survey_list,
                 cookies=self.cookies,
                 formdata={
-                    "__VIEWSTATE": response.css(
-                        "input[name=__VIEWSTATE]::attr(value)"
-                    ).get(),
+                    "__VIEWSTATE": response.css("#__VIEWSTATE::attr(value)").get(),
                     "__VIEWSTATEGENERATOR": response.css(
-                        "input[name=__VIEWSTATEGENERATOR]::attr(value)"
+                        "#__VIEWSTATEGENERATOR::attr(value)"
                     ).get(),
                     "__EVENTVALIDATION": response.css(
-                        "input[name=__EVENTVALIDATION]::attr(value)"
+                        "#__EVENTVALIDATION::attr(value)"
                     ).get(),
                     "__EVENTTARGET": "",
                     "__EVENTARGUMENT": "",
                     "__VIEWSTATEENCRYPTED": "",
-                    "ViewList$dplField": "Title",
-                    "ViewList$dplOperator": "contains",
-                    "ViewList$tbxValue": "",
-                    "ViewList$ctl04$listing$ctl01$btnNext": "",
+                    "ctl00$ddlLanguageInput": "en-US",
+                    "ctl00$ContentPlaceHolder1$ViewList$tbxValue": "",
+                    "ctl00$ContentPlaceHolder1$ViewList$ctl01$listing$ctl14$btnNext": "\ue92b",
                 },
             )
 
@@ -222,20 +218,20 @@ def parse_question_block_v2(text: str) -> Question:
     question_loader.add_css("question", "h4 span::text")
     question_loader.add_value("total_responses", total_responses)
 
-    options = []
+    responses = []
     for option in options_table.css("tbody tr"):
         label, description = map(
             normalize_string, option.css("th::text").get().split(": ")
         )
-        responses = int(option.css("td::text").get())
+        num_responses = int(option.css("td::text").get())
 
-        options.append(
+        responses.append(
             {
                 "label": label,
                 "description": description,
-                "responses": responses,
+                "num_responses": num_responses,
             }
         )
 
-    question_loader.add_value("options", options)
+    question_loader.add_value("options", responses)
     return question_loader.load_item()

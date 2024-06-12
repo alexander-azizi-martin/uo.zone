@@ -44,7 +44,7 @@ class Question(scrapy.Item):
             {
                 "total_responses": 0,
                 "image_url": result_image,
-                "options": [],
+                "responses": [],
             }
         )
 
@@ -52,14 +52,14 @@ class Question(scrapy.Item):
         lines = filter(len, text.strip().split("\n"))
         for line in lines:
             if match := OPTION_PATTERN.search(line):
-                label, description, responses = map(normalize_string, match.groups())
-                description = normalize_whitespace(label.replace("-", " - "))
+                label, description, num_responses = map(normalize_string, match.groups())
+                description = normalize_whitespace(description.replace("-", " - "))
 
                 question["options"].append(
                     {
                         "label": label.lower(),
                         "description": description.lower(),
-                        "responses": int(responses),
+                        "num_responses": int(num_responses),
                     }
                 )
             elif match := RESULT_PATTERN.search(line):
