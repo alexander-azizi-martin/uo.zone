@@ -43,4 +43,25 @@ class SurveyQuestion extends Model
     {
         return $this->responses->sum('num_responses');
     }
+
+    /**
+     * Gets a score out of 5 for the survey question.
+     */
+    public function getScoreAttribute(): ?float
+    {
+        $score = 0;
+        $total = 0;
+        foreach ($this->responses as $response) {
+            $value = $response->value;
+
+            if ($value < 0) {
+                continue;
+            }
+
+            $score += $value * $response->num_responses;
+            $total += $response->num_responses;
+        }
+
+        return $total > 0 ? $score / $total : null;
+    }
 }
