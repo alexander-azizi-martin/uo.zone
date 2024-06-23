@@ -21,6 +21,14 @@ class Professor extends Model
     protected $guarded = [];
 
     /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'public_id';
+    }
+
+    /**
      * Get all of the sections taught by the professor.
      */
     public function sections(): BelongsToMany
@@ -45,6 +53,7 @@ class Professor extends Model
 
         return [
             'name' => $this->name,
+            'public_id' => $this->public_id,
             'total_enrolled' => (int) ($this->grades->total ?? 0),
         ];
     }
@@ -54,12 +63,6 @@ class Professor extends Model
      */
     public static function unknown(): Professor
     {
-        $unknownProfessor = Professor::find(0);
-
-        if (empty($unknownProfessor)) {
-            $unknownProfessor = Professor::create(['id' => 0, 'name' => 'Unknown Professors']);
-        }
-
-        return $unknownProfessor;
+        return new Professor(['id' => 0, 'name' => '']);
     }
 }

@@ -18,6 +18,8 @@ class ProfessorResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            /** @var int */
+            'publicId' => $this->public_id,
             'name' => $this->name,
             'grades' => new GradesResource($this->grades),
             'rmpReview' => new RateMyProfessorReviewResource($this->rmpReview),

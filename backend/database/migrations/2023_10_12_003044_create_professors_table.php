@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('professors', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
+            $table->unsignedBigInteger('public_id')->index();
             $table->timestamps();
         });
     }

@@ -33,6 +33,6 @@ class RmpSeeder extends Seeder
             $progress->advance();
         }
 
-        $professor->finish();
+        $progress->finish();
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Resources\Survey\SurveyQuestionResource;
 use App\Models\Course\Course;
 use App\Models\Course\CourseSection;
 use App\Models\Grades;
+use App\Models\Professor\Professor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -46,13 +47,16 @@ class CourseController extends Controller
             ->sortByDesc('term_id')
             ->loadMissing('professors')
             ->groupby(function (CourseSection $section) {
-                return $section->professors->pluck('id')->all();
+                return $section->professors->pluck('id')->all() ?: [0];
             })
             ->map(function ($sections, $professorId) {
                 $grades = Grades::new();
                 $sections->pluck('grades')->each([$grades, 'mergeGrades']);
 
-                $professor = $sections->first()->professors->find($professorId);
+                $professor = $professorId === 0
+                    ? Professor::unknown()
+                    : $sections->first()->professors->find($professorId);
+
                 $professor->setRelation('sections', $sections);
                 $professor->setRelation('grades', $grades->total > 0 ? $grades : null);
 

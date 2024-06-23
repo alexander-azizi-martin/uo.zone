@@ -37,7 +37,7 @@ class Grades extends Model
     {
         $grades = new Grades;
 
-        foreach (array_keys(Grades::GRADE_VALUES) as $grade) {
+        foreach (array_keys(self::GRADE_VALUES) as $grade) {
             $grades->setAttribute($grade, 0);
         }
 
@@ -65,7 +65,7 @@ class Grades extends Model
 
         $mean = 0;
         $total = 0;
-        foreach (Grades::GRADE_VALUES as $grade => $value) {
+        foreach (self::GRADE_VALUES as $grade => $value) {
             if (is_null($value)) {
                 continue;
             }
@@ -87,7 +87,7 @@ class Grades extends Model
         }
 
         $accumulator = 0;
-        foreach (array_keys(Grades::GRADE_VALUES) as $grade) {
+        foreach (array_keys(self::GRADE_VALUES) as $grade) {
             $accumulator += $this->getAttribute($grade);
             if ($accumulator >= $this->total / 2) {
                 break;
@@ -102,16 +102,16 @@ class Grades extends Model
      */
     public function getModeAttribute(): ?string
     {
-        $mode = '';
+        $mode = null;
         $size = 0;
-        foreach (array_keys(Grades::GRADE_VALUES) as $grade) {
+        foreach (array_keys(self::GRADE_VALUES) as $grade) {
             if ($size < $this->getAttribute($grade)) {
                 $mode = $grade;
                 $size = $this->getAttribute($grade);
             }
         }
 
-        return $mode !== '' ? $mode : null;
+        return $mode;
     }
 
     /**
@@ -123,7 +123,7 @@ class Grades extends Model
             return $this;
         }
 
-        foreach (array_keys(Grades::GRADE_VALUES) as $grade) {
+        foreach (array_keys(self::GRADE_VALUES) as $grade) {
             $this->setAttribute(
                 $grade,
                 $this->getAttribute($grade) + $grades->getAttribute($grade)

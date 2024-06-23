@@ -18,21 +18,50 @@ class GradesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $distribution = [];
-        foreach (array_keys(Grades::GRADE_VALUES) as $grade) {
-            $distribution[$grade] = $this->getAttribute($grade);
-        }
-
         return [
             'total' => $this->total,
             /** @var float|null */
             'mean' => $this->mean,
-            /** @var string|null */
+            /** @var ('A+'|'A'|'A-'|'B+'|'B'|'C+'|'C'|'D+'|'D'|'E'|'F'|'EIN'|'NS'|'NC'|'ABS'|'P'|'S')|null */
             'median' => $this->median,
-            /** @var string|null */
+            /** @var ('A+'|'A'|'A-'|'B+'|'B'|'C+'|'C'|'D+'|'D'|'E'|'F'|'EIN'|'NS'|'NC'|'ABS'|'P'|'S')|null */
             'mode' => $this->mode,
-            /** @var array<string,int> */
-            'distribution' => $distribution,
+            'distribution' => [
+                /** @var int */
+                'A+' => $this->{'A+'},
+                /** @var int */
+                'A' => $this->{'A'},
+                /** @var int */
+                'A-' => $this->{'A-'},
+                /** @var int */
+                'B+' => $this->{'B+'},
+                /** @var int */
+                'B' => $this->{'B'},
+                /** @var int */
+                'C+' => $this->{'C+'},
+                /** @var int */
+                'C' => $this->{'C'},
+                /** @var int */
+                'D+' => $this->{'D+'},
+                /** @var int */
+                'D' => $this->{'D'},
+                /** @var int */
+                'E' => $this->{'E'},
+                /** @var int */
+                'F' => $this->{'F'},
+                /** @var int */
+                'EIN' => $this->{'EIN'},
+                /** @var int */
+                'NS' => $this->{'NS'},
+                /** @var int */
+                'NC' => $this->{'NC'},
+                /** @var int */
+                'ABS' => $this->{'ABS'},
+                /** @var int */
+                'P' => $this->{'P'},
+                /** @var int */
+                'S' => $this->{'S'},
+            ],
         ];
     }
 }

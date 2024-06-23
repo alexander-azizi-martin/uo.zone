@@ -17,6 +17,8 @@ class ProfessorSearchRecourse extends JsonResource
     {
         return [
             'id' => $this->id,
+            /** @var int */
+            'publicId' => $this->public_id,
             'name' => $this->name,
         ];
     }

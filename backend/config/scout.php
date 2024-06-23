@@ -169,7 +169,7 @@ return [
                 ],
             ],
             Professor::class => [
-                'displayedAttributes' => ['id', 'name'],
+                'displayedAttributes' => ['id', 'public_id', 'name'],
                 'sortableAttributes' => ['total_enrolled'],
                 'searchableAttributes' => ['name'],
             ],

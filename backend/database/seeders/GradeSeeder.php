@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Course\Course;
 use App\Models\Course\CourseSection;
 use App\Models\Grades;
-use App\Models\Professor\Professor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -33,13 +32,14 @@ class GradeSeeder extends Seeder
             $courseSection = CourseSection::firstWhere([
                 'course_id' => $course->id,
                 'term_id' => $gradeData['term_id'],
+                'section' => $gradeData['section'],
             ]);
 
             if (empty($courseSection)) {
-                $courseSection = Professor::unknown()->sections()->create([
+                $courseSection = CourseSection::create([
                     'course_id' => $course->id,
                     'term_id' => $gradeData['term_id'],
-                    'section' => Str::lower($gradeData['section']),
+                    'section' => $gradeData['section'],
                 ]);
             }
 

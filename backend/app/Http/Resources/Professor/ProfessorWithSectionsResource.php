@@ -19,6 +19,8 @@ class ProfessorWithSectionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            /** @var int */
+            'publicId' => $this->public_id,
             'name' => $this->name,
             'grades' => new GradesResource($this->grades),
             'sections' => CourseSectionResource::collection($this->sections),
