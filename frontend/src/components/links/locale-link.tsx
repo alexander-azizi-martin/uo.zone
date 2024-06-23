@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { type ComponentProps, useMemo } from 'react';
+import { type ComponentProps } from 'react';
 
 import linguiConfig, { type Locale } from '@/lingui.config';
 
@@ -14,25 +14,21 @@ function LocaleLink({ locale, ...props }: LocalLink) {
   const pathname = usePathname() as string;
   const searchParams = useSearchParams();
 
-  const href = useMemo(() => {
-    let pathnameWithoutLocale = pathname.replace(
-      new RegExp(`^/(${linguiConfig.locales.join('|')})`),
-      '',
-    );
+  let pathnameWithoutLocale = pathname.replace(
+    new RegExp(`^/(${linguiConfig.locales.join('|')})`),
+    '',
+  );
 
-    if (!pathnameWithoutLocale.startsWith('/')) {
-      pathnameWithoutLocale = `/${pathnameWithoutLocale}`;
-    }
+  if (!pathnameWithoutLocale.startsWith('/')) {
+    pathnameWithoutLocale = `/${pathnameWithoutLocale}`;
+  }
 
-    const href =
-      locale === linguiConfig.sourceLocale
-        ? `${pathnameWithoutLocale}?${searchParams}`
-        : `/${locale}${pathnameWithoutLocale}?${searchParams}`;
+  const href =
+    locale === linguiConfig.sourceLocale
+      ? `${pathnameWithoutLocale}?${searchParams}`
+      : `/${locale}${pathnameWithoutLocale}?${searchParams}`;
 
-    return href.replace(/\?$/, '');
-  }, [locale, pathname, searchParams]);
-
-  return <Link href={href} {...props} />;
+  return <Link href={href.replace(/\?$/, '')} {...props} />;
 }
 
 export { LocaleLink };

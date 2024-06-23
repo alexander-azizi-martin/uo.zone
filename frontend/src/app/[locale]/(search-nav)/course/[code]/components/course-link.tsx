@@ -3,7 +3,7 @@ import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import { Link } from '@/components/links/link';
 import { cn } from '@/lib/utils';
 
-export const CourseLink = forwardRef<
+const CourseLink = forwardRef<
   HTMLAnchorElement,
   ComponentPropsWithoutRef<typeof Link>
 >(({ className, ...props }, ref) => {
@@ -19,3 +19,5 @@ export const CourseLink = forwardRef<
   );
 });
 CourseLink.displayName = 'CourseLink';
+
+export { CourseLink };

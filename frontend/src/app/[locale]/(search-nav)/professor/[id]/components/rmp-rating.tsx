@@ -28,10 +28,10 @@ interface RmpRatingProps {
   review: components['schemas']['RateMyProfessorReviewResource'];
 }
 
-export function RmpRating({ review }: RmpRatingProps) {
+function RmpRating({ review }: RmpRatingProps) {
   return (
     <div className='flex flex-wrap gap-2'>
-      <Tooltip label='RateMyProfessor rating'>
+      <Tooltip label={<Trans>RateMyProfessor rating</Trans>}>
         <Badge
           className={cntl`
             min-w-max border-current text-center
@@ -45,7 +45,7 @@ export function RmpRating({ review }: RmpRatingProps) {
         </Badge>
       </Tooltip>
 
-      <Tooltip label='RateMyProfessor difficulty'>
+      <Tooltip label={<Trans>RateMyProfessor difficulty</Trans>}>
         <Badge
           className={cntl`
             min-w-max border-current text-center
@@ -59,7 +59,7 @@ export function RmpRating({ review }: RmpRatingProps) {
         </Badge>
       </Tooltip>
 
-      <Tooltip label='Number of RateMyProfessor reviews'>
+      <Tooltip label={<Trans>Number of RateMyProfessor reviews</Trans>}>
         <Badge
           className='min-w-max border-current text-center text-blue-500'
           variant='outline'
@@ -72,6 +72,10 @@ export function RmpRating({ review }: RmpRatingProps) {
   );
 }
 
+export { RmpRating };
+
+export type { RmpRatingProps };
+
 interface StarRatingInterface extends HTMLAttributes<HTMLSpanElement> {
   rating: number;
 }
@@ -81,7 +85,7 @@ function StarRating({ rating, className, ...props }: StarRatingInterface) {
   const numStars = Math.round(rating * 2) / 2;
 
   return (
-  <span {...props} className={cn(className, 'flex')}>
+    <span {...props} className={cn(className, 'flex')}>
       {Array.from({ length: Math.floor(numStars) }).map((_, i) => (
         <StarIcon key={i} className='size-3.5 fill-current' />
       ))}

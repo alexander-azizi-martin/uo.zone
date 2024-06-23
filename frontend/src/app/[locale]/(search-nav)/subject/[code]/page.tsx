@@ -8,10 +8,10 @@ import { SkeletonList } from '@/components/ui/skeleton';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 
-import { BackToTopButton } from './components/BackToTopButton';
-import { CourseFilterMenu } from './components/CourseFilterMenu';
-import { CourseFilterProvider } from './components/CourseFilterProvider';
-import { CourseList } from './components/CourseList';
+import { BackToTopButton } from './components/back-to-top-button';
+import { CourseFilterMenu } from './components/course-filter-menu';
+import { CourseFilterProvider } from './components/course-filter-provider';
+import { CourseList } from './components/course-list';
 
 interface SubjectPageProps {
   params: {
@@ -36,7 +36,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     <CourseFilterProvider>
       <div>
         <div className='flex items-center justify-between'>
-          <h2 className='my-4 mt-4 sm:text-4xl'>{`${subject.code}: ${subject.subject}`}</h2>
+          <h2 className='py-4 sm:text-4xl'>{`${subject.code}: ${subject.subject}`}</h2>
 
           <CourseFilterMenu />
         </div>

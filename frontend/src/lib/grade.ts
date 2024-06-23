@@ -2,6 +2,7 @@ export type Letter =
   | 'EIN'
   | 'ABS'
   | 'NS'
+  | 'NC'
   | 'P'
   | 'S'
   | 'F'
@@ -38,6 +39,7 @@ export class Grade {
     'ABS': NaN, 
     'EIN': NaN,
     'NS': NaN,
+    'NC': NaN,
     'P': NaN,
     'S': NaN,
     'F': 0,
@@ -84,7 +86,9 @@ export class Grade {
     const letterGrade = Grade.letter(grade);
 
     if (letterGrade in Grade.BADGE_GRADE_COLOR) {
-      return Grade.BADGE_GRADE_COLOR[letterGrade];
+      return Grade.BADGE_GRADE_COLOR[
+        letterGrade as keyof typeof Grade.BADGE_GRADE_COLOR
+      ];
     }
 
     throw new Error(`No badge color for '${grade}'.`);

@@ -68,7 +68,7 @@ export default async function GradeCoursePage({ params }: CoursePageProps) {
                 <UnknownProfessor professor={professor} />
               )
             }
-            href={professor.id !== 0 ? `/professor/${professor.id}` : undefined}
+            href={professor.id !== 0 ? `/professor/${professor.publicId}` : undefined}
             summarize={professor}
           />
         ))}
@@ -83,7 +83,7 @@ interface UnknownProfessorProps {
 
 function UnknownProfessor({ professor }: UnknownProfessorProps) {
   return (
-    <div className='flex items-start gap-2'>
+    <div className='flex items-center gap-2'>
       <div>
         <Trans>
           Unknown{' '}

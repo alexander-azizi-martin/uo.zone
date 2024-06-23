@@ -3,16 +3,12 @@
 import { Trans } from '@lingui/macro';
 import cntl from 'cntl';
 import { InfoIcon } from 'lucide-react';
-import { useMemo, useRef } from 'react';
 
 import { Paper } from '@/components/ui/paper';
 import { Tooltip } from '@/components/ui/tooltip';
-import { useBoolean } from '@/hooks/useBoolean';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { type components } from '@/lib/api/schema';
-import { Survey } from '@/lib/survey';
-import { percent } from '@/lib/utils';
 
+import { SurveyQuestionHistogramBar } from './survey-question-histogram-bar';
 interface SurveyQuestionHistogramProps {
   title: string;
   tooltip: string;
@@ -24,10 +20,8 @@ function SurveyQuestionHistogram({
   tooltip,
   surveyQuestion,
 }: SurveyQuestionHistogramProps) {
-  const score = useMemo(() => Survey.score(surveyQuestion), [surveyQuestion]);
-
   return (
-    <Paper className='w-[525px] pb-8 pr-8'>
+    <Paper className='h-full w-[525px] pb-8 pr-8'>
       <div className='flex justify-between pb-6'>
         <div>
           <div className='flex items-center'>
@@ -47,7 +41,7 @@ function SurveyQuestionHistogram({
 
         <div className='flex items-start gap-2'>
           <h2 className='text-3xl text-black sm:text-4xl md:text-5xl'>
-            {score.toFixed(2)}
+            {surveyQuestion.score?.toFixed(2)}
           </h2>
           <h3 className='text-md pt-1 text-black sm:text-lg md:text-xl'>/ 5</h3>
         </div>
@@ -61,7 +55,7 @@ function SurveyQuestionHistogram({
         `}
       >
         {surveyQuestion.responses.map(({ response, numResponses }) => (
-          <HistogramBar
+          <SurveyQuestionHistogramBar
             key={response}
             label={response}
             value={numResponses}
@@ -70,64 +64,27 @@ function SurveyQuestionHistogram({
         ))}
 
         {[0.25, 0.5, 0.75, 1].map((percent) => (
-          <HistogramPercentBoundary key={percent} percent={percent} />
+          <SurveyQuestionHistogramPercentBoundary
+            key={percent}
+            percent={percent}
+          />
         ))}
       </div>
     </Paper>
   );
 }
 
-interface HistogramBar {
-  label: string;
-  value: number;
-  total: number;
-}
+export { SurveyQuestionHistogram };
 
-function HistogramBar({ label, value, total }: HistogramBar) {
-  const [hovering, setHovering] = useBoolean(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useOutsideClick({
-    ref: ref,
-    handler: setHovering.off,
-  });
+export type { SurveyQuestionHistogramProps };
 
-  const valuePercent = Math.round(percent(value, total) * 100);
-
-  return (
-    <div
-      ref={ref}
-      className='flex w-full items-center'
-      onMouseEnter={setHovering.on}
-      onMouseLeave={setHovering.off}
-      onClick={setHovering.on}
-    >
-      <div
-        className={cntl`
-          relative min-w-[--question-bar-label-width] 
-          max-w-[--question-bar-label-width] border-r border-solid 
-          border-black py-4 pr-1 text-center sm:pr-2
-        `}
-      >
-        {label}
-      </div>
-
-      <div className='z-10 flex h-4 w-full items-center'>
-        <div
-          className='mr-1.5 h-full bg-geegee'
-          style={{ width: `${valuePercent}%` }}
-        />
-
-        {hovering ? value : `${valuePercent}%`}
-      </div>
-    </div>
-  );
-}
-
-interface HistogramPercentBoundaryProps {
+interface SurveyQuestionHistogramPercentBoundaryProps {
   percent: number;
 }
 
-function HistogramPercentBoundary({ percent }: HistogramPercentBoundaryProps) {
+function SurveyQuestionHistogramPercentBoundary({
+  percent,
+}: SurveyQuestionHistogramPercentBoundaryProps) {
   return (
     <div
       className='absolute top-0 h-full'
@@ -153,7 +110,3 @@ function HistogramPercentBoundary({ percent }: HistogramPercentBoundaryProps) {
     </div>
   );
 }
-
-export { SurveyQuestionHistogram };
-
-export type { SurveyQuestionHistogramProps };

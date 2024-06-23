@@ -10,11 +10,7 @@ interface I18nProviderProps {
   children: React.ReactNode;
 }
 
-export function I18nProvider({
-  locale,
-  messages,
-  ...props
-}: I18nProviderProps) {
+function I18nProvider({ locale, messages, ...props }: I18nProviderProps) {
   return (
     <LinguiProvider
       i18n={setupI18n({
@@ -25,3 +21,7 @@ export function I18nProvider({
     />
   );
 }
+
+export { I18nProvider };
+
+export type { I18nProviderProps };

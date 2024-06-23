@@ -1,10 +1,9 @@
 'use client';
 
 import { Plural, Select, Trans } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import cntl from 'cntl';
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Trapezoid } from '@/components/ui/trapezoid';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
@@ -14,7 +13,8 @@ import { pairwise, percent } from '@/lib/utils';
 
 const gradeDistributionVariants = cva(
   cntl`
-    relative flex touch-none overflow-hidden rounded bg-grades-gradient
+    prevent-hover z-10 relative flex touch-none overflow-hidden rounded 
+    bg-grades-gradient 
     h-[--grade-distribution-height] w-[--grade-distribution-width]
   `,
   {
@@ -46,7 +46,17 @@ interface GradeDistributionProps
 const NUM_BINS = Grade.NUMERICAL_GRADES.length - 1;
 
 function GradeDistribution({ grades, size }: GradeDistributionProps) {
-  const { i18n } = useLingui();
+  const numericalTotal = Grade.NUMERICAL_GRADES.reduce(
+    (acc, letter) => acc + grades.distribution[letter],
+    0,
+  );
+
+  const heightPercents = Grade.NUMERICAL_GRADES.map((letter) => {
+    const gradePercent = percent(grades.distribution[letter], numericalTotal);
+    const heightPercent = 1 - gradePercent * 4;
+
+    return Math.max(0, heightPercent).toFixed(2);
+  });
 
   const [selectedGrade, setSelectedGrade] = useState<Letter>();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -54,20 +64,6 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
     ref: rootRef,
     handler: () => setSelectedGrade(undefined),
   });
-
-  const heightPercents = useMemo(() => {
-    const numericalTotal = Grade.NUMERICAL_GRADES.reduce(
-      (acc, letter) => acc + grades.distribution[letter],
-      0,
-    );
-
-    return Grade.NUMERICAL_GRADES.map((letter) => {
-      const gradePercent = percent(grades.distribution[letter], numericalTotal);
-      const heightPercent = 1 - gradePercent * 4;
-
-      return Math.max(0, heightPercent).toFixed(2);
-    });
-  }, [grades]);
 
   const handleMouseMove = (event: any) => {
     if (!rootRef.current) return;
@@ -112,8 +108,7 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
             leaning={currentPercent > nextPercent ? 'left' : 'right'}
           />
         ))}
-
-        {selectedGrade !== undefined && (
+        {selectedGrade && (
           <>
             <PinPoint
               x={`calc(100% * ${(1 / NUM_BINS) * Grade.value(selectedGrade)})`}
@@ -122,9 +117,9 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
 
             <p
               className={cntl`
-                color-[#1B202B] absolute left-0 right-0 m-auto w-max 
-                select-none text-xs font-bold
-              `}
+              color-[#1B202B] absolute left-0 right-0 m-auto w-max 
+              select-none text-xs font-bold
+            `}
             >
               <Trans>
                 {grades.distribution[selectedGrade]}{' '}
@@ -134,16 +129,12 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
                   other='students'
                 />{' '}
                 got <Select value={selectedGrade[0]} _A={'an'} other={'a'} />{' '}
-                {selectedGrade} (
-                {i18n.number(
-                  percent(grades.distribution[selectedGrade], grades.total),
-                  { style: 'percent' },
-                )}
-                )
+                {selectedGrade}{' '}
+                {`(${Math.round(percent(grades.distribution[selectedGrade], grades.total) * 100)}%)`}
               </Trans>
             </p>
           </>
-        )}
+        )}{' '}
       </div>
 
       <div className='relative h-3.5'>
@@ -162,6 +153,10 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
     </div>
   );
 }
+
+export { GradeDistribution };
+
+export type { GradeDistributionProps };
 
 interface PinPointProps {
   x: string;
@@ -189,7 +184,3 @@ function PinPoint({ x, y }: PinPointProps) {
     </>
   );
 }
-
-export { GradeDistribution };
-
-export type { GradeDistributionProps };

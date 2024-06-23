@@ -24,9 +24,9 @@ import {
 import {
   CourseFilterContext,
   type CourseFilterOptions,
-} from './CourseFilterProvider';
+} from './course-filter-provider';
 
-export function CourseFilterMenu() {
+function CourseFilterMenu() {
   const courseFilterContext = useContext(CourseFilterContext);
   if (courseFilterContext === null) {
     throw new Error(
@@ -66,8 +66,8 @@ export function CourseFilterMenu() {
       >
         <div
           className={cntl`
-            scrollbar-thin h-[500px] overflow-x-hidden 
-            overflow-y-scroll overscroll-contain
+            h-[500px] overflow-x-hidden overflow-y-scroll 
+            overscroll-contain scrollbar-thin
           `}
         >
           <DropdownMenuLabel>
@@ -167,3 +167,5 @@ export function CourseFilterMenu() {
     </DropdownMenu>
   );
 }
+
+export { CourseFilterMenu };

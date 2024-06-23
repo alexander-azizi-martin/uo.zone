@@ -43,7 +43,12 @@ const Tooltip = React.forwardRef<
     <TooltipProvider>
       <TooltipRoot delayDuration={0}>
         <TooltipTrigger>{children}</TooltipTrigger>
-        <TooltipContent ref={ref} side='bottom' {...props}>
+        <TooltipContent
+          ref={ref}
+          side='bottom'
+          collisionPadding={10}
+          {...props}
+        >
           {label}
         </TooltipContent>
       </TooltipRoot>

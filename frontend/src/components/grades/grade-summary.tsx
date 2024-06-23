@@ -127,11 +127,11 @@ const GradeSummaryGraph = ({
 
 export {
   GradeSummary,
-  GradeSummaryRoot,
-  GradeSummaryHeader,
-  GradeSummaryTitle,
-  GradeSummarySubtitle,
   GradeSummaryGraph,
+  GradeSummaryHeader,
+  GradeSummaryRoot,
+  GradeSummarySubtitle,
+  GradeSummaryTitle,
 };
 
 export type { GradeSummaryProps };

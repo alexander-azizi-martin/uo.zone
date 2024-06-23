@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
-export function BackToTopButton() {
+function BackToTopButton() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ export function BackToTopButton() {
   return (
     <Button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      data-umami-event='back-to-top'
       className={clsx(
         'fixed bottom-4 right-4 z-50 size-10 rounded-full p-0 transition-all',
         show && 'visible scale-100 opacity-100',
@@ -41,3 +42,5 @@ export function BackToTopButton() {
     </Button>
   );
 }
+
+export { BackToTopButton };

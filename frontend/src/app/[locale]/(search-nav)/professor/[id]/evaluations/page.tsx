@@ -1,8 +1,8 @@
-import { msg, Trans } from '@lingui/macro';
+import { Trans } from '@lingui/macro';
 
 import { SurveyQuestionHistogram } from '@/components/common/survey-question-histogram';
 import { client } from '@/lib/api/client';
-import { getI18n, loadI18n } from '@/lib/i18n';
+import { loadI18n } from '@/lib/i18n';
 
 interface CourseEvaluationsPageProps {
   params: {
@@ -15,7 +15,6 @@ export default async function CourseEvaluationsPage({
   params,
 }: CourseEvaluationsPageProps) {
   await loadI18n(params.locale);
-  const i18n = getI18n();
 
   const survey = (
     await client.GET('/professors/{professor}/survey', {
@@ -35,15 +34,16 @@ export default async function CourseEvaluationsPage({
   }
 
   return (
-    <div className='flex w-full flex-wrap justify-center gap-4 lg:gap-8'>
-      {Object.entries(PROFESSOR_QUESTIONS).map(([question, titleMsg]) => {
+    <div className='flex h-full w-full flex-wrap justify-center gap-4 lg:gap-8'>
+      {Object.entries(PROFESSOR_QUESTIONS).map(([question, title]) => {
         const surveyQuestion = survey.find(
           (survey) => survey.question === question,
         );
 
-        if (surveyQuestion === undefined) return null;
+        if (surveyQuestion === undefined || surveyQuestion.score === null) {
+          return null;
+        }
 
-        const title = i18n._(titleMsg);
         return (
           <SurveyQuestionHistogram
             key={title}
@@ -57,12 +57,19 @@ export default async function CourseEvaluationsPage({
   );
 }
 
+// prettier-ignore
 const PROFESSOR_QUESTIONS = {
-  // 'I find that the professor as a teacher is': msg`teacher`,
-  'I find the professor well prepared for class': msg`Prepared`,
-  'I think the professor conveys the subject matter effectively': msg`Communication`,
-  'The professors feedback contributes to my learning': msg`Feedback`,
-  'The professor is available to address questions outside of class': msg`Availability`,
-  'The professor shows respect towards the students': msg`Respect`,
-  'Instructions for completing activities and assignments are clear': msg`Instructions`,
+  // en
+  'I find the professor well prepared for class': 'Prepared',
+  'I think the professor conveys the subject matter effectively': 'Communication',
+  'The professor\'s feedback contributes to my learning': 'Feedback',
+  'The professor is available to address questions outside of class': 'Availability',
+  'The professor shows respect towards the students': 'Respect',
+  'Instructions for completing activities and assignments are clear': 'Instructions',
+  // fr
+  'J\'estime que le professeur prépare bien ses cours': 'Préparé',
+  'J\'estime que le professeur communique efficacement la matière': 'Communication',
+  'Le professeur est disponible pour répondre aux questions en dehors des heures de cours': 'Disponibilité',
+  'Le professeur fait preuve de respect envers les étudiants': 'Respect',
+  'Les instructions sur les activités et les travaux à faire sont claires': 'Instructions',
 };

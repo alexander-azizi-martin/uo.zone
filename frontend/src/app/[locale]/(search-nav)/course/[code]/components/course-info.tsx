@@ -1,36 +1,30 @@
 import { msg, Trans } from '@lingui/macro';
 import Markdown from 'markdown-to-jsx';
-import { useMemo } from 'react';
 
-import { Link } from '@/components/links/link';
 import { Badge } from '@/components/ui/badge';
 import { type components } from '@/lib/api/schema';
 import { getI18n } from '@/lib/i18n';
 import { TERM_TO_ID } from '@/lib/utils';
 
-import { CourseLink } from './CourseLink';
+import { CourseLink } from './course-link';
 
 interface CourseInfoProps {
   course: components['schemas']['CourseResource'];
 }
 
-export function CourseInfo({ course }: CourseInfoProps) {
+function CourseInfo({ course }: CourseInfoProps) {
   const i18n = getI18n();
 
-  const terms = useMemo(() => {
-    type Term = keyof typeof TERM_TO_ID;
+  type Term = keyof typeof TERM_TO_ID;
+  const terms: Term[] = [];
 
-    const terms: Term[] = [];
-    for (const term in TERM_TO_ID) {
-      const hasTerm = course.previousTermIds.some(
-        (termId) => termId % 10 === TERM_TO_ID[term as Term],
-      );
+  for (const term in TERM_TO_ID) {
+    const hasTerm = course.previousTermIds.some(
+      (termId) => termId % 10 === TERM_TO_ID[term as Term],
+    );
 
-      if (hasTerm) terms.push(term as Term);
-    }
-
-    return terms;
-  }, [course]);
+    if (hasTerm) terms.push(term as Term);
+  }
 
   return (
     <div className='stack my-6 items-start gap-4'>
@@ -120,6 +114,10 @@ export function CourseInfo({ course }: CourseInfoProps) {
     </div>
   );
 }
+
+export { CourseInfo };
+
+export type { CourseInfoProps };
 
 const TERMS = {
   winter: msg`Winter`,

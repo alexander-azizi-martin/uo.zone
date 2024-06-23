@@ -14,7 +14,7 @@ interface VirtualCourseListProps {
   courses: components['schemas']['CourseResource'][];
 }
 
-export function VirtualCourseList({ courses }: VirtualCourseListProps) {
+function VirtualCourseList({ courses }: VirtualCourseListProps) {
   const filteredCourses = useFilteredCourses(courses);
 
   return (
@@ -51,3 +51,7 @@ export function VirtualCourseList({ courses }: VirtualCourseListProps) {
     </>
   );
 }
+
+export { VirtualCourseList };
+
+export type { VirtualCourseListProps };

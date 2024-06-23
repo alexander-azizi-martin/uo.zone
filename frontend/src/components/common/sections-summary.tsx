@@ -1,7 +1,7 @@
 import { msg, Trans } from '@lingui/macro';
 import cntl from 'cntl';
 import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
-import { type ReactNode, useMemo } from 'react';
+import { type ReactNode } from 'react';
 
 import {
   GradeSummary,
@@ -33,25 +33,21 @@ interface SectionsSummaryProps {
 function SectionsSummary({ title, href, summarize }: SectionsSummaryProps) {
   const i18n = getI18n();
 
-  const term = useMemo(() => {
-    const oldestTerm = summarize.sections[summarize.sections.length - 1].term;
-    const newestTerm = summarize.sections[0].term;
+  const oldestTerm = summarize.sections[summarize.sections.length - 1].term;
+  const newestTerm = summarize.sections[0].term;
 
-    let term: string;
-    if (summarize.sections.length === 1) {
-      term = `${oldestTerm} - ${summarize.sections[0].section}`;
-    } else if (oldestTerm == newestTerm) {
-      term = i18n._(
-        msg`${summarize.sections.length} sections during ${oldestTerm}`,
-      );
-    } else {
-      term = i18n._(
-        msg`${summarize.sections.length} sections from ${oldestTerm} to ${newestTerm}`,
-      );
-    }
-
-    return term;
-  }, [summarize]);
+  let term: string;
+  if (summarize.sections.length === 1) {
+    term = `${oldestTerm} - ${summarize.sections[0].section}`;
+  } else if (oldestTerm == newestTerm) {
+    term = i18n._(
+      msg`${summarize.sections.length} sections during ${oldestTerm}`,
+    );
+  } else {
+    term = i18n._(
+      msg`${summarize.sections.length} sections from ${oldestTerm} to ${newestTerm}`,
+    );
+  }
 
   return (
     <Collapsible className='relative w-full'>
@@ -65,21 +61,23 @@ function SectionsSummary({ title, href, summarize }: SectionsSummaryProps) {
                 <CollapsibleTrigger asChild>
                   <button
                     className={cntl`
-                      prevent-hover absolute z-10 flex size-6 -translate-x-3/4 -translate-y-[12.5%]
-                      items-center justify-center rounded-full p-0 hover:bg-accent/70
+                      prevent-hover absolute -left-5 -top-0.5 z-10 flex size-6
+                      items-center justify-center rounded-full p-0 hover:bg-black/5
                     `}
                   >
                     <ChevronDownIcon
                       size={12}
                       className={cntl`
-                        [[data-state=closed]>&]:hidden 
+                        text-gray-400
+                        [[data-state=closed]>&]:hidden
                         [[data-state=open]>&]:block
                       `}
                     />
                     <ChevronRightIcon
                       size={12}
                       className={cntl`
-                        [[data-state=closed]>&]:block 
+                        text-gray-400
+                        [[data-state=closed]>&]:block
                         [[data-state=open]>&]:hidden
                       `}
                     />
@@ -98,11 +96,7 @@ function SectionsSummary({ title, href, summarize }: SectionsSummaryProps) {
           </GradeSummaryHeader>
 
           {summarize.grades && (
-            <GradeSummaryGraph
-              grades={summarize.grades}
-              className='prevent-hover z-10'
-              size='sm'
-            />
+            <GradeSummaryGraph grades={summarize.grades} size='sm' />
           )}
         </GradeSummaryRoot>
 

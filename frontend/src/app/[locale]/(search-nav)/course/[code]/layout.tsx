@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 
-import { CourseInfo } from './components/CourseInfo';
+import { CourseInfo } from './components/course-info';
 
 interface CourseLayoutProps extends PropsWithChildren {
   params: {
@@ -33,7 +33,7 @@ export default async function CoursePage({
 
   return (
     <div>
-      <h2 className='relative mt-4 sm:text-4xl'>
+      <h2 className='pt-4 sm:text-4xl'>
         <Link
           href={`/subject/${subjectCode}`}
           className='underline decoration-2 hover:decoration-4'

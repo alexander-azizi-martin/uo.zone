@@ -1,8 +1,8 @@
-import { msg, Trans } from '@lingui/macro';
+import { Trans } from '@lingui/macro';
 
 import { SurveyQuestionHistogram } from '@/components/common/survey-question-histogram';
 import { client } from '@/lib/api/client';
-import { getI18n, loadI18n } from '@/lib/i18n';
+import { loadI18n } from '@/lib/i18n';
 
 interface CourseEvaluationsPageProps {
   params: {
@@ -15,7 +15,6 @@ export default async function CourseEvaluationsPage({
   params,
 }: CourseEvaluationsPageProps) {
   await loadI18n(params.locale);
-  const i18n = getI18n();
 
   const survey = (
     await client.GET('/courses/{course}/survey', {
@@ -35,15 +34,16 @@ export default async function CourseEvaluationsPage({
   }
 
   return (
-    <div className='flex w-full flex-wrap justify-center gap-4 lg:gap-8'>
-      {Object.entries(COURSE_QUESTIONS).map(([question, titleMsg]) => {
+    <div className='flex h-full w-full flex-wrap justify-center gap-4 lg:gap-8'>
+      {Object.entries(COURSE_QUESTIONS).map(([question, title]) => {
         const surveyQuestion = survey.find(
           (survey) => survey.question === question,
         );
 
-        if (surveyQuestion === undefined) return null;
+        if (surveyQuestion === undefined || surveyQuestion.score === null) {
+          return null;
+        }
 
-        const title = i18n._(titleMsg);
         return (
           <SurveyQuestionHistogram
             key={title}
@@ -57,11 +57,20 @@ export default async function CourseEvaluationsPage({
   );
 }
 
+// prettier-ignore
 const COURSE_QUESTIONS = {
-  'The course is well organized': msg`Organized`,
-  'Course expectations are clearly explained': msg`Expectations`,
-  'I have learned a lot in this course': msg`Learning`,
-  'I would recommend this course to another student': msg`Recommend`,
-  'In comparison with my other courses, the workload for this course is': msg`Workload`,
-  'Assignments and/or exams closely reflect what is covered in class': msg`Activities`,
+  // en
+  'The course is well organized': 'Organized',
+  'Course expectations are clearly explained': 'Expectations',
+  'I have learned a lot in this course': 'Learning',
+  'I would recommend this course to another student': 'Recommend',
+  'In comparison with my other courses, the workload for this course is': 'Workload',
+  'Assignments and/or exams closely reflect what is covered in class': 'Activities',
+  // fr
+  'Le cours est bien organisé': 'Organisé',
+  'Les attentes envers les étudiants sont clairement expliquées': 'Attentes',
+  'J\'ai beaucoup appris dans ce cours': 'Apprentissage',
+  'Je recommanderais ce cours à un autre étudiant': 'Recommander',
+  'Comparée à celle de mes autres cours, la charge de travail pour ce cours est': 'Charge de travail',
+  'Les travaux et/ou les examens reflètent bien le contenu du cours': 'Activités',
 };

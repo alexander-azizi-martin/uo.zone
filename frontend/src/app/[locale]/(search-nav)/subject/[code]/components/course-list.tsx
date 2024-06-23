@@ -1,13 +1,13 @@
 import { client } from '@/lib/api/client';
 
-import { VirtualCourseList } from './VirtualCourseList';
+import { VirtualCourseList } from './virtual-course-list';
 
 interface CourseListProps {
   code: string;
   locale: string;
 }
 
-export async function CourseList({ code, locale }: CourseListProps) {
+async function CourseList({ code, locale }: CourseListProps) {
   const courses = (
     await client.GET('/subjects/{subject}/courses', {
       params: {
@@ -19,3 +19,7 @@ export async function CourseList({ code, locale }: CourseListProps) {
 
   return <VirtualCourseList courses={courses} />;
 }
+
+export { CourseList };
+
+export type { CourseListProps };

@@ -1,6 +1,7 @@
 'use client';
 
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 import * as React from 'react';
 
@@ -50,7 +51,7 @@ const AccordionContent = React.forwardRef<
   return (
     <AccordionPrimitive.Content
       ref={ref}
-      className={cn(
+      className={clsx(
         'overflow-hidden text-sm transition-all',
         !isFirstRender &&
           'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',

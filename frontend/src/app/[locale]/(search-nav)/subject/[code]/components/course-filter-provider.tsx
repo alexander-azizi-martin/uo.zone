@@ -10,14 +10,14 @@ import {
 
 import { type Locale } from '@/lingui.config';
 
-export interface CourseFilterOptions {
+interface CourseFilterOptions {
   sortBy: 'code' | 'average' | 'median' | 'mode';
   years: ('1' | '2' | '3' | '4' | '5')[];
   languages: Locale[];
   term: ('fall' | 'winter' | 'summer')[];
 }
 
-export const CourseFilterContext = createContext<{
+const CourseFilterContext = createContext<{
   filterOptions: CourseFilterOptions;
   setFilterOptions: (
     key: keyof CourseFilterOptions,
@@ -26,7 +26,7 @@ export const CourseFilterContext = createContext<{
   resetFilterOptions: () => void;
 } | null>(null);
 
-export function CourseFilterProvider({ children }: PropsWithChildren) {
+function CourseFilterProvider({ children }: PropsWithChildren) {
   const [filterOptions, setFilterOptionsObject] = useQueryStates(
     {
       sortBy: parseAsStringLiteral(['code', 'average', 'mode'])
@@ -76,3 +76,7 @@ export function CourseFilterProvider({ children }: PropsWithChildren) {
     </CourseFilterContext.Provider>
   );
 }
+
+export { CourseFilterContext, CourseFilterProvider };
+
+export type { CourseFilterOptions };

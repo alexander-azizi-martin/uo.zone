@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 
-import { RmpRating } from './components/RmpRating';
+import { RmpRating } from './components/rmp-rating';
 
 interface CourseLayoutProps extends PropsWithChildren {
   params: {
@@ -33,7 +33,7 @@ export default async function CoursePage({
 
   return (
     <div>
-      <h2 className='my-4 mt-4 sm:text-4xl'>{professor.name}</h2>
+      <h2 className='pt-4 sm:text-4xl'>{professor.name}</h2>
 
       {professor.rmpReview && professor.rmpReview.numRatings > 0 && (
         <>
@@ -58,11 +58,11 @@ export default async function CoursePage({
       )}
 
       <TabLinkList>
-        <TabLink href={`/professor/${professor.id}`}>
+        <TabLink href={`/professor/${professor.publicId}`}>
           <Trans>Grades</Trans>
         </TabLink>
 
-        <TabLink href={`/professor/${professor.id}/evaluations`}>
+        <TabLink href={`/professor/${professor.publicId}/evaluations`}>
           <Trans>Evaluations</Trans>
         </TabLink>
       </TabLinkList>

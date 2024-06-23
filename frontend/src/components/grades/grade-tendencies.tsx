@@ -11,7 +11,7 @@ interface GradeTendenciesProps {
 
 export function GradeTendencies({ grades }: GradeTendenciesProps) {
   return (
-    <div className='flex gap-2'>
+    <div className='flex flex-wrap justify-center gap-2'>
       {grades.mean !== undefined &&
         grades.mean !== null &&
         grades.total > 0 && (
@@ -24,18 +24,19 @@ export function GradeTendencies({ grades }: GradeTendenciesProps) {
             </Trans>
           </Badge>
         )}
+
       {grades.mode !== undefined &&
         grades.mode !== null &&
         grades.total > 0 && (
           <Badge
-            className={`py-1 text-center ${Grade.badgeColor(grades.mode as any)}`}
+            className={`py-1 text-center ${Grade.badgeColor(grades.mode)}`}
             size={'sm'}
           >
             <Trans>
-              Most Common: {grades.mode} (
-              {Math.round(
+              Most Common: {grades.mode}{' '}
+              {`(${Math.round(
                 percent(grades.distribution[grades.mode], grades.total) * 100,
-              )}
+              )}%)`}
             </Trans>
           </Badge>
         )}

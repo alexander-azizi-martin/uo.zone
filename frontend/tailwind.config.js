@@ -1,4 +1,4 @@
-const plugin = require('tailwindcss/plugin')
+const plugin = require('tailwindcss/plugin');
 
 const gradeGradient = [
   { color: '#ff0000', offset: 0 },
@@ -89,6 +89,9 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      minHeight: {
+        'search-nav-body': 'calc(100vh - theme(spacing.8) - 40px)',
+      },
       animation: {
         'accordion-down': 'accordion-down 0.35s ease-out',
         'accordion-up': 'accordion-up 0.35s ease-out',
@@ -122,7 +125,10 @@ module.exports = {
     require('tailwindcss-animate'),
     require('tailwind-scrollbar'),
     plugin(function ({ addVariant }) {
-      addVariant('preventable-hover', '&:hover:not(:has(.prevent-hover:hover))');
+      addVariant(
+        'preventable-hover',
+        '&:hover:not(:has(.prevent-hover:hover))',
+      );
     }),
   ],
 };
