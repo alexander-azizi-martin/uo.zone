@@ -6,7 +6,7 @@ from itemloaders.processors import MapCompose, TakeFirst
 
 from scraper.helpers import download_image, normalize_string, normalize_whitespace
 
-OPTION_PATTERN = re.compile(r"([A-Z]):\s+(.*?)\s+\((\d+)\)")
+OPTION_PATTERN = re.compile(r"([A-Z]):\s+(.*?)\s+\(?(\d+)\)?")
 RESULT_PATTERN = re.compile(r"Total \((\d+)\)")
 
 
@@ -33,7 +33,7 @@ class Question(scrapy.Item):
         output_processor=TakeFirst(),
     )
     image_url = scrapy.Field(output_processor=TakeFirst())
-    options = scrapy.Field()
+    responses = scrapy.Field()
 
     @staticmethod
     def extract_results(result_image: str):
@@ -55,7 +55,7 @@ class Question(scrapy.Item):
                 label, description, num_responses = map(normalize_string, match.groups())
                 description = normalize_whitespace(description.replace("-", " - "))
 
-                question["options"].append(
+                question["responses"].append(
                     {
                         "label": label.lower(),
                         "description": description.lower(),

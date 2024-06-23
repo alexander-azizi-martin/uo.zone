@@ -15,8 +15,8 @@ for survey_file in filesystem.listdir("surveys"):
         continue
 
     season = season_match.group(0)
-    data = json.loads(filesystem.get(survey_file))
-    saved_surveys[season].append(data["link"])
+    survey_data = json.loads(filesystem.get(survey_file))
+    saved_surveys[season].append(survey_data["title"])
 
 for season in saved_surveys:
     data = json.dumps(saved_surveys[season])

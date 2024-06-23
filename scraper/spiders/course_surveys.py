@@ -3,7 +3,6 @@ import os
 from itertools import repeat
 from multiprocessing import Pool
 from urllib.parse import urljoin
-import time
 
 import browser_cookie3
 import parsel
@@ -96,14 +95,13 @@ class CourseSurveysSpider(scrapy.Spider):
             )
 
         if self.current_page < self.start_page:
-            print(self.current_page)
             offset = 0 if self.current_page <= 10 else 1
             jump = min(10, self.start_page - self.current_page)
 
-            starting_position = int(
+            first_listed_page = int(
                 response.css("tr:first-of-type :is(a, span)::text").getall()[offset]
             )
-            relative_position = (self.current_page - starting_position) + jump + offset
+            relative_position = (self.current_page - first_listed_page) + jump + offset
 
             self.current_page += jump
             self.progress_bar.update(jump * SURVEYS_PER_PAGE)
@@ -120,7 +118,7 @@ class CourseSurveysSpider(scrapy.Spider):
                     "__EVENTVALIDATION": response.css(
                         "#__EVENTVALIDATION::attr(value)"
                     ).get(),
-                    "__EVENTTARGET": f"ctl00$ContentPlaceHolder1$ViewList$ctl01$listing$ctl14$ctl{relative_position}",
+                    "__EVENTTARGET": f"ctl00$ContentPlaceHolder1$ViewList$ctl01$listing$ctl14$ctl{relative_position:02}",
                     "__EVENTARGUMENT": "",
                     "__VIEWSTATEENCRYPTED": "",
                     "ctl00$ddlLanguageInput": "en-US",
@@ -156,8 +154,11 @@ class CourseSurveysSpider(scrapy.Spider):
 
         next_page_button = response.css(
             "#ctl00_ContentPlaceHolder1_ViewList_ctl01_listing_ctl14_btnNext"
-        ).get()
-        if next_page_button is not None:
+        )
+        if (
+            next_page_button.get() is not None
+            and "disabled" not in next_page_button.attrib
+        ):
             yield scrapy.FormRequest(
                 url=response.url,
                 callback=self.parse_survey_list,
@@ -233,5 +234,5 @@ def parse_question_block_v2(text: str) -> Question:
             }
         )
 
-    question_loader.add_value("options", responses)
+    question_loader.add_value("responses", responses)
     return question_loader.load_item()
