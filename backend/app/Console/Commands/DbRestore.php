@@ -58,8 +58,8 @@ class DbRestore extends Command
             }
         }
 
-        if (! file_exists($dbDumpFilepath)) {
-            $this->error('The database dump could not be found.');
+        if (! file_exists($dbDumpFilepath.'.gz')) {
+            $this->error('The compressed database dump could not be found.');
 
             return;
         }
