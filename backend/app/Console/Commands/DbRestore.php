@@ -44,7 +44,7 @@ class DbRestore extends Command
                 function () use ($dbDumpFilename) {
                     $compressedFile = Storage::disk('s3')->readStream($dbDumpFilename.'.gz');
 
-                    return Storage::disk('database')->put($dbDumpFilename, $compressedFile);
+                    return Storage::disk('database')->put($dbDumpFilename.'.gz', $compressedFile);
                 },
                 'Downloading the compressed database dump from s3.'
             );
