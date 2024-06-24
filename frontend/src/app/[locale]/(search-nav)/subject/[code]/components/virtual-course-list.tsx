@@ -32,18 +32,17 @@ function VirtualCourseList({ courses }: VirtualCourseListProps) {
         itemContent={(_, course) => (
           <div className='pt-4' key={course.code}>
             <Paper asChild variant='link'>
-              <Link href={`/course/${course.code}`}>
-                <GradeSummary
-                  title={course.title}
-                  subtitle={
-                    !course.grades?.total ? (
-                      <Trans>No grade data available for this course.</Trans>
-                    ) : undefined
-                  }
-                  grades={course.grades}
-                  graphSize={'sm'}
-                />
-              </Link>
+              <GradeSummary
+                title={course.title}
+                subtitle={
+                  !course.grades?.total ? (
+                    <Trans>No grade data available for this course.</Trans>
+                  ) : undefined
+                }
+                grades={course.grades}
+                graphSize={'sm'}
+              />
+              <Link href={`/course/${course.code}`} className='stretched-link'></Link>
             </Paper>
           </div>
         )}
