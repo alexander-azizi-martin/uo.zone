@@ -256,6 +256,10 @@ msgstr "Été"
 msgid "The {0, plural, one {professor for this course section is} other {professors for these course sections are}} not known."
 msgstr "{0, plural, one {Le professeur de cette section} other {Les professeurs de ces sections}} de cours n'est pas connu."
 
+#: src/app/[locale]/maintenance/page.tsx:17
+msgid "The website is currently under maintenance."
+msgstr "Le site web est actuellement en maintenance."
+
 #: src/app/[locale]/not-found.tsx:14
 msgid "This page does not exist."
 msgstr "Cette page n'existe pas."

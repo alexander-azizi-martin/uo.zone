@@ -3,8 +3,14 @@ import { type NextRequest } from 'next/server';
 import { apiMiddleware } from './middleware/api-middleware';
 import { filterParamMiddleware } from './middleware/filter-param-middleware';
 import { localeMiddleware } from './middleware/locale-middleware';
+import { maintenanceMiddleware } from './middleware/maintenance-middleware';
 
-const middlewares = [apiMiddleware, filterParamMiddleware, localeMiddleware];
+const middlewares = [
+  apiMiddleware,
+  maintenanceMiddleware,
+  filterParamMiddleware,
+  localeMiddleware,
+];
 
 export function middleware(request: NextRequest) {
   for (const m of middlewares) {
