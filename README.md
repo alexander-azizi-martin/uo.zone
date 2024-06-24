@@ -13,7 +13,7 @@ Python and scrapy were used to scrape information from the University of Ottawa'
 
 # Acknowledgments
 
-The idea for UO Grades was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design and frontend for UO Grades was based off of the [Gopher Grades Github](https://github.com/samyok/gophergrades) with many of the React components being reimplemented.
+The idea for UO Grades was inspired by [Gopher Grades](https://umn.lol/) a similar website for the University of Minnesota, Twin Cities. The design and initial frontend for UO Grades was based off of the [Gopher Grades Github](https://github.com/samyok/gophergrades).
 
 # Running Locally
 
@@ -35,6 +35,11 @@ docker run --rm \
     composer install --ignore-platform-reqs
 
 cp .env.example .env
+
+
+# optional: allows the use of 'sail' rather than './vendor/bin/sail'
+echo "alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'" >> ~/.zshrc
+source ~/.zshrc
 
 npm install
 ./vendor/bin/sail up -d
