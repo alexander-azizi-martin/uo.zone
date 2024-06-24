@@ -42,7 +42,7 @@ class DbRestore extends Command
         } elseif ($this->option('s3')) {
             $success = spin(
                 function () use ($dbDumpFilename) {
-                    $compressedFile = Storage::disk('s3')->readStream($dbDumpFilename);
+                    $compressedFile = Storage::disk('s3')->readStream($dbDumpFilename.'.gz');
 
                     return Storage::disk('database')->put($dbDumpFilename, $compressedFile);
                 },
