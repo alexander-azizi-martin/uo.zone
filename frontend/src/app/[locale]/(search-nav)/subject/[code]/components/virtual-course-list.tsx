@@ -31,7 +31,7 @@ function VirtualCourseList({ courses }: VirtualCourseListProps) {
         className='w-full'
         itemContent={(_, course) => (
           <div className='pt-4' key={course.code}>
-            <Paper variant='link'>
+            <Paper variant='link' className='relative'>
               <GradeSummary
                 title={course.title}
                 subtitle={
