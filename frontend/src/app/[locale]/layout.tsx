@@ -77,5 +77,5 @@ const OPEN_GRAPH = {
   description:
     'View all the past grades for courses taken at the University of Ottawa.',
   url: 'https://uo.zone',
-  image: 'https://uo.zone/images/homepage.png',
+  image: 'https://uo.zone/static/homepage.png',
 };
