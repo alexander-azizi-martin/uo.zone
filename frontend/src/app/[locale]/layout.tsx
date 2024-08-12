@@ -38,6 +38,22 @@ export default async function LanguageLayout({
 
   return (
     <html lang={params.locale}>
+      <head>
+        <title>UO Grades</title>
+
+        <link rel='icon' href={'/favicon.ico'} />
+        <meta name='description' content={OPEN_GRAPH.description} />
+        <meta property='og:type' content={'website'} />
+        <meta property='og:url' content={OPEN_GRAPH.url} />
+        <meta property='og:title' content={OPEN_GRAPH.title} />
+        <meta property='og:description' content={OPEN_GRAPH.description} />
+        <meta property='og:image' content={OPEN_GRAPH.image} />
+        <meta property='twitter:image' content={OPEN_GRAPH.image} />
+        <meta property='twitter:card' content={'summary_large_image'} />
+        <meta property='twitter:url' content={OPEN_GRAPH.url} />
+        <meta property='twitter:title' content={OPEN_GRAPH.title} />
+        <meta property='twitter:description' content={OPEN_GRAPH.description} />
+      </head>
       <body className={`${inter.variable} ${ibmPlexSans.variable}`}>
         <I18nProvider locale={i18n.locale} messages={i18n.messages}>
           <Main>{children}</Main>
@@ -55,3 +71,11 @@ export default async function LanguageLayout({
     </html>
   );
 }
+
+const OPEN_GRAPH = {
+  title: 'UO Grades',
+  description:
+    'View all the past grades for courses taken at the University of Ottawa.',
+  url: 'https://uo.zone',
+  image: 'https://uo.zone/images/homepage.png',
+};
