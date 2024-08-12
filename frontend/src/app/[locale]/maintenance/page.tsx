@@ -1,5 +1,6 @@
-import { loadI18n } from '@/lib/i18n';
 import { Trans } from '@lingui/macro';
+
+import { loadI18n } from '@/lib/i18n';
 
 interface MaintenancePageProps {
   params: {

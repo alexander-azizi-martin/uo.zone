@@ -13,7 +13,7 @@ import { pairwise, percent } from '@/lib/utils';
 
 const gradeDistributionVariants = cva(
   cntl`
-    prevent-hover z-10 relative flex touch-none overflow-hidden rounded 
+    relative flex touch-none overflow-hidden rounded 
     bg-grades-gradient 
     h-[--grade-distribution-height] w-[--grade-distribution-width]
   `,
@@ -88,7 +88,7 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
   };
 
   return (
-    <div className='flex flex-col hover:cursor-default'>
+    <div className='prevent-hover z-10 flex flex-col hover:cursor-default'>
       <div
         ref={rootRef}
         className={gradeDistributionVariants({ size })}

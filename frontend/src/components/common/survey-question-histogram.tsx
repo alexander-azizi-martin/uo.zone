@@ -1,8 +1,7 @@
-'use client';
-
 import { Trans } from '@lingui/macro';
 import cntl from 'cntl';
 import { InfoIcon } from 'lucide-react';
+import { type ReactNode } from 'react';
 
 import { Paper } from '@/components/ui/paper';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -10,8 +9,8 @@ import { type components } from '@/lib/api/schema';
 
 import { SurveyQuestionHistogramBar } from './survey-question-histogram-bar';
 interface SurveyQuestionHistogramProps {
-  title: string;
-  tooltip: string;
+  title: ReactNode;
+  tooltip: ReactNode;
   surveyQuestion: components['schemas']['SurveyQuestionResource'];
 }
 
@@ -50,7 +49,7 @@ function SurveyQuestionHistogram({
       <div
         className={cntl`
           relative 
-          [--question-bar-label-width:70px] 
+          [--question-bar-label-width:85px] 
           sm:[--question-bar-label-width:100px]
         `}
       >

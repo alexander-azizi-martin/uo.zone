@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { msg, Trans } from '@lingui/macro';
 
 import { SurveyQuestionHistogram } from '@/components/common/survey-question-histogram';
 import { client } from '@/lib/api/client';
@@ -14,7 +14,7 @@ interface CourseEvaluationsPageProps {
 export default async function CourseEvaluationsPage({
   params,
 }: CourseEvaluationsPageProps) {
-  await loadI18n(params.locale);
+  const i18n = await loadI18n(params.locale);
 
   const survey = (
     await client.GET('/courses/{course}/survey', {
@@ -46,8 +46,8 @@ export default async function CourseEvaluationsPage({
 
         return (
           <SurveyQuestionHistogram
-            key={title}
-            title={title}
+            key={title.id}
+            title={i18n._(title)}
             tooltip={question}
             surveyQuestion={surveyQuestion}
           />
@@ -60,17 +60,17 @@ export default async function CourseEvaluationsPage({
 // prettier-ignore
 const COURSE_QUESTIONS = {
   // en
-  'The course is well organized': 'Organized',
-  'Course expectations are clearly explained': 'Expectations',
-  'I have learned a lot in this course': 'Learning',
-  'I would recommend this course to another student': 'Recommend',
-  'In comparison with my other courses, the workload for this course is': 'Workload',
-  'Assignments and/or exams closely reflect what is covered in class': 'Activities',
+  'The course is well organized': msg`Organized`,
+  'Course expectations are clearly explained': msg`Clear Expectations`,
+  'I have learned a lot in this course': msg`Learned a Lot`,
+  'I would recommend this course to another student': msg`Recommend`,
+  'In comparison with my other courses, the workload for this course is': msg`Workload`,
+  'Assignments and/or exams closely reflect what is covered in class': msg`Fair Assessments`,
   // fr
-  'Le cours est bien organisé': 'Organisé',
-  'Les attentes envers les étudiants sont clairement expliquées': 'Attentes',
-  'J\'ai beaucoup appris dans ce cours': 'Apprentissage',
-  'Je recommanderais ce cours à un autre étudiant': 'Recommander',
-  'Comparée à celle de mes autres cours, la charge de travail pour ce cours est': 'Charge de travail',
-  'Les travaux et/ou les examens reflètent bien le contenu du cours': 'Activités',
+  'Le cours est bien organisé': msg`Organized`,
+  'Les attentes envers les étudiants sont clairement expliquées': msg`Clear Expectations`,
+  'J\'ai beaucoup appris dans ce cours': msg`Learned a Lot`,
+  'Je recommanderais ce cours à un autre étudiant': msg`Recommend`,
+  'Comparée à celle de mes autres cours, la charge de travail pour ce cours est': msg`Workload`,
+  'Les travaux et/ou les examens reflètent bien le contenu du cours': msg`Fair Assessments`,
 };

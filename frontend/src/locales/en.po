@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/grades/grade-summary.tsx:115
+#: src/components/grades/grade-summary.tsx:114
 msgid "{0} {1, plural, one {student} other {students}}"
 msgstr "{0} {1, plural, one {student} other {students}}"
 
@@ -65,9 +65,24 @@ msgstr "All Courses For {0}"
 msgid "All Professors"
 msgstr "All Professors"
 
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:66
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:72
+msgid "Available"
+msgstr "Available"
+
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:85
 msgid "Average"
 msgstr "Average"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:64
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:71
+msgid "Clear Communication"
+msgstr "Clear Communication"
+
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:64
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:71
+msgid "Clear Expectations"
+msgstr "Clear Expectations"
 
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:82
 msgid "Code"
@@ -98,6 +113,11 @@ msgstr "English Equivalent"
 msgid "Evaluations"
 msgstr "Evaluations"
 
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:68
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:75
+msgid "Fair Assessments"
+msgstr "Fair Assessments"
+
 #: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:125
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:128
 msgid "Fall"
@@ -127,6 +147,15 @@ msgstr "French"
 msgid "French Equivalent"
 msgstr "French Equivalent"
 
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:65
+msgid "Good Feedback"
+msgstr "Good Feedback"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:68
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:74
+msgid "Good Instructions"
+msgstr "Good Instructions"
+
 #: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:69
 #: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:62
 msgid "Grades"
@@ -143,6 +172,11 @@ msgstr "https://uozone2.uottawa.ca/en/apps/s-reports"
 #: src/app/[locale]/components/footer.tsx:12
 msgid "https://www.uottawa.ca/about-us/aipo"
 msgstr "https://www.uottawa.ca/about-us/aipo"
+
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:65
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:72
+msgid "Learned a Lot"
+msgstr "Learned a Lot"
 
 #: src/components/search/search-nav.tsx:94
 msgid "Loading..."
@@ -164,7 +198,7 @@ msgstr "Most Common: {0} ({1}%)"
 msgid "No course matches the filters."
 msgstr "No course matches the filters."
 
-#: src/app/[locale]/(search-nav)/subject/[code]/components/virtual-course-list.tsx:40
+#: src/app/[locale]/(search-nav)/subject/[code]/components/virtual-course-list.tsx:39
 #: src/components/common/sections-summary.tsx:92
 msgid "No grade data available for this course."
 msgstr "No grade data available for this course."
@@ -187,6 +221,16 @@ msgstr "No survey data."
 msgid "Number of RateMyProfessor reviews"
 msgstr "Number of RateMyProfessor reviews"
 
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:63
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:70
+msgid "Organized"
+msgstr "Organized"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:63
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:70
+msgid "Prepared"
+msgstr "Prepared"
+
 #: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:70
 msgid "Previously Offered Terms"
 msgstr "Previously Offered Terms"
@@ -203,6 +247,11 @@ msgstr "RateMyProfessor difficulty"
 msgid "RateMyProfessor rating"
 msgstr "RateMyProfessor rating"
 
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:66
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:73
+msgid "Recommend"
+msgstr "Recommend"
+
 #: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:58
 msgid "Requirements"
 msgstr "Requirements"
@@ -211,7 +260,12 @@ msgstr "Requirements"
 msgid "Reset Filters"
 msgstr "Reset Filters"
 
-#: src/components/common/survey-question-histogram.tsx:38
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:67
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:73
+msgid "Respectful"
+msgstr "Respectful"
+
+#: src/components/common/survey-question-histogram.tsx:37
 msgid "responses"
 msgstr "responses"
 
@@ -252,11 +306,11 @@ msgstr "Subjects"
 msgid "Summer"
 msgstr "Summer"
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:100
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:104
 msgid "The {0, plural, one {professor for this course section is} other {professors for these course sections are}} not known."
 msgstr "The {0, plural, one {professor for this course section is} other {professors for these course sections are}} not known."
 
-#: src/app/[locale]/maintenance/page.tsx:17
+#: src/app/[locale]/maintenance/page.tsx:18
 msgid "The website is currently under maintenance."
 msgstr "The website is currently under maintenance."
 
@@ -268,7 +322,7 @@ msgstr "This page does not exist."
 msgid "This total also includes classes that they may not teach anymore."
 msgstr "This total also includes classes that they may not teach anymore."
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:88
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:92
 msgid "Unknown {0, plural, one {Professor} other {Professors}}"
 msgstr "Unknown {0, plural, one {Professor} other {Professors}}"
 
@@ -284,3 +338,8 @@ msgstr "View on RateMyProfessor"
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:131
 msgid "Winter"
 msgstr "Winter"
+
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:67
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:74
+msgid "Workload"
+msgstr "Workload"

@@ -34,7 +34,6 @@ function GradeSummary({
   return (
     <GradeSummaryRoot>
       <GradeSummaryHeader grades={grades} info={info}>
-        {/* text-3xl text-lg */}
         <GradeSummaryTitle size={titleSize}>{title}</GradeSummaryTitle>
 
         {subtitle && <GradeSummarySubtitle>{subtitle}</GradeSummarySubtitle>}
@@ -118,8 +117,11 @@ const GradeSummaryGraph = ({
       </Trans>
     </Tag>
 
-    <div className='flex flex-col-reverse items-center gap-2.5 sm:flex-row sm:items-start'>
+    <div className='flex flex-col-reverse items-center sm:flex-row sm:items-start'>
       <GradeHistogram grades={grades} size={size} />
+
+      <div className='prevent-hover z-10 h-2.5 w-auto self-stretch sm:h-auto sm:w-2.5'></div>
+
       <GradeDistribution grades={grades} size={size} />
     </div>
   </div>

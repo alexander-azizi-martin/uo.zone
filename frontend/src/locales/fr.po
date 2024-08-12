@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/grades/grade-summary.tsx:115
+#: src/components/grades/grade-summary.tsx:114
 msgid "{0} {1, plural, one {student} other {students}}"
 msgstr "{0} {1, plural, one {étudiant} other {étudiants}}"
 
@@ -65,9 +65,24 @@ msgstr "Tous Les Cours Pour {0}"
 msgid "All Professors"
 msgstr "Tous Les Professeurs"
 
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:66
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:72
+msgid "Available"
+msgstr "Disponible"
+
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:85
 msgid "Average"
 msgstr "Moyenne"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:64
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:71
+msgid "Clear Communication"
+msgstr "Communication Claire"
+
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:64
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:71
+msgid "Clear Expectations"
+msgstr "Attentes claires"
 
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:82
 msgid "Code"
@@ -98,6 +113,11 @@ msgstr "Équivalent Anglais"
 msgid "Evaluations"
 msgstr "Évaluations"
 
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:68
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:75
+msgid "Fair Assessments"
+msgstr "Évaluations Équitables"
+
 #: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:125
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:128
 msgid "Fall"
@@ -127,6 +147,15 @@ msgstr "Français"
 msgid "French Equivalent"
 msgstr "Équivalent Français"
 
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:65
+msgid "Good Feedback"
+msgstr "Bons Retours"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:68
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:74
+msgid "Good Instructions"
+msgstr "Bonnes Instructions"
+
 #: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:69
 #: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:62
 msgid "Grades"
@@ -143,6 +172,11 @@ msgstr "https://uozone2.uottawa.ca/fr/apps/s-reports?language=fr"
 #: src/app/[locale]/components/footer.tsx:12
 msgid "https://www.uottawa.ca/about-us/aipo"
 msgstr "https://www.uottawa.ca/notre-universite/baipvp"
+
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:65
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:72
+msgid "Learned a Lot"
+msgstr "Beaucoup Appris"
 
 #: src/components/search/search-nav.tsx:94
 msgid "Loading..."
@@ -164,7 +198,7 @@ msgstr "Le plus fréquent: {0} ({1}%)"
 msgid "No course matches the filters."
 msgstr "Aucun cours ne correspond aux filtres."
 
-#: src/app/[locale]/(search-nav)/subject/[code]/components/virtual-course-list.tsx:40
+#: src/app/[locale]/(search-nav)/subject/[code]/components/virtual-course-list.tsx:39
 #: src/components/common/sections-summary.tsx:92
 msgid "No grade data available for this course."
 msgstr "Aucune donnée sur les notes n'est disponible pour ce cours."
@@ -187,6 +221,16 @@ msgstr "Pas de données d'enquête."
 msgid "Number of RateMyProfessor reviews"
 msgstr "Nombre d’avis RateMyProfessor"
 
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:63
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:70
+msgid "Organized"
+msgstr "Organisé"
+
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:63
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:70
+msgid "Prepared"
+msgstr "Préparé"
+
 #: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:70
 msgid "Previously Offered Terms"
 msgstr "Terme proposées précédemment"
@@ -203,6 +247,11 @@ msgstr "Difficulté RateMyProfessor"
 msgid "RateMyProfessor rating"
 msgstr "Note RateMyProfessor"
 
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:66
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:73
+msgid "Recommend"
+msgstr "Recommander"
+
 #: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:58
 msgid "Requirements"
 msgstr "Exigences"
@@ -211,7 +260,12 @@ msgstr "Exigences"
 msgid "Reset Filters"
 msgstr "Réinitialiser les filtres"
 
-#: src/components/common/survey-question-histogram.tsx:38
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:67
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:73
+msgid "Respectful"
+msgstr "Respectueux"
+
+#: src/components/common/survey-question-histogram.tsx:37
 msgid "responses"
 msgstr "réponses"
 
@@ -252,11 +306,11 @@ msgstr "Sujets"
 msgid "Summer"
 msgstr "Été"
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:100
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:104
 msgid "The {0, plural, one {professor for this course section is} other {professors for these course sections are}} not known."
 msgstr "{0, plural, one {Le professeur de cette section} other {Les professeurs de ces sections}} de cours n'est pas connu."
 
-#: src/app/[locale]/maintenance/page.tsx:17
+#: src/app/[locale]/maintenance/page.tsx:18
 msgid "The website is currently under maintenance."
 msgstr "Le site web est actuellement en maintenance."
 
@@ -268,7 +322,7 @@ msgstr "Cette page n'existe pas."
 msgid "This total also includes classes that they may not teach anymore."
 msgstr "Ce total comprend également les classes qu'ils n'enseignent peut-être plus."
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:88
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:92
 msgid "Unknown {0, plural, one {Professor} other {Professors}}"
 msgstr "{0, plural, one {Professeur} other {Professeurs}} Inconnus"
 
@@ -284,3 +338,8 @@ msgstr "Vue sur RateMyProfessor"
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:131
 msgid "Winter"
 msgstr "Hiver"
+
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:67
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:74
+msgid "Workload"
+msgstr "Charge de Travail"

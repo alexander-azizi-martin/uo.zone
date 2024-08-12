@@ -68,7 +68,11 @@ export default async function GradeCoursePage({ params }: CoursePageProps) {
                 <UnknownProfessor professor={professor} />
               )
             }
-            href={professor.id !== 0 ? `/professor/${professor.publicId}` : undefined}
+            href={
+              professor.id !== 0
+                ? `/professor/${professor.publicId}`
+                : undefined
+            }
             summarize={professor}
           />
         ))}
@@ -107,7 +111,7 @@ function UnknownProfessor({ professor }: UnknownProfessorProps) {
             not known.
           </Trans>
         }
-        className='text-center text-sm'
+        className='text-center text-sm font-normal'
       >
         <InfoIcon size={14} />
       </Tooltip>

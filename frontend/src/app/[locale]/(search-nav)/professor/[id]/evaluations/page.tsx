@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { msg,Trans } from '@lingui/macro';
 
 import { SurveyQuestionHistogram } from '@/components/common/survey-question-histogram';
 import { client } from '@/lib/api/client';
@@ -14,7 +14,7 @@ interface CourseEvaluationsPageProps {
 export default async function CourseEvaluationsPage({
   params,
 }: CourseEvaluationsPageProps) {
-  await loadI18n(params.locale);
+  const i18n = await loadI18n(params.locale);
 
   const survey = (
     await client.GET('/professors/{professor}/survey', {
@@ -46,8 +46,8 @@ export default async function CourseEvaluationsPage({
 
         return (
           <SurveyQuestionHistogram
-            key={title}
-            title={title}
+            key={title.id}
+            title={i18n._(title)}
             tooltip={question}
             surveyQuestion={surveyQuestion}
           />
@@ -60,16 +60,16 @@ export default async function CourseEvaluationsPage({
 // prettier-ignore
 const PROFESSOR_QUESTIONS = {
   // en
-  'I find the professor well prepared for class': 'Prepared',
-  'I think the professor conveys the subject matter effectively': 'Communication',
-  'The professor\'s feedback contributes to my learning': 'Feedback',
-  'The professor is available to address questions outside of class': 'Availability',
-  'The professor shows respect towards the students': 'Respect',
-  'Instructions for completing activities and assignments are clear': 'Instructions',
+  'I find the professor well prepared for class': msg`Prepared`,
+  'I think the professor conveys the subject matter effectively': msg`Clear Communication`,
+  'The professor\'s feedback contributes to my learning': msg`Good Feedback`,
+  'The professor is available to address questions outside of class': msg`Available`,
+  'The professor shows respect towards the students': msg`Respectful`,
+  'Instructions for completing activities and assignments are clear': msg`Good Instructions`,
   // fr
-  'J\'estime que le professeur prépare bien ses cours': 'Préparé',
-  'J\'estime que le professeur communique efficacement la matière': 'Communication',
-  'Le professeur est disponible pour répondre aux questions en dehors des heures de cours': 'Disponibilité',
-  'Le professeur fait preuve de respect envers les étudiants': 'Respect',
-  'Les instructions sur les activités et les travaux à faire sont claires': 'Instructions',
+  'J\'estime que le professeur prépare bien ses cours': msg`Prepared`,
+  'J\'estime que le professeur communique efficacement la matière': msg`Clear Communication`,
+  'Le professeur est disponible pour répondre aux questions en dehors des heures de cours': msg`Available`,
+  'Le professeur fait preuve de respect envers les étudiants': msg`Respectful`,
+  'Les instructions sur les activités et les travaux à faire sont claires': msg`Good Instructions`,
 };

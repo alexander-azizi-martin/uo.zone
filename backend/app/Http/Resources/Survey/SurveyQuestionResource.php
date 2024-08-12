@@ -15,15 +15,13 @@ class SurveyQuestionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $this->responses->sortByDesc('value');
-
         return [
             'question' => $this->question,
             /** @var float|null */
             'score' => $this->score,
             /** @var int */
             'totalResponses' => $this->total_responses,
-            'responses' => SurveyResponseResource::collection($this->responses),
+            'responses' => SurveyResponseResource::collection($this->responses->sortByDesc('value')),
         ];
     }
 }
