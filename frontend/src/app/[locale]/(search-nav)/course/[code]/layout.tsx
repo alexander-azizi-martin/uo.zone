@@ -24,7 +24,10 @@ export default async function CoursePage({
 
   const course = (
     await client.GET('/courses/{course}', {
-      params: { path: { course: params.code } },
+      params: {
+        path: { course: params.code },
+        header: { 'Accept-Language': params.locale },
+      },
     })
   ).data!;
 
