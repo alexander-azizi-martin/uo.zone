@@ -1,6 +1,6 @@
 import debounce from 'lodash.debounce';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { client } from '@/lib/api/client';
 import { type components } from '@/lib/api/schema';
@@ -52,7 +52,16 @@ function useSearchResults(query: string) {
     }
   }, [query, updateResults]);
 
-  return { searching, results, loading: searching && !results };
+  const stopSearching = useCallback(() => {
+    setSearching(false);
+  }, []);
+
+  return {
+    searching,
+    stopSearching,
+    results,
+    loading: searching && !results,
+  };
 }
 
 export { useSearchResults };

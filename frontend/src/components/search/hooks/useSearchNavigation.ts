@@ -42,7 +42,13 @@ function useSearchNavigation(searchBar: HTMLInputElement | null | undefined) {
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (document.activeElement === searchBar) {
+      const selectedNode =
+        selectedIndex.current > -1 ? resultNodes[selectedIndex.current] : null;
+
+      if (
+        document.activeElement === searchBar ||
+        document.activeElement !== selectedNode
+      ) {
         selectedIndex.current = -1;
       }
 

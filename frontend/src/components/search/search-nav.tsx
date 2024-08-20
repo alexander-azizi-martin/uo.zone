@@ -41,7 +41,8 @@ function SearchNav({
 
   const pathname = usePathname();
   const [query, setQuery] = useState('');
-  const { searching, loading, results } = useSearchResults(query);
+  const { searching, stopSearching, loading, results } =
+    useSearchResults(query);
 
   useEffect(() => {
     setQuery('');
@@ -60,6 +61,11 @@ function SearchNav({
       type='single'
       value={searching ? 'search-results' : 'content'}
       className='w-full pt-8'
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          stopSearching();
+        }
+      }}
     >
       <SearchBar
         {...searchBarProps}
