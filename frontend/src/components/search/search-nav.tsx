@@ -62,6 +62,14 @@ function SearchNav({
       type='single'
       value={searching ? 'search-results' : 'content'}
       className='w-full pt-8'
+      onClick={(event) => {
+        if (
+          event.target instanceof HTMLAnchorElement &&
+          (event.target as HTMLAnchorElement).href === window.location.href
+        ) {
+          setQuery('');
+        }
+      }}
       onKeyDown={(event) => {
         if (event.key === 'Escape') {
           stopSearching();
