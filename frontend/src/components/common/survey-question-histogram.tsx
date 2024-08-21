@@ -39,10 +39,10 @@ function SurveyQuestionHistogram({
         </div>
 
         <div className='flex items-start gap-2'>
-          <h2 className='text-3xl text-black sm:text-4xl md:text-5xl'>
+          <h2 className='text-3xl text-foreground sm:text-4xl md:text-5xl'>
             {surveyQuestion.score?.toFixed(2)}
           </h2>
-          <h3 className='text-md pt-1 text-black sm:text-lg md:text-xl'>/ 5</h3>
+          <h3 className='text-md pt-1 text-foreground sm:text-lg md:text-xl'>/ 5</h3>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ function SurveyQuestionHistogramPercentBoundary({
       <div
         className={cntl`
           h-full w-px -translate-x-1/2
-          border-l border-solid border-black/10 
+          border-l border-solid border-foreground/10 
         `}
       />
 

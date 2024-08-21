@@ -34,7 +34,7 @@ function GradeHistogramBar({
     >
       <div className='relative flex h-[--grade-histogram-bar-height] grow flex-col'>
         <div
-          className={`w-full ${Grade.barColor(letter)} opacity-10`}
+          className={`w-full ${Grade.barColor(letter)} opacity-10 dark:opacity-20`}
           style={{
             height: `calc(100% * ${barHeightPercent})`,
           }}
@@ -47,7 +47,7 @@ function GradeHistogramBar({
         />
 
         {hovering && (
-          <div className='absolute left-1/2 h-full w-0.5 -translate-x-1/2 bg-black/20' />
+          <div className='absolute left-1/2 h-full w-0.5 -translate-x-1/2 bg-foreground/20' />
         )}
       </div>
 

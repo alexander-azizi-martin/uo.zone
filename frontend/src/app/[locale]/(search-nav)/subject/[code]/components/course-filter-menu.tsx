@@ -53,7 +53,7 @@ function CourseFilterMenu() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button className='h-8 font-semibold ' variant='outline'>
+        <Button className='h-8 font-semibold' variant='outline'>
           <Trans>Filter</Trans>
           <SlidersHorizontalIcon className='ml-1' size={14} />
         </Button>

@@ -49,7 +49,7 @@ export default async function CoursePage({
           <p className='my-4 text-sm'>
             <ExternalLink
               href={professor.rmpReview.link}
-              className='text-sm text-gray-600'
+              className='text-sm text-foreground/75'
             >
               <Trans>View on RateMyProfessor</Trans>
             </ExternalLink>

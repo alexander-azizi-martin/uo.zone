@@ -12,7 +12,7 @@ const CourseLink = forwardRef<
       {...props}
       ref={ref}
       className={cn(
-        'text-[#8f001a] underline decoration-1 hover:decoration-2',
+        'text-geegee-light underline decoration-1 hover:decoration-2',
         className,
       )}
     />

@@ -16,35 +16,32 @@
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    /* --muted: 347.37 21.35% 82.55%; */
-    --muted: 210 40% 96.1%;
+    --muted: 240 4.8% 95.9%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 240 4.8% 95.9%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 347.37 21.35% 82.55%;
-    /* --border: 214.3 31.8% 91.4%; */
-    --input: 347.37 21.35% 82.55%;
-    /* --input: 214.3 31.8% 91.4%; */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
 
     --geegee: 342.5 55.38% 25.49%;
-    --garnet: 349.09 100% 28.04%;
+    --geegee-light: 349.09 100% 28.04%;
 
     --animate-accordion-up: accordion-down 0.35s ease-out;
     --animate-accordion-down: accordion-up 0.35s ease-out;
   }
 
-  .dark {
+  :root[data-theme='dark'] {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -72,6 +69,9 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --geegee: 349.09 100% 38.04%;
+    --geegee-light: 342.5 55.38% 54.49%;
   }
 
   * {
@@ -79,7 +79,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background font-inter text-foreground;
   }
 
   h1,
@@ -88,7 +88,7 @@
   h4,
   h5,
   h6 {
-    @apply font-plex font-bold tracking-tighter leading-tight text-geegee;
+    @apply font-plex font-bold leading-tight tracking-tighter text-geegee;
   }
 
   h2 {
@@ -114,7 +114,7 @@
     left: 0;
     z-index: 1;
     pointer-events: auto;
-    content: "";
+    content: '';
     background-color: rgba(0, 0, 0, 0);
   }
 
@@ -141,9 +141,11 @@
 }
 
 #nprogress .bar {
-  background: theme('colors.garnet') !important;
+  background: theme('colors.geegee-light') !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px theme('colors.garnet'), 0 0 5px theme('colors.garnet');
+  box-shadow:
+    0 0 10px theme('colors.geegee-light'),
+    0 0 5px theme('colors.geegee-light');
 }

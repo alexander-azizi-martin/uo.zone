@@ -29,7 +29,7 @@ async function Footer() {
           </Button>
         </div>
 
-        <p className='text-center text-sm font-light text-gray-600'>
+        <p className='text-center text-sm font-light text-foreground/60'>
           <Trans>
             Data from Fall 2017 to Winter 2023 provided by{' '}
             <ExternalLink href={aipoUrl}>
@@ -39,7 +39,7 @@ async function Footer() {
           </Trans>
         </p>
 
-        <p className='text-center text-sm font-light text-gray-600'>
+        <p className='text-center text-sm font-light text-foreground/60'>
           <ExternalLink
             href='https://github.com/alexander-azizi-martin/uo.zone'
             data-umami-event='github'

@@ -99,7 +99,7 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
         {pairwise(heightPercents).map(([currentPercent, nextPercent], i) => (
           <Trapezoid
             key={i}
-            className='text-white/90'
+            className='text-background/80'
             width={`calc(var(--grade-distribution-width) * ${1 / NUM_BINS})`}
             heights={[
               `calc(var(--grade-distribution-height) * ${currentPercent})`,
@@ -117,9 +117,9 @@ function GradeDistribution({ grades, size }: GradeDistributionProps) {
 
             <p
               className={cntl`
-              color-[#1B202B] absolute left-0 right-0 m-auto w-max 
-              select-none text-xs font-bold
-            `}
+                color-[#1B202B] absolute left-0 right-0 m-auto 
+                w-max select-none text-xs font-bold
+              `}
             >
               <Trans>
                 {grades.distribution[selectedGrade]}{' '}
@@ -167,17 +167,17 @@ function PinPoint({ x, y }: PinPointProps) {
   return (
     <>
       <div
-        className='absolute h-0.5 w-full -translate-y-1/2 bg-black/10'
+        className='absolute h-0.5 w-full -translate-y-1/2 bg-foreground/10'
         style={{ top: y }}
       />
       <div
-        className='absolute h-full w-0.5 -translate-x-1/2 bg-black/20'
+        className='absolute h-full w-0.5 -translate-x-1/2 bg-foreground/20'
         style={{ left: x }}
       />
       <div
         className={cntl`
           absolute size-1 -translate-x-1/2 -translate-y-1/2 
-          rounded-full bg-black/40
+          rounded-full bg-foreground/40
         `}
         style={{ left: x, top: y }}
       />

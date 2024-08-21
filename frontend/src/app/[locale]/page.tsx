@@ -42,6 +42,7 @@ export default function IndexPage() {
             sm:pl-8
             md:top-24 md:opacity-50 
             lg:top-40
+            dark:md:opacity-80
           `}
         >
           <img
@@ -59,7 +60,7 @@ export default function IndexPage() {
       <SearchNav
         onSearchOpen={setSearching.on}
         onSearchClose={setSearching.off}
-        searchBarProps={{ autoFocus: true, className: 'w-full md:w-3/5' }}
+        searchBarProps={{ autoFocus: true, className: 'md:w-3/5' }}
       />
     </div>
   );

@@ -22,7 +22,7 @@ function createGradient(gradientData) {
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
+  darkMode: ['selector', '[data-theme="dark"]'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -41,7 +41,7 @@ module.exports = {
     extend: {
       colors: {
         geegee: 'hsl(var(--geegee))',
-        garnet: 'hsl(var(--garnet))',
+        'geegee-light': 'hsl(var(--geegee-light))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

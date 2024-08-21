@@ -10,7 +10,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
   ({ className, ...props }, ref) => (
     <div
       className={cn(
-        'relative flex rounded-lg shadow-[0_0_20px_rgba(111,19,29,0.1)]',
+        'relative flex rounded-lg shadow-[0_0_20px] shadow-geegee-light/10 dark:shadow-geegee-light/25',
         className,
       )}
     >
@@ -25,7 +25,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
         className={cntl`
           h-10 w-full rounded-[inherit] pl-10 pr-4 outline-none 
           transition-shadow placeholder:text-gray-500 
-          focus:shadow-[0_0_20px_rgba(111,19,29,0.35)]
+          focus:shadow-[0_0_20px] focus:shadow-geegee-light/35
         `}
       />
     </div>

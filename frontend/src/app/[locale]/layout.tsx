@@ -4,6 +4,7 @@ import 'nprogress/nprogress.css';
 import { IBM_Plex_Sans, Inter } from 'next/font/google';
 import Script from 'next/script';
 import { AxiomWebVitals } from 'next-axiom';
+import { ThemeProvider } from 'next-themes';
 import { type PropsWithChildren } from 'react';
 
 import { loadI18n } from '@/lib/i18n';
@@ -37,7 +38,7 @@ export default async function LanguageLayout({
   const i18n = await loadI18n(params.locale);
 
   return (
-    <html lang={params.locale}>
+    <html lang={params.locale} suppressHydrationWarning>
       <head>
         <title>UO Grades</title>
 
@@ -55,18 +56,20 @@ export default async function LanguageLayout({
         <meta property='twitter:description' content={OPEN_GRAPH.description} />
       </head>
       <body className={`${inter.variable} ${ibmPlexSans.variable}`}>
-        <I18nProvider locale={i18n.locale} messages={i18n.messages}>
-          <Main>{children}</Main>
-        </I18nProvider>
+        <ThemeProvider disableTransitionOnChange>
+          <I18nProvider locale={i18n.locale} messages={i18n.messages}>
+            <Main>{children}</Main>
+          </I18nProvider>
 
-        <AxiomWebVitals />
+          <AxiomWebVitals />
 
-        <Script
-          async
-          src={'/stats/script.js'}
-          data-domains={'uo.zone'}
-          data-website-id={'fddef98b-d861-4a60-a798-f74bb07995cc'}
-        />
+          <Script
+            async
+            src={'/stats/script.js'}
+            data-domains={'uo.zone'}
+            data-website-id={'fddef98b-d861-4a60-a798-f74bb07995cc'}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

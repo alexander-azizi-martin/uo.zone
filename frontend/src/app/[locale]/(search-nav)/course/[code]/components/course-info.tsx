@@ -42,7 +42,7 @@ function CourseInfo({ course }: CourseInfoProps) {
           <div className='flex flex-wrap gap-2'>
             {course.components.map((component) => (
               <Badge
-                className='w-max-content bg-muted text-center text-black'
+                className='w-max-content bg-muted text-center text-foreground'
                 size='sm'
                 key={component}
               >
@@ -73,7 +73,7 @@ function CourseInfo({ course }: CourseInfoProps) {
           <div className='flex flex-wrap gap-2'>
             {terms.map((term) => (
               <Badge
-                className='w-max-content bg-muted text-center text-black'
+                className='w-max-content bg-muted text-center text-foreground'
                 size='sm'
                 key={term}
               >

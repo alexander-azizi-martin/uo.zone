@@ -5,16 +5,16 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const paperVariants = cva(
-  'block h-full w-full rounded-lg text-left text-base shadow-[0px_0px_4px] shadow-garnet/10',
+  'block h-full w-full rounded-lg text-left text-base shadow-[0px_0px_4px] shadow-geegee-light/20 dark:shadow-geegee-light/80',
   {
     variants: {
       variant: {
         default: '',
-        link: 'preventable-hover:cursor-pointer preventable-hover:shadow-[0_0_6px] preventable-hover:shadow-garnet/20 focus-visible:outline-geegee',
+        link: 'preventable-hover:cursor-pointer preventable-hover:shadow-[0_0_6px] preventable-hover:shadow-geegee-light/30 preventable-hover:dark:shadow-geegee-light/90 focus-visible:outline-geegee',
       },
       size: {
         md: 'py-3 px-5',
-        lg: 'py-9 px-5 shadow-[0_0_4px] shadow-garnet/20',
+        lg: 'py-9 px-5 shadow-[0_0_6px] shadow-geegee-light/30 dark:shadow-geegee-light/90',
       },
     },
     defaultVariants: {

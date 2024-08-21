@@ -52,7 +52,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
             title={<Trans>All Courses</Trans>}
             titleSize={'3xl'}
             info={
-              <p className='mt-2 text-sm text-gray-600'>
+              <p className='mt-2 text-sm text-foreground/60'>
                 <Trans>
                   This total also includes classes that they may not teach
                   anymore.

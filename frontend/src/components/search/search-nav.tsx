@@ -12,6 +12,7 @@ import {
   AccordionItem,
 } from '@/components/ui/accordion';
 import { Spinner } from '@/components/ui/spinner';
+import { cn } from '@/lib/utils';
 
 import { useResizeOnAnimation } from './hooks/useResizeOnAnimation';
 import { useSearchResults } from './hooks/useSearchResults';
@@ -71,6 +72,7 @@ function SearchNav({
         {...searchBarProps}
         ref={searchBarRef}
         value={query}
+        className={cn('mr-12', searchBarProps?.className)}
         onChange={(event) => {
           setQuery(event.target.value);
         }}

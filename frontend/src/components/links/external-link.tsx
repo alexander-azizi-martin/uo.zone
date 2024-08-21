@@ -14,7 +14,7 @@ function ExternalLink({
       href={href}
       target='_blank'
       className={cn(
-        'inline-flex items-center font-medium text-gray-700 hover:underline',
+        'inline-flex items-center font-medium text-foreground/70 hover:underline',
         className,
       )}
       {...props}

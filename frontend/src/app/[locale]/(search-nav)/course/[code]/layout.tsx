@@ -49,7 +49,7 @@ export default async function CoursePage({
 
       <div className='mt-1 flex flex-wrap gap-2'>
         {course.units !== null && (
-          <Badge className='bg-muted text-black'>
+          <Badge className='bg-muted text-foreground'>
             <Trans>
               {course.units}{' '}
               <Plural value={course.units} one='unit' other='units' />

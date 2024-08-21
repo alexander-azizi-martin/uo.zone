@@ -23,7 +23,7 @@ function TabLink({ href, ...props }: LinkProps) {
       href={href}
       className={cn(
         '-mb-0.5 border-b-2 border-transparent px-4 py-2 text-base',
-        active && 'border-garnet text-garnet',
+        active && 'border-geegee-light text-geegee-light',
       )}
       {...props}
     />

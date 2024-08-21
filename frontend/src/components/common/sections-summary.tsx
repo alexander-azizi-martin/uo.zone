@@ -62,7 +62,8 @@ function SectionsSummary({ title, href, summarize }: SectionsSummaryProps) {
                   <button
                     className={cntl`
                       prevent-hover absolute -left-5 -top-0.5 z-10 flex size-6
-                      items-center justify-center rounded-full p-0 hover:bg-black/5
+                      items-center justify-center rounded-full p-0 hover:bg-foreground/5 
+                      dark:hover:bg-foreground/15
                     `}
                   >
                     <ChevronDownIcon
