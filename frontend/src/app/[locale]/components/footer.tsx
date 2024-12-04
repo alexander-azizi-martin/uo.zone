@@ -41,15 +41,15 @@ async function Footer() {
 
         <p className='text-center text-sm font-light text-foreground/60'>
           <ExternalLink
-            href='https://linkedin.com/in/alexander-azizi-martin'
-            data-umami-event='linkedin'
+            href='https://github.com/alexander-azizi-martin/uo.zone'
+            data-umami-event='github'
           >
             Github
           </ExternalLink>{' '}
           <Trans>maintained by</Trans>{' '}
           <ExternalLink
-            href='mailto:alexander.azizi-martin@uo.zone'
-            data-umami-event='alexander.azizi-martin@uo.zone'
+            href='https://linkedin.com/in/alexander-azizi-martin'
+            data-umami-event='linkedin'
           >
             Alexander Azizi-Martin
           </ExternalLink>
