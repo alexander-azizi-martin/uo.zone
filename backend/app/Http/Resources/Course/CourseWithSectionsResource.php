@@ -2,12 +2,13 @@
 
 namespace App\Http\Resources\Course;
 
-use App\Http\Resources\GradesResource;
+use App\Http\Resources\CourseSection\CourseSectionResource;
+use App\Http\Resources\CourseSection\GradesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin App\Models\Course\Course
+ * @mixin App\Models\Course
  */
 class CourseWithSectionsResource extends JsonResource
 {
@@ -25,7 +26,7 @@ class CourseWithSectionsResource extends JsonResource
             /** @var array<string> */
             'languages' => $this->languages->filter()->keys(),
             /** @var array<string> */
-            'components' => $this->components->pluck('component'),
+            'components' => $this->components,
             'grades' => new GradesResource($this->grades),
             'sections' => CourseSectionResource::collection($this->sections),
         ];

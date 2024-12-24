@@ -1,16 +1,16 @@
 import { Trans } from '@lingui/macro';
 
-import { SectionsSummary } from '@/components/common/sections-summary';
 import { GradeSummary } from '@/components/grades/grade-summary';
+import { SectionsSummary } from '@/components/sections-summary';
 import { Paper } from '@/components/ui/paper';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
-
+import { type Locale } from '@/lingui.config';
 
 interface ProfessorPageProps {
   params: {
     id: number;
-    locale: string;
+    locale: Locale;
   };
 }
 
@@ -25,7 +25,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
       },
     })
   ).data!;
-
+  console.log(professor);
+  console.log('jdjskalfkjdhsf')
   const courses = (
     await client.GET('/professors/{professor}/courses', {
       params: {
@@ -35,6 +36,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
     })
   ).data!;
 
+  console.log(courses);
   if (courses.length === 0) {
     return (
       <div>

@@ -36,8 +36,7 @@ class SubjectController extends Controller
                 'subject',
                 'sections',
                 'grades',
-                'frenchEquivalent',
-                'englishEquivalent',
+                'equivalentCourses',
             ],
         ]);
 

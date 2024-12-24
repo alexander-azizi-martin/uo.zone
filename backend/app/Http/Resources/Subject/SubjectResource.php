@@ -19,7 +19,7 @@ class SubjectResource extends JsonResource
 
         return [
             'code' => Str::upper($this->code),
-            'subject' => $this->subject,
+            'title' => $this->title,
             'faculty' => $this->faculty,
         ];
     }

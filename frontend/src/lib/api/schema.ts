@@ -52,14 +52,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/courses/{course}/survey": {
+    "/courses/{course}/survey-responses": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["course.getCourseSurvey"];
+        get: operations["course.getCourseSurveyResponses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -116,14 +116,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/professors/{professor}/survey": {
+    "/professors/{professor}/survey-responses": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["professor.getProfessorSurvey"];
+        get: operations["professor.getProfessorSurveyResponses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -209,8 +209,10 @@ export interface components {
             units: number | null;
             languages: string[];
             components: string[];
-            englishEquivalent: string | null;
-            frenchEquivalent: string | null;
+            equivalentCourse: {
+                code: string;
+                language: string;
+            } | null;
             previousTermIds: number[];
             grades: components["schemas"]["GradesResource"];
             subject: components["schemas"]["SubjectResource"];
@@ -240,12 +242,12 @@ export interface components {
         };
         /** GradesResource */
         GradesResource: {
-            total: number;
             mean: number | null;
             /** @enum {string|null} */
             median: "A+" | "A" | "A-" | "B+" | "B" | "C+" | "C" | "D+" | "D" | "E" | "F" | "EIN" | "NS" | "NC" | "ABS" | "P" | "S" | null;
             /** @enum {string|null} */
             mode: "A+" | "A" | "A-" | "B+" | "B" | "C+" | "C" | "D+" | "D" | "E" | "F" | "EIN" | "NS" | "NC" | "ABS" | "P" | "S" | null;
+            total: number;
             distribution: {
                 "A+": number;
                 A: number;
@@ -299,33 +301,41 @@ export interface components {
         /** SubjectResource */
         SubjectResource: {
             code: string;
-            subject: string;
+            title: string;
             faculty: string;
         };
         /** SubjectSearchRecourse */
         SubjectSearchRecourse: {
             code: string;
-            subject: string;
+            title: string;
         };
         /** SubjectWithGradesResource */
         SubjectWithGradesResource: {
             code: string;
-            subject: string;
+            title: string;
             faculty: string;
             coursesCount: number;
             grades: components["schemas"]["GradesResource"];
         };
-        /** SurveyQuestionResource */
-        SurveyQuestionResource: {
+        /** SurveyResponseRecourse */
+        SurveyResponseRecourse: {
             question: string;
-            score: number | null;
+            options: {
+                A?: string;
+                B?: string;
+                C?: string;
+                D?: string;
+                E?: string;
+                F?: string;
+            };
             totalResponses: number;
-            responses: components["schemas"]["SurveyResponseResource"][];
-        };
-        /** SurveyResponseResource */
-        SurveyResponseResource: {
-            response: string;
-            numResponses: number;
+            score: number | null;
+            A: number;
+            B: number;
+            C: number;
+            D: number;
+            E: number;
+            F: number;
         };
     };
     responses: {
@@ -352,7 +362,7 @@ export interface components {
                     message: string;
                     /** @description A detailed description of each field that failed validation. */
                     errors: {
-                        [key: string]: string[] | undefined;
+                        [key: string]: string[];
                     };
                 };
             };
@@ -367,9 +377,11 @@ export type $defs = Record<string, never>;
 export interface operations {
     "course.getAllCourses": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path?: never;
             cookie?: never;
@@ -388,9 +400,11 @@ export interface operations {
     };
     "course.getCourse": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The course code */
@@ -414,9 +428,11 @@ export interface operations {
     };
     "course.getCourseProfessors": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The course code */
@@ -438,11 +454,13 @@ export interface operations {
             404: components["responses"]["ModelNotFoundException"];
         };
     };
-    "course.getCourseSurvey": {
+    "course.getCourseSurveyResponses": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The course code */
@@ -452,13 +470,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Array of `SurveyQuestionResource` */
+            /** @description Array of `SurveyResponseRecourse` */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SurveyQuestionResource"][];
+                    "application/json": components["schemas"]["SurveyResponseRecourse"][];
                 };
             };
             404: components["responses"]["ModelNotFoundException"];
@@ -466,9 +484,11 @@ export interface operations {
     };
     "professor.getAllProfessors": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path?: never;
             cookie?: never;
@@ -487,9 +507,11 @@ export interface operations {
     };
     "professor.getProfessor": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The professor public id */
@@ -513,9 +535,11 @@ export interface operations {
     };
     "professor.getProfessorCourses": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The professor public id */
@@ -537,11 +561,13 @@ export interface operations {
             404: components["responses"]["ModelNotFoundException"];
         };
     };
-    "professor.getProfessorSurvey": {
+    "professor.getProfessorSurveyResponses": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The professor public id */
@@ -551,13 +577,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Array of `SurveyQuestionResource` */
+            /** @description Array of `SurveyResponseRecourse` */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SurveyQuestionResource"][];
+                    "application/json": components["schemas"]["SurveyResponseRecourse"][];
                 };
             };
             404: components["responses"]["ModelNotFoundException"];
@@ -565,9 +591,11 @@ export interface operations {
     };
     "search.search": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path?: never;
             cookie?: never;
@@ -597,9 +625,11 @@ export interface operations {
     };
     "subject.getAllSubjects": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path?: never;
             cookie?: never;
@@ -618,9 +648,11 @@ export interface operations {
     };
     "subject.getSubject": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The subject code */
@@ -644,9 +676,11 @@ export interface operations {
     };
     "subject.getSubjectCourses": {
         parameters: {
-            query?: never;
+            query?: {
+                covid?: boolean;
+            };
             header?: {
-                "Accept-Language"?: string;
+                "Accept-Language"?: "en" | "fr";
             };
             path: {
                 /** @description The subject code */

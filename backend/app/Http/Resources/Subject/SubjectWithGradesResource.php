@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Subject;
 
-use App\Http\Resources\GradesResource;
+use App\Http\Resources\CourseSection\GradesResource;
 use Illuminate\Http\Request;
 
 /**

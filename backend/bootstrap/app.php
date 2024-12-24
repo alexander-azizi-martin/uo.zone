@@ -15,10 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: '*');
-        $middleware->throttleWithRedis();
-        $middleware->prependToGroup('api', 'throttle:api');
+        $middleware->throttleApi(redis: true);
         $middleware->appendToGroup('api', ValidateLanguage::class);
         $middleware->append(ReportMetrics::class);
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         (new ConfigureExceptions)($exceptions);

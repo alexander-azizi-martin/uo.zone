@@ -6,13 +6,14 @@ import { TabLink, TabLinkList } from '@/components/links/tab-link';
 import { Badge } from '@/components/ui/badge';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
+import { Locale } from '@/lingui.config';
 
 import { CourseInfo } from './components/course-info';
 
 interface CourseLayoutProps extends PropsWithChildren {
   params: {
     code: string;
-    locale: string;
+    locale: Locale;
   };
 }
 
@@ -38,7 +39,7 @@ export default async function CoursePage({
     <div>
       <h2 className='pt-4 sm:text-4xl'>
         <Link
-          href={`/subject/${subjectCode}`}
+          href={`/subject/${subjectCode.toLowerCase()}`}
           className='underline decoration-2 hover:decoration-4'
         >
           {subjectCode}
@@ -58,7 +59,7 @@ export default async function CoursePage({
         )}
 
         <Badge className='bg-blue-500' size='sm'>
-          {course.subject.subject}
+          {course.subject.title}
         </Badge>
         <Badge className='bg-blue-500' size='sm'>
           {course.subject.faculty}

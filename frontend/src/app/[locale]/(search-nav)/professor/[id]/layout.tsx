@@ -6,13 +6,14 @@ import { TabLink, TabLinkList } from '@/components/links/tab-link';
 import { Badge } from '@/components/ui/badge';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
+import { type Locale } from '@/lingui.config';
 
 import { RmpRating } from './components/rmp-rating';
 
 interface CourseLayoutProps extends PropsWithChildren {
   params: {
     id: number;
-    locale: string;
+    locale: Locale;
   };
 }
 

@@ -1,13 +1,14 @@
 import { msg, Trans } from '@lingui/macro';
 
-import { SurveyQuestionHistogram } from '@/components/common/survey-question-histogram';
+import { SurveyQuestionHistogram } from '@/components/survey-question-histogram';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
+import { type Locale } from '@/lingui.config';
 
 interface CourseEvaluationsPageProps {
   params: {
     code: string;
-    locale: string;
+    locale: Locale;
   };
 }
 
@@ -17,7 +18,7 @@ export default async function CourseEvaluationsPage({
   const i18n = await loadI18n(params.locale);
 
   const survey = (
-    await client.GET('/courses/{course}/survey', {
+    await client.GET('/courses/{course}/survey-responses', {
       params: {
         path: { course: params.code },
         header: { 'Accept-Language': params.locale },

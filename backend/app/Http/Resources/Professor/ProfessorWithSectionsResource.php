@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\Professor;
 
-use App\Http\Resources\Course\CourseSectionResource;
-use App\Http\Resources\GradesResource;
+use App\Http\Resources\CourseSection\CourseSectionResource;
+use App\Http\Resources\CourseSection\GradesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

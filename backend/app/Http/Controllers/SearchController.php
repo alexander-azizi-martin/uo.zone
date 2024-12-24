@@ -5,34 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Search\CourseSearchRecourse;
 use App\Http\Resources\Search\ProfessorSearchRecourse;
 use App\Http\Resources\Search\SubjectSearchRecourse;
-use App\Models\Course\Course;
+use App\Models\Course;
 use App\Models\Professor\Professor;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Validator;
 
 class SearchController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
+        // $validator = Validator::make($request->all(), ['q' => 'required|max:255']);
+        // if ($validator->fails()) {
+        //     throw $validator->getException();
+        // }
         $query = $request->validate(['q' => 'required|max:255'])['q'];
 
         $courses = Course::search($query)
             ->orderBy('languages.'.App::getLocale(), 'desc')
             ->orderBy('total_enrolled', 'desc')
             ->take(10)
-            ->hydrate();
+            ->get();
 
         $subjects = Subject::search($query)
             ->orderBy('total_enrolled', 'desc')
             ->take(10)
-            ->hydrate();
+            ->get();
 
         $professors = Professor::search($query)
             ->orderBy('total_enrolled', 'desc')
             ->take(10)
-            ->hydrate();
+            ->get();
 
         return response()->json([
             'courses' => CourseSearchRecourse::collection($courses),

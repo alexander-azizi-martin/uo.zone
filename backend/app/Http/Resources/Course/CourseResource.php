@@ -2,13 +2,13 @@
 
 namespace App\Http\Resources\Course;
 
-use App\Http\Resources\GradesResource;
+use App\Http\Resources\CourseSection\GradesResource;
 use App\Http\Resources\Subject\SubjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin App\Models\Course\Course
+ * @mixin App\Models\Course
  */
 class CourseResource extends JsonResource
 {
@@ -26,11 +26,14 @@ class CourseResource extends JsonResource
             /** @var array<string> */
             'languages' => $this->languages->filter()->keys(),
             /** @var array<string> */
-            'components' => $this->components->pluck('component'),
-            /** @var string|null */
-            'englishEquivalent' => $this->englishEquivalent->code ?? null,
-            /** @var string|null */
-            'frenchEquivalent' => $this->frenchEquivalent->code ?? null,
+            'components' => $this->components,
+            /** @var array{'code':string,'language':string}|null */
+            'equivalentCourse' => is_null($this->equivalent_course)
+                ? null
+                : [
+                    'code' => $this->equivalent_course->code,
+                    'language' => $this->equivalent_course->pivot->equivalent_course_language,
+                ],
             /** @var array<int> */
             'previousTermIds' => $this->previousTermIds,
             'grades' => new GradesResource($this->grades),

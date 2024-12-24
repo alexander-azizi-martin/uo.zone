@@ -1,4 +1,4 @@
-import { msg, Trans } from '@lingui/macro';
+import { msg, Select, Trans } from '@lingui/macro';
 import Markdown from 'markdown-to-jsx';
 
 import { Badge } from '@/components/ui/badge';
@@ -83,30 +83,22 @@ function CourseInfo({ course }: CourseInfoProps) {
           </div>
         </div>
       )}
-      {course.englishEquivalent && (
+      {course.equivalentCourse && (
         <div className='flex gap-2'>
           <p className='mb-auto text-sm font-bold'>
-            <Trans>English Equivalent</Trans>:
+            <Select
+              value={course.equivalentCourse.language}
+              _en={'English Equivalent'}
+              _fr={'French Equivalent'}
+              other={''}
+            />
+            :
           </p>
           <div className='text-sm'>
-            <CourseLink href={`/course/${course.englishEquivalent}`}>
-              {course.englishEquivalent.slice(0, 3).toUpperCase() +
+            <CourseLink href={`/course/${course.equivalentCourse.code}`}>
+              {course.equivalentCourse.code.slice(0, 3).toUpperCase() +
                 ' ' +
-                course.englishEquivalent.slice(3)}
-            </CourseLink>
-          </div>
-        </div>
-      )}
-      {course.frenchEquivalent && (
-        <div className='flex gap-2'>
-          <p className='mb-auto text-sm font-bold'>
-            <Trans>French Equivalent</Trans>:
-          </p>
-          <div className='text-sm'>
-            <CourseLink href={`/course/${course.frenchEquivalent}`}>
-              {course.frenchEquivalent.slice(0, 3).toUpperCase() +
-                ' ' +
-                course.frenchEquivalent.slice(3)}
+                course.equivalentCourse.code.slice(3)}
             </CourseLink>
           </div>
         </div>

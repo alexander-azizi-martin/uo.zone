@@ -7,6 +7,7 @@ import { Paper } from '@/components/ui/paper';
 import { SkeletonList } from '@/components/ui/skeleton';
 import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
+import { type Locale } from '@/lingui.config';
 
 import { BackToTopButton } from './components/back-to-top-button';
 import { CourseFilterMenu } from './components/course-filter-menu';
@@ -16,7 +17,7 @@ import { CourseList } from './components/course-list';
 interface SubjectPageProps {
   params: {
     code: string;
-    locale: string;
+    locale: Locale;
   };
 }
 
@@ -27,6 +28,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     await client.GET('/subjects/{subject}', {
       params: {
         path: { subject: params.code },
+        query: {covid: false},
         header: { 'Accept-Language': params.locale },
       },
     })
@@ -36,7 +38,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     <CourseFilterProvider>
       <div>
         <div className='flex items-center justify-between'>
-          <h2 className='py-4 sm:text-4xl'>{`${subject.code}: ${subject.subject}`}</h2>
+          <h2 className='py-4 sm:text-4xl'>{`${subject.code}: ${subject.title}`}</h2>
 
           <CourseFilterMenu />
         </div>

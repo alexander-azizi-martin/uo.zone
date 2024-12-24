@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Casts\Translation;
-use App\Models\Course\Course;
-use App\Traits\HasGrades;
+use App\Helpers\CustomRelation;
+use App\Helpers\TranslationCast;
+use App\Traits\HasCustomRelations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,28 +12,22 @@ use Laravel\Scout\Searchable;
 
 class Subject extends Model
 {
-    use HasFactory, HasGrades, Searchable;
+    use HasCustomRelations, HasFactory, Searchable;
 
-    /**
-     * The attributes that aren't mass assignable.
-     */
+    public $timestamps = false;
+
+    public $incrementing = false;
+
+    protected $primaryKey = 'code';
+
+    protected $keyType = 'string';
+
     protected $guarded = [];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
-        'subject' => Translation::class,
-        'faculty' => Translation::class,
+        'title' => TranslationCast::class,
+        'faculty' => TranslationCast::class,
     ];
-
-    /**
-     * Get the route key for the model.
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'code';
-    }
 
     /**
      * Get all the subject's courses.
@@ -41,6 +35,16 @@ class Subject extends Model
     public function courses(): HasMany
     {
         return $this->hasMany(Course::class);
+    }
+
+    public function grades(): CustomRelation
+    {
+        $includeCovid = filter_var(
+            request()->query('covid', false),
+            FILTER_VALIDATE_BOOL
+        );
+
+        return $this->hasGrades(includeCovid: $includeCovid);
     }
 
     /**
@@ -51,9 +55,9 @@ class Subject extends Model
         $this->loadMissing('grades');
 
         return [
-            'subject' => $this->getRawOriginal('subject'),
+            'title' => json_decode($this->getRawOriginal('title'), true),
             'code' => $this->code,
-            'total_enrolled' => (int) ($this->grades->total ?? 0),
+            'total_enrolled' => $this->grades->total ?? 0,
         ];
     }
 }

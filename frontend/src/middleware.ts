@@ -15,6 +15,7 @@ const middlewares = [
 export function middleware(request: NextRequest) {
   for (const m of middlewares) {
     const response = m(request);
+    console.log(m, response)
     if (response) return response;
   }
 }

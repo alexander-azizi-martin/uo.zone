@@ -21,7 +21,7 @@ class DuckDuckGoRMPSpider(scrapy.Spider):
     name = "ddg_rmp"
 
     def start_requests(self):
-        professors = json.loads(filesystem.get("professor-names.json"))
+        professors = json.loads(filesystem.get("professor_names.json"))
 
         for professor in tqdm.tqdm(professors):
             yield scrapy.Request(

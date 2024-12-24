@@ -1,6 +1,6 @@
 'use client';
 
-import { Plural, Select, Trans } from '@lingui/macro';
+import { Plural,Select, Trans } from '@lingui/macro';
 import { cva, type VariantProps } from 'class-variance-authority';
 import cntl from 'cntl';
 import { useRef, useState } from 'react';

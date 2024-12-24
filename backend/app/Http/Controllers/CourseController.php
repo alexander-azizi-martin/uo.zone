@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Course\CourseResource;
+use App\Http\Resources\CourseSection\SurveyResponseRecourse;
 use App\Http\Resources\Professor\ProfessorWithSectionsResource;
-use App\Http\Resources\Survey\SurveyQuestionResource;
-use App\Models\Course\Course;
-use App\Models\Course\CourseSection;
-use App\Models\Grades;
+use App\Models\Course;
+use App\Models\CourseSection\CourseSection;
+use App\Models\CourseSection\Grades;
 use App\Models\Professor\Professor;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -31,8 +32,7 @@ class CourseController extends Controller
             'sections',
             'subject',
             'grades',
-            'frenchEquivalent',
-            'englishEquivalent',
+            'equivalentCourses',
         ]);
 
         return new CourseResource($course);
@@ -42,16 +42,16 @@ class CourseController extends Controller
     {
         $course->load(['sections' => ['professors', 'grades']]);
 
-        /** @var array<\App\Models\Professor> */
+        /** @var array<\App\Models\Professor\Professor> */
         $professors = $course->sections
+            ->filter(fn ($s) => ! $s->is_during_covid)
             ->sortByDesc('term_id')
             ->loadMissing('professors')
             ->groupby(function (CourseSection $section) {
                 return $section->professors->pluck('id')->all() ?: [0];
             })
-            ->map(function ($sections, $professorId) {
-                $grades = Grades::new();
-                $sections->pluck('grades')->each([$grades, 'mergeGrades']);
+            ->map(function (Collection $sections, int $professorId) {
+                $grades = Grades::merge($sections->pluck('grades'));
 
                 $professor = $professorId === 0
                     ? Professor::unknown()
@@ -68,10 +68,10 @@ class CourseController extends Controller
         return ProfessorWithSectionsResource::collection($professors);
     }
 
-    public function getCourseSurvey(Course $course)
+    public function getCourseSurveyResponses(Course $course)
     {
-        $course->load(['survey']);
+        $course->load(['surveyResponses']);
 
-        return SurveyQuestionResource::collection($course->survey);
+        return SurveyResponseRecourse::collection($course->surveyResponses);
     }
 }

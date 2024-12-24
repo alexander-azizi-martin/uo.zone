@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:89
+msgid "{0, select, en {English Equivalent} fr {French Equivalent} other {}}"
+msgstr "{0, select, en {English Equivalent} fr {French Equivalent} other {}}"
+
 #: src/components/grades/grade-summary.tsx:114
 msgid "{0} {1, plural, one {student} other {students}}"
 msgstr "{0} {1, plural, one {student} other {students}}"
@@ -21,7 +25,7 @@ msgstr "{0} {1, plural, one {student} other {students}}"
 msgid "{0} {1, plural, one {student} other {students}} got {2, select, A {an} other {a}} {selectedGrade} ({3}%)"
 msgstr "{0} {1, plural, one {student} other {students}} got {2, select, A {an} other {a}} {selectedGrade} ({3}%)"
 
-#: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:50
+#: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:54
 msgid "{0} {1, plural, one {unit} other {units}}"
 msgstr "{0} {1, plural, one {unit} other {units}}"
 
@@ -29,11 +33,11 @@ msgstr "{0} {1, plural, one {unit} other {units}}"
 msgid "{0} Average ({1})"
 msgstr "{0} Average ({1})"
 
-#: src/components/common/sections-summary.tsx:44
+#: src/components/sections-summary.tsx:44
 msgid "{0} sections during {oldestTerm}"
 msgstr "{0} sections during {oldestTerm}"
 
-#: src/components/common/sections-summary.tsx:48
+#: src/components/sections-summary.tsx:48
 msgid "{0} sections from {oldestTerm} to {newestTerm}"
 msgstr "{0} sections from {oldestTerm} to {newestTerm}"
 
@@ -53,20 +57,20 @@ msgstr "3rd Year"
 msgid "4th Year"
 msgstr "4th Year"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:52
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:54
 msgid "All Courses"
 msgstr "All Courses"
 
-#: src/app/[locale]/(search-nav)/subject/[code]/page.tsx:47
+#: src/app/[locale]/(search-nav)/subject/[code]/page.tsx:49
 msgid "All Courses For {0}"
 msgstr "All Courses For {0}"
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:55
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:56
 msgid "All Professors"
 msgstr "All Professors"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:66
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:72
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:67
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:73
 msgid "Available"
 msgstr "Available"
 
@@ -74,13 +78,13 @@ msgstr "Available"
 msgid "Average"
 msgstr "Average"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:64
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:71
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:65
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:72
 msgid "Clear Communication"
 msgstr "Clear Communication"
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:64
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:71
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:65
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:72
 msgid "Clear Expectations"
 msgstr "Clear Expectations"
 
@@ -97,28 +101,24 @@ msgid "Courses"
 msgstr "Courses"
 
 #: src/app/[locale]/components/footer.tsx:33
-msgid "Data from Fall 2017 to Winter 2023 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
-msgstr "Data from Fall 2017 to Winter 2023 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+msgid "Data from Fall 2017 to Fall 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+msgstr "Data from Fall 2017 to Fall 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
 
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:148
 msgid "English"
 msgstr "English"
 
-#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:89
-msgid "English Equivalent"
-msgstr "English Equivalent"
-
-#: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:73
-#: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:66
+#: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:77
+#: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:67
 msgid "Evaluations"
 msgstr "Evaluations"
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:68
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:75
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:69
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:76
 msgid "Fair Assessments"
 msgstr "Fair Assessments"
 
-#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:125
+#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:117
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:128
 msgid "Fall"
 msgstr "Fall"
@@ -143,21 +143,17 @@ msgstr "Filter Year"
 msgid "French"
 msgstr "French"
 
-#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:103
-msgid "French Equivalent"
-msgstr "French Equivalent"
-
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:65
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:66
 msgid "Good Feedback"
 msgstr "Good Feedback"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:68
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:74
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:69
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:75
 msgid "Good Instructions"
 msgstr "Good Instructions"
 
-#: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:69
-#: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:62
+#: src/app/[locale]/(search-nav)/course/[code]/layout.tsx:73
+#: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:63
 msgid "Grades"
 msgstr "Grades"
 
@@ -173,12 +169,12 @@ msgstr "https://uozone2.uottawa.ca/en/apps/s-reports"
 msgid "https://www.uottawa.ca/about-us/aipo"
 msgstr "https://www.uottawa.ca/about-us/aipo"
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:65
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:72
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:66
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:73
 msgid "Learned a Lot"
 msgstr "Learned a Lot"
 
-#: src/components/search/search-nav.tsx:94
+#: src/components/search/search-nav.tsx:110
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -199,12 +195,12 @@ msgid "No course matches the filters."
 msgstr "No course matches the filters."
 
 #: src/app/[locale]/(search-nav)/subject/[code]/components/virtual-course-list.tsx:39
-#: src/components/common/sections-summary.tsx:92
+#: src/components/sections-summary.tsx:93
 msgid "No grade data available for this course."
 msgstr "No grade data available for this course."
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:43
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:41
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:44
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:43
 msgid "No grade data."
 msgstr "No grade data."
 
@@ -212,8 +208,8 @@ msgstr "No grade data."
 msgid "No results found."
 msgstr "No results found."
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:31
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:31
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:32
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:32
 msgid "No survey data."
 msgstr "No survey data."
 
@@ -221,13 +217,13 @@ msgstr "No survey data."
 msgid "Number of RateMyProfessor reviews"
 msgstr "Number of RateMyProfessor reviews"
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:63
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:70
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:64
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:71
 msgid "Organized"
 msgstr "Organized"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:63
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:70
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:64
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:71
 msgid "Prepared"
 msgstr "Prepared"
 
@@ -247,8 +243,8 @@ msgstr "RateMyProfessor difficulty"
 msgid "RateMyProfessor rating"
 msgstr "RateMyProfessor rating"
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:66
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:73
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:67
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:74
 msgid "Recommend"
 msgstr "Recommend"
 
@@ -260,12 +256,12 @@ msgstr "Requirements"
 msgid "Reset Filters"
 msgstr "Reset Filters"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:67
-#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:73
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:68
+#: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:74
 msgid "Respectful"
 msgstr "Respectful"
 
-#: src/components/common/survey-question-histogram.tsx:37
+#: src/components/survey-question-histogram.tsx:37
 msgid "responses"
 msgstr "responses"
 
@@ -281,11 +277,11 @@ msgstr "RMP Rating"
 msgid "RMP ratings"
 msgstr "RMP ratings"
 
-#: src/components/search/search-nav.tsx:71
+#: src/components/search/search-nav.tsx:87
 msgid "Search by Course, Professor, or Subject"
 msgstr "Search by Course, Professor, or Subject"
 
-#: src/components/search/search-nav.tsx:88
+#: src/components/search/search-nav.tsx:104
 msgid "Search Results for “{query}”"
 msgstr "Search Results for “{query}”"
 
@@ -301,12 +297,12 @@ msgstr "Sort By"
 msgid "Subjects"
 msgstr "Subjects"
 
-#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:124
+#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:116
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:134
 msgid "Summer"
 msgstr "Summer"
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:104
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:105
 msgid "The {0, plural, one {professor for this course section is} other {professors for these course sections are}} not known."
 msgstr "The {0, plural, one {professor for this course section is} other {professors for these course sections are}} not known."
 
@@ -318,11 +314,11 @@ msgstr "The website is currently under maintenance."
 msgid "This page does not exist."
 msgstr "This page does not exist."
 
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:56
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:58
 msgid "This total also includes classes that they may not teach anymore."
 msgstr "This total also includes classes that they may not teach anymore."
 
-#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:92
+#: src/app/[locale]/(search-nav)/course/[code]/page.tsx:93
 msgid "Unknown {0, plural, one {Professor} other {Professors}}"
 msgstr "Unknown {0, plural, one {Professor} other {Professors}}"
 
@@ -330,16 +326,16 @@ msgstr "Unknown {0, plural, one {Professor} other {Professors}}"
 msgid "View all the past grades for courses taken at the University of Ottawa."
 msgstr "View all the past grades for courses taken at the University of Ottawa."
 
-#: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:54
+#: src/app/[locale]/(search-nav)/professor/[id]/layout.tsx:55
 msgid "View on RateMyProfessor"
 msgstr "View on RateMyProfessor"
 
-#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:123
+#: src/app/[locale]/(search-nav)/course/[code]/components/course-info.tsx:115
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:131
 msgid "Winter"
 msgstr "Winter"
 
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:67
-#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:74
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:68
+#: src/app/[locale]/(search-nav)/course/[code]/evaluations/page.tsx:75
 msgid "Workload"
 msgstr "Workload"

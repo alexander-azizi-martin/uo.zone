@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin App\Models\Course\Course
+ * @mixin App\Models\Course
  */
 class CourseSearchRecourse extends JsonResource
 {

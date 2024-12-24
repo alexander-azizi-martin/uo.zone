@@ -4,6 +4,7 @@ namespace App\Http\Resources\Search;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 /**
  * @mixin App\Models\Section
@@ -16,8 +17,8 @@ class SubjectSearchRecourse extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'code' => $this->code,
-            'subject' => $this->subject,
+            'code' => Str::upper($this->code),
+            'title' => $this->title,
         ];
     }
 }

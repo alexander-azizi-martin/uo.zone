@@ -1,18 +1,19 @@
 import { Plural, Trans } from '@lingui/macro';
 import { InfoIcon } from 'lucide-react';
 
-import { SectionsSummary } from '@/components/common/sections-summary';
 import { GradeSummary } from '@/components/grades/grade-summary';
+import { SectionsSummary } from '@/components/sections-summary';
 import { Paper } from '@/components/ui/paper';
 import { Tooltip } from '@/components/ui/tooltip';
 import { client } from '@/lib/api/client';
 import { type components } from '@/lib/api/schema';
 import { loadI18n } from '@/lib/i18n';
+import { type Locale } from '@/lingui.config';
 
 interface CoursePageProps {
   params: {
     code: string;
-    locale: string;
+    locale: Locale;
   };
 }
 

@@ -15,7 +15,7 @@ class StatsdServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Statsd::class, function () {
             $options = Arr::only(
-                config('statsd'),
+                config('services.statsd'),
                 ['host', 'port', 'namespace', 'timeout', 'throwConnectionExceptions']
             );
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bc8f53fdee09b6beb5792716ddbe602",
+    "content-hash": "bee84fe8dd878656437ce3ec2ddd7ea9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1755,16 +1755,16 @@
         },
         {
             "name": "laravel/sanctum",
-            "version": "v4.0.0",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "9e6e561308cace166de9ceae4ced820309fa8e13"
+                "reference": "9cfc0ce80cabad5334efff73ec856339e8ec1ac1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/9e6e561308cace166de9ceae4ced820309fa8e13",
-                "reference": "9e6e561308cace166de9ceae4ced820309fa8e13",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/9cfc0ce80cabad5334efff73ec856339e8ec1ac1",
+                "reference": "9cfc0ce80cabad5334efff73ec856339e8ec1ac1",
                 "shasum": ""
             },
             "require": {
@@ -1773,7 +1773,8 @@
                 "illuminate/contracts": "^11.0",
                 "illuminate/database": "^11.0",
                 "illuminate/support": "^11.0",
-                "php": "^8.2"
+                "php": "^8.2",
+                "symfony/console": "^7.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.6",
@@ -1814,7 +1815,7 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
-            "time": "2024-03-12T14:07:05+00:00"
+            "time": "2024-04-10T19:39:58+00:00"
         },
         {
             "name": "laravel/scout",
@@ -3174,6 +3175,61 @@
                 }
             ],
             "time": "2024-03-06T16:17:14+00:00"
+        },
+        {
+            "name": "php-ds/php-ds",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-ds/polyfill.git",
+                "reference": "7b2c5f1843466d50769a0682ce6fa9ddaaa99cb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-ds/polyfill/zipball/7b2c5f1843466d50769a0682ce6fa9ddaaa99cb4",
+                "reference": "7b2c5f1843466d50769a0682ce6fa9ddaaa99cb4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.0"
+            },
+            "provide": {
+                "ext-ds": "1.5.0"
+            },
+            "require-dev": {
+                "php-ds/tests": "^1.5"
+            },
+            "suggest": {
+                "ext-ds": "to improve performance and reduce memory usage"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ds\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rudi Theunissen",
+                    "email": "rudolf.theunissen@gmail.com"
+                }
+            ],
+            "keywords": [
+                "data structures",
+                "ds",
+                "php",
+                "polyfill"
+            ],
+            "support": {
+                "issues": "https://github.com/php-ds/polyfill/issues",
+                "source": "https://github.com/php-ds/polyfill/tree/v1.5.0"
+            },
+            "time": "2023-12-19T16:52:21+00:00"
         },
         {
             "name": "php-http/client-common",

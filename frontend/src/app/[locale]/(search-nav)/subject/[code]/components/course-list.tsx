@@ -1,10 +1,11 @@
 import { client } from '@/lib/api/client';
+import { type Locale } from '@/lingui.config';
 
 import { VirtualCourseList } from './virtual-course-list';
 
 interface CourseListProps {
   code: string;
-  locale: string;
+  locale: Locale;
 }
 
 async function CourseList({ code, locale }: CourseListProps) {

@@ -18,7 +18,8 @@
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "^3.0",
         "league/statsd": "^2.0",
-        "meilisearch/meilisearch-php": "^1.7"
+        "meilisearch/meilisearch-php": "^1.7",
+        "php-ds/php-ds": "^1.5"
     },
     "require-dev": {
         "dedoc/scramble": "^0.10.13",

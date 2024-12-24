@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Course\Course;
+use App\Models\Course;
 use App\Models\Professor\Professor;
 use App\Models\Subject;
 use Illuminate\Console\Command;
@@ -30,10 +30,14 @@ class ScoutFresh extends Command
      */
     public function handle()
     {
+        foreach (static::MODELS as $model) {
+            $indexName = (new $model)->getTable();
+            $this->call('scout:delete-index', ['name' => $indexName]);
+        }
+
         $this->call('scout:sync-index-settings');
 
         foreach (static::MODELS as $model) {
-            $this->call('scout:flush', ['model' => $model]);
             $this->call('scout:import', ['model' => $model]);
         }
     }

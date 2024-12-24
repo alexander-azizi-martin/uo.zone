@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Course\CourseWithSectionsResource;
+use App\Http\Resources\CourseSection\SurveyResponseRecourse;
 use App\Http\Resources\Professor\ProfessorResource;
-use App\Http\Resources\Survey\SurveyQuestionResource;
-use App\Models\Grades;
+use App\Models\CourseSection\Grades;
 use App\Models\Professor\Professor;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,7 +16,7 @@ class ProfessorController extends Controller
     public function getAllProfessors(): JsonResponse
     {
         if (! Cache::has('professors')) {
-            $professors = Professor::cursor()->pluck('id')->all() ?? [];
+            $professors = Professor::pluck('public_id')->all();
             Cache::put('professors', $professors);
         }
 
@@ -38,10 +39,9 @@ class ProfessorController extends Controller
         $courses = $professor->sections
             ->sortByDesc('term_id')
             ->loadMissing('course')
-            ->groupby('course.id')
-            ->map(function ($sections) {
-                $grades = Grades::new();
-                $sections->pluck('grades')->each([$grades, 'mergeGrades']);
+            ->groupby('course.code')
+            ->map(function (Collection $sections) {
+                $grades = Grades::merge($sections->pluck('grades'));
 
                 $course = $sections->first()->course;
                 $course->setRelation('sections', $sections);
@@ -55,10 +55,10 @@ class ProfessorController extends Controller
         return CourseWithSectionsResource::collection($courses);
     }
 
-    public function getProfessorSurvey(Professor $professor)
+    public function getProfessorSurveyResponses(Professor $professor)
     {
-        $professor->load(['survey']);
+        $professor->load(['surveyResponses']);
 
-        return SurveyQuestionResource::collection($professor->survey);
+        return SurveyResponseRecourse::collection($professor->surveyResponses);
     }
 }

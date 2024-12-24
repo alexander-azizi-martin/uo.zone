@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { client } from '@/lib/api/client';
 import { type components } from '@/lib/api/schema';
+import { type Locale } from '@/lingui.config';
 
 interface SearchResultsType {
   subjects: components['schemas']['SubjectSearchRecourse'][];
@@ -14,7 +15,7 @@ interface SearchResultsType {
 function useSearchResults(query: string) {
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<SearchResultsType | null>();
-  const { locale } = useParams<{ locale: string }>()!;
+  const { locale } = useParams<{ locale: Locale }>()!;
 
   const updateResults = useMemo(
     () =>
@@ -22,7 +23,9 @@ function useSearchResults(query: string) {
         client
           .POST('/search', {
             body: { q: query },
-            params: { header: { 'Accept-Language': locale } },
+            params: {
+              header: { 'Accept-Language': locale },
+            },
           })
           .then(({ data }) => {
             setResults(data);

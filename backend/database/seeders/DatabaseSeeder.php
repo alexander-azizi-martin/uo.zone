@@ -13,6 +13,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SubjectSeeder::class,
+            Course\CourseSeeder::class,
+            Course\CourseLinkSeeder::class,
+            Course\EquivalentCourseSeeder::class,
+            CourseSection\CourseSectionSeeder::class,
+            CourseSection\CourseSectionGradeSeeder::class,
         ]);
     }
 }

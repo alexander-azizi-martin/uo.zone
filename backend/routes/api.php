@@ -10,7 +10,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('/courses', 'getAllCourses')->middleware('throttle:list-all');
     Route::get('/courses/{course}', 'getCourse');
     Route::get('/courses/{course}/professors', 'getCourseProfessors');
-    Route::get('/courses/{course}/survey', 'getCourseSurvey');
+    Route::get('/courses/{course}/survey-responses', 'getCourseSurveyResponses');
 });
 
 Route::controller(SubjectController::class)->group(function () {
@@ -23,7 +23,7 @@ Route::controller(ProfessorController::class)->group(function () {
     Route::get('/professors', 'getAllProfessors')->middleware('throttle:list-all');
     Route::get('/professors/{professor}', 'getProfessor');
     Route::get('/professors/{professor}/courses', 'getProfessorCourses');
-    Route::get('/professors/{professor}/survey', 'getProfessorSurvey');
+    Route::get('/professors/{professor}/survey-responses', 'getProfessorSurveyResponses');
 });
 
 Route::post('/search', [SearchController::class, 'search']);

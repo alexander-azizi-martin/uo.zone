@@ -33,8 +33,8 @@ function SearchResults({ results, searchBar }: SearchResultsProps) {
       <SearchResultCollection
         collection={results.subjects}
         header={<Trans>Subjects</Trans>}
-        itemTitle={(item) => `${item.code} - ${item.subject}`}
-        itemLink={(item) => `/subject/${item.code}`}
+        itemTitle={(item) => `${item.code} - ${item.title}`}
+        itemLink={(item) => `/subject/${item.code.toLowerCase()}`}
       />
       <SearchResultCollection
         collection={results.courses}

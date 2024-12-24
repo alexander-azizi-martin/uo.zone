@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Course\Course;
+use App\Models\Course;
 use App\Models\Professor\Professor;
 use App\Models\Subject;
 use Illuminate\Support\Arr;
@@ -140,7 +140,6 @@ return [
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
             Course::class => [
-                'displayedAttributes' => ['code', 'title'],
                 'synonyms' => [
                     'intro' => ['introduction', 'introd'],
                     'intod' => ['introduction'],
@@ -156,27 +155,18 @@ return [
                     'cpp' => ['c++'],
                 ],
                 'sortableAttributes' => [
-                    ...Arr::map(config('app.valid_locales'), function (string $locale) {
-                        return "languages.$locale";
-                    }),
+                    ...Arr::map(config('app.valid_locales'), fn (string $l) => "languages.$l"),
                     'total_enrolled',
                 ],
-                'searchableAttributes' => [
-                    'code',
-                    'title',
-                    'english_equivalent_title',
-                    'french_equivalent_title',
-                ],
+                'searchableAttributes' => ['code', 'title', 'equivalent_course_title'],
             ],
             Professor::class => [
-                'displayedAttributes' => ['id', 'public_id', 'name'],
                 'sortableAttributes' => ['total_enrolled'],
                 'searchableAttributes' => ['name'],
             ],
             Subject::class => [
-                'displayedAttributes' => ['code', 'subject'],
                 'sortableAttributes' => ['total_enrolled'],
-                'searchableAttributes' => ['code', 'subject'],
+                'searchableAttributes' => ['code', 'title'],
             ],
         ],
     ],
