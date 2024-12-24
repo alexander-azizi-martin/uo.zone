@@ -57,7 +57,7 @@ msgstr "3rd Year"
 msgid "4th Year"
 msgstr "4th Year"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:54
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:52
 msgid "All Courses"
 msgstr "All Courses"
 
@@ -68,6 +68,10 @@ msgstr "All Courses For {0}"
 #: src/app/[locale]/(search-nav)/course/[code]/page.tsx:56
 msgid "All Professors"
 msgstr "All Professors"
+
+#: src/app/[locale]/components/footer.tsx:60
+msgid "API Docs"
+msgstr "API Docs"
 
 #: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:67
 #: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:73
@@ -101,8 +105,8 @@ msgid "Courses"
 msgstr "Courses"
 
 #: src/app/[locale]/components/footer.tsx:33
-msgid "Data from Fall 2017 to Fall 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
-msgstr "Data from Fall 2017 to Fall 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+msgid "Data from Fall 2017 to Summer 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+msgstr "Data from Fall 2017 to Summer 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
 
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:148
 msgid "English"
@@ -200,7 +204,7 @@ msgid "No grade data available for this course."
 msgstr "No grade data available for this course."
 
 #: src/app/[locale]/(search-nav)/course/[code]/page.tsx:44
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:43
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:41
 msgid "No grade data."
 msgstr "No grade data."
 
@@ -314,7 +318,7 @@ msgstr "The website is currently under maintenance."
 msgid "This page does not exist."
 msgstr "This page does not exist."
 
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:58
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:56
 msgid "This total also includes classes that they may not teach anymore."
 msgstr "This total also includes classes that they may not teach anymore."
 

@@ -57,7 +57,7 @@ msgstr "3ème Année"
 msgid "4th Year"
 msgstr "4ème Année"
 
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:54
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:52
 msgid "All Courses"
 msgstr "Tous Les Cours"
 
@@ -68,6 +68,10 @@ msgstr "Tous Les Cours Pour {0}"
 #: src/app/[locale]/(search-nav)/course/[code]/page.tsx:56
 msgid "All Professors"
 msgstr "Tous Les Professeurs"
+
+#: src/app/[locale]/components/footer.tsx:60
+msgid "API Docs"
+msgstr "API Docs"
 
 #: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:67
 #: src/app/[locale]/(search-nav)/professor/[id]/evaluations/page.tsx:73
@@ -101,8 +105,8 @@ msgid "Courses"
 msgstr "Cours"
 
 #: src/app/[locale]/components/footer.tsx:33
-msgid "Data from Fall 2017 to Fall 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
-msgstr "L'information de l'Automne 2017 au l'Automne 2024 ont été fournies par <0>Le Bureau de l'accès à l'information et de la protection de la vie privée</0> and <1>uoZone</1>"
+msgid "Data from Fall 2017 to Summer 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
+msgstr "L'information de l'Automne 2017 au l'Été 2024 ont été fournies par <0>Le Bureau de l'accès à l'information et de la protection de la vie privée</0> and <1>uoZone</1>"
 
 #: src/app/[locale]/(search-nav)/subject/[code]/components/course-filter-menu.tsx:148
 msgid "English"
@@ -200,7 +204,7 @@ msgid "No grade data available for this course."
 msgstr "Aucune donnée sur les notes n'est disponible pour ce cours."
 
 #: src/app/[locale]/(search-nav)/course/[code]/page.tsx:44
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:43
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:41
 msgid "No grade data."
 msgstr "Pas de données sur les notes."
 
@@ -314,7 +318,7 @@ msgstr "Le site web est actuellement en maintenance."
 msgid "This page does not exist."
 msgstr "Cette page n'existe pas."
 
-#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:58
+#: src/app/[locale]/(search-nav)/professor/[id]/page.tsx:56
 msgid "This total also includes classes that they may not teach anymore."
 msgstr "Ce total comprend également les classes qu'ils n'enseignent peut-être plus."
 

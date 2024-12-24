@@ -31,7 +31,7 @@ async function Footer() {
 
         <p className='text-center text-sm font-light text-foreground/60'>
           <Trans>
-            Data from Fall 2017 to Fall 2024 provided by{' '}
+            Data from Fall 2017 to Summer 2024 provided by{' '}
             <ExternalLink href={aipoUrl}>
               The Access to Information and Privacy Office
             </ExternalLink>{' '}
@@ -48,12 +48,18 @@ async function Footer() {
           </ExternalLink>{' '}
           <Trans>maintained by</Trans>{' '}
           <ExternalLink
-            href='https://linkedin.com/in/alexander-azizi-martin'
-            data-umami-event='linkedin'
+            href='mailto:aaziz063@uottawa.ca'
+            data-umami-event='uottawa-email'
           >
             Alexander Azizi-Martin
           </ExternalLink>
         </p>
+
+        <div className='flex justify-center text-sm'>
+          <ExternalLink href='/docs'>
+            <Trans>API Docs</Trans>
+          </ExternalLink>
+        </div>
       </div>
     </footer>
   );
