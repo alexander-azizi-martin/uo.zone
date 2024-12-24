@@ -13,9 +13,12 @@ const middlewares = [
 ];
 
 export function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/docs')) {
+    return;
+  }
+
   for (const m of middlewares) {
     const response = m(request);
-    console.log(m, response)
     if (response) return response;
   }
 }

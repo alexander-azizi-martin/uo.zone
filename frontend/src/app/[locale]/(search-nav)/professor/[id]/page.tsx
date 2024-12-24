@@ -25,8 +25,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
       },
     })
   ).data!;
-  console.log(professor);
-  console.log('jdjskalfkjdhsf')
+
   const courses = (
     await client.GET('/professors/{professor}/courses', {
       params: {
@@ -36,7 +35,6 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
     })
   ).data!;
 
-  console.log(courses);
   if (courses.length === 0) {
     return (
       <div>

@@ -1,4 +1,5 @@
 const { withAxiom } = require('next-axiom');
+const urlJoin = import('url-join');
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -13,6 +14,20 @@ const nextConfig = {
       {
         source: '/stats/:match*',
         destination: 'https://analytics.uo.zone/:match*',
+        basePath: false,
+      },
+      {
+        source: '/docs',
+        destination: await (
+          await urlJoin
+        ).default(process.env.SERVER_URL, '/docs/api'),
+        basePath: false,
+      },
+      {
+        source: '/docs/api.json',
+        destination: await (
+          await urlJoin
+        ).default(process.env.SERVER_URL, '/docs/api.json'),
         basePath: false,
       },
     ];

@@ -76,7 +76,9 @@ return [
      * ],
      * ```
      */
-    'servers' => null,
+    'servers' => [
+        'Prod' => 'https://uo.zone/api'
+    ],
 
     'middleware' => [
         'web',
