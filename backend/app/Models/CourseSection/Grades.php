@@ -39,9 +39,6 @@ class Grades extends Model
     public static function merge($grades): ?Grades
     {
         $collectedGrades = collect($grades)->filter();
-        if ($collectedGrades->count() === 0) {
-            return null;
-        }
 
         $mergedGrades = new Grades;
         foreach (array_keys(self::GRADE_VALUES) as $grade) {
