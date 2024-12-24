@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->throttleApi(redis: true);
         $middleware->appendToGroup('api', ValidateLanguage::class);
         $middleware->append(ReportMetrics::class);
-        $middleware->statefulApi();
+        // $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         (new ConfigureExceptions)($exceptions);
