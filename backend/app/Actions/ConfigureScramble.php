@@ -20,12 +20,14 @@ class ConfigureScramble extends OperationExtension
         $operation->addParameters([
             Parameter::make('Accept-Language', 'header')
                 ->setSchema(Schema::fromType($languageType))
+                ->description('Language for the api content')
                 ->required(false),
         ]);
 
         $operation->addParameters([
             Parameter::make('covid', 'query')
                 ->setSchema(Schema::fromType(new BooleanType))
+                ->description('Whether to include grade data during covid')
                 ->required(false),
         ]);
     }

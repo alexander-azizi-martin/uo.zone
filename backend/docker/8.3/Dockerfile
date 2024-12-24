@@ -67,6 +67,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.3/cli/conf.d/99-sail.ini
 RUN crontab /etc/cron.d/laravel
 RUN chmod +x /usr/local/bin/start-container
+RUN chmod -R 775 storage
+RUN chmod -R 775 database
 
 EXPOSE 8000
 
