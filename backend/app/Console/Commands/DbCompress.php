@@ -42,7 +42,7 @@ class DbCompress extends Command
             '-cJf',
             $archiveFilepath,
             $databaseFilepath,
-        ]);
+        ])->timeout(120);
 
         spin(fn () => $compressDB->run()->throw(), 'Compressing the database.');
 
