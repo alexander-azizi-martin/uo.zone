@@ -19,7 +19,7 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
             SUPERVISOR_PHP_COMMAND: '${SUPERVISOR_PHP_COMMAND}'
         volumes:
-            - '.:/var/www/html'
+            - '.:/var/www/html:rw'
             - '../static:/var/www/html/storage/static'
             - '~/.ssh:/home/sail/.ssh'
         networks:

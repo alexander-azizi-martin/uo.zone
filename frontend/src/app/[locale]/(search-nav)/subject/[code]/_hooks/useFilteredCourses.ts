@@ -4,7 +4,7 @@ import { type components } from '@/lib/api/schema';
 import { Grade } from '@/lib/grade';
 import { percent, TERM_TO_ID } from '@/lib/utils';
 
-import { CourseFilterContext } from '../components/course-filter-provider';
+import { CourseFilterContext } from '../_components/course-filter-provider';
 
 function useFilteredCourses(
   courses: components['schemas']['CourseResource'][],

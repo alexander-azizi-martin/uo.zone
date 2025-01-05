@@ -8,7 +8,7 @@ import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 import { type Locale } from '@/lingui.config';
 
-import { RmpRating } from './components/rmp-rating';
+import { RmpRating } from './_components/rmp-rating';
 
 interface CourseLayoutProps extends PropsWithChildren {
   params: {

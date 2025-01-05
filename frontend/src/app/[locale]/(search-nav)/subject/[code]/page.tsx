@@ -9,10 +9,10 @@ import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 import { type Locale } from '@/lingui.config';
 
-import { BackToTopButton } from './components/back-to-top-button';
-import { CourseFilterMenu } from './components/course-filter-menu';
-import { CourseFilterProvider } from './components/course-filter-provider';
-import { CourseList } from './components/course-list';
+import { BackToTopButton } from './_components/back-to-top-button';
+import { CourseFilterMenu } from './_components/course-filter-menu';
+import { CourseFilterProvider } from './_components/course-filter-provider';
+import { CourseList } from './_components/course-list';
 
 interface SubjectPageProps {
   params: {
@@ -28,7 +28,7 @@ export default async function SubjectPage({ params }: SubjectPageProps) {
     await client.GET('/subjects/{subject}', {
       params: {
         path: { subject: params.code },
-        query: {covid: false},
+        query: { covid: false },
         header: { 'Accept-Language': params.locale },
       },
     })

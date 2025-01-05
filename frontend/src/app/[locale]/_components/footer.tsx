@@ -56,7 +56,7 @@ async function Footer() {
         </p>
 
         <div className='flex justify-center text-sm'>
-          <ExternalLink href='/docs'>
+          <ExternalLink href='/docs' data-umami-event='docs'>
             <Trans>API Docs</Trans>
           </ExternalLink>
         </div>

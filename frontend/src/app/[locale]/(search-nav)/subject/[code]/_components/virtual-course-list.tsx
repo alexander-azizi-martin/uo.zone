@@ -8,7 +8,7 @@ import { Link } from '@/components/links/link';
 import { Paper } from '@/components/ui/paper';
 import { type components } from '@/lib/api/schema';
 
-import { useFilteredCourses } from '../hooks/useFilteredCourses';
+import { useFilteredCourses } from '../_hooks/useFilteredCourses';
 
 interface VirtualCourseListProps {
   courses: components['schemas']['CourseResource'][];

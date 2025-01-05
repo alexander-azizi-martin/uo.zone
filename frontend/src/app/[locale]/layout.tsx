@@ -9,8 +9,8 @@ import { type PropsWithChildren } from 'react';
 
 import { loadI18n } from '@/lib/i18n';
 
-import { I18nProvider } from './components/i18n-provider';
-import { Main } from './components/main';
+import { I18nProvider } from './_components/i18n-provider';
+import { Main } from './_components/main';
 
 const inter = Inter({
   subsets: ['latin'],

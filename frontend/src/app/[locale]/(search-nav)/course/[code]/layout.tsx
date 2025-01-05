@@ -8,7 +8,7 @@ import { client } from '@/lib/api/client';
 import { loadI18n } from '@/lib/i18n';
 import { Locale } from '@/lingui.config';
 
-import { CourseInfo } from './components/course-info';
+import { CourseInfo } from './_components/course-info';
 
 interface CourseLayoutProps extends PropsWithChildren {
   params: {

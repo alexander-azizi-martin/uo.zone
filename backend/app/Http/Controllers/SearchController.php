@@ -17,10 +17,6 @@ class SearchController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
-        // $validator = Validator::make($request->all(), ['q' => 'required|max:255']);
-        // if ($validator->fails()) {
-        //     throw $validator->getException();
-        // }
         $query = $request->validate(['q' => 'required|max:255'])['q'];
 
         $courses = Course::search($query)
