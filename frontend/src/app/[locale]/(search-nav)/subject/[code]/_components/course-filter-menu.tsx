@@ -3,6 +3,7 @@
 import { Trans } from '@lingui/macro';
 import cntl from 'cntl';
 import { SlidersHorizontalIcon } from 'lucide-react';
+import { ArrowDown,ArrowUp } from 'lucide-react';
 import { useContext, useTransition } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -70,8 +71,15 @@ function CourseFilterMenu() {
             overscroll-contain scrollbar-thin
           `}
         >
-          <DropdownMenuLabel>
+          <DropdownMenuLabel className="flex items-center">
             <Trans>Sort By</Trans>
+            <span className="ml-1">
+              {filterOptions.sortOrder ? (
+                <ArrowUp className="w-4 h-4 text-current" />
+              ) : (
+                <ArrowDown className="w-4 h-4 text-current" />
+              )}
+            </span>
           </DropdownMenuLabel>
 
           <DropdownMenuRadioGroup

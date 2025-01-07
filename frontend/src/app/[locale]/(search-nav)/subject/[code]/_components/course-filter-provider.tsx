@@ -12,6 +12,7 @@ import { type Locale } from '@/lingui.config';
 
 interface CourseFilterOptions {
   sortBy: 'code' | 'average' | 'median' | 'mode';
+  sortOrder: 'increasing' | 'decreasing';
   years: ('1' | '2' | '3' | '4' | '5')[];
   languages: Locale[];
   term: ('fall' | 'winter' | 'summer')[];
@@ -32,6 +33,9 @@ function CourseFilterProvider({ children }: PropsWithChildren) {
       sortBy: parseAsStringLiteral(['code', 'average', 'mode'])
         .withDefault('code')
         .withOptions({ clearOnDefault: true }),
+      sortOrder: parseAsStringLiteral(['increasing', 'decreasing'])
+        .withDefault('increasing')
+        .withOptions({ clearOnDefault: true }),
       years: parseAsArrayOf(parseAsStringLiteral(['1', '2', '3', '4', '5']))
         .withDefault([])
         .withOptions({ clearOnDefault: true }),
@@ -48,6 +52,7 @@ function CourseFilterProvider({ children }: PropsWithChildren) {
   const resetFilterOptions = useCallback(() => {
     setFilterOptionsObject({
       sortBy: 'code',
+      sortOrder: 'increasing', 
       years: [],
       languages: [],
       term: [],
