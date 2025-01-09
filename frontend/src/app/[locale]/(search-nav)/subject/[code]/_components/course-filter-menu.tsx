@@ -3,7 +3,7 @@
 import { Trans } from '@lingui/macro';
 import cntl from 'cntl';
 import { SlidersHorizontalIcon } from 'lucide-react';
-import { ArrowDown,ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useContext, useTransition } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -43,6 +43,13 @@ function CourseFilterMenu() {
   const handleChange =
     (key: keyof CourseFilterOptions) => (value: string | string[]) => {
       startTransition(() => {
+        // Toggle sort order if the same sort by is selected
+        if (key === 'sortBy') {
+          const isSameSortBy = value === filterOptions.sortBy;
+          setFilterOptions('sortOrder', isSameSortBy 
+            ? (filterOptions.sortOrder === 'increasing' ? 'decreasing' : 'increasing') 
+            : 'increasing');
+        }
         setFilterOptions(key, value);
       });
     };
@@ -74,7 +81,7 @@ function CourseFilterMenu() {
           <DropdownMenuLabel className="flex items-center">
             <Trans>Sort By</Trans>
             <span className="ml-1">
-              {filterOptions.sortOrder ? (
+              {filterOptions.sortOrder === 'increasing' ? (
                 <ArrowUp className="w-4 h-4 text-current" />
               ) : (
                 <ArrowDown className="w-4 h-4 text-current" />
