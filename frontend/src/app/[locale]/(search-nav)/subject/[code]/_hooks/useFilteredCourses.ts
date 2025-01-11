@@ -46,15 +46,23 @@ function useFilteredCourses(
           return includesLanguage && includesYear && includesTerm;
         })
         .sort((a, b) => {
+          const hasDataA = a.grades?.mean || a.grades?.mode || a.grades?.median;
+          const hasDataB = b.grades?.mean || b.grades?.mode || b.grades?.median;
+
+          if (!hasDataA && !hasDataB) return 0;
+          if (!hasDataA) return 1;
+          if (!hasDataB) return -1;
+
+          const orderMultiplier = filterOptions.sortOrder === 'decreasing' ? -1 : 1;
           switch (filterOptions.sortBy) {
             case 'code':
-              return Number(a.code > b.code);
+              return orderMultiplier * Number(a.code > b.code);
             case 'average':
-              return compareAverage(a, b);
+              return orderMultiplier * compareAverage(a, b);
             case 'mode':
-              return compareMode(a, b);
+              return orderMultiplier * compareMode(a, b);
             case 'median':
-              return compareMedian(a, b);
+              return orderMultiplier * compareMedian(a, b);
             default:
               return 0;
           }
@@ -62,6 +70,7 @@ function useFilteredCourses(
     [
       courses,
       filterOptions.sortBy,
+      filterOptions.sortOrder,
       filterOptions.languages,
       filterOptions.years,
       filterOptions.term,
@@ -82,13 +91,7 @@ function compareAverage(
   const aAverage = a.grades.mean;
   const bAverage = b.grades.mean;
 
-  if (aAverage < bAverage) {
-    return 1;
-  } else if (aAverage > bAverage) {
-    return -1;
-  }
-
-  return 0;
+  return bAverage - aAverage;
 }
 
 function compareMode(
@@ -110,11 +113,8 @@ function compareMode(
     b.grades.total,
   );
 
-  if (aMode < bMode) return 1;
-  else if (aMode > bMode) return -1;
-  else if (aModePercent < bModePercent) return 1;
-  else if (aModePercent > bModePercent) return -1;
-  else return 0;
+  if (aMode !== bMode) return bMode - aMode;
+  return bModePercent - aModePercent;
 }
 
 function compareMedian(
@@ -126,21 +126,18 @@ function compareMedian(
   if (!b.grades?.median) return -1;
 
   const aMedian = Grade.value(a.grades.median);
+  const bMedian = Grade.value(b.grades.median);
   const aMedianPercent = percent(
     a.grades.distribution[a.grades.median],
     a.grades.total,
   );
-  const bMedian = Grade.value(b.grades.median);
   const bMedianPercent = percent(
     b.grades.distribution[b.grades.median],
     b.grades.total,
   );
 
-  if (aMedian < bMedian) return 1;
-  else if (bMedian > aMedian) return -1;
-  else if (aMedianPercent < bMedianPercent) return 1;
-  else if (aMedianPercent > bMedianPercent) return -1;
-  else return 0;
+  if (aMedian !== bMedian) return aMedian - bMedian;
+  return aMedianPercent - bMedianPercent;
 }
 
 export { useFilteredCourses };

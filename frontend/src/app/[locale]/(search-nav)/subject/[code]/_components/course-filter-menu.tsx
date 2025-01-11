@@ -58,6 +58,18 @@ function CourseFilterMenu() {
     event.preventDefault();
   };
 
+function SortArrow({ sortBy, value, sortOrder }: { sortBy: string; value: string; sortOrder: string }) {
+  if (sortBy !== value) return null; 
+
+  return <span className="ml-auto">
+    {sortOrder === 'increasing' ? (
+      <ArrowUp className="w-4 h-4 text-current" />
+    ) : (
+      <ArrowDown className="w-4 h-4 text-current" />
+    )}
+  </span>;
+}
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -80,13 +92,6 @@ function CourseFilterMenu() {
         >
           <DropdownMenuLabel className="flex items-center">
             <Trans>Sort By</Trans>
-            <span className="ml-1">
-              {filterOptions.sortOrder === 'increasing' ? (
-                <ArrowUp className="w-4 h-4 text-current" />
-              ) : (
-                <ArrowDown className="w-4 h-4 text-current" />
-              )}
-            </span>
           </DropdownMenuLabel>
 
           <DropdownMenuRadioGroup
@@ -95,12 +100,15 @@ function CourseFilterMenu() {
           >
             <DropdownMenuRadioItem value='code' onSelect={preventDefault}>
               <Trans>Code</Trans>
+              <SortArrow sortBy={filterOptions.sortBy} value="code" sortOrder={filterOptions.sortOrder} />
             </DropdownMenuRadioItem>
             <DropdownMenuRadioItem value='average' onSelect={preventDefault}>
               <Trans>Average</Trans>
+              <SortArrow sortBy={filterOptions.sortBy} value="average" sortOrder={filterOptions.sortOrder} />
             </DropdownMenuRadioItem>
             <DropdownMenuRadioItem value='mode' onSelect={preventDefault}>
               <Trans>Mode</Trans>
+              <SortArrow sortBy={filterOptions.sortBy} value="mode" sortOrder={filterOptions.sortOrder} />
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
 
