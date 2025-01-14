@@ -58,6 +58,7 @@ cd frontend
 cp .env.example .env.local
 
 npm install
+npm run lingui:compile
 npm run dev
 
 # live at http://localhost:3000

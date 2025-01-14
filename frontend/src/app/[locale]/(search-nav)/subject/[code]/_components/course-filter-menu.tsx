@@ -2,8 +2,11 @@
 
 import { Trans } from '@lingui/macro';
 import cntl from 'cntl';
-import { SlidersHorizontalIcon } from 'lucide-react';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  SlidersHorizontalIcon,
+} from 'lucide-react';
 import { useContext, useTransition } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -11,6 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuItemIndicator,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -46,9 +50,14 @@ function CourseFilterMenu() {
         // Toggle sort order if the same sort by is selected
         if (key === 'sortBy') {
           const isSameSortBy = value === filterOptions.sortBy;
-          setFilterOptions('sortOrder', isSameSortBy 
-            ? (filterOptions.sortOrder === 'increasing' ? 'decreasing' : 'increasing') 
-            : 'increasing');
+          setFilterOptions(
+            'sortOrder',
+            isSameSortBy
+              ? filterOptions.sortOrder === 'increasing'
+                ? 'decreasing'
+                : 'increasing'
+              : 'increasing',
+          );
         }
         setFilterOptions(key, value);
       });
@@ -57,18 +66,6 @@ function CourseFilterMenu() {
   const preventDefault = (event: Event) => {
     event.preventDefault();
   };
-
-function SortArrow({ sortBy, value, sortOrder }: { sortBy: string; value: string; sortOrder: string }) {
-  if (sortBy !== value) return null; 
-
-  return <span className="ml-auto">
-    {sortOrder === 'increasing' ? (
-      <ArrowUp className="w-4 h-4 text-current" />
-    ) : (
-      <ArrowDown className="w-4 h-4 text-current" />
-    )}
-  </span>;
-}
 
   return (
     <DropdownMenu modal={false}>
@@ -90,7 +87,7 @@ function SortArrow({ sortBy, value, sortOrder }: { sortBy: string; value: string
             overscroll-contain scrollbar-thin
           `}
         >
-          <DropdownMenuLabel className="flex items-center">
+          <DropdownMenuLabel className='flex items-center'>
             <Trans>Sort By</Trans>
           </DropdownMenuLabel>
 
@@ -100,15 +97,24 @@ function SortArrow({ sortBy, value, sortOrder }: { sortBy: string; value: string
           >
             <DropdownMenuRadioItem value='code' onSelect={preventDefault}>
               <Trans>Code</Trans>
-              <SortArrow sortBy={filterOptions.sortBy} value="code" sortOrder={filterOptions.sortOrder} />
+
+              <DropdownMenuItemIndicator className='ml-auto'>
+                <SortArrow sortOrder={filterOptions.sortOrder} />
+              </DropdownMenuItemIndicator>
             </DropdownMenuRadioItem>
             <DropdownMenuRadioItem value='average' onSelect={preventDefault}>
               <Trans>Average</Trans>
-              <SortArrow sortBy={filterOptions.sortBy} value="average" sortOrder={filterOptions.sortOrder} />
+
+              <DropdownMenuItemIndicator className='ml-auto'>
+                <SortArrow sortOrder={filterOptions.sortOrder} />
+              </DropdownMenuItemIndicator>
             </DropdownMenuRadioItem>
             <DropdownMenuRadioItem value='mode' onSelect={preventDefault}>
               <Trans>Mode</Trans>
-              <SortArrow sortBy={filterOptions.sortBy} value="mode" sortOrder={filterOptions.sortOrder} />
+
+              <DropdownMenuItemIndicator className='ml-auto'>
+                <SortArrow sortOrder={filterOptions.sortOrder} />
+              </DropdownMenuItemIndicator>
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
 
@@ -192,3 +198,16 @@ function SortArrow({ sortBy, value, sortOrder }: { sortBy: string; value: string
 }
 
 export { CourseFilterMenu };
+
+interface SortArrowProps {
+  sortOrder: CourseFilterOptions['sortOrder'];
+}
+
+function SortArrow({ sortOrder }: SortArrowProps) {
+  switch (sortOrder) {
+    case 'increasing':
+      return <ArrowUpIcon size={14} />;
+    case 'decreasing':
+      return <ArrowDownIcon size={14} />;
+  }
+}

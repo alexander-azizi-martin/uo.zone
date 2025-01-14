@@ -42,7 +42,10 @@ function VirtualCourseList({ courses }: VirtualCourseListProps) {
                 grades={course.grades}
                 graphSize={'sm'}
               />
-              <Link href={`/course/${course.code}`} className='stretched-link'></Link>
+              <Link
+                href={`/course/${course.code}`}
+                className='stretched-link'
+              ></Link>
             </Paper>
           </div>
         )}

@@ -10,7 +10,7 @@ export function maintenanceMiddleware(request: NextRequest) {
     (hasValidLocale && request.nextUrl.pathname.endsWith('/maintenance')) ||
     request.nextUrl.pathname === '/maintenance';
 
-    if (process.env.MAINTENANCE_MODE === 'on' && !isMaintenancePage) {
+  if (process.env.MAINTENANCE_MODE === 'on' && !isMaintenancePage) {
     return NextResponse.redirect(new URL('/maintenance', request.url));
   }
   if (process.env.MAINTENANCE_MODE === 'off' && isMaintenancePage) {

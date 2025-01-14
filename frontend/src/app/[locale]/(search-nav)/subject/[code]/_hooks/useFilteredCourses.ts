@@ -53,10 +53,11 @@ function useFilteredCourses(
           if (!hasDataA) return 1;
           if (!hasDataB) return -1;
 
-          const orderMultiplier = filterOptions.sortOrder === 'decreasing' ? -1 : 1;
+          const orderMultiplier =
+            filterOptions.sortOrder === 'decreasing' ? -1 : 1;
           switch (filterOptions.sortBy) {
             case 'code':
-              return orderMultiplier * Number(a.code > b.code);
+              return -orderMultiplier * Number(a.code < b.code);
             case 'average':
               return orderMultiplier * compareAverage(a, b);
             case 'mode':
@@ -103,11 +104,11 @@ function compareMode(
   if (!b.grades?.mode) return -1;
 
   const aMode = Grade.value(a.grades.mode);
+  const bMode = Grade.value(b.grades.mode);
   const aModePercent = percent(
     a.grades.distribution[a.grades.mode],
     a.grades.total,
   );
-  const bMode = Grade.value(b.grades.mode);
   const bModePercent = percent(
     b.grades.distribution[b.grades.mode],
     b.grades.total,

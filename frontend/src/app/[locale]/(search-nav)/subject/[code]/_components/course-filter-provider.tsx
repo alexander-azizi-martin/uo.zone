@@ -52,7 +52,7 @@ function CourseFilterProvider({ children }: PropsWithChildren) {
   const resetFilterOptions = useCallback(() => {
     setFilterOptionsObject({
       sortBy: 'code',
-      sortOrder: 'increasing', 
+      sortOrder: 'increasing',
       years: [],
       languages: [],
       term: [],

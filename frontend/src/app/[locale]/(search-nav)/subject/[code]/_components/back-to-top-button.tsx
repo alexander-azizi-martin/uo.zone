@@ -33,7 +33,7 @@ function BackToTopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       data-umami-event='back-to-top'
       className={clsx(
-        'hover:bg-geegee-light fixed bottom-4 right-4 z-50 size-10 rounded-full bg-geegee p-0 transition-all',
+        'fixed bottom-4 right-4 z-50 size-10 rounded-full bg-geegee p-0 transition-all hover:bg-geegee-light',
         show && 'visible scale-100 opacity-100',
         !show && 'invisible scale-0 opacity-0',
       )}
