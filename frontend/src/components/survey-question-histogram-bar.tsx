@@ -39,7 +39,7 @@ function SurveyQuestionHistogramBar({
         className={cntl`
           relative min-w-[--question-bar-label-width] 
           max-w-[--question-bar-label-width] border-r border-solid 
-          border-black py-4 pr-1 text-center sm:pr-2
+          border-foreground/10 py-4 pr-1 text-center sm:pr-2
         `}
       >
         {label}

@@ -47,11 +47,22 @@ export default function IndexPage() {
         >
           <img
             className={cntl`
-              w-[250px] pb-5 pt-20 
-              sm:w-[300px] 
-              md:w-[500px] md:pb-0 md:pt-0
+              block w-[250px] pb-5 
+              pt-20 
+              sm:w-[300px] md:w-[500px] md:pb-0
+              md:pt-0 dark:hidden
             `}
-            src={'static/geegee.svg'}
+            src={'static/geegee-dark.svg'}
+            alt={'Geegee'}
+          />
+          <img
+            className={cntl`
+              hidden w-[250px] pb-5 
+              pt-20 
+              sm:w-[300px] md:w-[500px] md:pb-0
+              md:pt-0 dark:block
+            `}
+            src={'static/geegee-light.svg'}
             alt={'Geegee'}
           />
         </CollapsibleContent>

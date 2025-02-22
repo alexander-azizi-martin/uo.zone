@@ -27,7 +27,7 @@ function GradeHistogramBar({
   return (
     <div
       ref={ref}
-      className='w-8 border-black focus:border'
+      className='w-8 border-foreground focus:border'
       onMouseEnter={setHovering.on}
       onMouseLeave={setHovering.off}
       onClick={setHovering.on}

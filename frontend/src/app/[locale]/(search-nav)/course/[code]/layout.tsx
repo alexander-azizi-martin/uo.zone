@@ -32,8 +32,11 @@ export default async function CoursePage({
     })
   ).data!;
 
-  const subjectCode = course.title.slice(0, 3);
-  const courseTitle = course.title.slice(3);
+  const subjectCode = course.subject.code;
+  const courseTitle = course.title.replace(
+    new RegExp(`^${course.subject.code}`),
+    '',
+  );
 
   return (
     <div>
@@ -58,10 +61,10 @@ export default async function CoursePage({
           </Badge>
         )}
 
-        <Badge className='bg-blue-500' size='sm'>
+        <Badge className='bg-blue-500 dark:text-foreground'>
           {course.subject.title}
         </Badge>
-        <Badge className='bg-blue-500' size='sm'>
+        <Badge className='bg-blue-500 dark:text-foreground'>
           {course.subject.faculty}
         </Badge>
       </div>

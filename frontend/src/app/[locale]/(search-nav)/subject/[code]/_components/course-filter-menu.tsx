@@ -87,7 +87,7 @@ function CourseFilterMenu() {
             overscroll-contain scrollbar-thin
           `}
         >
-          <DropdownMenuLabel className='flex items-center'>
+          <DropdownMenuLabel>
             <Trans>Sort By</Trans>
           </DropdownMenuLabel>
 
