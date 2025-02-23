@@ -1,16 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 function useSearchNavigation(searchBar: HTMLInputElement | null | undefined) {
-  const selectedIndex = useRef<number>(-1);
   const lastCursorPosition = useRef<number | null>();
 
   useEffect(() => {
-    const resultNodes = document.querySelectorAll<HTMLElement>(
-      '[data-search-result=""]',
+    const navigableNodes = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-search-result=""]'),
     );
 
-    const focusSelected = () => {
-      const resultNode = resultNodes[selectedIndex.current];
+    const focusNode = (i: number) => {
+      const resultNode = navigableNodes[i];
       const resultNodeRect = resultNode.getBoundingClientRect();
       resultNode.focus();
 
@@ -37,49 +36,44 @@ function useSearchNavigation(searchBar: HTMLInputElement | null | undefined) {
           lastCursorPosition.current = undefined;
         }
       });
-
-      selectedIndex.current = -1;
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
-      const selectedNode =
-        selectedIndex.current > -1 ? resultNodes[selectedIndex.current] : null;
+      const searchbarSelected = searchBar === document.activeElement;
+      const selectedNode = navigableNodes.findIndex(
+        (node) => node === document.activeElement,
+      );
 
-      if (
-        document.activeElement === searchBar ||
-        document.activeElement !== selectedNode
-      ) {
-        selectedIndex.current = -1;
-      }
+      const upEvent =
+        event.key === 'ArrowUp' || (event.key === 'Tab' && event.shiftKey);
+      const downEvent =
+        event.key === 'ArrowDown' || (event.key === 'Tab' && !event.shiftKey);
 
-      switch (event.key) {
-        case 'ArrowUp':
-          if (selectedIndex.current === 0) {
-            focusSearchBar(true);
-          } else if (selectedIndex.current > 0) {
-            selectedIndex.current -= 1;
-            focusSelected();
-            event.preventDefault();
-          }
-
-          break;
-        case 'ArrowDown':
-          if (selectedIndex.current === -1) {
-            lastCursorPosition.current = searchBar?.selectionStart;
-          }
-          if (resultNodes.length > selectedIndex.current + 1) {
-            selectedIndex.current += 1;
-            focusSelected();
-            event.preventDefault();
-          }
-
-          break;
-        default:
-          if (selectedIndex.current >= 0 && event.key !== 'Enter') {
-            focusSearchBar(false);
-          }
-
-          break;
+      if (upEvent) {
+        if (selectedNode - 1 >= 0) {
+          focusNode(selectedNode - 1);
+          event.preventDefault();
+        } else if (selectedNode !== -1) {
+          focusSearchBar(true);
+          event.preventDefault();
+        }
+      } else if (downEvent) {
+        if (searchbarSelected && 0 < navigableNodes.length) {
+          lastCursorPosition.current = searchBar?.selectionStart;
+          focusNode(0);
+          event.preventDefault();
+        } else if (
+          selectedNode !== -1 &&
+          selectedNode + 1 < navigableNodes.length
+        ) {
+          focusNode(selectedNode + 1);
+          event.preventDefault();
+        } else if (selectedNode === -1 && event.key === 'ArrowDown') {
+          focusNode(0);
+          event.preventDefault();
+        }
+      } else if (!['Shift', 'Tab', 'Enter'].includes(event.key)) {
+        focusSearchBar(false);
       }
     };
 
