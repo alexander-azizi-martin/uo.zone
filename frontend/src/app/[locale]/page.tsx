@@ -71,7 +71,10 @@ export default function IndexPage() {
       <SearchNav
         onSearchOpen={setSearching.on}
         onSearchClose={setSearching.off}
-        searchBarProps={{ autoFocus: true, className: 'md:w-3/5' }}
+        searchBarProps={{
+          autoFocus: true,
+          className: 'md:w-3/5 z-10 mr-0 md:mr-12',
+        }}
       />
     </div>
   );
