@@ -6,6 +6,7 @@ import cntl from 'cntl';
 import { SearchNav } from '@/components/search/search-nav';
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { useBoolean } from '@/hooks/useBoolean';
+import { ExternalLink } from '@/components/links/external-link';
 
 export default function IndexPage() {
   const [searching, setSearching] = useBoolean();
@@ -76,6 +77,24 @@ export default function IndexPage() {
           className: 'md:w-3/5 z-10 mr-0 md:mr-12',
         }}
       />
+
+      {!searching && (
+        <div
+          className={cntl`
+            mt-6 rounded-md border-s-4 border-geegee bg-geegee-light/15
+            px-3 py-2 text-xs text-geegee sm:text-base
+            dark:border-white dark:bg-[#2b2a33] dark:text-foreground
+          `}
+        >
+          <Trans>
+            Check out{' '}
+            <ExternalLink href='https://uenroll.ca' className='text-current'>
+              uEnroll
+            </ExternalLink>{' '}
+            to create your course schedules!
+          </Trans>
+        </div>
+      )}
     </div>
   );
 }
