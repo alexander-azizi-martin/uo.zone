@@ -88,7 +88,11 @@ export default function IndexPage() {
         >
           <Trans>
             Check out{' '}
-            <ExternalLink href='https://uenroll.ca' className='text-current'>
+            <ExternalLink
+              href='https://uenroll.ca'
+              data-umami-event='uenroll'
+              className='text-current'
+            >
               uEnroll
             </ExternalLink>{' '}
             to create your course schedules!
