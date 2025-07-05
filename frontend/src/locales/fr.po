@@ -110,7 +110,7 @@ msgstr "Cours"
 
 #: src/app/[locale]/_components/footer.tsx:33
 msgid "Data from Fall 2017 to Summer 2024 provided by <0>The Access to Information and Privacy Office</0> and <1>uoZone</1>"
-msgstr "L'information de l'Automne 2017 au l'Été 2024 ont été fournies par <0>Le Bureau de l'accès à l'information et de la protection de la vie privée</0> and <1>uoZone</1>"
+msgstr "L'information de l'Automne 2017 au l'Hiver 2025 ont été fournies par <0>Le Bureau de l'accès à l'information et de la protection de la vie privée</0> and <1>uoZone</1>"
 
 #: src/app/[locale]/(search-nav)/subject/[code]/_components/course-filter-menu.tsx:177
 msgid "English"
