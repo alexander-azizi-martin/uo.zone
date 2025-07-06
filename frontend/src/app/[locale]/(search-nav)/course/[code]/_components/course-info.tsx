@@ -30,7 +30,7 @@ function CourseInfo({ course }: CourseInfoProps) {
     <div className='stack my-6 items-start gap-4'>
       <div className='text-base leading-6'>
         <Markdown options={{ overrides: { a: CourseLink } }}>
-          {course.description}
+          {course.description || ''}
         </Markdown>
       </div>
       {course.components.length > 0 && (
