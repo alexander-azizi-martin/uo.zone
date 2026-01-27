@@ -12,11 +12,6 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/stats/:match*',
-        destination: 'https://analytics.uo.zone/:match*',
-        basePath: false,
-      },
-      {
         source: '/docs',
         destination: await (
           await urlJoin
